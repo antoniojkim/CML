@@ -1,0 +1,6 @@
+{
+    "code-runner.executorMap": {
+        "c": "cd $dir && make && ./main",
+        "cpp": "cd $dir && make && ./main",
+    }
+}
