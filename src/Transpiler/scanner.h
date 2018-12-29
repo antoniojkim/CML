@@ -6,8 +6,7 @@
 #include <string>
 
 enum Type {
-    INT,
-    FLOAT,
+    NUM,
     EQUALS,
     LESS_THAN,
     GREATER_THAN,
@@ -15,7 +14,7 @@ enum Type {
     MINUS,
     STAR,
     AMP,
-    MOD,
+    PCT,
     CARET,
     SLASH,
     BACKSLASH,
@@ -34,6 +33,7 @@ enum Type {
     COLON,
     SEMICOLON,
     QUESTION,
+    POUND,
     UNDERSCORE,
     NEGATE,
     BACKTICK,
@@ -48,8 +48,8 @@ enum Type {
     MINUS_MINUS,
     STAR_STAR,
     SLASH_SLASH,
-    BOOLEAN_AND,
-    BOOLEAN_OR,
+    AMP_AMP,
+    PIPE_PIPE,
     L_ARROW,
     R_ARROW,
     // SQRT,
