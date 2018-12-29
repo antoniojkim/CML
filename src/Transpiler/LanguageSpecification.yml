@@ -1,0 +1,165 @@
+tokens:
+ - STR:
+    description: "a string consisting of any combination of letters (in the range a-z, A-Z), digits (in the range 0-9) as well as underscores ( _ ) with the exception that it may not start with a digit."
+ - NUM:
+    description: "a string consisting of only digits separated by at most one dot ( . ) at most one case insensitive \"e\" which must come after the dot."
+ - LPAREN:
+    description: "the string \"(\""
+ - RPAREN:
+    description: "the string \")\""
+ - LSQUARE:
+    description: "the string \"[\""
+ - RSQUARE:
+    description: "the string \"]\""
+ - LCURLY:
+    description: "the string \"{\""
+ - RCURLY:
+    description: "the string \"}\""
+ - LCURLY:
+    description: "the string \"{\""
+ - RCURLY:
+    description: "the string \"}\""
+ - BECOMES:
+    description: "the string \"=\""
+ - EQ:
+    description: "the string \"==\""
+ - NE:
+    description: "the string \"!=\""
+ - LT:
+    description: "the string \"<\""
+ - GT:
+    description: "the string \">\""
+ - LE:
+    description: "the string \"<=\""
+ - GE:
+    description: "the string \">=\""
+ - PLUS:
+    description: "the string \"+\""
+ - MINUS:
+    description: "the string \"-\""
+ - STAR:
+    description: "the string \"*\""
+ - SLASH:
+    description: "the string \"/\""
+ - PCT:
+    description: "the string \"%\""
+ - CARET:
+    description: "the string \"^\""
+ - AMP:
+    description: "the string \"&\""
+ - PIPE:
+    description: "the string \"|\""
+ - PLUS_EQUALS:
+    description: "the string \"+=\""
+ - MINUS_EQUALS:
+    description: "the string \"-=\""
+ - STAR_EQUALS:
+    description: "the string \"*=\""
+ - SLASH_EQUALS:
+    description: "the string \"/=\""
+ - PCT_EQUALS:
+    description: "the string \"%=\""
+ - CARET_EQUALS:
+    description: "the string \"^=\""
+ - AMP_EQUALS:
+    description: "the string \"&=\""
+ - PIPE_EQUALS:
+    description: "the string \"|=\""
+ - PLUS_PLUS:
+    description: "the string \"++\""
+ - MINUS_MINUS:
+    description: "the string \"--\""
+ - STAR_STAR:
+    description: "the string \"**\""
+ - SLASH_SLASH:
+    description: "the string \"//\""
+ - AMP_AMP:
+    description: "the string \"&&\""
+ - PIPE_PIPE:
+    description: "the string \"||\""
+ - L_ARROW:
+    description: "the string \"<-\""
+ - R_ARROW:
+    description: "the string \"->\""
+ - PIPE_PIPE:
+    description: "the string \"||\""
+ - COMMA:
+    description: "the string \",\""
+ - COLON:
+    description: "the string \":\""
+ - SEMICOLON:
+    description: "the string \";\""
+ - QUESTION:
+    description: "the string \"?\""
+ - POUND:
+    description: "the string \"#\""
+keywords:
+ - IF:
+    description: "the string \"if\""
+ - ELSE:
+    description: "the string \"else\""
+ - WHILE:
+    description: "the string \"while\""
+ - FOR:
+    description: "the string \"for\""
+ - DO:
+    description: "the string \"do\""
+ - RETURN:
+    description: "the string \"return\""
+ - INT:
+    description: "the string \"int\""
+ - FLOAT:
+    description: "the string \"float\""
+ - DOUBLE:
+    description: "the string \"double\""
+ - LONG:
+    description: "the string \"long\""
+ - STRING:
+    description: "the string \"string\""
+ - NULL:
+    description: "the string \"null\""
+ - NULLPTR:
+    description: "the string \"nullptr\""
+ - NEW:
+    description: "the string \"new\""
+ - DELETE:
+    description: "the string \"delete\""
+ - INCLUDE:
+    description: "the string \"include\""
+whitespace:
+ - SPACE:
+    description: "ascii 32"
+ - TAB:
+    description: "ascii 9"
+ - NEWLINE:
+    description: "ascii 10"
+ - COMMENT:
+    description: "the string \"//\" followed by all the characters up to and including the next newline"
+ - MULTILINE_COMMENT:
+    description: "all characters wrapped by the two strings \"/\\*\" and \"\\*/\""
+nonterminalSymbols:
+ - "globals"
+ - "procedure"
+ - "main"
+ - "params"
+ - "paramlist"
+ - "type"
+ - "dcl"
+ - "dcls"
+ - "statements"
+ - "lvalue"
+ - "string"
+ - "expr"
+ - "term"
+ - "test"
+ - "factor"
+ - "arglist"
+startSymbol: "globals"
+productionRules:
+ - "globals"
+ - "globals POUND INCLUDE LT STR RT globals"
+ - "globals POUND INCLUDE QUOTE STR QUOTE globals"
+ - "globals procedure globals"
+ - "globals main globals"
+ - "globals dcls globals"
+ - "procedure type"
