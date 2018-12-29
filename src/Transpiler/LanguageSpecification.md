@@ -65,7 +65,7 @@ In addition to the above tokens, the following are also valid tokens and their s
  * `DOUBLE`: the string "double"
  * `LONG`: the string "long"
  * `STRING`: the string "string"
- * `NULL`: the string "null"
+ * `None`: the string "null"
  * `NULLPTR`: the string "nullptr"
  * `NEW`: the string "new"
  * `DELETE`: the string "delete"
@@ -110,4 +110,3 @@ A context-free grammar for a valid CML program is:
    * `globals → main globals`
    * `globals → dcls globals`
    * `procedure → type`
-

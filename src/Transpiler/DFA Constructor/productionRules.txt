@@ -1,0 +1,8 @@
+start BOF globals EOF
+globals
+globals POUND INCLUDE LT STR RT globals 
+globals POUND INCLUDE QUOTE STR QUOTE globals 
+globals procedure globals 
+globals main globals 
+globals dcls globals 
+procedure type 
