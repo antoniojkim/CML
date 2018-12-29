@@ -5,7 +5,7 @@
 using namespace std;
 
 Type getType(char c) {
-    if ('0' <= c && c <= '9') return INT;
+    if ('0' <= c && c <= '9') return NUM;
     if ('a' <= c && c <= 'z') return STR;
     if ('A' <= c && c <= 'Z') return STR;
 
@@ -23,9 +23,9 @@ Type getType(char c) {
         case '*':
             return STAR;
         case '%':
-            return MOD;
+            return PCT;
         case '^':
-            return MOD;
+            return CARET;
         case '/':
             return SLASH;
         case '\\':
@@ -57,7 +57,9 @@ Type getType(char c) {
         case ';':
             return SEMICOLON;
         case '?':
-            return UNDERSCORE;
+            return QUESTION;
+        case '#':
+            return POUND;
         case '_':
             return UNDERSCORE;
         case '~':
@@ -82,10 +84,8 @@ Type getType(char c) {
 }
 std::string getTypeString(Type type) {
     switch (type) {
-        case INT:
-            return "INT";
-        case FLOAT:
-            return "FLOAT";
+        case NUM:
+            return "NUM";
         case DOT:
             return "DOT";
         case COMMA:
@@ -104,8 +104,8 @@ std::string getTypeString(Type type) {
             return "STAR";
         case AMP:
             return "AMP";
-        case MOD:
-            return "MOD";
+        case PCT:
+            return "PCT";
         case CARET:
             return "CARET";
         case SLASH:
@@ -166,15 +166,16 @@ void scan(std::istream& in, std::list<Token>& tokens) {
             } else if (type == SLASH) {
                 current = SLASH_SLASH;
             } else if (type == AMP) {
-                current = BOOLEAN_AND;
+                current = AMP_AMP;
             } else if (type == PIPE) {
-                current = BOOLEAN_OR;
+                current = PIPE_PIPE;
             }
-        } else if ((current == STR && (type == INT || type == UNDERSCORE)) ||
-                   (current == UNDERSCORE && (type == STR || type == INT))) {
+        } else if ((current == STR && (type == NUM || type == UNDERSCORE)) ||
+                   (current == UNDERSCORE && (type == STR || type == NUM))) {
             current = STR;
-        } else if ((current == INT && type == DOT) || (current == FLOAT && type == INT)) {
-            current = FLOAT;
+        } else if ((current == NUM && type == DOT) || 
+                   (current == NUM && type == STR && (c == 'e' || c == 'E'))) {
+            current = NUM;
         } else if (current == PLUS && type == EQUALS) {
             current = PLUS_EQUALS;
         } else if (current == MINUS && type == EQUALS) {
