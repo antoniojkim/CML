@@ -5,7 +5,7 @@
 #include <list>
 #include <sstream>
 #include <string>
-#include "scanner.h"
+#include "Scanner/scanner.h"
 
 using namespace std;
 

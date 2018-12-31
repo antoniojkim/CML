@@ -15,13 +15,9 @@ tokens:
     description: "the string \"{\""
  - RCURLY:
     description: "the string \"}\""
- - LCURLY:
-    description: "the string \"{\""
- - RCURLY:
-    description: "the string \"}\""
- - BECOMES:
+ - EQUALS:
     description: "the string \"=\""
- - EQ:
+ - EQUALS_EQUALS:
     description: "the string \"==\""
  - NE:
     description: "the string \"!=\""
@@ -75,8 +71,10 @@ tokens:
     description: "the string \"//\""
  - AMP_AMP:
     description: "the string \"&&\""
- - PIPE_PIPE:
-    description: "the string \"||\""
+ - LT_LT:
+    description: "the string \"<<\""
+ - GT_GT:
+    description: "the string \"<<\""
  - L_ARROW:
     description: "the string \"<-\""
  - R_ARROW:
@@ -116,7 +114,7 @@ keywords:
     description: "the string \"long\""
  - STRING:
     description: "the string \"string\""
- - NULL:
+ - "NULL":
     description: "the string \"null\""
  - NULLPTR:
     description: "the string \"nullptr\""
@@ -139,6 +137,7 @@ whitespace:
     description: "all characters wrapped by the two strings \"/\\*\" and \"\\*/\""
 nonterminalSymbols:
  - "globals"
+ - "include"
  - "procedure"
  - "main"
  - "params"
@@ -157,9 +156,10 @@ nonterminalSymbols:
 startSymbol: "globals"
 productionRules:
  - "globals"
- - "globals POUND INCLUDE LT STR RT globals"
- - "globals POUND INCLUDE QUOTE STR QUOTE globals"
+ - "globals include globals"
  - "globals procedure globals"
- - "globals main globals"
- - "globals dcls globals"
+ - "globals statement globals"
+ - "include POUND INCLUDE LT STR RT"
+ - "include POUND INCLUDE QUOTE STR QUOTE"
  - "procedure type"
+ - "statement"

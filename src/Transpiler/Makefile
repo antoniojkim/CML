@@ -1,10 +1,8 @@
 CXX = g++
 CXXFLAGS = -Ofast -std=c++14 -DDEBUG -Wall -MMD -Werror=vla
 EXEC = main
-# Boards/Board2D.o Boards/Quadrants.o 
-# MCTS/Game.o  main.o
 
-OBJECTS = scanner.o main.o
+OBJECTS = Scanner/scanner.o main.o
 DEPENDS = ${OBJECTS:.o=.d}
 
 ${EXEC}: ${OBJECTS}
