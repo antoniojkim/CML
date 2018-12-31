@@ -13,9 +13,9 @@ Type getType(char c) {
         case '=':
             return EQUALS;
         case '<':
-            return LESS_THAN;
+            return LT;
         case '>':
-            return GREATER_THAN;
+            return GT;
         case '+':
             return PLUS;
         case '-':
@@ -169,6 +169,10 @@ void scan(std::istream& in, std::list<Token>& tokens) {
                 current = AMP_AMP;
             } else if (type == PIPE) {
                 current = PIPE_PIPE;
+            } else if (type == LT) {
+                current = LT_LT;
+            } else if (type == GT) {
+                current = GT_GT;
             }
         } else if ((current == STR && (type == NUM || type == UNDERSCORE)) ||
                    (current == UNDERSCORE && (type == STR || type == NUM))) {
@@ -184,13 +188,13 @@ void scan(std::istream& in, std::list<Token>& tokens) {
             current = STAR_EQUALS;
         } else if (current == SLASH && type == EQUALS) {
             current = SLASH_EQUALS;
-        } else if (current == MOD && type == EQUALS) {
+        } else if (current == PCT && type == EQUALS) {
             current = MOD_EQUALS;
         } else if (current == CARET && type == EQUALS) {
             current = CARET_EQUALS;
-        } else if (current == MINUS && type == GREATER_THAN) {
+        } else if (current == MINUS && type == GT) {
             current = R_ARROW;
-        } else if (current == LESS_THAN && type == MINUS) {
+        } else if (current == LT && type == MINUS) {
             current = L_ARROW;
         } else {
             if (!token.str().empty()) {

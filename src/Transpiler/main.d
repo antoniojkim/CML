@@ -1,1 +1,1 @@
-main.o: main.cc scanner.h
+main.o: main.cc Scanner/scanner.h
