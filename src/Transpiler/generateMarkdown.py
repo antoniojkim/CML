@@ -5,7 +5,7 @@ with open("./LanguageSpecification.yml", "r") as file:
 
 
 
-with open("./LanguageSpecification.md", "w") as file:
+with open("./README.md", "w") as file:
     def write(s):
         file.write(s)
         # print(s, end="")
