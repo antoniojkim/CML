@@ -12,10 +12,8 @@ A procedure definition is a sequence of *tokens* optionally separated by *white 
  * `RSQUARE`: the string "]"
  * `LCURLY`: the string "{"
  * `RCURLY`: the string "}"
- * `LCURLY`: the string "{"
- * `RCURLY`: the string "}"
- * `BECOMES`: the string "="
- * `EQ`: the string "=="
+ * `EQUALS`: the string "="
+ * `EQUALS_EQUALS`: the string "=="
  * `NE`: the string "!="
  * `LT`: the string "<"
  * `GT`: the string ">"
@@ -42,7 +40,8 @@ A procedure definition is a sequence of *tokens* optionally separated by *white 
  * `STAR_STAR`: the string "**"
  * `SLASH_SLASH`: the string "//"
  * `AMP_AMP`: the string "&&"
- * `PIPE_PIPE`: the string "||"
+ * `LT_LT`: the string "<<"
+ * `GT_GT`: the string "<<"
  * `L_ARROW`: the string "<-"
  * `R_ARROW`: the string "->"
  * `PIPE_PIPE`: the string "||"
@@ -65,11 +64,12 @@ In addition to the above tokens, the following are also valid tokens and their s
  * `DOUBLE`: the string "double"
  * `LONG`: the string "long"
  * `STRING`: the string "string"
- * `None`: the string "null"
+ * `NULL`: the string "null"
  * `NULLPTR`: the string "nullptr"
  * `NEW`: the string "new"
  * `DELETE`: the string "delete"
  * `INCLUDE`: the string "include"
+ * `DEF`: the string "def"
 
 White space consists of any sequence of the following:
 
@@ -86,6 +86,7 @@ A context-free grammar for a valid CML program is:
  * terminal symbols: the set of valid tokens above
  * nonterminal symbols:
    * `globals`
+   * `include`
    * `procedure`
    * `main`
    * `params`
@@ -94,6 +95,7 @@ A context-free grammar for a valid CML program is:
    * `dcl`
    * `dcls`
    * `statements`
+   * `statement`
    * `lvalue`
    * `string`
    * `expr`
@@ -104,9 +106,35 @@ A context-free grammar for a valid CML program is:
  * start symbol: `globals`
  * production rules:
    * `globals → `
-   * `globals → POUND INCLUDE LT STR RT globals`
-   * `globals → POUND INCLUDE QUOTE STR QUOTE globals`
+   * `globals → include globals`
    * `globals → procedure globals`
-   * `globals → main globals`
-   * `globals → dcls globals`
-   * `procedure → type`
+   * `globals → statement globals`
+   * `include → POUND INCLUDE LT STR RT`
+   * `include → POUND INCLUDE QUOTE STR QUOTE`
+   * `procedure → type STR LPAREN params RPAREN LBRACE statements RBRACE`
+   * `params → `
+   * `params → param params`
+   * `param → type STR`
+   * `param → STR`
+   * `type → INT`
+   * `type → INT STAR`
+   * `type → DOUBLE`
+   * `type → DOUBLE STAR`
+   * `type → FLOAT`
+   * `type → FLOAT STAR`
+   * `type → STR`
+   * `type → STR STAR`
+   * `statements → `
+   * `statements → statement statements`
+   * `statement → type STR SEMICOLON`
+   * `statement → type STR BECOMES expr SEMICOLON`
+   * `expr → term`
+   * `expr → expr PLUS term`
+   * `expr → expr MINUS term`
+   * `term → factor`
+   * `term → term STAR factor`
+   * `term → term STAR_STAR factor`
+   * `term → term SLASH factor`
+   * `term → term SLASH_SLASH factor`
+   * `term → term PCT factor`
+   * `factor → NUM`
