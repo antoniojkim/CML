@@ -1,131 +1,153 @@
 tokens:
- - STR:
+ - ID:
     description: "a string consisting of any combination of letters (in the range a-z, A-Z), digits (in the range 0-9) as well as underscores ( _ ) with the exception that it may not start with a digit."
+ - STR:
+    description: "a string consisting of any combination of letters, digits, and symbols (e.g. $, √) with the exception that it may not start with a digit."
  - NUM:
     description: "a string consisting of only digits separated by at most one dot ( . ) at most one case insensitive \"e\" which must come after the dot."
  - LPAREN:
-    description: "the string \"(\""
+    lexeme: "("
  - RPAREN:
-    description: "the string \")\""
+    lexeme: ")"
  - LSQUARE:
-    description: "the string \"[\""
+    lexeme: "["
  - RSQUARE:
-    description: "the string \"]\""
+    lexeme: "]"
  - LCURLY:
-    description: "the string \"{\""
+    lexeme: "{"
  - RCURLY:
-    description: "the string \"}\""
+    lexeme: "}"
  - EQUALS:
-    description: "the string \"=\""
+    lexeme: "="
  - EQUALS_EQUALS:
-    description: "the string \"==\""
+    lexeme: "=="
  - NE:
-    description: "the string \"!=\""
+    lexeme: "!="
  - LT:
-    description: "the string \"<\""
+    lexeme: "<"
  - GT:
-    description: "the string \">\""
+    lexeme: ">"
  - LE:
-    description: "the string \"<=\""
+    lexeme: "<="
  - GE:
-    description: "the string \">=\""
+    lexeme: ">="
  - PLUS:
-    description: "the string \"+\""
+    lexeme: "+"
  - MINUS:
-    description: "the string \"-\""
+    lexeme: "-"
  - STAR:
-    description: "the string \"*\""
+    lexeme: "*"
  - SLASH:
-    description: "the string \"/\""
+    lexeme: "/"
  - PCT:
-    description: "the string \"%\""
+    lexeme: "%"
  - CARET:
-    description: "the string \"^\""
+    lexeme: "^"
  - AMP:
-    description: "the string \"&\""
+    lexeme: "&"
  - PIPE:
-    description: "the string \"|\""
+    lexeme: "|"
+ - NEGATE:
+    lexeme: "~"
+ - NOT:
+    lexeme: "!"
  - PLUS_EQUALS:
-    description: "the string \"+=\""
+    lexeme: "+="
  - MINUS_EQUALS:
-    description: "the string \"-=\""
+    lexeme: "-="
  - STAR_EQUALS:
-    description: "the string \"*=\""
+    lexeme: "*="
  - SLASH_EQUALS:
-    description: "the string \"/=\""
+    lexeme: "/="
  - PCT_EQUALS:
-    description: "the string \"%=\""
+    lexeme: "%="
  - CARET_EQUALS:
-    description: "the string \"^=\""
+    lexeme: "^="
  - AMP_EQUALS:
-    description: "the string \"&=\""
+    lexeme: "&="
  - PIPE_EQUALS:
-    description: "the string \"|=\""
+    lexeme: "|="
  - PLUS_PLUS:
-    description: "the string \"++\""
+    lexeme: "++"
  - MINUS_MINUS:
-    description: "the string \"--\""
+    lexeme: "--"
  - STAR_STAR:
-    description: "the string \"**\""
+    lexeme: "**"
  - SLASH_SLASH:
-    description: "the string \"//\""
+    lexeme: "//"
  - AMP_AMP:
-    description: "the string \"&&\""
+    lexeme: "&&"
  - LT_LT:
-    description: "the string \"<<\""
+    lexeme: "<<"
  - GT_GT:
-    description: "the string \"<<\""
+    lexeme: "<<"
  - L_ARROW:
-    description: "the string \"<-\""
+    lexeme: "<-"
  - R_ARROW:
-    description: "the string \"->\""
+    lexeme: "->"
  - PIPE_PIPE:
-    description: "the string \"||\""
+    lexeme: "||"
+ - DOT:
+    lexeme: "."
  - COMMA:
-    description: "the string \",\""
+    lexeme: ","
  - COLON:
-    description: "the string \":\""
+    lexeme: ":"
  - SEMICOLON:
-    description: "the string \";\""
+    lexeme: ";"
  - QUESTION:
-    description: "the string \"?\""
+    lexeme: "?"
  - POUND:
-    description: "the string \"#\""
+    lexeme: "#"
+ - DOLLAR:
+    lexeme: "$"
+ - QUOTE:
+    lexeme: ""
+ - APOSTROPHE:
+    lexeme: "'"
+ - BACKSLASH:
+    lexeme: "\\\\"
+ - BACKTICK:
+    lexeme: "`"
+ - UNDERSCORE:
+    lexeme: "_"
 keywords:
  - IF:
-    description: "the string \"if\""
+    lexeme: "if"
  - ELSE:
-    description: "the string \"else\""
+    lexeme: "else"
  - WHILE:
-    description: "the string \"while\""
+    lexeme: "while"
  - FOR:
-    description: "the string \"for\""
+    lexeme: "for"
  - DO:
-    description: "the string \"do\""
+    lexeme: "do"
  - RETURN:
-    description: "the string \"return\""
+    lexeme: "return"
  - INT:
-    description: "the string \"int\""
+    lexeme: "int"
  - FLOAT:
-    description: "the string \"float\""
+    lexeme: "float"
  - DOUBLE:
-    description: "the string \"double\""
+    lexeme: "double"
  - LONG:
-    description: "the string \"long\""
+    lexeme: "long"
  - STRING:
-    description: "the string \"string\""
- - "NULL":
-    description: "the string \"null\""
+    lexeme: "string"
+ - NONE_:
+    lexeme: "none"
+ - NULL_:
+    lexeme: "NULL"
  - NULLPTR:
-    description: "the string \"nullptr\""
+    lexeme: "nullptr"
  - NEW:
-    description: "the string \"new\""
+    lexeme: "new"
  - DELETE:
-    description: "the string \"delete\""
+    lexeme: "delete"
  - INCLUDE:
-    description: "the string \"include\""
+    lexeme: "include"
  - DEF:
-    description: "the string \"def\""
+    lexeme: "def"
 whitespace:
  - SPACE:
     description: "ascii 32"
@@ -161,23 +183,23 @@ productionRules:
  - "globals"
  - "globals include globals"
  - "globals procedure globals"
- - "globals statement globals"
+#  - "globals statement globals"
  - "include POUND INCLUDE LT STR RT"
  - "include POUND INCLUDE QUOTE STR QUOTE"
- - "procedure type STR LPAREN params RPAREN LBRACE statements RBRACE"
+ - "procedure type ID LPAREN params RPAREN LBRACE statements RBRACE"
 #  - "procedure DEF STR LPAREN params RPAREN LBRACE statements RBRACE"
  - "params"
  - "params param params"
- - "param type STR"
- - "param STR"
+ - "param type ID"
+#  - "param ID"
  - "type INT"
  - "type INT STAR"
  - "type DOUBLE"
  - "type DOUBLE STAR"
  - "type FLOAT"
  - "type FLOAT STAR"
- - "type STR"
- - "type STR STAR"
+ - "type ID"
+ - "type ID STAR"
  - "statements"
  - "statements statement statements"
  - "statement type STR SEMICOLON"

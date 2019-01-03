@@ -16,13 +16,14 @@ with open("./README.md", "w") as file:
 
     for token in specs["tokens"]:
         for key in token:
-            write(f" * `{key}`: {token[key]['description']}\n")
+            description = token[key]['description'] if 'description' in token[key] else f"the string \"{token[key]['lexeme']}\""
+            write(f" * `{key}`: {description}\n")
 
     write("\nIn addition to the above tokens, the following are also valid tokens and their strings are reserved keywords:\n\n")
 
     for keyword in specs["keywords"]:
         for key in keyword:
-            write(f" * `{key}`: {keyword[key]['description']}\n")
+            write(f" * `{key}`: the string \"{keyword[key]['lexeme']}\"\n")
 
     write("\nWhite space consists of any sequence of the following:\n\n")
 

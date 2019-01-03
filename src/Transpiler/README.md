@@ -4,7 +4,8 @@
 
 A procedure definition is a sequence of *tokens* optionally separated by *white space* consisting of spaces, newlines, or comments. Every valid token is one of the following:
 
- * `STR`: a string consisting of any combination of letters (in the range a-z, A-Z), digits (in the range 0-9) as well as underscores ( _ ) with the exception that it may not start with a digit.
+ * `ID`: a string consisting of any combination of letters (in the range a-z, A-Z), digits (in the range 0-9) as well as underscores ( _ ) with the exception that it may not start with a digit.
+ * `STR`: a string consisting of any combination of letters, digits, and symbols (e.g. $, √) with the exception that it may not start with a digit.
  * `NUM`: a string consisting of only digits separated by at most one dot ( . ) at most one case insensitive "e" which must come after the dot.
  * `LPAREN`: the string "("
  * `RPAREN`: the string ")"
@@ -27,6 +28,8 @@ A procedure definition is a sequence of *tokens* optionally separated by *white 
  * `CARET`: the string "^"
  * `AMP`: the string "&"
  * `PIPE`: the string "|"
+ * `NEGATE`: the string "~"
+ * `NOT`: the string "!"
  * `PLUS_EQUALS`: the string "+="
  * `MINUS_EQUALS`: the string "-="
  * `STAR_EQUALS`: the string "*="
@@ -45,11 +48,18 @@ A procedure definition is a sequence of *tokens* optionally separated by *white 
  * `L_ARROW`: the string "<-"
  * `R_ARROW`: the string "->"
  * `PIPE_PIPE`: the string "||"
+ * `DOT`: the string "."
  * `COMMA`: the string ","
  * `COLON`: the string ":"
  * `SEMICOLON`: the string ";"
  * `QUESTION`: the string "?"
  * `POUND`: the string "#"
+ * `DOLLAR`: the string "$"
+ * `QUOTE`: the string ""
+ * `APOSTROPHE`: the string "'"
+ * `BACKSLASH`: the string "\\"
+ * `BACKTICK`: the string "`"
+ * `UNDERSCORE`: the string "_"
 
 In addition to the above tokens, the following are also valid tokens and their strings are reserved keywords:
 
@@ -64,7 +74,8 @@ In addition to the above tokens, the following are also valid tokens and their s
  * `DOUBLE`: the string "double"
  * `LONG`: the string "long"
  * `STRING`: the string "string"
- * `NULL`: the string "null"
+ * `NONE_`: the string "none"
+ * `NULL_`: the string "NULL"
  * `NULLPTR`: the string "nullptr"
  * `NEW`: the string "new"
  * `DELETE`: the string "delete"
@@ -108,22 +119,20 @@ A context-free grammar for a valid CML program is:
    * `globals → `
    * `globals → include globals`
    * `globals → procedure globals`
-   * `globals → statement globals`
    * `include → POUND INCLUDE LT STR RT`
    * `include → POUND INCLUDE QUOTE STR QUOTE`
-   * `procedure → type STR LPAREN params RPAREN LBRACE statements RBRACE`
+   * `procedure → type ID LPAREN params RPAREN LBRACE statements RBRACE`
    * `params → `
    * `params → param params`
-   * `param → type STR`
-   * `param → STR`
+   * `param → type ID`
    * `type → INT`
    * `type → INT STAR`
    * `type → DOUBLE`
    * `type → DOUBLE STAR`
    * `type → FLOAT`
    * `type → FLOAT STAR`
-   * `type → STR`
-   * `type → STR STAR`
+   * `type → ID`
+   * `type → ID STAR`
    * `statements → `
    * `statements → statement statements`
    * `statement → type STR SEMICOLON`

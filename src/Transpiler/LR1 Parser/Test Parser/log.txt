@@ -1,0 +1,1149 @@
+Rules:
+    0  start BOF procedures EOF
+    1  procedures procedure procedures
+    2  procedures main
+    3  procedure INT ID LPAREN params RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    4  main INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    5  params
+    6  params paramlist
+    7  paramlist dcl
+    8  paramlist dcl COMMA paramlist
+    9  type INT
+    10  type INT STAR
+    11  dcls
+    12  dcls dcls dcl BECOMES NUM SEMI
+    13  dcls dcls dcl BECOMES NULL SEMI
+    14  dcl type ID
+    15  statements
+    16  statements statements statement
+    17  statement lvalue BECOMES expr SEMI
+    18  statement IF LPAREN test RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE
+    19  statement WHILE LPAREN test RPAREN LBRACE statements RBRACE
+    20  statement PRINTLN LPAREN expr RPAREN SEMI
+    21  statement DELETE LBRACK RBRACK expr SEMI
+    22  test expr EQ expr
+    23  test expr NE expr
+    24  test expr LT expr
+    25  test expr LE expr
+    26  test expr GE expr
+    27  test expr GT expr
+    28  expr term
+    29  expr expr PLUS term
+    30  expr expr MINUS term
+    31  term factor
+    32  term term STAR factor
+    33  term term SLASH factor
+    34  term term PCT factor
+    35  factor ID
+    36  factor NUM
+    37  factor NULL
+    38  factor LPAREN expr RPAREN
+    39  factor AMP lvalue
+    40  factor STAR factor
+    41  factor NEW INT LBRACK expr RBRACK
+    42  factor ID LPAREN RPAREN
+    43  factor ID LPAREN arglist RPAREN
+    44  arglist expr
+    45  arglist expr COMMA arglist
+    46  lvalue ID
+    47  lvalue STAR factor
+    48  lvalue LPAREN lvalue RPAREN 
+
+Nullable:
+    start: False
+    procedures: False
+    procedure: False
+    main: False
+    params: True
+    paramlist: False
+    type: False
+    dcls: True
+    dcl: False
+    statements: True
+    statement: False
+    test: False
+    expr: False
+    term: False
+    factor: False
+    arglist: False
+    lvalue: False 
+
+First:
+    start: ['BOF']
+    procedures: ['INT']
+    procedure: ['INT']
+    main: ['INT']
+    params: ['INT']
+    paramlist: ['INT']
+    type: ['INT']
+    dcls: ['INT']
+    dcl: ['INT']
+    statements: ['IF', 'WHILE', 'PRINTLN', 'DELETE', 'ID', 'STAR', 'LPAREN']
+    statement: ['IF', 'WHILE', 'PRINTLN', 'DELETE', 'ID', 'STAR', 'LPAREN']
+    test: ['ID', 'NUM', 'NULL', 'LPAREN', 'AMP', 'STAR', 'NEW']
+    expr: ['ID', 'NUM', 'NULL', 'LPAREN', 'AMP', 'STAR', 'NEW']
+    term: ['ID', 'NUM', 'NULL', 'LPAREN', 'AMP', 'STAR', 'NEW']
+    factor: ['ID', 'NUM', 'NULL', 'LPAREN', 'AMP', 'STAR', 'NEW']
+    arglist: ['AMP', 'ID', 'LPAREN', 'NEW', 'NULL', 'NUM', 'STAR']
+    lvalue: ['ID', 'STAR', 'LPAREN'] 
+
+Follow:
+    procedures: ['EOF']
+    procedure: ['INT']
+    main: ['EOF']
+    params: ['RPAREN']
+    paramlist: ['RPAREN']
+    type: ['ID']
+    dcls: ['DELETE', 'ID', 'IF', 'LPAREN', 'PRINTLN', 'RETURN', 'STAR', 'WHILE', 'INT']
+    dcl: ['COMMA', 'RPAREN', 'BECOMES']
+    statements: ['RETURN', 'DELETE', 'ID', 'IF', 'LPAREN', 'PRINTLN', 'STAR', 'WHILE', 'RBRACE']
+    statement: ['DELETE', 'ID', 'IF', 'LPAREN', 'PRINTLN', 'RETURN', 'STAR', 'WHILE', 'RBRACE']
+    test: ['RPAREN']
+    expr: ['SEMI', 'RPAREN', 'EQ', 'NE', 'LT', 'LE', 'GE', 'GT', 'PLUS', 'MINUS', 'RBRACK', 'COMMA']
+    term: ['EQ', 'GE', 'GT', 'LE', 'LT', 'NE', 'RPAREN', 'SEMI', 'PLUS', 'MINUS', 'STAR', 'SLASH', 'PCT', 'RBRACK', 'COMMA']
+    factor: ['EQ', 'GE', 'GT', 'LE', 'LT', 'MINUS', 'NE', 'PLUS', 'RPAREN', 'SEMI', 'STAR', 'SLASH', 'PCT', 'RBRACK', 'COMMA', 'BECOMES']
+    arglist: ['RPAREN']
+    lvalue: ['BECOMES', 'EQ', 'GE', 'GT', 'LE', 'LT', 'MINUS', 'NE', 'PCT', 'PLUS', 'RPAREN', 'SEMI', 'SLASH', 'STAR', 'RBRACK', 'COMMA'] 
+
+State 0:
+    start ⋅ BOF procedures EOF
+    Transitions: BOF->1
+State 1:
+    start BOF ⋅ procedures EOF
+    procedures ⋅ procedure procedures
+    procedures ⋅ main
+    procedure ⋅ INT ID LPAREN params RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    main ⋅ INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    Transitions: procedures->2, procedure->3, main->4, INT->5
+State 2:
+    start BOF procedures ⋅ EOF
+    Transitions: EOF->6
+State 6:
+    start BOF procedures EOF ⋅
+    Transitions: 
+State 3:
+    procedures procedure ⋅ procedures
+    procedures ⋅ main
+    main ⋅ INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    Transitions: procedures->7, main->4, INT->8
+State 7:
+    procedures procedure procedures ⋅
+    Transitions: 
+State 4:
+    procedures main ⋅
+    Transitions: 
+State 8:
+    main INT ⋅ WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    Transitions: WAIN->9
+State 9:
+    main INT WAIN ⋅ LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    Transitions: LPAREN->10
+State 10:
+    main INT WAIN LPAREN ⋅ dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    dcl ⋅ type ID
+    type ⋅ INT
+    type ⋅ INT STAR
+    Transitions: dcl->11, type->12, INT->13
+State 11:
+    main INT WAIN LPAREN dcl ⋅ COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    Transitions: COMMA->14
+State 14:
+    main INT WAIN LPAREN dcl COMMA ⋅ dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    dcl ⋅ type ID
+    type ⋅ INT
+    type ⋅ INT STAR
+    Transitions: dcl->15, type->12, INT->13
+State 15:
+    main INT WAIN LPAREN dcl COMMA dcl ⋅ RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    Transitions: RPAREN->16
+State 16:
+    main INT WAIN LPAREN dcl COMMA dcl RPAREN ⋅ LBRACE dcls statements RETURN expr SEMI RBRACE
+    Transitions: LBRACE->17
+State 17:
+    main INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE ⋅ dcls statements RETURN expr SEMI RBRACE
+    dcls ⋅
+    dcls ⋅ dcls dcl BECOMES NUM SEMI
+    dcls ⋅ dcls dcl BECOMES NULL SEMI
+    Transitions: dcls->18
+State 18:
+    main INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls ⋅ statements RETURN expr SEMI RBRACE
+    dcls dcls ⋅ dcl BECOMES NUM SEMI
+    dcls dcls ⋅ dcl BECOMES NULL SEMI
+    statements ⋅
+    statements ⋅ statements statement
+    dcl ⋅ type ID
+    type ⋅ INT
+    type ⋅ INT STAR
+    Transitions: statements->19, dcl->20, type->12, INT->13
+State 19:
+    main INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements ⋅ RETURN expr SEMI RBRACE
+    statements statements ⋅ statement
+    statement ⋅ lvalue BECOMES expr SEMI
+    statement ⋅ IF LPAREN test RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE
+    statement ⋅ WHILE LPAREN test RPAREN LBRACE statements RBRACE
+    statement ⋅ PRINTLN LPAREN expr RPAREN SEMI
+    statement ⋅ DELETE LBRACK RBRACK expr SEMI
+    lvalue ⋅ ID
+    lvalue ⋅ STAR factor
+    lvalue ⋅ LPAREN lvalue RPAREN
+    Transitions: RETURN->21, statement->22, lvalue->23, IF->24, WHILE->25, PRINTLN->26, DELETE->27, ID->28, STAR->29, LPAREN->30
+State 21:
+    main INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN ⋅ expr SEMI RBRACE
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: expr->31, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 31:
+    main INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr ⋅ SEMI RBRACE
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: SEMI->41, PLUS->42, MINUS->43
+State 41:
+    main INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI ⋅ RBRACE
+    Transitions: RBRACE->44
+State 44:
+    main INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE ⋅
+    Transitions: 
+State 42:
+    expr expr PLUS ⋅ term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    expr expr PLUS ⋅ term
+    Transitions: term->45, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 45:
+    expr expr PLUS term ⋅
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    Transitions: STAR->46, SLASH->47, PCT->48
+State 46:
+    term term STAR ⋅ factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    term term STAR ⋅ factor
+    term term STAR ⋅ factor
+    Transitions: factor->49, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 49:
+    term term STAR factor ⋅
+    Transitions: 
+State 34:
+    factor ID ⋅
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    factor ID ⋅ LPAREN RPAREN
+    factor ID ⋅ LPAREN arglist RPAREN
+    Transitions: LPAREN->50
+State 50:
+    factor ID LPAREN ⋅ RPAREN
+    factor ID LPAREN ⋅ arglist RPAREN
+    factor ID LPAREN ⋅ RPAREN
+    factor ID LPAREN ⋅ arglist RPAREN
+    factor ID LPAREN ⋅ RPAREN
+    factor ID LPAREN ⋅ arglist RPAREN
+    arglist ⋅ expr
+    arglist ⋅ expr COMMA arglist
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    Transitions: RPAREN->51, arglist->52, expr->53, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 51:
+    factor ID LPAREN RPAREN ⋅
+    factor ID LPAREN RPAREN ⋅
+    factor ID LPAREN RPAREN ⋅
+    Transitions: 
+State 52:
+    factor ID LPAREN arglist ⋅ RPAREN
+    factor ID LPAREN arglist ⋅ RPAREN
+    factor ID LPAREN arglist ⋅ RPAREN
+    Transitions: RPAREN->54
+State 54:
+    factor ID LPAREN arglist RPAREN ⋅
+    factor ID LPAREN arglist RPAREN ⋅
+    factor ID LPAREN arglist RPAREN ⋅
+    Transitions: 
+State 53:
+    arglist expr ⋅
+    arglist expr ⋅ COMMA arglist
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: COMMA->55, PLUS->42, MINUS->43
+State 55:
+    arglist expr COMMA ⋅ arglist
+    arglist ⋅ expr
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: arglist->56, expr->53, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 56:
+    arglist expr COMMA arglist ⋅
+    Transitions: 
+State 32:
+    expr term ⋅
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    Transitions: STAR->46, SLASH->47, PCT->48
+State 47:
+    term term SLASH ⋅ factor
+    term term SLASH ⋅ factor
+    term term SLASH ⋅ factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: factor->57, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 57:
+    term term SLASH factor ⋅
+    term term SLASH factor ⋅
+    term term SLASH factor ⋅
+    Transitions: 
+State 35:
+    factor NUM ⋅
+    Transitions: 
+State 36:
+    factor NULL ⋅
+    Transitions: 
+State 37:
+    factor LPAREN ⋅ expr RPAREN
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: expr->58, term->32, factor->33, ID->34, NUM->35, NULL->36, AMP->38, STAR->39, NEW->40
+State 58:
+    factor LPAREN expr ⋅ RPAREN
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: RPAREN->59, PLUS->42, MINUS->43
+State 59:
+    factor LPAREN expr RPAREN ⋅
+    Transitions: 
+State 43:
+    expr expr MINUS ⋅ term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    expr expr MINUS ⋅ term
+    Transitions: term->60, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 60:
+    expr expr MINUS term ⋅
+    term term ⋅ STAR factor
+    term term ⋅ SLASH factor
+    term term ⋅ PCT factor
+    Transitions: STAR->46, SLASH->47, PCT->48
+State 48:
+    term term PCT ⋅ factor
+    term term PCT ⋅ factor
+    term term PCT ⋅ factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: factor->61, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 61:
+    term term PCT factor ⋅
+    term term PCT factor ⋅
+    term term PCT factor ⋅
+    Transitions: 
+State 38:
+    factor AMP ⋅ lvalue
+    lvalue ⋅ ID
+    lvalue ⋅ STAR factor
+    lvalue ⋅ LPAREN lvalue RPAREN
+    Transitions: lvalue->62, ID->28, STAR->29, LPAREN->30
+State 62:
+    factor AMP lvalue ⋅
+    Transitions: 
+State 28:
+    lvalue ID ⋅
+    Transitions: 
+State 29:
+    lvalue STAR ⋅ factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: factor->63, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 63:
+    lvalue STAR factor ⋅
+    Transitions: 
+State 39:
+    factor STAR ⋅ factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: factor->64, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, NEW->40
+State 64:
+    factor STAR factor ⋅
+    Transitions: 
+State 40:
+    factor NEW ⋅ INT LBRACK expr RBRACK
+    Transitions: INT->65
+State 65:
+    factor NEW INT ⋅ LBRACK expr RBRACK
+    Transitions: LBRACK->66
+State 66:
+    factor NEW INT LBRACK ⋅ expr RBRACK
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: expr->67, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39
+State 67:
+    factor NEW INT LBRACK expr ⋅ RBRACK
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: RBRACK->68, PLUS->42, MINUS->43
+State 68:
+    factor NEW INT LBRACK expr RBRACK ⋅
+    Transitions: 
+State 33:
+    term factor ⋅
+    Transitions: 
+State 30:
+    lvalue LPAREN ⋅ lvalue RPAREN
+    lvalue ⋅ ID
+    lvalue ⋅ STAR factor
+    Transitions: lvalue->69, ID->28, STAR->29
+State 69:
+    lvalue LPAREN lvalue ⋅ RPAREN
+    Transitions: RPAREN->70
+State 70:
+    lvalue LPAREN lvalue RPAREN ⋅
+    Transitions: 
+State 22:
+    statements statements statement ⋅
+    Transitions: 
+State 23:
+    statement lvalue ⋅ BECOMES expr SEMI
+    Transitions: BECOMES->71
+State 71:
+    statement lvalue BECOMES ⋅ expr SEMI
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: expr->72, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 72:
+    statement lvalue BECOMES expr ⋅ SEMI
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: SEMI->73, PLUS->42, MINUS->43
+State 73:
+    statement lvalue BECOMES expr SEMI ⋅
+    Transitions: 
+State 24:
+    statement IF ⋅ LPAREN test RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE
+    Transitions: LPAREN->74
+State 74:
+    statement IF LPAREN ⋅ test RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE
+    test ⋅ expr EQ expr
+    test ⋅ expr NE expr
+    test ⋅ expr LT expr
+    test ⋅ expr LE expr
+    test ⋅ expr GE expr
+    test ⋅ expr GT expr
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: test->75, expr->76, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 75:
+    statement IF LPAREN test ⋅ RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE
+    Transitions: RPAREN->77
+State 77:
+    statement IF LPAREN test RPAREN ⋅ LBRACE statements RBRACE ELSE LBRACE statements RBRACE
+    Transitions: LBRACE->78
+State 78:
+    statement IF LPAREN test RPAREN LBRACE ⋅ statements RBRACE ELSE LBRACE statements RBRACE
+    statements ⋅
+    statements ⋅ statements statement
+    Transitions: statements->79
+State 79:
+    statement IF LPAREN test RPAREN LBRACE statements ⋅ RBRACE ELSE LBRACE statements RBRACE
+    statements statements ⋅ statement
+    statement ⋅ lvalue BECOMES expr SEMI
+    statement ⋅ WHILE LPAREN test RPAREN LBRACE statements RBRACE
+    statement ⋅ PRINTLN LPAREN expr RPAREN SEMI
+    statement ⋅ DELETE LBRACK RBRACK expr SEMI
+    lvalue ⋅ ID
+    lvalue ⋅ STAR factor
+    lvalue ⋅ LPAREN lvalue RPAREN
+    Transitions: RBRACE->80, statement->22, lvalue->23, WHILE->25, PRINTLN->26, DELETE->27, ID->28, STAR->29, LPAREN->30
+State 80:
+    statement IF LPAREN test RPAREN LBRACE statements RBRACE ⋅ ELSE LBRACE statements RBRACE
+    Transitions: ELSE->81
+State 81:
+    statement IF LPAREN test RPAREN LBRACE statements RBRACE ELSE ⋅ LBRACE statements RBRACE
+    Transitions: LBRACE->82
+State 82:
+    statement IF LPAREN test RPAREN LBRACE statements RBRACE ELSE LBRACE ⋅ statements RBRACE
+    statements ⋅
+    statements ⋅ statements statement
+    Transitions: statements->83
+State 83:
+    statement IF LPAREN test RPAREN LBRACE statements RBRACE ELSE LBRACE statements ⋅ RBRACE
+    statements statements ⋅ statement
+    statement ⋅ lvalue BECOMES expr SEMI
+    statement ⋅ WHILE LPAREN test RPAREN LBRACE statements RBRACE
+    statement ⋅ PRINTLN LPAREN expr RPAREN SEMI
+    statement ⋅ DELETE LBRACK RBRACK expr SEMI
+    lvalue ⋅ ID
+    lvalue ⋅ STAR factor
+    lvalue ⋅ LPAREN lvalue RPAREN
+    Transitions: RBRACE->84, statement->22, lvalue->23, WHILE->25, PRINTLN->26, DELETE->27, ID->28, STAR->29, LPAREN->30
+State 84:
+    statement IF LPAREN test RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE ⋅
+    Transitions: 
+State 25:
+    statement WHILE ⋅ LPAREN test RPAREN LBRACE statements RBRACE
+    Transitions: LPAREN->85
+State 85:
+    statement WHILE LPAREN ⋅ test RPAREN LBRACE statements RBRACE
+    test ⋅ expr EQ expr
+    test ⋅ expr NE expr
+    test ⋅ expr LT expr
+    test ⋅ expr LE expr
+    test ⋅ expr GE expr
+    test ⋅ expr GT expr
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: test->86, expr->76, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 86:
+    statement WHILE LPAREN test ⋅ RPAREN LBRACE statements RBRACE
+    Transitions: RPAREN->87
+State 87:
+    statement WHILE LPAREN test RPAREN ⋅ LBRACE statements RBRACE
+    Transitions: LBRACE->88
+State 88:
+    statement WHILE LPAREN test RPAREN LBRACE ⋅ statements RBRACE
+    statements ⋅
+    statements ⋅ statements statement
+    Transitions: statements->89
+State 89:
+    statement WHILE LPAREN test RPAREN LBRACE statements ⋅ RBRACE
+    statements statements ⋅ statement
+    statement ⋅ lvalue BECOMES expr SEMI
+    statement ⋅ IF LPAREN test RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE
+    statement ⋅ PRINTLN LPAREN expr RPAREN SEMI
+    statement ⋅ DELETE LBRACK RBRACK expr SEMI
+    lvalue ⋅ ID
+    lvalue ⋅ STAR factor
+    lvalue ⋅ LPAREN lvalue RPAREN
+    Transitions: RBRACE->90, statement->22, lvalue->23, IF->24, PRINTLN->26, DELETE->27, ID->28, STAR->29, LPAREN->30
+State 90:
+    statement WHILE LPAREN test RPAREN LBRACE statements RBRACE ⋅
+    Transitions: 
+State 26:
+    statement PRINTLN ⋅ LPAREN expr RPAREN SEMI
+    Transitions: LPAREN->91
+State 91:
+    statement PRINTLN LPAREN ⋅ expr RPAREN SEMI
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: expr->92, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 92:
+    statement PRINTLN LPAREN expr ⋅ RPAREN SEMI
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: RPAREN->93, PLUS->42, MINUS->43
+State 93:
+    statement PRINTLN LPAREN expr RPAREN ⋅ SEMI
+    Transitions: SEMI->94
+State 94:
+    statement PRINTLN LPAREN expr RPAREN SEMI ⋅
+    Transitions: 
+State 27:
+    statement DELETE ⋅ LBRACK RBRACK expr SEMI
+    Transitions: LBRACK->95
+State 95:
+    statement DELETE LBRACK ⋅ RBRACK expr SEMI
+    Transitions: RBRACK->96
+State 96:
+    statement DELETE LBRACK RBRACK ⋅ expr SEMI
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: expr->97, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 97:
+    statement DELETE LBRACK RBRACK expr ⋅ SEMI
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: SEMI->98, PLUS->42, MINUS->43
+State 98:
+    statement DELETE LBRACK RBRACK expr SEMI ⋅
+    Transitions: 
+State 76:
+    test expr ⋅ EQ expr
+    test expr ⋅ NE expr
+    test expr ⋅ LT expr
+    test expr ⋅ LE expr
+    test expr ⋅ GE expr
+    test expr ⋅ GT expr
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    test expr ⋅ NE expr
+    test expr ⋅ LT expr
+    test expr ⋅ LE expr
+    test expr ⋅ GE expr
+    test expr ⋅ GT expr
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: EQ->99, NE->100, LT->101, LE->102, GE->103, GT->104, PLUS->42, MINUS->43
+State 99:
+    test expr EQ ⋅ expr
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: expr->105, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 105:
+    test expr EQ expr ⋅
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: PLUS->42, MINUS->43
+State 100:
+    test expr NE ⋅ expr
+    test expr NE ⋅ expr
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: expr->106, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 106:
+    test expr NE expr ⋅
+    test expr NE expr ⋅
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: PLUS->42, MINUS->43
+State 101:
+    test expr LT ⋅ expr
+    test expr LT ⋅ expr
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: expr->107, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 107:
+    test expr LT expr ⋅
+    test expr LT expr ⋅
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: PLUS->42, MINUS->43
+State 102:
+    test expr LE ⋅ expr
+    test expr LE ⋅ expr
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: expr->108, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 108:
+    test expr LE expr ⋅
+    test expr LE expr ⋅
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: PLUS->42, MINUS->43
+State 103:
+    test expr GE ⋅ expr
+    test expr GE ⋅ expr
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: expr->109, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 109:
+    test expr GE expr ⋅
+    test expr GE expr ⋅
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: PLUS->42, MINUS->43
+State 104:
+    test expr GT ⋅ expr
+    test expr GT ⋅ expr
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: expr->110, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 110:
+    test expr GT expr ⋅
+    test expr GT expr ⋅
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: PLUS->42, MINUS->43
+State 20:
+    dcls dcls dcl ⋅ BECOMES NUM SEMI
+    dcls dcls dcl ⋅ BECOMES NULL SEMI
+    dcls dcls dcl ⋅ BECOMES NULL SEMI
+    Transitions: BECOMES->111
+State 111:
+    dcls dcls dcl BECOMES ⋅ NUM SEMI
+    dcls dcls dcl BECOMES ⋅ NULL SEMI
+    Transitions: NUM->112, NULL->113
+State 112:
+    dcls dcls dcl BECOMES NUM ⋅ SEMI
+    Transitions: SEMI->114
+State 114:
+    dcls dcls dcl BECOMES NUM SEMI ⋅
+    Transitions: 
+State 113:
+    dcls dcls dcl BECOMES NULL ⋅ SEMI
+    Transitions: SEMI->115
+State 115:
+    dcls dcls dcl BECOMES NULL SEMI ⋅
+    Transitions: 
+State 12:
+    dcl type ⋅ ID
+    Transitions: ID->116
+State 116:
+    dcl type ID ⋅
+    Transitions: 
+State 13:
+    type INT ⋅
+    type INT ⋅ STAR
+    type INT ⋅ STAR
+    type INT ⋅ STAR
+    type INT ⋅ STAR
+    type INT ⋅ STAR
+    type INT ⋅ STAR
+    Transitions: STAR->117
+State 117:
+    type INT STAR ⋅
+    type INT STAR ⋅
+    type INT STAR ⋅
+    Transitions: 
+State 5:
+    procedure INT ⋅ ID LPAREN params RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    main INT ⋅ WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    Transitions: ID->118, WAIN->9
+State 118:
+    procedure INT ID ⋅ LPAREN params RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    Transitions: LPAREN->119
+State 119:
+    procedure INT ID LPAREN ⋅ params RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    params ⋅
+    params ⋅ paramlist
+    paramlist ⋅ dcl
+    paramlist ⋅ dcl COMMA paramlist
+    dcl ⋅ type ID
+    type ⋅ INT
+    type ⋅ INT STAR
+    Transitions: params->120, paramlist->121, dcl->122, type->12, INT->13
+State 120:
+    procedure INT ID LPAREN params ⋅ RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+    Transitions: RPAREN->123
+State 123:
+    procedure INT ID LPAREN params RPAREN ⋅ LBRACE dcls statements RETURN expr SEMI RBRACE
+    Transitions: LBRACE->124
+State 124:
+    procedure INT ID LPAREN params RPAREN LBRACE ⋅ dcls statements RETURN expr SEMI RBRACE
+    dcls ⋅
+    dcls ⋅ dcls dcl BECOMES NUM SEMI
+    dcls ⋅ dcls dcl BECOMES NULL SEMI
+    Transitions: dcls->125
+State 125:
+    procedure INT ID LPAREN params RPAREN LBRACE dcls ⋅ statements RETURN expr SEMI RBRACE
+    dcls dcls ⋅ dcl BECOMES NUM SEMI
+    dcls dcls ⋅ dcl BECOMES NULL SEMI
+    statements ⋅
+    statements ⋅ statements statement
+    dcl ⋅ type ID
+    type ⋅ INT
+    type ⋅ INT STAR
+    Transitions: statements->126, dcl->20, type->12, INT->13
+State 126:
+    procedure INT ID LPAREN params RPAREN LBRACE dcls statements ⋅ RETURN expr SEMI RBRACE
+    statements statements ⋅ statement
+    statement ⋅ lvalue BECOMES expr SEMI
+    statement ⋅ IF LPAREN test RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE
+    statement ⋅ WHILE LPAREN test RPAREN LBRACE statements RBRACE
+    statement ⋅ PRINTLN LPAREN expr RPAREN SEMI
+    statement ⋅ DELETE LBRACK RBRACK expr SEMI
+    lvalue ⋅ ID
+    lvalue ⋅ STAR factor
+    lvalue ⋅ LPAREN lvalue RPAREN
+    Transitions: RETURN->127, statement->22, lvalue->23, IF->24, WHILE->25, PRINTLN->26, DELETE->27, ID->28, STAR->29, LPAREN->30
+State 127:
+    procedure INT ID LPAREN params RPAREN LBRACE dcls statements RETURN ⋅ expr SEMI RBRACE
+    expr ⋅ term
+    expr ⋅ expr PLUS term
+    expr ⋅ expr MINUS term
+    term ⋅ factor
+    term ⋅ term STAR factor
+    term ⋅ term SLASH factor
+    term ⋅ term PCT factor
+    factor ⋅ ID
+    factor ⋅ NUM
+    factor ⋅ NULL
+    factor ⋅ LPAREN expr RPAREN
+    factor ⋅ AMP lvalue
+    factor ⋅ STAR factor
+    factor ⋅ NEW INT LBRACK expr RBRACK
+    factor ⋅ ID LPAREN RPAREN
+    factor ⋅ ID LPAREN arglist RPAREN
+    Transitions: expr->128, term->32, factor->33, ID->34, NUM->35, NULL->36, LPAREN->37, AMP->38, STAR->39, NEW->40
+State 128:
+    procedure INT ID LPAREN params RPAREN LBRACE dcls statements RETURN expr ⋅ SEMI RBRACE
+    expr expr ⋅ PLUS term
+    expr expr ⋅ MINUS term
+    Transitions: SEMI->129, PLUS->42, MINUS->43
+State 129:
+    procedure INT ID LPAREN params RPAREN LBRACE dcls statements RETURN expr SEMI ⋅ RBRACE
+    Transitions: RBRACE->130
+State 130:
+    procedure INT ID LPAREN params RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE ⋅
+    Transitions: 
+State 121:
+    params paramlist ⋅
+    Transitions: 
+State 122:
+    paramlist dcl ⋅
+    paramlist dcl ⋅ COMMA paramlist
+    Transitions: COMMA->131
+State 131:
+    paramlist dcl COMMA ⋅ paramlist
+    paramlist ⋅ dcl
+    dcl ⋅ type ID
+    type ⋅ INT
+    type ⋅ INT STAR
+    Transitions: paramlist->132, dcl->122, type->12, INT->13
+State 132:
+    paramlist dcl COMMA paramlist ⋅
+    Transitions: 

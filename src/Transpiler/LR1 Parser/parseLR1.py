@@ -2,7 +2,7 @@
 import yaml
 import numpy as np
 
-def parseLR1(infile, outfile):
+def parseLR1(infile, outfile, verbose=False):
 
     with open(infile, "r") as file:
         specs = yaml.load(file)
@@ -10,17 +10,27 @@ def parseLR1(infile, outfile):
     #     specs = yaml.load(file)
 
 
-    terminals = ["BOF", "EOF"]
+    terminals = []
     for token in specs["tokens"]:
         terminals.extend([key for key in token])
     for keyword in specs["keywords"]:
         terminals.extend([key for key in keyword])
 
-    nonterminals = ["S"]
+    if "BOF" not in terminals:
+        terminals.append("BOF")
+    if "EOF" not in terminals:
+        terminals.append("EOF")
+
+    start_symbol = specs["startSymbol"]
+
+    nonterminals = []
     for nonterminal in specs["nonterminalSymbols"]:
         nonterminals.append(nonterminal)
 
-    productionRules = [["S", "BOF", specs["startSymbol"], "EOF"]]
+    if start_symbol not in nonterminals:
+        nonterminals.append(start_symbol)
+
+    productionRules = []
     for rule in specs["productionRules"]:
         productionRules.append(rule.split(" "))
 
@@ -31,8 +41,16 @@ def parseLR1(infile, outfile):
         else:
             productions[rule[0]] = [i]
 
-    # print("Rules:\n    ", end="")
-    # print("\n    ".join([" ".join(rule) for rule in productionRules]), "\n")
+    if "start" not in productions:
+        productionRules.append(["start", "BOF", start_symbol, "EOF"])
+        start_state = len(productionRules)-1
+        productions["start"] = [start_state]
+    else:
+        start_state = 0
+
+    if verbose:
+        print("Rules:\n    ", end="")
+        print("\n    ".join([f"{i}  "+" ".join(rule) for i, rule in enumerate(productionRules)]), "\n")
 
 
     ###############################################################################################
@@ -43,7 +61,7 @@ def parseLR1(infile, outfile):
     for rule in productionRules:
         nullable[rule[0]] = False
         first[rule[0]] = []
-        if rule[0] != specs["startSymbol"]:
+        if rule[0] != start_symbol:
             follow[rule[0]] = []
 
     def is_nullable(s, bool_=True):
@@ -80,8 +98,9 @@ def parseLR1(infile, outfile):
                     nullable[rule[0]] = True
                     changed = True
 
-    # print("Nullable:\n    ", end="")
-    # print("\n    ".join(f"{A}: {nullable[A]}" for A in nullable if A in nonterminals), "\n")
+    if verbose:
+        print("Nullable:\n    ", end="")
+        print("\n    ".join(f"{A}: {nullable[A]}" for A in nullable if A in nonterminals), "\n")
 
     # Compute First Table
     changed = True
@@ -96,8 +115,9 @@ def parseLR1(infile, outfile):
                     changed = changed or union(get_first(rule[0]), get_first(s))
                     if not is_nullable(s): break
 
-    # print("First:\n    ", end="")
-    # print("\n    ".join(f"{s}: {first[s]}" for s in first), "\n")
+    if verbose:
+        print("First:\n    ", end="")
+        print("\n    ".join(f"{s}: {first[s]}" for s in first), "\n")
 
     def first_star(rule, i):
         result = []
@@ -123,8 +143,9 @@ def parseLR1(infile, outfile):
                     if all(is_nullable(rule[k]) for k in range(j+1, len(rule))):
                         changed = changed or union(get_follow(rule[j]), get_follow(rule[0]))
 
-    # print("Follow:\n    ", end="")
-    # print("\n    ".join(f"{s}: {follow[s]}" for s in follow), "\n")
+    if verbose:
+        print("Follow:\n    ", end="")
+        print("\n    ".join(f"{s}: {follow[s]}" for s in follow), "\n")
 
     ###############################################################################################
 
@@ -148,8 +169,8 @@ def parseLR1(infile, outfile):
         def get_rule(self):
             return productionRules[self.rule]
 
-        def get_next(self):
-            return productionRules[self.rule][self.bookmark]
+        def get_next(self, i=0):
+            return productionRules[self.rule][self.bookmark+i]
 
     class State:
         state_map = {}
@@ -168,6 +189,9 @@ def parseLR1(infile, outfile):
                 for transition, state in self.transitions.items():
                     state.reset_visited()
 
+        def add_item(self, item):
+            self.items.append(item)
+
         def generate_items(self):
             for item in self.items:
                 if item.bookmark < len(item.get_rule()):
@@ -177,21 +201,38 @@ def parseLR1(infile, outfile):
                             if not any(rule == i.rule for i in self.items):
                                 self.items.append(Item(rule))
 
+                        # if item.bookmark+1 < len(item.get_rule()) and is_nullable(next_item):
+                        #     next_item = item.get_next(1)
+                        #     if next_item in nonterminals:
+                        #         for rule in productions[next_item]:
+                        #             if not any(rule == i.rule for i in self.items):
+                        #                 self.items.append(Item(rule))
+
+
         def generate_states(self):
             if not self.visited:
                 self.visited = True
                 self.generate_items()
-                for item in self.items:
-                    if item.bookmark < len(item.get_rule()):
-                        next_item = item.get_next()
-                        # if next_item in terminals:
-                        new_item = Item(item=item)
+
+                def add_transition(new_item, next_item):
+                    if next_item in self.transitions:
+                        self.transitions[next_item].add_item(new_item)
+                    else:
                         hashed = hash(new_item)
                         if hashed in State.state_map:
                             self.transitions[next_item] = State.state_map[hashed]
                         else:
                             self.transitions[next_item] = State(new_item)
                             State.state_map[hashed] = self.transitions[next_item]
+                        
+                for item in self.items:
+
+                    new_item = Item(item=item)
+                    if item.bookmark < len(item.get_rule()):
+                        add_transition(new_item, item.get_next())
+                    # else:
+                    #     for next_item in get_follow(item.get_rule()[0]):
+                    #         add_transition(next_item)
 
                 for transition, state in self.transitions.items():
                     state.generate_states()
@@ -209,19 +250,25 @@ def parseLR1(infile, outfile):
                             transitions.append([self.num, s, "REDUCE", item.rule])
 
             return transitions
-            
+
+        def print(self):
+            if not self.visited:
+                self.visited = True
+                print(f"State {self.num}:\n    ", end="")
+                print("\n    ".join(list(map(str, self.items))))
+                print("    Transitions: "+", ".join(f"{t}->{s.num}" for t, s in self.transitions.items()))
+
+                for transition, state in self.transitions.items():
+                    state.print()
 
 
-
-
-    state = State(Item())
+    state = State(Item(start_state))
     state.reset_visited()
     state.generate_states()
 
-    # print(len(states))
-    # for state in states:
-    #     print("State", state.num, ":\n    ", end="")
-    #     print("\n    ".join(list(map(str, state.items))), "\n")
+    if verbose:
+        state.reset_visited()
+        state.print()
 
 
     state.reset_visited()
@@ -239,6 +286,7 @@ def parseLR1(infile, outfile):
         file.write("\n".join(terminals)+"\n")
         file.write(f"{len(nonterminals)}\n")
         file.write("\n".join(nonterminals)+"\n")
+        file.write(f"start\n")
         file.write(f"{len(productionRules)}\n")
         file.write("\n".join([" ".join(rule) for rule in productionRules])+"\n")
         file.write(f"{State.num}\n")
@@ -247,4 +295,4 @@ def parseLR1(infile, outfile):
 
 
 if __name__ == "__main__":
-    parseLR1("./LanguageSpecification.yml", "./LanguageSpecification.lr1")
+    parseLR1("../LanguageSpecification.yml", "../LanguageSpecification.lr1")

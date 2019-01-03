@@ -60,6 +60,8 @@ Type getType(char c) {
             return QUESTION;
         case '#':
             return POUND;
+        case '$':
+            return DOLLAR;
         case '_':
             return UNDERSCORE;
         case '~':
@@ -180,6 +182,8 @@ void scan(std::istream& in, std::list<Token>& tokens) {
         } else if ((current == NUM && type == DOT) || 
                    (current == NUM && type == STR && (c == 'e' || c == 'E'))) {
             current = NUM;
+        } else if (current == NOT && type == EQUALS) {
+            current = NE;
         } else if (current == PLUS && type == EQUALS) {
             current = PLUS_EQUALS;
         } else if (current == MINUS && type == EQUALS) {
@@ -189,7 +193,7 @@ void scan(std::istream& in, std::list<Token>& tokens) {
         } else if (current == SLASH && type == EQUALS) {
             current = SLASH_EQUALS;
         } else if (current == PCT && type == EQUALS) {
-            current = MOD_EQUALS;
+            current = PCT_EQUALS;
         } else if (current == CARET && type == EQUALS) {
             current = CARET_EQUALS;
         } else if (current == MINUS && type == GT) {
