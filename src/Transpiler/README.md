@@ -151,10 +151,19 @@ A context-free grammar for a valid CML program is:
    * `term → term SLASH_SLASH factor`
    * `term → term PCT factor`
    * `factor → NUM`
+   * `factor → LPAREN expr RPAREN`
+   * `factor → ID LPAREN RPAREN`
+   * `factor → ID LPAREN arglist RPAREN`
    * `factor → ID`
+   * `factor → AMP lvalue`
+   * `factor → STAR factor`
    * `factor → QUOTE string QUOTE`
    * `factor → ID QUOTE string QUOTE`
+   * `arglist → expr`
+   * `arglist → expr COMMA arglist`
    * `string → `
    * `string → ID`
    * `string → STR`
-   * `whitespace → `
+   * `lvalue → ID`
+   * `lvalue → STAR factor`
+   * `lvalue → LPAREN lvalue RPAREN`

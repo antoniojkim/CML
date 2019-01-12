@@ -87,12 +87,15 @@ Parser::Parser(const std::string& lr1Path) {
     }
 }
 
-std::unique_ptr<ParseTree> Parser::parse(const std::string& input) {
+std::unique_ptr<ParseTree> Parser::parse(const std::string& input,
+                                         const bool& showTokens) {
     list<Token> tokens;
     tokens.emplace_back(Token{"BOF_", Type::BOF_});
     scan(input, tokens);
     tokens.emplace_back(Token{"EOF_", Type::EOF_});
-    // print(cout, tokens, "\n", true) << endl << endl;
+    if (showTokens) {
+        print(cout, tokens, "\n", true) << endl << endl;
+    }
     return parse(tokens);
 }
 

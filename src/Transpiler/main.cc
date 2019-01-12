@@ -23,7 +23,7 @@ void assertScan(const string& input, const string& expected) {
 
 void assertParsable(Parser& parser, const string& input,
                     const bool& printTree = false) {
-    unique_ptr<ParseTree> tree = parser.parse(input);
+    unique_ptr<ParseTree> tree = parser.parse(input, printTree);
     if (printTree) {
         tree->print(cout) << endl;
     }
@@ -55,9 +55,12 @@ void runTests() {
     Parser parser{"./LanguageSpecification.lr1"};
     assertParsable(parser, "int main() { return 5; }");
     assertParsable(parser, "int main() { return s5; }");
+    assertParsable(parser, "int main() { return *s5; }");
+    assertParsable(parser, "int main() { return &s5; }");
     assertUnparsable(parser, "int main() { return 5s; }");
     assertParsable(parser, "int main() { return \"hello world\"; }");
     assertParsable(parser, "int main() { return f\"hello world\"; }");
+    // assertParsable(parser, "int main() { int i = 5; return i; }", true);
 
     cout << endl << "All Tests Passed!" << endl << endl;
 }
