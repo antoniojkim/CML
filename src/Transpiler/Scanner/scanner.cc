@@ -183,6 +183,7 @@ map<char, Type> charType = {
 	{'?', QUESTION},
 	{'#', POUND},
 	{'$', DOLLAR},
+	{'\"', QUOTE},
 	{'\'', APOSTROPHE},
 	{'`', BACKTICK},
 	{'_', UNDERSCORE}
@@ -212,6 +213,7 @@ std::string getTypeString(const Type& type) {
     if (keywordLexeme.count(type) > 0) return keywordLexeme[type];
     if (typeLexeme.count(type) > 0)    return typeLexeme[type];
     if (type == ID)                    return "ID";
+    if (type == STR)                   return "STR";
     if (type == NUM)                   return "NUM";
     if (type == WHITESPACE)            return "WHITESPACE";
 
@@ -240,7 +242,8 @@ void scan(std::istream& in, std::list<Token>& tokens) {
                    (current == NUM && type == ID && (c == 'e' || c == 'E'))) {
             current = NUM;
         } else if (openQuote && 
-                    ((current == NUM && type == ID) ||
+                    ((current == STR && type == ID) ||
+                     (current == NUM && type == ID) ||
                      (current == ID && type == WHITESPACE) ||
                      (current == STR && type == WHITESPACE))) {
             current = STR;

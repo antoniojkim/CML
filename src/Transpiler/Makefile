@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Ofast -std=c++14 -DDEBUG -Wall -MMD -Werror=vla
+CXXFLAGS = -Ofast -g -std=c++14 -DDEBUG -Wall -MMD -Werror=vla
 EXEC = main
 
 OBJECTS = Scanner/scanner.o Parser/parser.o Parser/parsetree.o utils.o main.o

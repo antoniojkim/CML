@@ -5,14 +5,14 @@
 A procedure definition is a sequence of *tokens* optionally separated by *white space* consisting of spaces, newlines, or comments. Every valid token is one of the following:
 
  * `ID`: a string consisting of any combination of letters (in the range a-z, A-Z), digits (in the range 0-9) as well as underscores ( _ ) with the exception that it may not start with a digit.
- * `STR`: a string consisting of any combination of letters, digits, and symbols (e.g. $, √) with the exception that it may not start with a digit.
+ * `STR`: a string consisting of any combination of letters, digits, and symbols (e.g. $, √)
  * `NUM`: a string consisting of only digits separated by at most one dot ( . ) at most one case insensitive "e" which must come after the dot.
  * `LPAREN`: the string "("
  * `RPAREN`: the string ")"
  * `LSQUARE`: the string "["
  * `RSQUARE`: the string "]"
- * `LCURLY`: the string "{"
- * `RCURLY`: the string "}"
+ * `LBRACE`: the string "{"
+ * `RBRACE`: the string "}"
  * `EQUALS`: the string "="
  * `EQUALS_EQUALS`: the string "=="
  * `NE`: the string "!="
@@ -55,11 +55,13 @@ A procedure definition is a sequence of *tokens* optionally separated by *white 
  * `QUESTION`: the string "?"
  * `POUND`: the string "#"
  * `DOLLAR`: the string "$"
- * `QUOTE`: the string ""
+ * `QUOTE`: the string """
  * `APOSTROPHE`: the string "'"
  * `BACKSLASH`: the string "\\"
  * `BACKTICK`: the string "`"
  * `UNDERSCORE`: the string "_"
+ * `BOF_`: the string "BOF"
+ * `EOF_`: the string "EOF"
 
 In addition to the above tokens, the following are also valid tokens and their strings are reserved keywords:
 
@@ -100,8 +102,8 @@ A context-free grammar for a valid CML program is:
    * `include`
    * `procedure`
    * `main`
+   * `param`
    * `params`
-   * `paramlist`
    * `type`
    * `dcl`
    * `dcls`
@@ -114,13 +116,14 @@ A context-free grammar for a valid CML program is:
    * `test`
    * `factor`
    * `arglist`
+   * `whitespace`
  * start symbol: `globals`
  * production rules:
    * `globals → `
    * `globals → include globals`
    * `globals → procedure globals`
-   * `include → POUND INCLUDE LT STR RT`
-   * `include → POUND INCLUDE QUOTE STR QUOTE`
+   * `include → POUND INCLUDE LT ID GT`
+   * `include → POUND INCLUDE QUOTE ID QUOTE`
    * `procedure → type ID LPAREN params RPAREN LBRACE statements RBRACE`
    * `params → `
    * `params → param params`
@@ -135,8 +138,9 @@ A context-free grammar for a valid CML program is:
    * `type → ID STAR`
    * `statements → `
    * `statements → statement statements`
-   * `statement → type STR SEMICOLON`
-   * `statement → type STR BECOMES expr SEMICOLON`
+   * `statement → type ID SEMICOLON`
+   * `statement → type ID EQUALS expr SEMICOLON`
+   * `statement → RETURN expr SEMICOLON`
    * `expr → term`
    * `expr → expr PLUS term`
    * `expr → expr MINUS term`
@@ -147,3 +151,10 @@ A context-free grammar for a valid CML program is:
    * `term → term SLASH_SLASH factor`
    * `term → term PCT factor`
    * `factor → NUM`
+   * `factor → ID`
+   * `factor → QUOTE string QUOTE`
+   * `factor → ID QUOTE string QUOTE`
+   * `string → `
+   * `string → ID`
+   * `string → STR`
+   * `whitespace → `

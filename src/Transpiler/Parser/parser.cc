@@ -92,7 +92,7 @@ std::unique_ptr<ParseTree> Parser::parse(const std::string& input) {
     tokens.emplace_back(Token{"BOF_", Type::BOF_});
     scan(input, tokens);
     tokens.emplace_back(Token{"EOF_", Type::EOF_});
-    // print(cout, tokens, "\n", true);
+    // print(cout, tokens, "\n", true) << endl << endl;
     return parse(tokens);
 }
 
@@ -140,6 +140,12 @@ std::unique_ptr<ParseTree> Parser::parse(list<Token>& tokens) {
             transitions[stateStack.back()][symbolStack.back()->getRoot()]
                 .second);
     }
+
+    // cout << symbolStack.size() << endl;
+    // for (auto& s : symbolStack){
+    //     cout << s->getRoot() << endl;
+    // }
+    symbolStack.pop_back();
 
     unique_ptr<ParseTree> tree = std::move(symbolStack.back());
 
