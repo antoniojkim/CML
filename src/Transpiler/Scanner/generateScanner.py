@@ -82,7 +82,7 @@ using namespace std;
     source.write(",\n\t".join([f"{{{k}, \"{k}\"}}" for k, v in typeLexeme.items()]))
     source.write("\n};\n")
 
-    charType = {k.replace("'", "\\'"):v for k, v in tokenType.items() if len(k) == 1}
+    charType = {k.replace("'", "\\'"):v for k, v in tokenType.items() if len(k) == 1 or k == "\\\""}
     source.write("map<char, Type> charType = {\n\t")
     source.write(",\n\t".join([f"{{'{k}', {v}}}" for k, v in charType.items()]))
     source.write("\n};\n")
@@ -112,6 +112,7 @@ std::string getTypeString(const Type& type) {
     if (keywordLexeme.count(type) > 0) return keywordLexeme[type];
     if (typeLexeme.count(type) > 0)    return typeLexeme[type];
     if (type == ID)                    return "ID";
+    if (type == STR)                   return "STR";
     if (type == NUM)                   return "NUM";
     if (type == WHITESPACE)            return "WHITESPACE";
 
@@ -142,7 +143,8 @@ void scan(std::istream& in, std::list<Token>& tokens) {
                    (current == NUM && type == ID && (c == 'e' || c == 'E'))) {
             current = NUM;
         } else if (openQuote && 
-                    ((current == NUM && type == ID) ||
+                    ((current == STR && type == ID) ||
+                     (current == NUM && type == ID) ||
                      (current == ID && type == WHITESPACE) ||
                      (current == STR && type == WHITESPACE))) {
             current = STR;

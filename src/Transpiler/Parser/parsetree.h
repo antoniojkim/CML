@@ -10,6 +10,10 @@
 struct ParseTree {
     virtual std::string& getRoot() = 0;
     virtual bool isTerminal() = 0;
+
+    // virtual std::unique_ptr<ParseTree> eval() = 0;
+
+    virtual std::ostream& print(std::ostream& out, const std::string& indent="") = 0;
 };
 
 class Terminal : public ParseTree {
@@ -21,6 +25,8 @@ class Terminal : public ParseTree {
 
         std::string& getRoot() override;
         bool isTerminal() override;
+
+        std::ostream& print(std::ostream& out, const std::string& indent) override;
 };
 
 class NonTerminal : public ParseTree {
@@ -37,6 +43,8 @@ class NonTerminal : public ParseTree {
 
         std::string& getRoot() override;
         bool isTerminal() override;
+
+        std::ostream& print(std::ostream& out, const std::string& indent) override;
 };
 
 

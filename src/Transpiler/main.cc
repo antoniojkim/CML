@@ -21,27 +21,50 @@ void assertScan(const string& input, const string& expected) {
     }
 }
 
+void assertParsable(Parser& parser, const string& input,
+                    const bool& printTree = false) {
+    unique_ptr<ParseTree> tree = parser.parse(input);
+    if (printTree) {
+        tree->print(cout) << endl;
+    }
+}
+
+void assertUnparsable(Parser& parser, const string& input) {
+    try {
+        unique_ptr<ParseTree> tree = parser.parse(input);
+    } catch (...) {
+        return;
+    }
+    throw "ERROR:  " + input + "  is parsable";
+}
+
 void runTests() {
-    assertScan("int main { return 5; }", "int⋮ ⋮main⋮ ⋮{⋮ ⋮return⋮ ⋮5⋮;⋮ ⋮}");
-    assertScan("int main2 { return 5; }", "int⋮ ⋮main2⋮ ⋮{⋮ ⋮return⋮ ⋮5⋮;⋮ ⋮}");
-    assertScan(
-        "int main    { int x_1 = 5.6; return x_1; }",
-        "int⋮ ⋮main⋮    ⋮{⋮ ⋮int⋮ ⋮x_1⋮ ⋮=⋮ ⋮5.6⋮;⋮ ⋮return⋮ ⋮x_1⋮;⋮ ⋮}");
-    assertScan("int main { return 5+6/7; }",
-               "int⋮ ⋮main⋮ ⋮{⋮ ⋮return⋮ ⋮5⋮+⋮6⋮/⋮7⋮;⋮ ⋮}");
+    assertScan("int main { return 5; }", "int⋮main⋮{⋮return⋮5⋮;⋮}");
+    assertScan("int main2 { return 5; }", "int⋮main2⋮{⋮return⋮5⋮;⋮}");
+    assertScan("int main    { int x_1 = 5.6; return x_1; }",
+               "int⋮main⋮{⋮int⋮x_1⋮=⋮5.6⋮;⋮return⋮x_1⋮;⋮}");
+    assertScan("int main { return 5+6/7; }", "int⋮main⋮{⋮return⋮5⋮+⋮6⋮/⋮7⋮;⋮}");
     assertScan("int main { return (5+6)/7; }",
-               "int⋮ ⋮main⋮ ⋮{⋮ ⋮return⋮ ⋮(⋮5⋮+⋮6⋮)⋮/⋮7⋮;⋮ ⋮}");
-    assertScan("int main { int* x; x->5; }",
-               "int⋮ ⋮main⋮ ⋮{⋮ ⋮int⋮*⋮ ⋮x⋮;⋮ ⋮x⋮->⋮5⋮;⋮ ⋮}");
+               "int⋮main⋮{⋮return⋮(⋮5⋮+⋮6⋮)⋮/⋮7⋮;⋮}");
+    assertScan("int main { int* x; x->5; }", "int⋮main⋮{⋮int⋮*⋮x⋮;⋮x⋮->⋮5⋮;⋮}");
     assertScan("int main { string x = \"asd \"; }",
-               "int⋮ ⋮main⋮ ⋮{⋮ ⋮string⋮ ⋮x⋮ ⋮=⋮ ⋮\"⋮asd⋮ ⋮\"⋮;⋮ ⋮}");
+               "int⋮main⋮{⋮string⋮x⋮=⋮\"⋮asd ⋮\"⋮;⋮}");
     assertScan("int main { string x = f\"asd{x}\"; }",
-               "int⋮ ⋮main⋮ ⋮{⋮ ⋮string⋮ ⋮x⋮ ⋮=⋮ ⋮f⋮\"⋮asd⋮{⋮x⋮}⋮\"⋮;⋮ ⋮}");
+               "int⋮main⋮{⋮string⋮x⋮=⋮f⋮\"⋮asd⋮{⋮x⋮}⋮\"⋮;⋮}");
+
+    Parser parser{"./LanguageSpecification.lr1"};
+    assertParsable(parser, "int main() { return 5; }");
+    assertParsable(parser, "int main() { return s5; }");
+    assertUnparsable(parser, "int main() { return 5s; }");
+    assertParsable(parser, "int main() { return \"hello world\"; }");
+    assertParsable(parser, "int main() { return f\"hello world\"; }");
+
+    cout << endl << "All Tests Passed!" << endl << endl;
 }
 
 int main(int argc, char** argv) {
     try {
-        // runTests();
+        runTests();
         // if (argc < 3) {
         //     cerr << "Invalid Usage:  Expected    ./CML <cml input file> <c
         //     output file>" << endl; return 1;
@@ -61,9 +84,7 @@ int main(int argc, char** argv) {
         // list<Token> tokens;
         // scan(input.str(), tokens);
         // cout << tokens << endl;
-        Parser parser{"./LanguageSpecification.lr1"};
         // cout << parser << endl;
-        unique_ptr<ParseTree> tree = parser.parse("int main() { return 5; }");
     } catch (const char* err) {
         cerr << err << endl;
     } catch (const string& err) {

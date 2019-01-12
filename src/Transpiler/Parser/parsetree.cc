@@ -10,19 +10,26 @@ bool Terminal::isTerminal() { return true; }
 std::string& Terminal::getRoot() { return typeString; }
 
 
+std::ostream& Terminal::print(std::ostream& out, const std::string& indent){
+    out << indent << getTypeString(token.type) << " " << token.lexeme << endl;
+    return out;
+}
+
+
+
 NonTerminal::NonTerminal(const list<string>& rule) {
     bool rootSet = false;
-    bool first = false;
+    bool first = true;
     ostringstream oss;
     for (auto& s : rule) {
         if (!rootSet) {
             root = s;
             rootSet = true;
         } else {
-            if (!first) {
-                oss << " ";
+            if (first) {
+                first = false;
             } else {
-                first = true;
+                oss << " ";
             }
             oss << s;
         }
@@ -43,3 +50,14 @@ vector<unique_ptr<ParseTree>>& NonTerminal::getChildren() { return children; }
 
 string& NonTerminal::getRoot() { return root; }
 bool NonTerminal::isTerminal() { return false; }
+
+
+std::ostream& NonTerminal::print(std::ostream& out, const std::string& indent){
+    out << indent << root << " " << rule << endl;
+    for (auto& child : children){
+        // if (!child->isTerminal()){
+            child->print(out, indent+"    ");
+        // }
+    }
+    return out;
+}
