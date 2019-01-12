@@ -1,1 +1,2 @@
-main.o: main.cc Scanner/scanner.h
+main.o: main.cc Parser/parser.h Parser/parsetree.h \
+ Parser/../Scanner/scanner.h Scanner/scanner.h
