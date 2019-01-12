@@ -5,6 +5,7 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include <sstream>
 #include <map>
     
 enum Type {
@@ -15,8 +16,8 @@ enum Type {
 	RPAREN,
 	LSQUARE,
 	RSQUARE,
-	LCURLY,
-	RCURLY,
+	LBRACE,
+	RBRACE,
 	EQUALS,
 	EQUALS_EQUALS,
 	NE,
@@ -64,6 +65,8 @@ enum Type {
 	BACKSLASH,
 	BACKTICK,
 	UNDERSCORE,
+	BOF_,
+	EOF_,
 	IF,
 	ELSE,
 	WHILE,
@@ -85,11 +88,9 @@ enum Type {
 	WHITESPACE,
 	NONE
 };
-extern std::map<std::string, Type> keywords;
-extern std::map<std::string, Type> charType;
 
 Type getType(char c);
-std::string getTypeString(Type type);
+std::string getTypeString(const Type& type);
 
 struct Token {
     std::string lexeme;
@@ -98,6 +99,8 @@ struct Token {
 
 void scan(const std::string& str, std::list<Token>& tokens);
 void scan(std::istream& in, std::list<Token>& tokens);
+
+std::ostream& print(std::ostream& out, std::list<Token> tokens, const std::string& delimiter="", const bool& printType=false);
 
 #endif
     

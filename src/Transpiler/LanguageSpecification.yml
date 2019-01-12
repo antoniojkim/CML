@@ -2,7 +2,7 @@ tokens:
  - ID:
     description: "a string consisting of any combination of letters (in the range a-z, A-Z), digits (in the range 0-9) as well as underscores ( _ ) with the exception that it may not start with a digit."
  - STR:
-    description: "a string consisting of any combination of letters, digits, and symbols (e.g. $, √) with the exception that it may not start with a digit."
+    description: "a string consisting of any combination of letters, digits, and symbols (e.g. $, √)"
  - NUM:
     description: "a string consisting of only digits separated by at most one dot ( . ) at most one case insensitive \"e\" which must come after the dot."
  - LPAREN:
@@ -13,9 +13,9 @@ tokens:
     lexeme: "["
  - RSQUARE:
     lexeme: "]"
- - LCURLY:
+ - LBRACE:
     lexeme: "{"
- - RCURLY:
+ - RBRACE:
     lexeme: "}"
  - EQUALS:
     lexeme: "="
@@ -102,7 +102,7 @@ tokens:
  - DOLLAR:
     lexeme: "$"
  - QUOTE:
-    lexeme: ""
+    lexeme: "\""
  - APOSTROPHE:
     lexeme: "'"
  - BACKSLASH:
@@ -111,6 +111,10 @@ tokens:
     lexeme: "`"
  - UNDERSCORE:
     lexeme: "_"
+ - BOF_:
+    lexeme: "BOF"
+ - EOF_:
+    lexeme: "EOF"
 keywords:
  - IF:
     lexeme: "if"
@@ -164,8 +168,8 @@ nonterminalSymbols:
  - "include"
  - "procedure"
  - "main"
+ - "param"
  - "params"
- - "paramlist"
  - "type"
  - "dcl"
  - "dcls"
@@ -178,14 +182,15 @@ nonterminalSymbols:
  - "test"
  - "factor"
  - "arglist"
+ - "whitespace"
 startSymbol: "globals"
 productionRules:
  - "globals"
  - "globals include globals"
  - "globals procedure globals"
 #  - "globals statement globals"
- - "include POUND INCLUDE LT STR RT"
- - "include POUND INCLUDE QUOTE STR QUOTE"
+ - "include POUND INCLUDE LT ID GT"
+ - "include POUND INCLUDE QUOTE ID QUOTE"
  - "procedure type ID LPAREN params RPAREN LBRACE statements RBRACE"
 #  - "procedure DEF STR LPAREN params RPAREN LBRACE statements RBRACE"
  - "params"
@@ -202,9 +207,10 @@ productionRules:
  - "type ID STAR"
  - "statements"
  - "statements statement statements"
- - "statement type STR SEMICOLON"
- - "statement type STR BECOMES expr SEMICOLON"
+ - "statement type ID SEMICOLON"
+ - "statement type ID EQUALS expr SEMICOLON"
 #  - "statement STR BECOMES expr SEMICOLON"
+ - "statement RETURN expr SEMICOLON"
  - "expr term"
  - "expr expr PLUS term"
  - "expr expr MINUS term"
@@ -215,3 +221,5 @@ productionRules:
  - "term term SLASH_SLASH factor"
  - "term term PCT factor"
  - "factor NUM"
+ - "whitespace"
+ - "whitespace"

@@ -42,7 +42,7 @@ def parseLR1(infile, outfile, verbose=False):
             productions[rule[0]] = [i]
 
     if "start" not in productions:
-        productionRules.append(["start", "BOF", start_symbol, "EOF"])
+        productionRules.append(["start", "BOF_", start_symbol, "EOF_"])
         start_state = len(productionRules)-1
         productions["start"] = [start_state]
     else:
