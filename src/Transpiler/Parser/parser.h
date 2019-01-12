@@ -21,7 +21,7 @@ class Parser {
    public:
     Parser(const std::string& lr1Path);
 
-    std::unique_ptr<ParseTree> parse(const std::string& input);
+    std::unique_ptr<ParseTree> parse(const std::string& input, const bool& showTokens=false);
     std::unique_ptr<ParseTree> parse(std::list<Token>& tokens);
 
     friend std::ostream& operator<<(std::ostream& out, Parser& parser);
