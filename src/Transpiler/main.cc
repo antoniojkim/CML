@@ -7,6 +7,7 @@
 #include <string>
 #include "Parser/parser.h"
 #include "Scanner/scanner.h"
+#include "ContextSensitiveTrees/ContextSensitiveTrees.h"
 
 using namespace std;
 
@@ -60,7 +61,10 @@ void runTests() {
     assertUnparsable(parser, "int main() { return 5s; }");
     assertParsable(parser, "int main() { return \"hello world\"; }");
     assertParsable(parser, "int main() { return f\"hello world\"; }");
-    // assertParsable(parser, "int main() { int i = 5; return i; }", true);
+    assertParsable(parser, "int main(int c) { return f\"hello world\"; }");
+    assertParsable(parser, "int main() { int i = 5; return i; }");
+    assertParsable(parser, "#include <math> int main(int c = 0) { int i = 5; return i; }");
+    assertParsable(parser, "int main(int c = 0) { int i = 5; return i[0]; }", true);
 
     cout << endl << "All Tests Passed!" << endl << endl;
 }
@@ -88,6 +92,11 @@ int main(int argc, char** argv) {
         // scan(input.str(), tokens);
         // cout << tokens << endl;
         // cout << parser << endl;
+
+        cout << "Functions: " << endl;
+        for (auto& s : generationMap){
+            cout << "    " << s.first << endl;
+        }
     } catch (const char* err) {
         cerr << err << endl;
     } catch (const string& err) {

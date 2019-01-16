@@ -87,6 +87,10 @@ tokens:
     lexeme: "->"
  - PIPE_PIPE:
     lexeme: "||"
+ - COLON_COLON:
+    lexeme: "::"
+#  - DOT_DOT:
+#     lexeme: ".."
  - DOT:
     lexeme: "."
  - COMMA:
@@ -128,6 +132,8 @@ keywords:
     lexeme: "do"
  - RETURN:
     lexeme: "return"
+ - BOOL:
+    lexeme: "bool"
  - INT:
     lexeme: "int"
  - FLOAT:
@@ -136,12 +142,16 @@ keywords:
     lexeme: "double"
  - LONG:
     lexeme: "long"
- - STRING:
-    lexeme: "string"
+ - TRUE_:
+    lexeme: "true"
+ - FALSE_:
+    lexeme: "false"
  - NONE_:
     lexeme: "none"
  - NULL_:
     lexeme: "NULL"
+ - VOID:
+    lexeme: "void"
  - NULLPTR:
     lexeme: "nullptr"
  - NEW:
@@ -150,6 +160,8 @@ keywords:
     lexeme: "delete"
  - INCLUDE:
     lexeme: "include"
+ - UNSIGNED:
+    lexeme: "unsigned"
  - DEF:
     lexeme: "def"
 whitespace:
@@ -170,16 +182,20 @@ nonterminalSymbols:
  - "main"
  - "param"
  - "params"
+ - "vtype"
  - "type"
+ - "signedtype"
  - "dcl"
  - "dcls"
  - "statements"
  - "statement"
+ - "elseifstatement"
+ - "elsestatement"
  - "lvalue"
  - "string"
  - "expr"
  - "term"
- - "test"
+ - "boolean"
  - "factor"
  - "arglist"
  - "whitespace"
@@ -191,26 +207,44 @@ productionRules:
 #  - "globals statement globals"
  - "include POUND INCLUDE LT ID GT"
  - "include POUND INCLUDE QUOTE ID QUOTE"
- - "procedure type ID LPAREN params RPAREN LBRACE statements RBRACE"
+ - "procedure vtype ID LPAREN params RPAREN LBRACE statements RBRACE"
 #  - "procedure DEF STR LPAREN params RPAREN LBRACE statements RBRACE"
  - "params"
- - "params param params"
- - "param type ID"
-#  - "param ID"
+ - "params dcl params"
+ - "dcl vtype ID"
+ - "dcl vtype ID EQUALS expr"
+ - "vtype signedtype type"
+ - "vtype signedtype type STAR"
+ - "vtype signedtype type AMP"
+ - "signedtype"
+ - "signedtype UNSIGNED"
+ - "type BOOL"
  - "type INT"
- - "type INT STAR"
+ - "type LONG"
+ - "type LONG LONG"
  - "type DOUBLE"
- - "type DOUBLE STAR"
  - "type FLOAT"
- - "type FLOAT STAR"
  - "type ID"
- - "type ID STAR"
+ - "type VOID"
  - "statements"
- - "statements statement statements"
- - "statement type ID SEMICOLON"
- - "statement type ID EQUALS expr SEMICOLON"
-#  - "statement STR BECOMES expr SEMICOLON"
+ - "statements statements statement"
+ - "statement dcl SEMICOLON"
+ - "statement ID BECOMES expr SEMICOLON"
+ - "statement IF LPAREN boolean RPAREN LBRACE statements RBRACE elseifstatement elsestatement"
+ - "elseifstatement"
+ - "elseifstatement ELSE IF LPAREN boolean RPAREN LBRACE statements RBRACE elseifstatement"
+ - "elsestatement"
+ - "elsestatement ELSE LBRACE statements RBRACE"
  - "statement RETURN expr SEMICOLON"
+ - "boolean expr"
+ - "boolean expr GT expr"
+ - "boolean expr GE expr"
+ - "boolean expr LT expr"
+ - "boolean expr LE expr"
+ - "boolean expr NE expr"
+ - "boolean expr EQUALS_EQUALS expr"
+ - "boolean boolean AND_AND boolean"
+ - "boolean boolean OR_OR boolean"
  - "expr term"
  - "expr expr PLUS term"
  - "expr expr MINUS term"
@@ -221,9 +255,18 @@ productionRules:
  - "term term SLASH_SLASH factor"
  - "term term PCT factor"
  - "factor NUM"
+ - "factor NONE_"
+ - "factor NULLPTR"
+ - "factor TRUE_"
+ - "factor FALSE_"
  - "factor LPAREN expr RPAREN"
+ - "factor ID LSQUARE expr RSQUARE"
+ - "factor ID LSQUARE expr COLON expr RSQUARE"
  - "factor ID LPAREN RPAREN"
  - "factor ID LPAREN arglist RPAREN"
+ - "factor ID DOT ID"
+ - "factor ID DOT ID LPAREN RPAREN"
+ - "factor ID DOT ID LPAREN arglist RPAREN"
  - "factor ID"
  - "factor AMP lvalue"
  - "factor STAR factor"
