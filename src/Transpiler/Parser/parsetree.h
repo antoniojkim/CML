@@ -25,6 +25,7 @@ class Terminal : public ParseTree {
 
         std::string& getRoot() override;
         bool isTerminal() override;
+        Token& getToken();
 
         std::ostream& print(std::ostream& out, const std::string& indent) override;
 };
@@ -40,11 +41,12 @@ class NonTerminal : public ParseTree {
         void reserve(const int& num);
         void addChild(std::unique_ptr<ParseTree>& child);
         std::vector<std::unique_ptr<ParseTree>>& getChildren();
+        std::unique_ptr<ParseTree>& getChild(const int& i);
 
         std::string& getRoot() override;
         bool isTerminal() override;
 
-        std::ostream& print(std::ostream& out, const std::string& indent) override;
+        virtual std::ostream& print(std::ostream& out, const std::string& indent) override;
 };
 
 

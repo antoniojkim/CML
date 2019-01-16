@@ -1,2 +1,2 @@
-Parser/parsetree.o: Parser/parsetree.cc Parser/../Scanner/scanner.h \
- Parser/parsetree.h
+Parser/parsetree.o: Parser/parsetree.cc Parser/parsetree.h \
+ Parser/../Scanner/scanner.h

@@ -48,6 +48,7 @@ A procedure definition is a sequence of *tokens* optionally separated by *white 
  * `L_ARROW`: the string "<-"
  * `R_ARROW`: the string "->"
  * `PIPE_PIPE`: the string "||"
+ * `COLON_COLON`: the string "::"
  * `DOT`: the string "."
  * `COMMA`: the string ","
  * `COLON`: the string ":"
@@ -71,17 +72,21 @@ In addition to the above tokens, the following are also valid tokens and their s
  * `FOR`: the string "for"
  * `DO`: the string "do"
  * `RETURN`: the string "return"
+ * `BOOL`: the string "bool"
  * `INT`: the string "int"
  * `FLOAT`: the string "float"
  * `DOUBLE`: the string "double"
  * `LONG`: the string "long"
- * `STRING`: the string "string"
+ * `TRUE_`: the string "true"
+ * `FALSE_`: the string "false"
  * `NONE_`: the string "none"
  * `NULL_`: the string "NULL"
+ * `VOID`: the string "void"
  * `NULLPTR`: the string "nullptr"
  * `NEW`: the string "new"
  * `DELETE`: the string "delete"
  * `INCLUDE`: the string "include"
+ * `UNSIGNED`: the string "unsigned"
  * `DEF`: the string "def"
 
 White space consists of any sequence of the following:
@@ -104,16 +109,20 @@ A context-free grammar for a valid CML program is:
    * `main`
    * `param`
    * `params`
+   * `vtype`
    * `type`
+   * `signedtype`
    * `dcl`
    * `dcls`
    * `statements`
    * `statement`
+   * `elseifstatement`
+   * `elsestatement`
    * `lvalue`
    * `string`
    * `expr`
    * `term`
-   * `test`
+   * `boolean`
    * `factor`
    * `arglist`
    * `whitespace`
@@ -124,23 +133,43 @@ A context-free grammar for a valid CML program is:
    * `globals → procedure globals`
    * `include → POUND INCLUDE LT ID GT`
    * `include → POUND INCLUDE QUOTE ID QUOTE`
-   * `procedure → type ID LPAREN params RPAREN LBRACE statements RBRACE`
+   * `procedure → vtype ID LPAREN params RPAREN LBRACE statements RBRACE`
    * `params → `
-   * `params → param params`
-   * `param → type ID`
+   * `params → dcl params`
+   * `dcl → vtype ID`
+   * `dcl → vtype ID EQUALS expr`
+   * `vtype → signedtype type`
+   * `vtype → signedtype type STAR`
+   * `vtype → signedtype type AMP`
+   * `signedtype → `
+   * `signedtype → UNSIGNED`
+   * `type → BOOL`
    * `type → INT`
-   * `type → INT STAR`
+   * `type → LONG`
+   * `type → LONG LONG`
    * `type → DOUBLE`
-   * `type → DOUBLE STAR`
    * `type → FLOAT`
-   * `type → FLOAT STAR`
    * `type → ID`
-   * `type → ID STAR`
+   * `type → VOID`
    * `statements → `
-   * `statements → statement statements`
-   * `statement → type ID SEMICOLON`
-   * `statement → type ID EQUALS expr SEMICOLON`
+   * `statements → statements statement`
+   * `statement → dcl SEMICOLON`
+   * `statement → ID BECOMES expr SEMICOLON`
+   * `statement → IF LPAREN boolean RPAREN LBRACE statements RBRACE elseifstatement elsestatement`
+   * `elseifstatement → `
+   * `elseifstatement → ELSE IF LPAREN boolean RPAREN LBRACE statements RBRACE elseifstatement`
+   * `elsestatement → `
+   * `elsestatement → ELSE LBRACE statements RBRACE`
    * `statement → RETURN expr SEMICOLON`
+   * `boolean → expr`
+   * `boolean → expr GT expr`
+   * `boolean → expr GE expr`
+   * `boolean → expr LT expr`
+   * `boolean → expr LE expr`
+   * `boolean → expr NE expr`
+   * `boolean → expr EQUALS_EQUALS expr`
+   * `boolean → boolean AND_AND boolean`
+   * `boolean → boolean OR_OR boolean`
    * `expr → term`
    * `expr → expr PLUS term`
    * `expr → expr MINUS term`
@@ -151,9 +180,18 @@ A context-free grammar for a valid CML program is:
    * `term → term SLASH_SLASH factor`
    * `term → term PCT factor`
    * `factor → NUM`
+   * `factor → NONE_`
+   * `factor → NULLPTR`
+   * `factor → TRUE_`
+   * `factor → FALSE_`
    * `factor → LPAREN expr RPAREN`
+   * `factor → ID LSQUARE expr RSQUARE`
+   * `factor → ID LSQUARE expr COLON expr RSQUARE`
    * `factor → ID LPAREN RPAREN`
    * `factor → ID LPAREN arglist RPAREN`
+   * `factor → ID DOT ID`
+   * `factor → ID DOT ID LPAREN RPAREN`
+   * `factor → ID DOT ID LPAREN arglist RPAREN`
    * `factor → ID`
    * `factor → AMP lvalue`
    * `factor → STAR factor`

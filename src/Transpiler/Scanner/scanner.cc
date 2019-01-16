@@ -11,17 +11,21 @@ map<string, Type> keywordType = {
 	{"for", FOR},
 	{"do", DO},
 	{"return", RETURN},
+	{"bool", BOOL},
 	{"int", INT},
 	{"float", FLOAT},
 	{"double", DOUBLE},
 	{"long", LONG},
-	{"string", STRING},
+	{"true", TRUE_},
+	{"false", FALSE_},
 	{"none", NONE_},
 	{"NULL", NULL_},
+	{"void", VOID},
 	{"nullptr", NULLPTR},
 	{"new", NEW},
 	{"delete", DELETE},
 	{"include", INCLUDE},
+	{"unsigned", UNSIGNED},
 	{"def", DEF}
 };
 map<Type, string> keywordLexeme = {
@@ -31,17 +35,21 @@ map<Type, string> keywordLexeme = {
 	{FOR, "FOR"},
 	{DO, "DO"},
 	{RETURN, "RETURN"},
+	{BOOL, "BOOL"},
 	{INT, "INT"},
 	{FLOAT, "FLOAT"},
 	{DOUBLE, "DOUBLE"},
 	{LONG, "LONG"},
-	{STRING, "STRING"},
+	{TRUE_, "TRUE"},
+	{FALSE_, "FALSE"},
 	{NONE_, "NONE"},
 	{NULL_, "NULL"},
+	{VOID, "VOID"},
 	{NULLPTR, "NULLPTR"},
 	{NEW, "NEW"},
 	{DELETE, "DELETE"},
 	{INCLUDE, "INCLUDE"},
+	{UNSIGNED, "UNSIGNED"},
 	{DEF, "DEF"}
 };
 map<string, Type> tokenType = {
@@ -85,6 +93,7 @@ map<string, Type> tokenType = {
 	{"<-", L_ARROW},
 	{"->", R_ARROW},
 	{"||", PIPE_PIPE},
+	{"::", COLON_COLON},
 	{".", DOT},
 	{",", COMMA},
 	{":", COLON},
@@ -141,6 +150,7 @@ map<Type, string> typeLexeme = {
 	{L_ARROW, "L_ARROW"},
 	{R_ARROW, "R_ARROW"},
 	{PIPE_PIPE, "PIPE_PIPE"},
+	{COLON_COLON, "COLON_COLON"},
 	{DOT, "DOT"},
 	{COMMA, "COMMA"},
 	{COLON, "COLON"},
@@ -290,6 +300,8 @@ void scan(std::istream& in, std::list<Token>& tokens) {
             current = R_ARROW;
         } else if (current == PIPE && type == PIPE) { /*  ||  */
             current = PIPE_PIPE;
+        } else if (current == COLON && type == COLON) { /*  ::  */
+            current = COLON_COLON;
 
         } else {
             if (!token.str().empty() && current != WHITESPACE) {
