@@ -33,6 +33,9 @@ typedef CST (*ContextGenerationfunction)(
     ParseTree*, ContextSensitiveTree*);  // function pointer type
 extern std::map<std::string, ContextGenerationfunction> generationMap;
 
+template<class C>
+CST generateC(ParseTree*, ContextSensitiveTree*);
+
 CST generateContextSensitiveTree(ParseTree* tree);
 CST generateGlobals(ParseTree* tree, ContextSensitiveTree* parent);
 CST generateProcedure(ParseTree* tree, ContextSensitiveTree* parent);

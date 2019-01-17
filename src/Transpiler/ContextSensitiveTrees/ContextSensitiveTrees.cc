@@ -46,29 +46,32 @@ bool ContextSensitiveTree::compareType(const std::string& type) {
 
 class  : public ContextSensitiveTree {
    public:
-    (ParseTree* tree, ContextSensitiveTree* parent): ContextSensitiveTree{parent} {
+    (ParseTree* tree, ContextSensitiveTree* parent):
+ContextSensitiveTree{parent} {
 
     }
 
     void checkContext() override {}
 
-    std::ostream& generateTree(std::ostream& out,
-                               const std::string& indent) override { return out; }
-    std::ostream& generateCode(std::ostream& out,
-                               const std::string& indent) override { return out; }
+    ostream& generateTree(ostream& out, const string& indent) override { return
+out; } ostream& generateCode(ostream& out, const string& indent) override {
+return out; }
 
 };
 
 */
 
+template <class C>
+CST generateC(ParseTree* tree, ContextSensitiveTree* parent) {
+    return make_unique<C>(tree, parent);
+}
 
 std::map<std::string, ContextGenerationfunction> generationMap = {
     {"globals", generateGlobals},
     {"procedure", generateProcedure},
     {"dcl", generateDcl},
     {"expr", generateExpr},
-    {"statement", generateStatement}
-};
+    {"statement", generateStatement}};
 
 std::unique_ptr<ContextSensitiveTree> generateContextSensitiveTree(
     ParseTree* tree) {
