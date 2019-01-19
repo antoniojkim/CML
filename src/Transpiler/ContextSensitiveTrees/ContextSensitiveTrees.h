@@ -2,12 +2,14 @@
 #define CONTEXT_SENSITIVE_TREES_H
 
 #include <iostream>
+#include <map>
 #include <list>
 #include <memory>
 #include <string>
 #include "../Parser/parsetree.h"
 
 std::string extractLexeme(ParseTree* tree);
+bool isTypeNumeric(const std::string& type);
 
 class ContextSensitiveTree {
    protected:
@@ -42,5 +44,6 @@ CST generateProcedure(ParseTree* tree, ContextSensitiveTree* parent);
 CST generateDcl(ParseTree* tree, ContextSensitiveTree* parent);
 CST generateExpr(ParseTree* tree, ContextSensitiveTree* parent);
 CST generateStatement(ParseTree* tree, ContextSensitiveTree* parent);
+CST generateBoolean(ParseTree* tree, ContextSensitiveTree* parent);
 
 #endif  // CONTEXT_SENSITIVE_TREES_H
