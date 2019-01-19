@@ -24,6 +24,18 @@ string extractLexeme(ParseTree* tree) {
     }
     return lexeme.str();
 }
+map<string, bool> numericTypes = {
+    {"int", true}, {"long", true}, {"long", true}, {"float", true}, {"double", true}, {"bool", true}, {"char", true}};
+bool isTypeNumeric(const std::string& type) {
+    istringstream iss{type};
+    string s;
+    while (iss >> s) {
+        if (numericTypes.count(s) == 0 && s != "unsigned") {
+            return false;
+        }
+    }
+    return true;
+}
 
 ContextSensitiveTree::ContextSensitiveTree(ContextSensitiveTree* parent)
     : parent{parent} {}
@@ -43,6 +55,10 @@ bool ContextSensitiveTree::compareType(const std::string& type) {
 }
 
 /* Template:
+
+#include "ContextSensitiveTrees.h"
+
+using namespace std;
 
 class  : public ContextSensitiveTree {
    public:
@@ -71,7 +87,9 @@ std::map<std::string, ContextGenerationfunction> generationMap = {
     {"procedure", generateProcedure},
     {"dcl", generateDcl},
     {"expr", generateExpr},
-    {"statement", generateStatement}};
+    {"statement", generateStatement},
+    {"statements", generateStatement},
+    {"boolean", generateBoolean}};
 
 std::unique_ptr<ContextSensitiveTree> generateContextSensitiveTree(
     ParseTree* tree) {

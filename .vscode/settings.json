@@ -1,7 +1,8 @@
 {
     "code-runner.executorMap": {
         "c": "cd $dir && make && ./main",
-        "cpp": "cd $workspaceRoot/src/Transpiler && make && ./main",
+        // "cpp": "cd $workspaceRoot/src/Transpiler && make && ./main",
+        "cpp": "cd $dir && make && ./main",
     },
     "files.associations": {
         "string": "cpp",
@@ -40,6 +41,7 @@
         "typeinfo": "cpp",
         "memory": "cpp",
         "algorithm": "cpp",
-        "deque": "cpp"
+        "deque": "cpp",
+        "iterator": "cpp"
     }
 }
