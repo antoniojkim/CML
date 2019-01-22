@@ -42,6 +42,7 @@
         "memory": "cpp",
         "algorithm": "cpp",
         "deque": "cpp",
-        "iterator": "cpp"
+        "iterator": "cpp",
+        "ctime": "cpp"
     }
 }
