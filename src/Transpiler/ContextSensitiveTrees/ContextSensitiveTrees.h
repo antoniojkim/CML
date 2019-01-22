@@ -42,8 +42,9 @@ CST generateContextSensitiveTree(ParseTree* tree);
 CST generateGlobals(ParseTree* tree, ContextSensitiveTree* parent);
 CST generateProcedure(ParseTree* tree, ContextSensitiveTree* parent);
 CST generateDcl(ParseTree* tree, ContextSensitiveTree* parent);
-CST generateExpr(ParseTree* tree, ContextSensitiveTree* parent);
 CST generateStatement(ParseTree* tree, ContextSensitiveTree* parent);
 CST generateBoolean(ParseTree* tree, ContextSensitiveTree* parent);
+CST generateExpr(ParseTree* tree, ContextSensitiveTree* parent);
+CST generateTerm(ParseTree* tree, ContextSensitiveTree* parent);
 
 #endif  // CONTEXT_SENSITIVE_TREES_H
