@@ -53,6 +53,7 @@ bool ContextSensitiveTree::compareType(const std::string& type) {
     }
     return this->type == type;
 }
+    std::unique_ptr<Params>& ContextSensitiveTree::getParams(){ return p; }
 
 /* Template:
 

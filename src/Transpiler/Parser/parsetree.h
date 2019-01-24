@@ -55,6 +55,7 @@ class NonTerminal : public ParseTree {
 
     std::string& getRoot() override;
     std::string& getFirst() override;
+    std::string& getRule();
     bool isTerminal() override;
     NonTerminal* getNonTerminal() override;
     bool isEmpty() override;
