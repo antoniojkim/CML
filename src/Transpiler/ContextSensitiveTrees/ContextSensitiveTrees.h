@@ -2,40 +2,50 @@
 #define CONTEXT_SENSITIVE_TREES_H
 
 #include <iostream>
-#include <map>
 #include <list>
+#include <map>
 #include <memory>
 #include <string>
+#include "../CodeGenerator/codeGenerator.h"
 #include "../Parser/parsetree.h"
 
 std::string extractLexeme(ParseTree* tree);
 bool isTypeNumeric(const std::string& type);
 
+struct Params {
+    std::string rule;
+    ContextSensitiveTree* parent;
+};
+
+typedef void (*InitFunction)(ParseTree* tree, ContextSensitiveTree* parent);
+typedef std::ostream& (*GenerateFunction)(std::ostream& out, const std::string& indent);
+typedef void (*TypeCheckFunction)(std::unique_ptr<Params>& p);
+
 class ContextSensitiveTree {
    protected:
     std::string type;
-    ContextSensitiveTree* parent;
+    std::unique_ptr<Params> p;
+
+    TypeCheckFunction checkType;
+    GenerateFunction generateTree;
+    GenerateFunction generateCode;
 
    public:
-    ContextSensitiveTree(ContextSensitiveTree* parent = nullptr);
+    ContextSensitiveTree(InitFunction init, ParseTree* tree, ContextSensitiveTree* parent = nullptr,
+                         GenerateFunction generateTree = nullptr, GenerateFunction generateCode = nullptr,
+                         TypeCheckFunction checkType = nullptr);
 
     std::string& getType();
     void setType(const std::string& type);
     bool compareType(const std::string& type);
-    virtual void checkContext() = 0;
-
-    virtual std::ostream& generateTree(std::ostream& out,
-                                       const std::string& indent = "") = 0;
-    virtual std::ostream& generateCode(std::ostream& out,
-                                       const std::string& indent = "") = 0;
+    std::unique_ptr<Params>& getParams();
 };
 
 typedef std::unique_ptr<ContextSensitiveTree> CST;
-typedef CST (*ContextGenerationfunction)(
-    ParseTree*, ContextSensitiveTree*);  // function pointer type
+typedef CST (*ContextGenerationfunction)(ParseTree*, ContextSensitiveTree*);  // function pointer type
 extern std::map<std::string, ContextGenerationfunction> generationMap;
 
-template<class C>
+template <class C>
 CST generateC(ParseTree*, ContextSensitiveTree*);
 
 CST generateContextSensitiveTree(ParseTree* tree);

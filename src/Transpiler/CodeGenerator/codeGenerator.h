@@ -1,5 +1,16 @@
 
-#include <iostream>
-#include <string>
+#ifndef CODE_GENERATOR_H
+#define CODE_GENERATOR_H
 
-std::ostream& generateCode(std::ostream& out, const std::string& indent = "");
+#include <iostream>
+#include <map>
+#include <string>
+#include "../ContextSensitiveTrees/ContextSensitiveTrees.h"
+#include "../Parser/parsetree.h"
+
+typedef std::ostream& (*GenerateFunction)(ContextSensitiveTree* tree, std::ostream& out, const std::string& indent);
+
+GenerateFunction getCodeGenerationFunction(ParseTree* tree);
+
+#endif // CODE_GENERATOR_H
+    
