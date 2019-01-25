@@ -12,13 +12,15 @@
 std::string extractLexeme(ParseTree* tree);
 bool isTypeNumeric(const std::string& type);
 
+class ContextSensitiveTree;
+
 struct Params {
     std::string rule;
     ContextSensitiveTree* parent;
 };
 
 typedef void (*InitFunction)(ParseTree* tree, ContextSensitiveTree* parent);
-typedef std::ostream& (*GenerateFunction)(std::ostream& out, const std::string& indent);
+typedef std::ostream& (*GenerateFunction)(ContextSensitiveTree* tree, std::ostream& out, const std::string& indent);
 typedef void (*TypeCheckFunction)(std::unique_ptr<Params>& p);
 
 class ContextSensitiveTree {
