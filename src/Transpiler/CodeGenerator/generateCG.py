@@ -22,64 +22,94 @@ with open("./codeGenerator.h", "w") as out:
 #define CODE_GENERATOR_H
 
 #include <iostream>
-#include <map>
 #include <string>
 #include "../ContextSensitiveTrees/ContextSensitiveTrees.h"
 #include "../Parser/parsetree.h"
 
 typedef std::ostream& (*GenerateFunction)(ContextSensitiveTree* tree, std::ostream& out, const std::string& indent);
+typedef GenerateFunction (*GetGenerateFunction)(ParseTree* tree);
 
 GenerateFunction getCodeGenerationFunction(ParseTree* tree);
+    \n""")
+    for root in productions:
+        out.write(f"GenerateFunction get_{root}_code_generation_function(ParseTree* tree);\n")
+    out.write("""
 
 #endif // CODE_GENERATOR_H
     \n""")
+
 
 
 #########################################
 ############ codeGenerator.cc ############
 #########################################
 
-existingImplementations = {}
-try:
-    with open("./codeGenerator.cc") as file:
-        for row in file:
-            if row.startswith("ostream& generate_"):
-                fname = row.strip().split(" ")[1].split("(")[0]
-                paren_count = 0
-                brace_count = 0
-                implementation = ""
-                while True:
-                    for c in list(row):
-                        if (brace_count > 0):
-                            implementation += c
-                        if c == "{":
-                            brace_count += 1
-                        elif c == "}":
-                            brace_count -= 1
-                        elif c == "(":
-                            paren_count += 1
-                        elif c == ")":
-                            paren_count -= 1
-                    if (paren_count > 0 or brace_count > 0):
-                        row = next(file)
-                    else:
-                        break
-
-                existingImplementations[fname] = implementation
-except:
-    pass
-
-
 with open("./codeGenerator.cc", "w") as out:
     out.write("""
 #include "./codeGenerator.h"
+#include <map>
+
+using namespace std;
+    \n""")
+    out.write("\nmap<string, GetGenerateFunction> generateFunctionsMap = {\n")
+    out.write("    "+",\n    ".join(
+        f"{{\"{root}\", get_{root}_code_generation_function}}"
+        for root in productions
+    ))
+    out.write("};\n")
+    out.write("""
+GenerateFunction getCodeGenerationFunction(ParseTree* tree){
+    return generateFunctionsMap[tree->getRoot()](tree);
+}
+    """)
+    
+
+
+############################################
+############ otherGenerators.cc ############
+############################################
+
+for root in productions:
+
+    existingImplementations = {}
+    try:
+        with open(f"./Generators/{root}Generator.cc") as file:
+            for row in file:
+                if row.startswith("ostream& generate_"):
+                    fname = row.strip().split(" ")[1].split("(")[0]
+                    paren_count = 0
+                    brace_count = 0
+                    implementation = ""
+                    while True:
+                        for c in list(row):
+                            if (brace_count > 0):
+                                implementation += c
+                            if c == "{":
+                                brace_count += 1
+                            elif c == "}":
+                                brace_count -= 1
+                            elif c == "(":
+                                paren_count += 1
+                            elif c == ")":
+                                paren_count -= 1
+                        if (paren_count > 0 or brace_count > 0):
+                            row = next(file)
+                        else:
+                            break
+
+                    existingImplementations[fname] = implementation
+    except:
+        pass
+
+
+    with open(f"./Generators/{root}Generator.cc", "w") as out:
+        out.write("""
+#include "../codeGenerator.h"
 #include <cassert>
 
 using namespace std;
-    """)
+\n""")
 
-    for root in productions:
-        out.write(f"\n// {root}\n")
         for rules in productions[root]:
             fname = f"generate_{root}_{'_'.join(rules)}"
             out.write(f"ostream& {fname}(ContextSensitiveTree* tree, ostream& out, const string& indent){{")
@@ -91,16 +121,15 @@ using namespace std;
 
             out.write("\n")
 
-    out.write("\nmap<string, GenerateFunction> generateMap = {\n");
-    out.write("    "+",\n    ".join(
-        f"{{\"{root} {' '.join(rules)}\", generate_{root}_{'_'.join(rules)}}}"
-        for root in productions
-        for rules in productions[root]
-    ))
-    out.write("};\n")
-    out.write("""
-GenerateFunction getCodeGenerationFunction(ParseTree* tree){
+        out.write(f"\nmap<string, GenerateFunction> generate_{root}_map = {{\n")
+        out.write("    "+",\n    ".join(
+            f"{{\"{root} {' '.join(rules)}\", generate_{root}_{'_'.join(rules)}}}"
+            for rules in productions[root]
+        ))
+        out.write("};\n")
+        out.write(f"""
+GenerateFunction get_{root}_code_generation_function(ParseTree* tree){{
     NonTerminal* nt = tree->getNonTerminal();
-    return generateMap[nt->getRule()];
-}
-    """)
+    return generate_{root}_map[nt->getRule()];
+}}
+        """)
