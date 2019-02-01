@@ -152,8 +152,8 @@ void scan(std::istream& in, std::list<Token>& tokens) {
 
     source.write("\n")
     for k, v in tokenType.items():
-        if len(k) == 2 and k[0] in tokenType and k[1] in tokenType: 
-            source.write(f"        }} else if (current == {tokenType[k[0]]} && type == {tokenType[k[1]]}) {{ /*  {k}  */\n")
+        if len(k) in (2, 3) and k[:-1] in tokenType and k[-1:] in tokenType: 
+            source.write(f"        }} else if (current == {tokenType[k[:-1]]} && type == {tokenType[k[-1:]]}) {{ /*  {k}  */\n")
             source.write(f"            current = {tokenType[k]};\n")
 
     source.write("""
