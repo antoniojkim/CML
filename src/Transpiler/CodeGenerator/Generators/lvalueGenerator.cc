@@ -8,9 +8,9 @@ ostream& generate_lvalue_ID(ContextSensitiveTree* tree, ostream& out, const stri
     assert(tree->getParams()->rule == "lvalue ID");
     throw "generate_lvalue_ID not implemented";
 }
-ostream& generate_lvalue_STAR_factor(ContextSensitiveTree* tree, ostream& out, const string& indent){
-    assert(tree->getParams()->rule == "lvalue STAR factor");
-    throw "generate_lvalue_STAR_factor not implemented";
+ostream& generate_lvalue_STAR_expr2(ContextSensitiveTree* tree, ostream& out, const string& indent){
+    assert(tree->getParams()->rule == "lvalue STAR expr2");
+    throw "generate_lvalue_STAR_expr2 not implemented";
 }
 ostream& generate_lvalue_LPAREN_lvalue_RPAREN(ContextSensitiveTree* tree, ostream& out, const string& indent){
     assert(tree->getParams()->rule == "lvalue LPAREN lvalue RPAREN");
@@ -19,7 +19,7 @@ ostream& generate_lvalue_LPAREN_lvalue_RPAREN(ContextSensitiveTree* tree, ostrea
 
 map<string, GenerateFunction> generate_lvalue_map = {
     {"lvalue ID", generate_lvalue_ID},
-    {"lvalue STAR factor", generate_lvalue_STAR_factor},
+    {"lvalue STAR expr2", generate_lvalue_STAR_expr2},
     {"lvalue LPAREN lvalue RPAREN", generate_lvalue_LPAREN_lvalue_RPAREN}};
 
 GenerateFunction get_lvalue_code_generation_function(ParseTree* tree){

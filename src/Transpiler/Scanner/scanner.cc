@@ -62,6 +62,7 @@ map<string, Type> tokenType = {
 	{"=", EQUALS},
 	{"==", EQUALS_EQUALS},
 	{"!=", NE},
+	{"?=", QE},
 	{"<", LT},
 	{">", GT},
 	{"<=", LE},
@@ -74,8 +75,8 @@ map<string, Type> tokenType = {
 	{"^", CARET},
 	{"&", AMP},
 	{"|", PIPE},
-	{"~", NEGATE},
-	{"!", NOT},
+	{"~", TILDE},
+	{"!", EXCL},
 	{"+=", PLUS_EQUALS},
 	{"-=", MINUS_EQUALS},
 	{"*=", STAR_EQUALS},
@@ -84,12 +85,15 @@ map<string, Type> tokenType = {
 	{"^=", CARET_EQUALS},
 	{"&=", AMP_EQUALS},
 	{"|=", PIPE_EQUALS},
+	{">>=", GT_GT_EQUALS},
+	{"<<=", LT_LT_EQUALS},
 	{"++", PLUS_PLUS},
 	{"--", MINUS_MINUS},
 	{"**", STAR_STAR},
 	{"//", SLASH_SLASH},
 	{"&&", AMP_AMP},
-	{"<<", GT_GT},
+	{"<<", LT_LT},
+	{">>", GT_GT},
 	{"<-", L_ARROW},
 	{"->", R_ARROW},
 	{"||", PIPE_PIPE},
@@ -119,6 +123,7 @@ map<Type, string> typeLexeme = {
 	{EQUALS, "EQUALS"},
 	{EQUALS_EQUALS, "EQUALS_EQUALS"},
 	{NE, "NE"},
+	{QE, "QE"},
 	{LT, "LT"},
 	{GT, "GT"},
 	{LE, "LE"},
@@ -131,8 +136,8 @@ map<Type, string> typeLexeme = {
 	{CARET, "CARET"},
 	{AMP, "AMP"},
 	{PIPE, "PIPE"},
-	{NEGATE, "NEGATE"},
-	{NOT, "NOT"},
+	{TILDE, "TILDE"},
+	{EXCL, "EXCL"},
 	{PLUS_EQUALS, "PLUS_EQUALS"},
 	{MINUS_EQUALS, "MINUS_EQUALS"},
 	{STAR_EQUALS, "STAR_EQUALS"},
@@ -141,11 +146,14 @@ map<Type, string> typeLexeme = {
 	{CARET_EQUALS, "CARET_EQUALS"},
 	{AMP_EQUALS, "AMP_EQUALS"},
 	{PIPE_EQUALS, "PIPE_EQUALS"},
+	{GT_GT_EQUALS, "GT_GT_EQUALS"},
+	{LT_LT_EQUALS, "LT_LT_EQUALS"},
 	{PLUS_PLUS, "PLUS_PLUS"},
 	{MINUS_MINUS, "MINUS_MINUS"},
 	{STAR_STAR, "STAR_STAR"},
 	{SLASH_SLASH, "SLASH_SLASH"},
 	{AMP_AMP, "AMP_AMP"},
+	{LT_LT, "LT_LT"},
 	{GT_GT, "GT_GT"},
 	{L_ARROW, "L_ARROW"},
 	{R_ARROW, "R_ARROW"},
@@ -184,8 +192,8 @@ map<char, Type> charType = {
 	{'^', CARET},
 	{'&', AMP},
 	{'|', PIPE},
-	{'~', NEGATE},
-	{'!', NOT},
+	{'~', TILDE},
+	{'!', EXCL},
 	{'.', DOT},
 	{',', COMMA},
 	{':', COLON},
@@ -260,8 +268,10 @@ void scan(std::istream& in, std::list<Token>& tokens) {
     
         } else if (current == EQUALS && type == EQUALS) { /*  ==  */
             current = EQUALS_EQUALS;
-        } else if (current == NOT && type == EQUALS) { /*  !=  */
+        } else if (current == EXCL && type == EQUALS) { /*  !=  */
             current = NE;
+        } else if (current == QUESTION && type == EQUALS) { /*  ?=  */
+            current = QE;
         } else if (current == LT && type == EQUALS) { /*  <=  */
             current = LE;
         } else if (current == GT && type == EQUALS) { /*  >=  */
@@ -282,6 +292,10 @@ void scan(std::istream& in, std::list<Token>& tokens) {
             current = AMP_EQUALS;
         } else if (current == PIPE && type == EQUALS) { /*  |=  */
             current = PIPE_EQUALS;
+        } else if (current == GT_GT && type == EQUALS) { /*  >>=  */
+            current = GT_GT_EQUALS;
+        } else if (current == LT_LT && type == EQUALS) { /*  <<=  */
+            current = LT_LT_EQUALS;
         } else if (current == PLUS && type == PLUS) { /*  ++  */
             current = PLUS_PLUS;
         } else if (current == MINUS && type == MINUS) { /*  --  */
@@ -293,6 +307,8 @@ void scan(std::istream& in, std::list<Token>& tokens) {
         } else if (current == AMP && type == AMP) { /*  &&  */
             current = AMP_AMP;
         } else if (current == LT && type == LT) { /*  <<  */
+            current = LT_LT;
+        } else if (current == GT && type == GT) { /*  >>  */
             current = GT_GT;
         } else if (current == LT && type == MINUS) { /*  <-  */
             current = L_ARROW;
