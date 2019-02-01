@@ -9,5 +9,8 @@ python -u generateScanner.py
 cd ../CodeGenerator
 python -u generateCG.py
 
+cd ../SemanticAnalyser
+python -u generateSA.py
+
 cd ../
 python -u generateMarkdown.py
