@@ -256,7 +256,7 @@ productionRules:
  - "term term PCT factor"
  - "term term AMP factor"
  - "term term PIPE factor"
- - "factor NUM"
+ - "zzz NUM"
  - "factor NONE_"
  - "factor NULLPTR"
  - "factor TRUE_"
