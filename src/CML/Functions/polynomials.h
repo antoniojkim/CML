@@ -1,26 +1,31 @@
 
-#ifndef CML_FUNCTIONS_POLYNOMIALS_H
-#define CML_FUNCTIONS_POLYNOMIALS_H
+#ifndef CML_FUNCTIONS_Poly1dS_H
+#define CML_FUNCTIONS_Poly1dS_H
 
 #include <initializer_list>
 #include <iostream>
 #include <vector>
 
-class Polynomial {
+class Poly1d {
     std::vector<double> coefficients;
     std::string var = "x";
 
    public:
-    Polynomial(std::vector<double> coefficients);
-    Polynomial(const Polynomial& other);
-    Polynomial(const int& order);
+    Poly1d(std::vector<double> coefficients);
+    Poly1d(const Poly1d& other);
+    Poly1d(const unsigned int& order);
 
-    Polynomial operator*(const Polynomial&);
+    double& operator[](const int&);
+    double operator()(const double&);
+    Poly1d operator*(const Poly1d&);
+    Poly1d operator+(const Poly1d&);
+    Poly1d operator-(const Poly1d&);
     
     std::vector<double> getRoots();
+    Poly1d getDerivative();
     
-    friend std::ostream& operator<<(std::ostream& out, Polynomial& p);
+    friend std::ostream& operator<<(std::ostream& out, const Poly1d& p);
 };
 
 
-#endif  // CML_FUNCTIONS_POLYNOMIALS_H
+#endif  // CML_FUNCTIONS_Poly1dS_H

@@ -116,7 +116,7 @@ void eigenTest3() {
     cout << eigenvecs(m, evls) << endl;
 }
 
-int main() {
+void EigenTest(){
     using Eigen::MatrixXd;
     MatrixXd A(5, 5);
     double a[5][5] = {{1, 2, 3, 4, 5},
@@ -146,4 +146,16 @@ int main() {
         cout << d[i] << " ";
     }
     cout << endl;
+}
+
+
+int main() {
+    Poly1d p {{3, 5, 7, 8, 4}};
+    cout << p << endl;
+    cout << p(2) << endl;
+    Poly1d dp = p.getDerivative();
+    cout << dp << endl;
+    cout << p+dp << endl;
+    cout << p-dp << endl;
+    cout << p*dp << endl;
 }
