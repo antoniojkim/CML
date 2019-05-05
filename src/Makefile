@@ -1,8 +1,13 @@
 CXX = g++
-CXXFLAGS = -Ofast -g -std=c++14 -DDEBUG -Wall -MMD -Werror=vla
-EXEC = main
+CXXFLAGS = -g -std=c++14 -Wall -MMD -Werror=vla
+EXEC = testCML
 
-OBJECTS = CML/Functions/roots.o CML/Functions/polynomials.o CML/LinAlg/matrix.o CML/LinAlg/eigen.o main.o
+TENSORS = $(wildcard CML/tensors/*.cc)
+MODULES = $(wildcard CML/nn/Modules/*.cc)
+VARIABLES = $(wildcard CML/nn/Variables/*.cc)
+LAYERS = $(wildcard CML/nn/Layers/*.cc)
+OPTIMIZER = $(wildcard CML/optim/Optimizers/*.cc)
+OBJECTS = $(TENSORS:.cc=.o) $(MODULES:.cc=.o) $(VARIABLES:.cc=.o) $(LAYERS:.cc=.o) $(OPTIMIZER:.cc=.o) testCML.o
 DEPENDS = ${OBJECTS:.o=.d}
 
 ${EXEC}: ${OBJECTS}
