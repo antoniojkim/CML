@@ -1,4 +1,0 @@
-int main(){
-    string s = "this is a test";
-    print("hello");
-}
