@@ -24,12 +24,11 @@ namespace nn {
         
         public:
             Module();
-            // Module(Modules submodules);
             template<typename ...T>
             Module(T&&...submodules) {
                 ModuleP mps[] = {std::move(submodules)...};
                 this->submodules = Modules{std::make_move_iterator(std::begin(mps)),
-                                     std::make_move_iterator(std::end(mps))};
+                                           std::make_move_iterator(std::end(mps))};
             }
         
             virtual cml::Tensor forward(const cml::Tensor&) = 0;

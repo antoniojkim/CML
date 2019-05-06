@@ -9,16 +9,6 @@
 
 namespace cml {
 namespace nn {
-    
-//     struct Layer {
-//         virtual cml::nn::Variable forward(const cml::nn::Variable&) = 0;
-//         virtual cml::nn::Variable backpropogation(const cml::nn::Variable&) = 0;
-//         virtual void step(const double& learningRate = 0.1){}
-        
-//         cml::nn::Variable operator()(const cml::nn::Variable& x){
-//             return forward(x);
-//         }
-//     };
  
     class ReLU: public Module {
         /*
