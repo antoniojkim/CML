@@ -15,6 +15,7 @@ int main(){
     Tensor t {2, 3};
     cout << t << endl;
     auto model = Sequential{
+        new_module<ReLU>(),
         new_module<ReLU>()
     };
     auto optimizer = SGD{vector<Parameter>(), 0.1};

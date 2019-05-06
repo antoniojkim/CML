@@ -17,24 +17,25 @@ SGD::SGD(const vector<Parameter>& params,
     Optimizer {params},
     lr {lr}, momentum {momentum}, 
     weight_decay {weight_decay}, dampening {dampening}, nesterov {nesterov} {
-        ostringstream error;
-        if (lr < 0){
-            error << "Invalid Learning Rate:  " << lr;
-            throw error.str();
-        }
-        if (momentum < 0){
-            error << "Invalid Momentum value:  " << momentum;
-            throw error.str();
-        }
-        if (weight_decay < 0){
-            error << "Invalid weight_decay value:  " << momentum;
-            throw error.str();
-        }
-        if (nesterov && (momentum <= 0 || dampening != 0)){
-            error << "Nesterov momentum requires a momentum and zero dampening";
-            throw error.str();
-        }
+        
+    ostringstream error;
+    if (lr < 0){
+        error << "Invalid Learning Rate:  " << lr;
+        throw error.str();
     }
+    if (momentum < 0){
+        error << "Invalid Momentum value:  " << momentum;
+        throw error.str();
+    }
+    if (weight_decay < 0){
+        error << "Invalid weight_decay value:  " << momentum;
+        throw error.str();
+    }
+    if (nesterov && (momentum <= 0 || dampening != 0)){
+        error << "Nesterov momentum requires a momentum and zero dampening";
+        throw error.str();
+    }
+}
 
 void SGD::step(){
     /*
