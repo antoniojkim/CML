@@ -27,6 +27,8 @@ namespace nn {
 
             cml::Tensor forward(const cml::Tensor&) override;
 //         cml::nn::Variable backpropogation(const cml::nn::Variable&) override;
+
+            std::ostream& print(std::ostream&, const std::string& indent) override;
     };
     
 }
