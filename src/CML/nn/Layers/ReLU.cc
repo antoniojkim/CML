@@ -1,5 +1,6 @@
 #include "../Layers.h"
 
+using namespace std;
 using namespace cml;
 using namespace cml::nn;
 
@@ -23,3 +24,7 @@ Tensor ReLU::forward(const Tensor& x){
 // Variable ReLU::backpropogation(const Variable& x){
 //     return x;
 // }
+
+std::ostream& ReLU::print(std::ostream& out, const std::string& indent){
+    return out << "ReLU {}";
+}

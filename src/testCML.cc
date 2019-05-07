@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "CML/Tensor.h"
+#include "CML/nn/Containers.h"
 #include "CML/nn/Layers.h"
 #include "CML/optim/Optimizer.h"
 
@@ -14,9 +15,24 @@ using namespace cml::optim;
 int main(){
     Tensor t {2, 3};
     cout << t << endl;
-    auto model = Sequential{
+    auto model = nn::Sequential{
         new_module<ReLU>(),
+        new_module<nn::Sequential> (
+            new_module<ReLU>(),
+            new_module<ReLU>()
+        ),
         new_module<ReLU>()
     };
-    auto optimizer = SGD{vector<Parameter>(), 0.1};
+    cout << model << endl;
+
+    auto moduleDictModel = nn::ModuleDict{
+        {"relu1", new_module<ReLU>()},
+        {"relu2", new_module<ReLU>()},
+        {"seq1", new_module<nn::Sequential> (
+            new_module<ReLU>(),
+            new_module<ReLU>()
+        )}
+    };
+    cout << moduleDictModel << endl;
+    // auto optimizer = SGD{vector<Parameter>(), 0.1};
 }
