@@ -10,16 +10,12 @@ using namespace cml::nn;
 
 
 Module::Module(){}
-#ifndef USE_VARIADIC_CONSTRUCTOR
-Module::Module(std::initializer_list<ModuleP> submodules){
-    this->submodules.reserve(submodules.size());
-    for (auto& submodule : submodules){
-        Module* tmp = submodule.get();
-        submodule.release();
-        addModule(ModuleP(tmp));
+Module::Module(std::initializer_list<std::pair<std::string, ModuleP&&>> dict){
+    submodules.reserve(dict.size());
+    for (auto& kv : dict){
+        addModule(std::forward<ModuleP>(kv.second), kv.first);
     }
 }
-#endif
 
 void Module::addModule(ModuleP& m, const std::string& key){ this->addModule(std::move(m), key); }
 void Module::addModule(const std::string& key, ModuleP& m){ this->addModule(std::move(m), key); }
