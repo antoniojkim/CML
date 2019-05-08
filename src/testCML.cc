@@ -25,6 +25,16 @@ int main(){
     };
     cout << model << endl;
 
+    auto moduleListModel = nn::ModuleList{
+        new_module<ReLU>(),
+        new_module<nn::Sequential> (
+            new_module<ReLU>(),
+            new_module<ReLU>()
+        ),
+        new_module<ReLU>()
+    };
+    cout << moduleListModel << endl;
+
     auto moduleDictModel = nn::ModuleDict{
         {"relu1", new_module<ReLU>()},
         {"relu2", new_module<ReLU>()},

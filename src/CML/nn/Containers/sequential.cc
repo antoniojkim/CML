@@ -6,9 +6,8 @@ using namespace cml;
 using namespace cml::nn;
 
 cml::nn::Sequential::Sequential() {}
-#ifndef USE_VARIADIC_CONSTRUCTOR
-cml::nn::Sequential::Sequential(std::initializer_list<ModuleP&&> submodules): Module{submodules} {}
-#endif
+cml::nn::Sequential::Sequential(initializer_list<pair<string, ModuleP&&>> dict): Module{dict} {}
+
 
 Tensor cml::nn::Sequential::forward(const Tensor& x) {
     auto y = x;
@@ -18,7 +17,7 @@ Tensor cml::nn::Sequential::forward(const Tensor& x) {
     return y;
 }
 
-std::ostream& cml::nn::Sequential::print(std::ostream& out, const std::string& indent){
+ostream& cml::nn::Sequential::print(ostream& out, const string& indent){
     out << "Sequential {" << endl;
     for (auto& submodule: submodules){
         out << indent << "    ";

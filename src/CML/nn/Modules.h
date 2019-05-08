@@ -11,14 +11,21 @@
 #include "Parameter.h"
 #include "../Tensor.h"
 
-#define USE_VARIADIC_CONSTRUCTOR
-
 namespace cml {
 namespace nn {
     
     class Module;
     typedef std::unique_ptr<cml::nn::Module> ModuleP;
     typedef std::vector<ModuleP> Modules;
+
+    template <typename T, typename...Args>
+    inline std::unique_ptr<Module> new_module(Args&&...args) {
+        return std::unique_ptr<Module>(new T(std::forward<Args>(args)...));
+    }
+    template <typename T, typename...Args>
+    inline std::pair<std::string, std::unique_ptr<Module>> new_module(const std::string& key, Args&&...args) {
+        return std::pair<std::string, std::unique_ptr<ModuleP>>(key, std::unique_ptr<Module>(new T(std::forward<Args>(args)...)));
+    }
     
     class Module {
         protected:
@@ -29,16 +36,17 @@ namespace nn {
         
         public:
             Module();
-#ifdef USE_VARIADIC_CONSTRUCTOR
             template<typename ...T>
             Module(T&&...submodules) {
                 ModuleP mps[] = {std::move(submodules)...};
                 this->submodules = Modules{std::make_move_iterator(std::begin(mps)),
                                            std::make_move_iterator(std::end(mps))};
+                for (unsigned int i = 0; i<this->submodules.size(); ++i){
+                    values[std::to_string(i)] = &(this->submodules[i]);
+                    keys[&(this->submodules[i])] = std::to_string(i);
+                }
             }
-#else
-            Module(std::initializer_list<ModuleP> submodules);
-#endif
+            Module(std::initializer_list<std::pair<std::string, ModuleP&&>>);
         
             virtual cml::Tensor forward(const cml::Tensor&) = 0;
             cml::Tensor operator()(const cml::Tensor& x){ return forward(x); }
@@ -47,6 +55,10 @@ namespace nn {
             void addModule(const std::string& key, ModuleP&);
             void addModule(const std::string& key, ModuleP&&);
             void addModule(ModuleP&&, const std::string& key = "");
+            template<typename T, typename...Args>
+            void addModule(Args&&...args){
+                addModule(new_module<T>(std::forward<T>(args)...));
+            }
 
             void apply(void (*fn)(ModuleP&));
 
@@ -56,15 +68,6 @@ namespace nn {
 
             virtual std::ostream& print(std::ostream&, const std::string& indent) = 0;
     };
-
-    template <typename T, typename...Args>
-    inline std::unique_ptr<Module> new_module(Args&&...args) {
-        return std::unique_ptr<Module>(new T(std::forward<Args>(args)...));
-    }
-    template <typename T, typename...Args>
-    inline std::pair<std::string, std::unique_ptr<Module>> new_module(const std::string& key, Args&&...args) {
-        return std::pair<std::string, std::unique_ptr<ModuleP>>(key, std::unique_ptr<Module>(new T(std::forward<Args>(args)...)));
-    }
     
 }
 }

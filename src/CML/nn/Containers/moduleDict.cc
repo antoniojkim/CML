@@ -6,12 +6,7 @@ using namespace cml;
 using namespace cml::nn;
 
 cml::nn::ModuleDict::ModuleDict() {}
-cml::nn::ModuleDict::ModuleDict(initializer_list<pair<string, ModuleP&&>> dict): Module() {
-    submodules.reserve(dict.size());
-    for (auto& kv : dict){
-        addModule(std::forward<ModuleP>(kv.second), kv.first);
-    }
-}
+cml::nn::ModuleDict::ModuleDict(initializer_list<pair<string, ModuleP&&>> dict): Module{dict} {}
 
 Tensor cml::nn::ModuleDict::forward(const Tensor& x) {
     auto y = x;
