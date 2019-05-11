@@ -8,6 +8,8 @@
 #include <memory>
 #include <vector>
 
+// #include "Linear.h"
+// #include "Nonlinear.h"
 #include "Parameter.h"
 #include "../Tensor.h"
 
@@ -60,9 +62,9 @@ namespace nn {
             }
 
             void addParameter(uParameter&&);
-            template<typename T, typename...Args>
-            void addParameter(Args&&...args){
-                addParameter(new_parameter<T>(std::forward<T>(args)...));
+            template<typename T>
+            void addParameter(const int& R, const int& C = 1){
+                addParameter(std::move(new_parameter<T>(R, C)));
             }
 
             void apply(void (*fn)(ModuleP&));

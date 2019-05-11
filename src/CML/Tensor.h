@@ -7,8 +7,8 @@ namespace cml {
     
     template <class T>
     struct __Tensor__: public Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>{
-        __Tensor__(const int& R);
-        __Tensor__(const int& R, const int& C);
+        __Tensor__(const int& R): Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>{R, 1} {}
+        __Tensor__(const int& R, const int& C): Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>{R, C} {}
         // __Tensor__(const int& R, const int& C, const int& D);
     };
     

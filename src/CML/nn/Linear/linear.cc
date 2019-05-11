@@ -10,8 +10,13 @@ in_features{in_features}, out_features{out_features}, bias{bias} {
     addParameter<float>(out_features);
 }
 
-Parameter Linear::getWeights(){ params[0].get(); }
-Parameter Linear::getBias(){ bias ? params[1].get() : nullptr; }
+Parameter Linear::getWeights(){ return params[0].get(); }
+Parameter Linear::getBias(){ return bias ? params[1].get() : nullptr; }
+
+
+cml::Tensor Linear::forward(const cml::Tensor& x){
+    return x;
+}
 
 std::ostream& Linear::print(std::ostream& out, const std::string& indent){
     return out << "Linear:  in_features: " << in_features << 

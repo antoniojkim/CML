@@ -8,7 +8,7 @@ using namespace cml::nn;
 using namespace cml::optim;
 
 
-SGD::SGD(const Parameters& params,
+SGD::SGD(Parameters* params,
          const double& lr, 
          const double& momentum, 
          const double& weight_decay,
