@@ -4,8 +4,9 @@
 using namespace cml;
 using namespace Eigen;
 
-template<class T>
-__Tensor__<T>::__Tensor__(const int& R, const int& C): Matrix<T, Dynamic, Dynamic>{R, C} {}
+__Tensor__::__Tensor__(const int& R): Matrix{R, 1} {}
+__Tensor__::__Tensor__(const int& R, const int& C): Matrix{R, C} {}
+// __Tensor__::__Tensor__(const int& R, const int& C, const int& D);
 
 // FloatTensor::FloatTensor(const int& R, const int& C): Matrix<float, Dynamic, Dynamic>{R, C} {}
 
