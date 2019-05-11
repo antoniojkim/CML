@@ -22,7 +22,7 @@ namespace nn {
 
         public:
             parameter(const bool& requires_grad = true);
-            virtual ~parameter() = 0;
+            // virtual ~parameter() = 0;
 
             template<class U>
             Parameter to(){
@@ -34,16 +34,27 @@ namespace nn {
     class __parameter__: public parameter, public __Tensor__<T> {
 
         public:
+            // template<typename...Args>
+            // __parameter__(Args... args): __Tensor__<T>(args...) {}
+            template<typename...Args>
             __parameter__(const int& R, const int& C): __Tensor__<T>(R, C) {}
             template <class U>
             __parameter__(__parameter__<U>&& p): __Tensor__<T>(p) {}
-            ~__parameter__() {}
+            // ~__parameter__() override {}
     };
 
+    template class __parameter__<float>;
+    template class __parameter__<double>;
+    template class __parameter__<long>;
 
-    template <typename T, typename...Args>
-    inline Parameter new_parameter(Args&&...args) {
-        return std::unique_ptr<__parameter__<T>>(std::forward<Args>(args)...);
+
+    // template <typename T, typename...Args>
+    // inline Parameter new_parameter(Args&&...args) {
+    //     return std::unique_ptr<__parameter__<T>>(std::forward<Args>(args)...);
+    // }
+    template <typename T>
+    inline uParameter new_parameter(const int& R, const int& C) {
+        return std::make_unique<__parameter__<T>>(R, C);
     }
     
 }

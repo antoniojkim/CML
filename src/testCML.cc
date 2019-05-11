@@ -4,7 +4,8 @@
 
 #include "CML/Tensor.h"
 #include "CML/nn/Containers.h"
-#include "CML/nn/Layers.h"
+#include "CML/nn/Linear.h"
+#include "CML/nn/Nonlinear.h"
 #include "CML/optim/Optimizer.h"
 
 using namespace std;
@@ -25,24 +26,29 @@ int main(){
     };
     cout << model << endl;
 
-    auto moduleListModel = nn::ModuleList{
-        new_module<ReLU>(),
-        new_module<nn::Sequential> (
-            new_module<ReLU>(),
-            new_module<ReLU>()
-        ),
-        new_module<ReLU>()
-    };
-    cout << moduleListModel << endl;
+    // auto moduleListModel = nn::ModuleList{
+    //     new_module<ReLU>(),
+    //     new_module<nn::Sequential> (
+    //         new_module<ReLU>(),
+    //         new_module<ReLU>()
+    //     ),
+    //     new_module<ReLU>()
+    // };
+    // cout << moduleListModel << endl;
 
-    auto moduleDictModel = nn::ModuleDict{
-        {"relu1", new_module<ReLU>()},
-        {"relu2", new_module<ReLU>()},
-        {"seq1", new_module<nn::Sequential> (
-            new_module<ReLU>(),
-            new_module<ReLU>()
-        )}
+    // auto moduleDictModel = nn::ModuleDict{
+    //     {"relu1", new_module<ReLU>()},
+    //     {"relu2", new_module<ReLU>()},
+    //     {"seq1", new_module<nn::Sequential> (
+    //         new_module<ReLU>(),
+    //         new_module<ReLU>()
+    //     )}
+    // };
+    // cout << moduleDictModel << endl;
+
+    auto paramTest = nn::Sequential {
+        new_module<Linear>(2, 4)
     };
-    cout << moduleDictModel << endl;
+    cout << paramTest << endl;
     // auto optimizer = SGD{vector<Parameter>(), 0.1};
 }
