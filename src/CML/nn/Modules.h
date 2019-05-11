@@ -29,10 +29,12 @@ namespace nn {
     
     class Module {
         protected:
-            std::vector<cml::nn::Parameter> params;
+            Module* parent;
+            Parameters params;
             Modules submodules;
             std::map<std::string, ModuleP*> values;
             std::map<ModuleP*, std::string> keys;
+            void init();
         
         public:
             Module();
@@ -41,10 +43,7 @@ namespace nn {
                 ModuleP mps[] = {std::move(submodules)...};
                 this->submodules = Modules{std::make_move_iterator(std::begin(mps)),
                                            std::make_move_iterator(std::end(mps))};
-                for (unsigned int i = 0; i<this->submodules.size(); ++i){
-                    values[std::to_string(i)] = &(this->submodules[i]);
-                    keys[&(this->submodules[i])] = std::to_string(i);
-                }
+                init();
             }
             Module(std::initializer_list<std::pair<std::string, ModuleP&&>>);
         
@@ -58,6 +57,12 @@ namespace nn {
             template<typename T, typename...Args>
             void addModule(Args&&...args){
                 addModule(new_module<T>(std::forward<T>(args)...));
+            }
+
+            void addParameter(uParameter&&);
+            template<typename T, typename...Args>
+            void addParameter(Args&&...args){
+                addParameter(new_parameter<T>(std::forward<T>(args)...));
             }
 
             void apply(void (*fn)(ModuleP&));

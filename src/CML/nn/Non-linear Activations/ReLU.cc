@@ -1,4 +1,4 @@
-#include "../Layers.h"
+#include "../Nonlinear.h"
 
 using namespace std;
 using namespace cml;

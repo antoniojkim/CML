@@ -7,7 +7,9 @@ namespace cml {
     
     template <class T>
     struct __Tensor__: public Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>{
+        __Tensor__(const int& R);
         __Tensor__(const int& R, const int& C);
+        // __Tensor__(const int& R, const int& C, const int& D);
     };
     
     template class __Tensor__<float>;
@@ -19,6 +21,8 @@ namespace cml {
     
     template class __Tensor__<long>;
     typedef class __Tensor__<long> LongTensor;
+
+
     
 }
 

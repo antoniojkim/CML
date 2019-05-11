@@ -11,8 +11,8 @@ namespace optim {
     struct Optimizer {
         virtual void step() = 0;
         protected:
-            std::vector<cml::nn::Parameter> params;
-            Optimizer(const std::vector<cml::nn::Parameter>& params): params {params} {}
+            cml::nn::Parameters params;
+            Optimizer(const cml::nn::Parameters& params): params {params} {}
     };
     
     class SGD: public Optimizer {
@@ -23,7 +23,7 @@ namespace optim {
         bool nesterov; // enables Nesterov momentum
     
         public:
-            SGD(const std::vector<cml::nn::Parameter>& params,
+            SGD(const cml::nn::Parameters& params,
                 const double& lr, 
                 const double& momentum = 0, 
                 const double& weight_decay = 0,

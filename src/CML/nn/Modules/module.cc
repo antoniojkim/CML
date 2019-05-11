@@ -9,7 +9,14 @@ using namespace cml;
 using namespace cml::nn;
 
 
-Module::Module(){}
+void Module::init(){
+    for (unsigned int i = 0; i<this->submodules.size(); ++i){
+        values[std::to_string(i)] = &(this->submodules[i]);
+        keys[&(this->submodules[i])] = std::to_string(i);
+    }
+}
+
+Module::Module(){ init(); }
 Module::Module(std::initializer_list<std::pair<std::string, ModuleP&&>> dict){
     submodules.reserve(dict.size());
     for (auto& kv : dict){
@@ -22,16 +29,16 @@ void Module::addModule(const std::string& key, ModuleP& m){ this->addModule(std:
 void Module::addModule(const std::string& key, ModuleP&& m){ this->addModule(std::move(m), key); }
 void Module::addModule(ModuleP&& m, const std::string& key){
     submodules.emplace_back(std::move(m));
+    submodules.back()->parent = this;
     if (key == ""){
-        ostringstream newkey;
-        newkey << submodules.size();
-        if (values.count(newkey.str()) > 0){
+        auto newkey = to_string(submodules.size());
+        if (values.count(newkey) > 0){
             ostringstream error;
-            error << "Key Already Exists: " << newkey.str();
+            error << "Key Already Exists: " << newkey;
             throw error.str();
         }
-        values[newkey.str()] = &(submodules.back());
-        keys[&(submodules.back())] = newkey.str();
+        values[newkey] = &(submodules.back());
+        keys[&(submodules.back())] = newkey;
     }
     else{
         if (values.count(key) > 0){
@@ -42,6 +49,10 @@ void Module::addModule(ModuleP&& m, const std::string& key){
         values[key] = &(submodules.back());
         keys[&(submodules.back())] = key;
     }
+}
+
+void Module::addParameter(uParameter&& p){
+    params.emplace_back(std::move(p));
 }
 
 void Module::apply(void (*fn)(ModuleP&)){
