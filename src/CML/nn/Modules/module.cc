@@ -51,9 +51,12 @@ void Module::addModule(ModuleP&& m, const std::string& key){
     }
 }
 
-void Module::addParameter(uParameter&& p){
-    params.emplace_back(std::move(p));
+void Module::addParameter(uParameter&& p, const std::string& key){
+    params.add(std::move(p), key);
 }
+Parameter Module::getParam(const int& index){ return params[index]; }
+Parameter Module::getParam(const std::string& key){ return params[key]; }
+Parameters& Module::getParams(){ return params; }
 
 void Module::apply(void (*fn)(ModuleP&)){
     for (auto& submodule : submodules){
@@ -62,21 +65,21 @@ void Module::apply(void (*fn)(ModuleP&)){
 }
 
 Modules& Module::getModules(){ return submodules; }
-ModuleP& Module::operator[](const int& index){
+Module& Module::operator[](const int& index){
     if (index >= 0 && index < (int) submodules.size()){
-        return submodules[index];
+        return *submodules[index];
     }
     else if (index < 0 && -index <= (int) submodules.size()){
-        return submodules[submodules.size()+index];
+        return *submodules[submodules.size()+index];
     }
     
     ostringstream error;
     error << "Invalid index: " << index << ",  submodules.size() == " << submodules.size() << endl;
     throw error.str();
 }
-ModuleP& Module::operator[](const string& key){
+Module& Module::operator[](const string& key){
     if (values.count(key) > 0){
-        return *values[key];
+        return *(*values[key]);
     }
     
     ostringstream error;

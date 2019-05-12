@@ -1,7 +1,9 @@
 #ifndef __CML_NN_PARAMETER_H__
 #define __CML_NN_PARAMETER_H__
 
+#include <map>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "../Tensor.h"
@@ -14,7 +16,6 @@ namespace nn {
 
     typedef parameter* Parameter;
     typedef std::unique_ptr<parameter> uParameter;
-    typedef std::vector<uParameter> Parameters;
 
     class parameter {
         protected:
@@ -28,6 +29,12 @@ namespace nn {
             Parameter to(){
                 return std::make_unique<__parameter__<U>>(std::move(*this));
             }
+
+            virtual std::ostream& print(std::ostream& out) = 0;
+
+            friend std::ostream& operator<<(std::ostream& out, Parameter p){
+                return p->print(out);
+            }
     };
 
     template <class T>
@@ -35,12 +42,16 @@ namespace nn {
 
         public:
             // template<typename...Args>
-            // __parameter__(Args... args): __Tensor__<T>(args...) {}
+            // __parameter__(Args... args): __Tensor__<T>(std::forward<Args>(args)...) {}
             template<typename...Args>
             __parameter__(const int& R, const int& C): __Tensor__<T>(R, C) {}
             template <class U>
             __parameter__(__parameter__<U>&& p): __Tensor__<T>(p) {}
             // ~__parameter__() override {}
+
+            std::ostream& print(std::ostream& out){
+                return out << dynamic_cast<__Tensor__<T>*>(this);
+            }
     };
 
     template class __parameter__<float>;
@@ -56,6 +67,19 @@ namespace nn {
     inline uParameter new_parameter(const int& R, const int& C) {
         return std::make_unique<__parameter__<T>>(R, C);
     }
+
+    struct Parameters {
+        std::vector<uParameter> params;
+        std::map<std::string, Parameter> values;
+
+        void emplace_back(uParameter&&, const std::string& key = "");
+        void push_back(uParameter&&, const std::string& key = "");
+        void append(uParameter&&, const std::string& key = "");
+        void add(uParameter&&, const std::string& key = "");
+
+        Parameter operator[](const int& index);
+        Parameter operator[](const std::string& key);
+    };
     
 }
 }

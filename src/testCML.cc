@@ -1,5 +1,7 @@
 
 #include <iostream>
+#include <memory>
+#include <sstream>
 #include <vector>
 
 #include "CML/Tensor.h"
@@ -13,9 +15,7 @@ using namespace cml;
 using namespace cml::nn;
 using namespace cml::optim;
 
-int main(){
-    Tensor t {2, 3};
-    cout << t << endl;
+void basicSequentialTest(){
     auto model = nn::Sequential{
         new_module<ReLU>(),
         new_module<nn::Sequential> (
@@ -25,30 +25,18 @@ int main(){
         new_module<ReLU>()
     };
     cout << model << endl;
-
-    // auto moduleListModel = nn::ModuleList{
-    //     new_module<ReLU>(),
-    //     new_module<nn::Sequential> (
-    //         new_module<ReLU>(),
-    //         new_module<ReLU>()
-    //     ),
-    //     new_module<ReLU>()
-    // };
-    // cout << moduleListModel << endl;
-
-    // auto moduleDictModel = nn::ModuleDict{
-    //     {"relu1", new_module<ReLU>()},
-    //     {"relu2", new_module<ReLU>()},
-    //     {"seq1", new_module<nn::Sequential> (
-    //         new_module<ReLU>(),
-    //         new_module<ReLU>()
-    //     )}
-    // };
-    // cout << moduleDictModel << endl;
-
+}
+void simpleParamTest(){
     auto paramTest = nn::Sequential {
-        new_module<Linear>(2, 4)
+        {"l1", new_module<Linear>(2, 4)}
     };
     cout << paramTest << endl;
-    // auto optimizer = SGD{vector<Parameter>(), 0.1};
+    cout << paramTest["l1"]("weights") << endl;
+}
+
+int main(){
+    Tensor t {2, 3};
+    cout << t << endl;
+    basicSequentialTest();
+    simpleParamTest();
 }
