@@ -9,14 +9,19 @@ namespace cml {
 namespace nn {
 
     class Linear: public Module {
+        /*
+        The weights are stored in the module parameters under the alias "weights"
+        The bias is stored in the module parameters under the alias "bias"
+        */
+        
         int in_features, out_features;
         bool bias;
 
         public:
             Linear(const int& in_features, const int& out_features, const bool& bias = true);
 
-            cml::nn::Parameter getWeights();
-            cml::nn::Parameter getBias();
+            Parameter getWeights();
+            Parameter getBias();
 
             cml::Tensor forward(const cml::Tensor&) override;
 

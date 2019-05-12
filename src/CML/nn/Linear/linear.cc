@@ -6,12 +6,15 @@ using namespace cml::nn;
 
 Linear::Linear(const int& in_features, const int& out_features, const bool& bias): 
 in_features{in_features}, out_features{out_features}, bias{bias} {
-    addParameter<float>(in_features, out_features);
-    addParameter<float>(out_features);
+    addParameter<float>("weights", in_features, out_features);
+    if (bias) addParameter<float>("bias", out_features);
 }
 
-Parameter Linear::getWeights(){ return params[0].get(); }
-Parameter Linear::getBias(){ return bias ? params[1].get() : nullptr; }
+Parameter Linear::getWeights(){ return params[0]; }
+Parameter Linear::getBias(){
+    if (bias) return params[1];
+    throw "Attempting to get bias from Linear layer without bias";
+}
 
 
 cml::Tensor Linear::forward(const cml::Tensor& x){
@@ -19,6 +22,6 @@ cml::Tensor Linear::forward(const cml::Tensor& x){
 }
 
 std::ostream& Linear::print(std::ostream& out, const std::string& indent){
-    return out << "Linear:  in_features: " << in_features << 
-                        "  out_features: " << out_features << "  bias: " << bias;
+    return out << "Linear { in_features: " << in_features << 
+                        "  out_features: " << out_features << "  bias: " << (bias ? "true" : "false") << " }";
 }

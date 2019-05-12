@@ -52,26 +52,32 @@ namespace nn {
             virtual cml::Tensor forward(const cml::Tensor&) = 0;
             cml::Tensor operator()(const cml::Tensor& x){ return forward(x); }
         
-            void addModule(ModuleP&, const std::string& key = "");
             void addModule(const std::string& key, ModuleP&);
             void addModule(const std::string& key, ModuleP&&);
+            void addModule(ModuleP&, const std::string& key = "");
             void addModule(ModuleP&&, const std::string& key = "");
             template<typename T, typename...Args>
             void addModule(Args&&...args){
                 addModule(new_module<T>(std::forward<T>(args)...));
             }
 
-            void addParameter(uParameter&&);
+            void addParameter(uParameter&&, const std::string& key = "");
             template<typename T>
-            void addParameter(const int& R, const int& C = 1){
-                addParameter(std::move(new_parameter<T>(R, C)));
+            void addParameter(const std::string& key, const int& R, const int& C = 1){
+                addParameter(new_parameter<T>(R, C), key);
             }
+            
+            Parameter getParam(const int& index);
+            Parameter getParam(const std::string& key);
+            Parameter operator()(const std::string& key){ return params[key]; }
+            Parameters& getParams();
+            
 
             void apply(void (*fn)(ModuleP&));
 
             Modules& getModules();
-            ModuleP& operator[](const int& index);
-            ModuleP& operator[](const std::string& key);
+            Module& operator[](const int& index);
+            Module& operator[](const std::string& key);
 
             virtual std::ostream& print(std::ostream&, const std::string& indent) = 0;
     };

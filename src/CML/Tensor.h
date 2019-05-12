@@ -10,6 +10,10 @@ namespace cml {
         __Tensor__(const int& R): Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>{R, 1} {}
         __Tensor__(const int& R, const int& C): Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>{R, C} {}
         // __Tensor__(const int& R, const int& C, const int& D);
+
+        friend std::ostream& operator<<(std::ostream& out, __Tensor__<T>* t){
+            return out << *(dynamic_cast<Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>*>(t));
+        }
     };
     
     template class __Tensor__<float>;
