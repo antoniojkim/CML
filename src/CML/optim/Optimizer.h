@@ -8,14 +8,17 @@
 namespace cml {
 namespace optim {
     
+    template<typename T>
     struct Optimizer {
         virtual void step() = 0;
         protected:
-            cml::nn::Parameters* params;
-            Optimizer(cml::nn::Parameters* params): params {params} {}
+            cml::nn::Parameters<T> params;
+            Optimizer(cml::nn::Parameters<T>& params):  params {std::move(params)} {}
+            Optimizer(cml::nn::Parameters<T>&& params): params {std::move(params)} {}
     };
     
-    class SGD: public Optimizer {
+    template<typename T>
+    class SGD: public Optimizer<T> {
         double lr; // learning Rate
         double momentum; // momentum factor
         double weight_decay; // weight decay (L2 penalty)
@@ -23,7 +26,7 @@ namespace optim {
         bool nesterov; // enables Nesterov momentum
     
         public:
-            SGD(cml::nn::Parameters* params,
+            SGD(cml::nn::Parameters<T>& params,
                 const double& lr, 
                 const double& momentum = 0, 
                 const double& weight_decay = 0,

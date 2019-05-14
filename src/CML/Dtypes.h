@@ -3,7 +3,13 @@
 
 namespace cml {
     
-    
+    #define INSTANTIATE_TEMPLATES(T) \
+        class template T<float>; \
+        class template T<double>; \
+        class template T<long long>; \
+        class template T<long>; \
+        class template T<int>;
+
     
 }
 

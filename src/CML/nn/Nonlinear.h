@@ -10,7 +10,8 @@
 namespace cml {
 namespace nn {
  
-    class ReLU: public Module {
+    template<typename T>
+    class ReLU: public Module<T> {
         /*
         Applies the rectified linear unit function element-wise:
         
@@ -25,7 +26,7 @@ namespace nn {
         public:
             ReLU(const bool& inplace = false);
 
-            cml::Tensor forward(const cml::Tensor&) override;
+            cml::Tensor<T> forward(const cml::Tensor<T>&) override;
 
             std::ostream& print(std::ostream&, const std::string& indent) override;
     };

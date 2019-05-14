@@ -2,19 +2,25 @@
 #include <sstream>
 
 #include "../Optimizer.h"
+#include "../../Dtypes.h"
 
 using namespace std;
 using namespace cml::nn;
 using namespace cml::optim;
 
 
-SGD::SGD(Parameters* params,
+/***********************************************************************************
+********************************* Constructors *************************************
+************************************************************************************/
+
+template<typename T>
+SGD<T>::SGD(Parameters<T>& params,
          const double& lr, 
          const double& momentum, 
          const double& weight_decay,
          const double& dampening,
          const bool& nesterov):
-    Optimizer {params},
+    Optimizer<T> {params},
     lr {lr}, momentum {momentum}, 
     weight_decay {weight_decay}, dampening {dampening}, nesterov {nesterov} {
         
@@ -37,7 +43,13 @@ SGD::SGD(Parameters* params,
     }
 }
 
-void SGD::step(){
+
+/***********************************************************************************
+*********************************** Methods ****************************************
+************************************************************************************/
+
+template<typename T>
+void SGD<T>::step(){
     /*
     def step(self, closure=None):
         """Performs a single optimization step.
@@ -81,3 +93,12 @@ void SGD::step(){
     
     
 }
+
+
+
+/***********************************************************************************
+**************************** Template Instantiations *******************************
+************************************************************************************/
+
+INSTANTIATE_TEMPLATES(SGD);
+

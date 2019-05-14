@@ -1,18 +1,37 @@
 
 #include "../Tensor.h"
+#include "../Dtypes.h"
 
 using namespace cml;
 using namespace Eigen;
 
-// __Tensor__::__Tensor__(const int& R): Matrix{R, 1} {}
-// __Tensor__::__Tensor__(const int& R, const int& C): Matrix{R, C} {}
-// __Tensor__::__Tensor__(const int& R, const int& C, const int& D);
 
-// FloatTensor::FloatTensor(const int& R, const int& C): Matrix<float, Dynamic, Dynamic>{R, C} {}
+/***********************************************************************************
+********************************* Constructors *************************************
+************************************************************************************/
 
-// LongTensor::LongTensor(const int& R, const int& C): Matrix<long, Dynamic, Dynamic>{R, C} {}
+template<typename T>
+Tensor<T>::Tensor(const int& R): Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>{R, 1} {}
+template<typename T>
+Tensor<T>::Tensor(const int& R, const int& C): Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>{R, C} {}
+// Tensor(const int& R, const int& C, const int& D);
 
 
-// std::ostream& operator<<(std::ostream& out, const Tensor& t){
-//     return out << t;
-// }
+
+/***********************************************************************************
+*********************************** Methods ****************************************
+************************************************************************************/
+
+template<typename T>
+std::ostream& operator<<(std::ostream& out, Tensor<T>& t){
+    return out << static_cast<DMatrix<T>&>(t);
+}
+
+
+
+/***********************************************************************************
+**************************** Template Instantiations *******************************
+************************************************************************************/
+
+INSTANTIATE_TEMPLATES(Tensor);
+

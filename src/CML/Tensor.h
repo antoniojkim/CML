@@ -4,29 +4,20 @@
 #include <Eigen/Core>
 
 namespace cml {
-    
-    template <class T>
-    struct __Tensor__: public Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>{
-        __Tensor__(const int& R): Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>{R, 1} {}
-        __Tensor__(const int& R, const int& C): Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>{R, C} {}
-        // __Tensor__(const int& R, const int& C, const int& D);
 
-        friend std::ostream& operator<<(std::ostream& out, __Tensor__<T>* t){
-            return out << *(dynamic_cast<Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>*>(t));
-        }
+    template<typename T>
+    using DMatrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>; // Dynamic Matrix
+    
+    template <class T = float>
+    struct Tensor: public DMatrix<T>{
+        Tensor(const int& R);
+        Tensor(const int& R, const int& C);
+        // Tensor(const int& R, const int& C, const int& D);
+
     };
     
-    template class __Tensor__<float>;
-    typedef __Tensor__<float> Tensor;
-    typedef __Tensor__<float> FloatTensor;
-    
-    template class __Tensor__<double>;
-    typedef __Tensor__<double> DoubleTensor;
-    
-    template class __Tensor__<long>;
-    typedef class __Tensor__<long> LongTensor;
-
-
+    template<typename T>
+    std::ostream& operator<<(std::ostream& out, Tensor<T>& t);
     
 }
 

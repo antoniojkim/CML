@@ -1,14 +1,28 @@
 
 #include "../Containers.h"
+#include "../../Dtypes.h"
 
 using namespace std;
 using namespace cml;
 using namespace cml::nn;
 
-cml::nn::ModuleDict::ModuleDict() {}
-cml::nn::ModuleDict::ModuleDict(initializer_list<pair<string, ModuleP&&>> dict): Module{dict} {}
+/***********************************************************************************
+********************************* Constructors *************************************
+************************************************************************************/
 
-Tensor cml::nn::ModuleDict::forward(const Tensor& x) {
+template<typename T>
+ModuleDict<T>::ModuleDict() {}
+template<typename T>
+ModuleDict<T>::ModuleDict(initializer_list<pair<string, uModule<T>&&>> dict): Module<T>{dict} {}
+
+
+
+/***********************************************************************************
+*********************************** Methods ****************************************
+************************************************************************************/
+
+template<typename T>
+Tensor<T> ModuleDict<T>::forward(const Tensor<T>& x) {
     auto y = x;
     for (auto& submodule : submodules){
         y = (*submodule)(y);
@@ -16,9 +30,10 @@ Tensor cml::nn::ModuleDict::forward(const Tensor& x) {
     return y;
 }
 
-ostream& cml::nn::ModuleDict::print(ostream& out, const string& indent){
+template<typename T>
+ostream& ModuleDict<T>::print(ostream& out, const string& indent){
     out << "ModuleDict {" << endl;
-    for (auto& submodule: submodules){
+    for (auto& submodule : submodules){
         out << indent << "    " << keys[&submodule] << ":  ";
         submodule->print(out, indent+"    ") << endl;
     }
@@ -26,3 +41,10 @@ ostream& cml::nn::ModuleDict::print(ostream& out, const string& indent){
     return out;
 }
 
+
+
+/***********************************************************************************
+**************************** Template Instantiations *******************************
+************************************************************************************/
+
+INSTANTIATE_TEMPLATES(ModuleDict);
