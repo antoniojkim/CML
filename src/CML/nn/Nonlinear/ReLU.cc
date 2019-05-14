@@ -1,12 +1,24 @@
 #include "../Nonlinear.h"
+#include "../../Dtypes.h"
 
 using namespace std;
 using namespace cml;
 using namespace cml::nn;
 
-ReLU::ReLU(const bool& inplace): inplace {inplace} {}
+/***********************************************************************************
+********************************* Constructors *************************************
+************************************************************************************/
 
-Tensor ReLU::forward(const Tensor& x){
+template<typename T>
+ReLU<T>::ReLU(const bool& inplace): inplace {inplace} {}
+
+
+/***********************************************************************************
+*********************************** Methods ****************************************
+************************************************************************************/
+
+template<typename T>
+Tensor<T> ReLU<T>::forward(const Tensor<T>& x){
 //     if (inplace){
 //         for (auto& e : x){
 //             if (e < 0) e = 0;
@@ -25,6 +37,14 @@ Tensor ReLU::forward(const Tensor& x){
 //     return x;
 // }
 
-std::ostream& ReLU::print(std::ostream& out, const std::string& indent){
+template<typename T>
+std::ostream& ReLU<T>::print(std::ostream& out, const std::string& indent){
     return out << "ReLU {}";
 }
+
+
+/***********************************************************************************
+**************************** Template Instantiations *******************************
+************************************************************************************/
+
+INSTANTIATE_TEMPLATES(ReLU);

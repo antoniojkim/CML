@@ -1,15 +1,30 @@
 
 #include "../Containers.h"
+#include "../../Dtypes.h"
 
 using namespace std;
 using namespace cml;
 using namespace cml::nn;
 
-cml::nn::Sequential::Sequential() {}
-cml::nn::Sequential::Sequential(initializer_list<pair<string, ModuleP&&>> dict): Module{dict} {}
+/***********************************************************************************
+********************************* Constructors *************************************
+************************************************************************************/
+
+template<typename T>
+Sequential<T>::Sequential() {}
+template<typename T> template<typename ...U>
+Sequential<T>::Sequential(U&&...submodules): Module<T>(std::forward<T>(submodules)...) {}
+template<typename T>
+Sequential<T>::Sequential(initializer_list<pair<string, uModule<T>&&>> dict): Module<T>{dict} {}
 
 
-Tensor cml::nn::Sequential::forward(const Tensor& x) {
+
+/***********************************************************************************
+*********************************** Methods ****************************************
+************************************************************************************/
+
+template<typename T>
+Tensor<T> Sequential<T>::forward(const Tensor<T>& x) {
     auto y = x;
     for (auto& submodule : submodules){
         y = (*submodule)(y);
@@ -17,7 +32,8 @@ Tensor cml::nn::Sequential::forward(const Tensor& x) {
     return y;
 }
 
-ostream& cml::nn::Sequential::print(ostream& out, const string& indent){
+template<typename T>
+ostream& Sequential<T>::print(ostream& out, const string& indent){
     out << "Sequential {" << endl;
     for (auto& submodule: submodules){
         out << indent << "    ";
@@ -30,3 +46,10 @@ ostream& cml::nn::Sequential::print(ostream& out, const string& indent){
     return out;
 }
 
+
+
+/***********************************************************************************
+**************************** Template Instantiations *******************************
+************************************************************************************/
+
+INSTANTIATE_TEMPLATES(Sequential);

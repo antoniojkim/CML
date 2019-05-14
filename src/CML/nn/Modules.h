@@ -16,74 +16,71 @@
 namespace cml {
 namespace nn {
     
-    class Module;
-    typedef std::unique_ptr<cml::nn::Module> ModuleP;
-    typedef std::vector<ModuleP> Modules;
+    template<typename T> class Module;
+    template<typename T>
+    using uModule = std::unique_ptr<cml::nn::Module<T>>;
+    template<typename T>
+    using Modules = std::vector<uModule<T>>;
 
-    template <typename T, typename...Args>
-    inline std::unique_ptr<Module> new_module(Args&&...args) {
-        return std::unique_ptr<Module>(new T(std::forward<Args>(args)...));
+    template <template<typename> class T, typename U = float, typename...Args>
+    inline std::unique_ptr<Module<U>> new_module(Args&&...args) {
+        return std::unique_ptr<Module<U>>(new T<U>(std::forward<Args>(args)...));
     }
-    template <typename T, typename...Args>
-    inline std::pair<std::string, std::unique_ptr<Module>> new_module(const std::string& key, Args&&...args) {
-        return std::pair<std::string, std::unique_ptr<ModuleP>>(key, std::unique_ptr<Module>(new T(std::forward<Args>(args)...)));
+    template <template<typename> class T, typename U = float, typename...Args>
+    inline std::pair<std::string, std::unique_ptr<Module<U>>> new_module(const std::string& key, Args&&...args) {
+        return std::pair<std::string, std::unique_ptr<Module<U>>>(key, std::unique_ptr<Module<U>>(new T<U>(std::forward<Args>(args)...)));
     }
     
+    template <typename T> 
     class Module {
         protected:
-            Module* parent;
-            Parameters params;
-            Modules submodules;
-            std::map<std::string, ModuleP*> values;
-            std::map<ModuleP*, std::string> keys;
+            Module<T>* parent = nullptr;
+            Parameters<T> params;
+            Modules<T> submodules;
+            std::map<std::string, uModule<T>*> values;
+            std::map<uModule<T>*, std::string> keys;
             void init();
         
         public:
             Module();
-            template<typename ...T>
-            Module(T&&...submodules) {
-                ModuleP mps[] = {std::move(submodules)...};
-                this->submodules = Modules{std::make_move_iterator(std::begin(mps)),
-                                           std::make_move_iterator(std::end(mps))};
-                init();
-            }
-            Module(std::initializer_list<std::pair<std::string, ModuleP&&>>);
+            template<typename ...U> Module(U&&...submodules);
+            Module(std::initializer_list<std::pair<std::string, uModule<T>&&>> dict);
         
-            virtual cml::Tensor forward(const cml::Tensor&) = 0;
-            cml::Tensor operator()(const cml::Tensor& x){ return forward(x); }
+            virtual cml::Tensor<T> forward(const cml::Tensor<T>&) = 0;
+            cml::Tensor<T> operator()(const cml::Tensor<T>& x);
         
-            void addModule(const std::string& key, ModuleP&);
-            void addModule(const std::string& key, ModuleP&&);
-            void addModule(ModuleP&, const std::string& key = "");
-            void addModule(ModuleP&&, const std::string& key = "");
-            template<typename T, typename...Args>
-            void addModule(Args&&...args){
-                addModule(new_module<T>(std::forward<T>(args)...));
-            }
+            void addModule(const std::string& key, uModule<T>& m);
+            void addModule(const std::string& key, uModule<T>&& m);
+            void addModule(uModule<T>& m, const std::string& key = "");
+            void addModule(uModule<T>&& m, const std::string& key = "");
+            template<template<typename> typename S, typename...Args>
+            void addModule(Args&&...args);
 
-            void addParameter(uParameter&&, const std::string& key = "");
-            template<typename T>
-            void addParameter(const std::string& key, const int& R, const int& C = 1){
-                addParameter(new_parameter<T>(R, C), key);
-            }
-            
-            Parameter getParam(const int& index);
-            Parameter getParam(const std::string& key);
-            Parameter operator()(const std::string& key){ return params[key]; }
-            Parameters& getParams();
-            
 
-            void apply(void (*fn)(ModuleP&));
+            void addParameter(uParameter<T>&& p, const std::string& key = "");
+            template<typename...Args>
+            void addParameter(const std::string& key, Args&&...args);
 
-            Modules& getModules();
-            Module& operator[](const int& index);
-            Module& operator[](const std::string& key);
+
+            void apply(void (*fn)(uModule<T>&), const bool& recursive = true);
+
+            Modules<T>& getModules();
+            Module<T>& operator[](const int& index);
+            Module<T>& operator[](const std::string& key);
+
+            Parameter<T>& getParam(const int& index);
+            Parameter<T>& getParam(const std::string& key);
+            Parameter<T>& operator()(const std::string& key);
+            Parameters<T>& getParams();
 
             virtual std::ostream& print(std::ostream&, const std::string& indent) = 0;
+
     };
+    
+    template<typename T>
+    std::ostream& operator<<(std::ostream& out, cml::nn::Module<T>& module);
     
 }
 }
-std::ostream& operator<<(std::ostream&, cml::nn::Module&);
 
 #endif // __CML_NN_MODULES_H__

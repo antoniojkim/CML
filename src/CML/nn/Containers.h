@@ -2,41 +2,52 @@
 #define __CML_NN_CONTAINERS_H__
 
 #include "Modules.h"
+#include "../Tensor.h"
 
+#include <string>
 #include <utility>
 
 namespace cml {
 namespace nn {
     
-    class Sequential: public Module {
+    template<typename T = float>
+    class Sequential: public Module<T> {
+        using Module<T>::submodules;
+        using Module<T>::keys;
+
         public:
             Sequential();
-            template<typename ...T>
-            Sequential(T&&...submodules): Module(std::forward<T>(submodules)...) {}
-            Sequential(std::initializer_list<std::pair<std::string, ModuleP&&>>);
+            template<typename ...U> Sequential(U&&...submodules);
+            Sequential(std::initializer_list<std::pair<std::string, uModule<T>&&>>);
 
-            cml::Tensor forward(const cml::Tensor&) override;
+            cml::Tensor<T> forward(const cml::Tensor<T>&) override;
 
             std::ostream& print(std::ostream&, const std::string& indent) override;
     };
     
-    class ModuleList: public Module {
+    template<typename T = float>
+    class ModuleList: public Module<T> {
+        using Module<T>::submodules;
+
         public:
             ModuleList();
-            template<typename ...T>
-            ModuleList(T&&...submodules): Module(std::forward<T>(submodules)...) {}
+            template<typename ...U> ModuleList(U&&...submodules);
 
-            cml::Tensor forward(const cml::Tensor&) override;
+            cml::Tensor<T> forward(const cml::Tensor<T>&) override;
 
             std::ostream& print(std::ostream&, const std::string& indent) override;
     };
     
-    class ModuleDict: public Module {
+    template<typename T = float>
+    class ModuleDict: public Module<T> {
+        using Module<T>::submodules;
+        using Module<T>::keys;
+
         public:
             ModuleDict();
-            ModuleDict(std::initializer_list<std::pair<std::string, ModuleP&&>>);
+            ModuleDict(std::initializer_list<std::pair<std::string, uModule<T>&&>>);
 
-            cml::Tensor forward(const cml::Tensor&) override;
+            cml::Tensor<T> forward(const cml::Tensor<T>&) override;
 
             std::ostream& print(std::ostream&, const std::string& indent) override;
     };
