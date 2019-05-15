@@ -17,7 +17,8 @@ namespace nn {
 
         public:
             Sequential();
-            template<typename ...U> Sequential(U&&...submodules);
+            template<typename ...U> 
+            Sequential(U&&...submodules): Module<T>(std::forward<U>(submodules)...) {}
             Sequential(std::initializer_list<std::pair<std::string, uModule<T>&&>>);
 
             cml::Tensor<T> forward(const cml::Tensor<T>&) override;

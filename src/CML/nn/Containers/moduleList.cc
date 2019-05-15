@@ -46,4 +46,4 @@ std::ostream& ModuleList<T>::print(std::ostream& out, const std::string& indent)
 **************************** Template Instantiations *******************************
 ************************************************************************************/
 
-INSTANTIATE_TEMPLATES(ModuleList);
+INSTANTIATE_CLASS_TEMPLATES(ModuleList);

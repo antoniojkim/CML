@@ -34,7 +34,7 @@ template<typename T>
 ostream& ModuleDict<T>::print(ostream& out, const string& indent){
     out << "ModuleDict {" << endl;
     for (auto& submodule : submodules){
-        out << indent << "    " << keys[&submodule] << ":  ";
+        out << indent << "    " << keys[submodule.get()] << ":  ";
         submodule->print(out, indent+"    ") << endl;
     }
     out << indent << "}";
@@ -47,4 +47,4 @@ ostream& ModuleDict<T>::print(ostream& out, const string& indent){
 **************************** Template Instantiations *******************************
 ************************************************************************************/
 
-INSTANTIATE_TEMPLATES(ModuleDict);
+INSTANTIATE_CLASS_TEMPLATES(ModuleDict);

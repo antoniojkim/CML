@@ -12,8 +12,6 @@ using namespace cml::nn;
 
 template<typename T>
 Sequential<T>::Sequential() {}
-template<typename T> template<typename ...U>
-Sequential<T>::Sequential(U&&...submodules): Module<T>(std::forward<T>(submodules)...) {}
 template<typename T>
 Sequential<T>::Sequential(initializer_list<pair<string, uModule<T>&&>> dict): Module<T>{dict} {}
 
@@ -37,8 +35,8 @@ ostream& Sequential<T>::print(ostream& out, const string& indent){
     out << "Sequential {" << endl;
     for (auto& submodule: submodules){
         out << indent << "    ";
-        if (keys.count(&submodule) > 0){
-            out << keys[&submodule] << ":  ";
+        if (keys.count(submodule.get()) > 0){
+            out << keys[submodule.get()] << ":  ";
         }
         submodule->print(out, indent+"    ") << endl;
     }
@@ -52,4 +50,4 @@ ostream& Sequential<T>::print(ostream& out, const string& indent){
 **************************** Template Instantiations *******************************
 ************************************************************************************/
 
-INSTANTIATE_TEMPLATES(Sequential);
+INSTANTIATE_CLASS_TEMPLATES(Sequential);

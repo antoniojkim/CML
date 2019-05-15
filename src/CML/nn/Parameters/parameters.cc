@@ -16,9 +16,6 @@ using namespace cml::nn;
 template<typename T>
 Parameter<T>::Parameter(Parameter<T>& p): cml::Tensor<T>(std::move(p.toTensor())) {}
 
-template<typename T> template<typename...Args>
-Parameter<T>::Parameter(Args&&... args): cml::Tensor<T>(std::forward<Args>(args)...) {}
-
 
 
 /***********************************************************************************
@@ -34,12 +31,6 @@ template<typename T>
 cml::Tensor<T>& Parameter<T>::toTensor(){
     return static_cast<cml::Tensor<T>&>(*this);
 }
-
-template<typename T>
-std::ostream& operator<<(std::ostream& out, Parameter<T>& p){
-    return out << static_cast<cml::Tensor<T>&>(p);
-}
-
 
 
 /***********************************************************************************
@@ -86,7 +77,7 @@ Parameter<T>& Parameters<T>::operator[](const std::string& key){
 **************************** Template Instantiations *******************************
 ************************************************************************************/
 
-INSTANTIATE_TEMPLATES(Parameter);
-INSTANTIATE_TEMPLATES(Parameters);
+INSTANTIATE_CLASS_TEMPLATES(Parameter);
+INSTANTIATE_CLASS_TEMPLATES(Parameters);
 
 
