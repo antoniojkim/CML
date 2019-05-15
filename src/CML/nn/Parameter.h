@@ -21,7 +21,8 @@ namespace nn {
 
         public:
             Parameter(Parameter<T>& p);
-            template<typename...Args> Parameter(Args&&... args);
+            template<typename...Args> 
+            Parameter(Args&&... args): cml::Tensor<T>(std::forward<Args>(args)...) {}
 
             template<class U> uParameter<U> to();
 
@@ -29,12 +30,14 @@ namespace nn {
     };
 
     template<typename T>
-    std::ostream& operator<<(std::ostream& out, Parameter<T>&);
+    std::ostream& operator<<(std::ostream& out, Parameter<T>& p){
+        return out << static_cast<cml::Tensor<T>&>(p);
+    }
 
 
     template <typename T, typename...Args>
     inline uParameter<T> new_parameter(Args&&...args) {
-        return std::make_unique<Parameter<T>>(std::forward<Args>(args)...);
+        return std::unique_ptr<Parameter<T>>(new Parameter<T>(std::forward<Args>(args)...));
     }
 
     template<typename T>

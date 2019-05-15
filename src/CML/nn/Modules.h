@@ -37,13 +37,19 @@ namespace nn {
             Module<T>* parent = nullptr;
             Parameters<T> params;
             Modules<T> submodules;
-            std::map<std::string, uModule<T>*> values;
-            std::map<uModule<T>*, std::string> keys;
+            std::map<std::string, Module<T>*> values;
+            std::map<Module<T>*, std::string> keys;
             void init();
         
         public:
             Module();
-            template<typename ...U> Module(U&&...submodules);
+            template<typename ...U> 
+            Module(U&&...submodules){
+                uModule<T> mps[] = {std::move(submodules)...};
+                this->submodules = Modules<T>{std::make_move_iterator(std::begin(mps)),
+                                            std::make_move_iterator(std::end(mps))};
+                init(); 
+            }
             Module(std::initializer_list<std::pair<std::string, uModule<T>&&>> dict);
         
             virtual cml::Tensor<T> forward(const cml::Tensor<T>&) = 0;
@@ -54,15 +60,19 @@ namespace nn {
             void addModule(uModule<T>& m, const std::string& key = "");
             void addModule(uModule<T>&& m, const std::string& key = "");
             template<template<typename> typename S, typename...Args>
-            void addModule(Args&&...args);
+            void addModule(Args&&...args){
+                addModule(new_module<S, T>(std::forward<Args>(args)...));
+            }
 
 
             void addParameter(uParameter<T>&& p, const std::string& key = "");
             template<typename...Args>
-            void addParameter(const std::string& key, Args&&...args);
+            void addParameter(const std::string& key, Args&&...args){
+                addParameter(new_parameter<T>(std::forward<Args>(args)...), key);
+            }
 
 
-            void apply(void (*fn)(uModule<T>&), const bool& recursive = true);
+            void apply(void (*fn)(Module<T>&), const bool& recursive = true);
 
             Modules<T>& getModules();
             Module<T>& operator[](const int& index);
@@ -78,7 +88,9 @@ namespace nn {
     };
     
     template<typename T>
-    std::ostream& operator<<(std::ostream& out, cml::nn::Module<T>& module);
+    std::ostream& operator<<(std::ostream& out, cml::nn::Module<T>& module){
+        return module.print(out, "");
+    }
     
 }
 }

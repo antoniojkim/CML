@@ -3,12 +3,20 @@
 
 namespace cml {
     
-    #define INSTANTIATE_TEMPLATES(T) \
-        class template T<float>; \
-        class template T<double>; \
-        class template T<long long>; \
-        class template T<long>; \
-        class template T<int>;
+    #define INSTANTIATE_CLASS_TEMPLATES(T) \
+        template class T<float>; \
+        template class T<double>; \
+        template class T<long long>; \
+        template class T<long>; \
+        template class T<int>;
+
+
+    #define INSTANTIATE_PRINT_TEMPLATES(T) \
+        template std::ostream& operator<<(std::ostream&, T<float>&); \
+        template std::ostream& operator<<(std::ostream&, T<double>&); \
+        template std::ostream& operator<<(std::ostream&, T<long long>&); \
+        template std::ostream& operator<<(std::ostream&, T<long>&); \
+        template std::ostream& operator<<(std::ostream&, T<int>&);
 
     
 }

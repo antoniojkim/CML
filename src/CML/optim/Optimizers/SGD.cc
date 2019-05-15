@@ -100,5 +100,5 @@ void SGD<T>::step(){
 **************************** Template Instantiations *******************************
 ************************************************************************************/
 
-INSTANTIATE_TEMPLATES(SGD);
+INSTANTIATE_CLASS_TEMPLATES(SGD);
 

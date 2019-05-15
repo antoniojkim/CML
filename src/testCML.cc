@@ -16,7 +16,7 @@ using namespace cml::nn;
 using namespace cml::optim;
 
 void basicSequentialTest(){
-    auto model = nn::Sequential<float> {
+    auto model = nn::Sequential<> {
         new_module<ReLU>(),
         new_module<nn::Sequential> (
             new_module<ReLU>(),
@@ -27,7 +27,7 @@ void basicSequentialTest(){
     cout << model << endl;
 }
 void simpleParamTest(){
-    auto paramTest = nn::Sequential<float> {
+    auto paramTest = nn::Sequential<> {
         {"l1", new_module<Linear>(2, 4)}
     };
     cout << paramTest << endl;

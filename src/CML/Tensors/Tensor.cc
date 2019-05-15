@@ -11,9 +11,9 @@ using namespace Eigen;
 ************************************************************************************/
 
 template<typename T>
-Tensor<T>::Tensor(const int& R): Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>{R, 1} {}
+Tensor<T>::Tensor(const int& R): DMatrix<T>{R, 1} {}
 template<typename T>
-Tensor<T>::Tensor(const int& R, const int& C): Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>{R, C} {}
+Tensor<T>::Tensor(const int& R, const int& C): DMatrix<T>{R, C} {}
 // Tensor(const int& R, const int& C, const int& D);
 
 
@@ -22,10 +22,6 @@ Tensor<T>::Tensor(const int& R, const int& C): Eigen::Matrix<T, Eigen::Dynamic, 
 *********************************** Methods ****************************************
 ************************************************************************************/
 
-template<typename T>
-std::ostream& operator<<(std::ostream& out, Tensor<T>& t){
-    return out << static_cast<DMatrix<T>&>(t);
-}
 
 
 
@@ -33,5 +29,5 @@ std::ostream& operator<<(std::ostream& out, Tensor<T>& t){
 **************************** Template Instantiations *******************************
 ************************************************************************************/
 
-INSTANTIATE_TEMPLATES(Tensor);
+INSTANTIATE_CLASS_TEMPLATES(Tensor);
 

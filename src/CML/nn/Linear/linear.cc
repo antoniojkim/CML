@@ -46,4 +46,4 @@ std::ostream& Linear<T>::print(std::ostream& out, const std::string& indent){
 **************************** Template Instantiations *******************************
 ************************************************************************************/
 
-INSTANTIATE_TEMPLATES(Linear);
+INSTANTIATE_CLASS_TEMPLATES(Linear);

@@ -17,7 +17,9 @@ namespace cml {
     };
     
     template<typename T>
-    std::ostream& operator<<(std::ostream& out, Tensor<T>& t);
+    std::ostream& operator<<(std::ostream& out, Tensor<T>& t){
+        return out << static_cast<DMatrix<T>&>(t);
+    }
     
 }
 
