@@ -10,7 +10,7 @@
 namespace cml {
 namespace nn {
  
-    template<typename T>
+    template<typename T = float>
     class ReLU: public Module<T> {
         /*
         Applies the rectified linear unit function element-wise:

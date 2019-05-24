@@ -13,7 +13,9 @@ using namespace cml::nn;
 template<typename T>
 Sequential<T>::Sequential() {}
 template<typename T>
-Sequential<T>::Sequential(initializer_list<pair<string, uModule<T>&&>> dict): Module<T>{dict} {}
+Sequential<T>::Sequential(std::initializer_list<Module<T>*> submodules): Module<T>{submodules} {}
+template<typename T>
+Sequential<T>::Sequential(initializer_list<pair<string, Module<T>*>> dict): Module<T>{dict} {}
 
 
 

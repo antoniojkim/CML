@@ -10,7 +10,7 @@
 
 namespace cml {
 namespace nn {
-    
+        
     template <typename T = float> class Parameter;
     template <typename T> using uParameter = std::unique_ptr<Parameter<T>>;
 

@@ -12,8 +12,8 @@ using namespace cml::nn;
 
 template<typename T>
 ModuleList<T>::ModuleList() {}
-template<typename T> template<typename ...U>
-ModuleList<T>::ModuleList(U&&...submodules): Module<T>(std::forward<T>(submodules)...) {}
+template<typename T>
+ModuleList<T>::ModuleList(std::initializer_list<Module<T>*> submodules): Module<T>{submodules} {}
 
 
 
