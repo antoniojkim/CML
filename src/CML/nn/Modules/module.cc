@@ -15,12 +15,19 @@ using namespace cml::nn;
 
 template<typename T>
 Module<T>::Module(){ init(); }
-
 template<typename T>
-Module<T>::Module(std::initializer_list<std::pair<string, uModule<T>&&>> dict){
+Module<T>::Module(std::initializer_list<Module<T>*> submodules){
+    this->submodules.reserve(submodules.size());
+    for(auto submodule: submodules){
+        addModule(std::unique_ptr<Module<T>>(submodule));
+    }
+    init();
+}
+template<typename T>
+Module<T>::Module(std::initializer_list<std::pair<std::string, Module<T>*>> dict){
     submodules.reserve(dict.size());
     for (auto& kv : dict){
-        addModule(std::forward<uModule<T>>(kv.second), kv.first);
+        addModule(std::unique_ptr<Module<T>>(kv.second), kv.first);
     }
 }
 
@@ -51,19 +58,6 @@ void Module<T>::apply(void (*fn)(Module<T>&), const bool& recursive){
         }
     }
 }
-
-// template<typename U>
-// uModule<T>& to(){
-//     // Parameters tmp;
-//     for (auto& kv : params.values){
-//         // kv.second = kv.second->to<T>();
-//         auto& t = kv.second->toTensor();
-//     }
-//     for (auto& submodule : submodules){
-//         submodule->to<U>();
-//     }
-//     return *this;
-// }
 
 
 /***********************************************************************************

@@ -13,7 +13,7 @@ using namespace cml::nn;
 template<typename T>
 ModuleDict<T>::ModuleDict() {}
 template<typename T>
-ModuleDict<T>::ModuleDict(initializer_list<pair<string, uModule<T>&&>> dict): Module<T>{dict} {}
+ModuleDict<T>::ModuleDict(initializer_list<pair<string, Module<T>*>> dict): Module<T>{dict} {}
 
 
 

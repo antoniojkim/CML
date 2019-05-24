@@ -10,14 +10,6 @@ namespace cml {
         template class T<long>; \
         template class T<int>;
 
-
-    #define INSTANTIATE_PRINT_TEMPLATES(T) \
-        template std::ostream& operator<<(std::ostream&, T<float>&); \
-        template std::ostream& operator<<(std::ostream&, T<double>&); \
-        template std::ostream& operator<<(std::ostream&, T<long long>&); \
-        template std::ostream& operator<<(std::ostream&, T<long>&); \
-        template std::ostream& operator<<(std::ostream&, T<int>&);
-
     
 }
 

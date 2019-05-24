@@ -1,11 +1,13 @@
 #ifndef __CML_NN_MODULES_H__
 #define __CML_NN_MODULES_H__
 
+#include <functional>
 #include <initializer_list>
 #include <iostream>
 #include <iterator>
 #include <map>
 #include <memory>
+#include <utility>
 #include <vector>
 
 // #include "Linear.h"
@@ -40,17 +42,13 @@ namespace nn {
             std::map<std::string, Module<T>*> values;
             std::map<Module<T>*, std::string> keys;
             void init();
+            void init(std::initializer_list<Module<T>*>);
+            void init(std::initializer_list<std::pair<std::string, Module<T>*>>);
         
         public:
             Module();
-            template<typename ...U> 
-            Module(U&&...submodules){
-                uModule<T> mps[] = {std::move(submodules)...};
-                this->submodules = Modules<T>{std::make_move_iterator(std::begin(mps)),
-                                            std::make_move_iterator(std::end(mps))};
-                init(); 
-            }
-            Module(std::initializer_list<std::pair<std::string, uModule<T>&&>> dict);
+            Module(std::initializer_list<Module<T>*>);
+            Module(std::initializer_list<std::pair<std::string, Module<T>*>>);
         
             virtual cml::Tensor<T> forward(const cml::Tensor<T>&) = 0;
             cml::Tensor<T> operator()(const cml::Tensor<T>& x);
@@ -91,6 +89,7 @@ namespace nn {
     std::ostream& operator<<(std::ostream& out, cml::nn::Module<T>& module){
         return module.print(out, "");
     }
+
     
 }
 }

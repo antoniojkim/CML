@@ -17,9 +17,8 @@ namespace nn {
 
         public:
             Sequential();
-            template<typename ...U> 
-            Sequential(U&&...submodules): Module<T>(std::forward<U>(submodules)...) {}
-            Sequential(std::initializer_list<std::pair<std::string, uModule<T>&&>>);
+            Sequential(std::initializer_list<Module<T>*> submodules);
+            Sequential(std::initializer_list<std::pair<std::string, Module<T>*>>);
 
             cml::Tensor<T> forward(const cml::Tensor<T>&) override;
 
@@ -32,7 +31,7 @@ namespace nn {
 
         public:
             ModuleList();
-            template<typename ...U> ModuleList(U&&...submodules);
+            ModuleList(std::initializer_list<Module<T>*> submodules);
 
             cml::Tensor<T> forward(const cml::Tensor<T>&) override;
 
@@ -46,7 +45,7 @@ namespace nn {
 
         public:
             ModuleDict();
-            ModuleDict(std::initializer_list<std::pair<std::string, uModule<T>&&>>);
+            ModuleDict(std::initializer_list<std::pair<std::string, Module<T>*>>);
 
             cml::Tensor<T> forward(const cml::Tensor<T>&) override;
 
