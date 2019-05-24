@@ -1,55 +1,95 @@
 #ifndef __CML_NN_MODULES_H__
 #define __CML_NN_MODULES_H__
 
+#include <functional>
+#include <initializer_list>
+#include <iostream>
 #include <iterator>
+#include <map>
 #include <memory>
+#include <utility>
 #include <vector>
 
+// #include "Linear.h"
+// #include "Nonlinear.h"
 #include "Parameter.h"
 #include "../Tensor.h"
-
-#define USE_VARIADIC_CONSTRUCTOR
 
 namespace cml {
 namespace nn {
     
-    class Module;
-    typedef std::unique_ptr<cml::nn::Module> ModuleP;
-    typedef std::vector<ModuleP> Modules;
+    template<typename T> class Module;
+    template<typename T>
+    using uModule = std::unique_ptr<cml::nn::Module<T>>;
+    template<typename T>
+    using Modules = std::vector<uModule<T>>;
+
+    template <template<typename> class T, typename U = float, typename...Args>
+    inline std::unique_ptr<Module<U>> new_module(Args&&...args) {
+        return std::unique_ptr<Module<U>>(new T<U>(std::forward<Args>(args)...));
+    }
+    template <template<typename> class T, typename U = float, typename...Args>
+    inline std::pair<std::string, std::unique_ptr<Module<U>>> new_module(const std::string& key, Args&&...args) {
+        return std::pair<std::string, std::unique_ptr<Module<U>>>(key, std::unique_ptr<Module<U>>(new T<U>(std::forward<Args>(args)...)));
+    }
     
+    template <typename T> 
     class Module {
         protected:
-            std::vector<cml::nn::Parameter> params;
-            Modules submodules;
+            Module<T>* parent = nullptr;
+            Parameters<T> params;
+            Modules<T> submodules;
+            std::map<std::string, Module<T>*> values;
+            std::map<Module<T>*, std::string> keys;
+            void init();
+            void init(std::initializer_list<Module<T>*>);
+            void init(std::initializer_list<std::pair<std::string, Module<T>*>>);
         
         public:
             Module();
-            template<typename ...T>
-            Module(T&&...submodules) {
-                ModuleP mps[] = {std::move(submodules)...};
-                this->submodules = Modules{std::make_move_iterator(std::begin(mps)),
-                                           std::make_move_iterator(std::end(mps))};
+            Module(std::initializer_list<Module<T>*>);
+            Module(std::initializer_list<std::pair<std::string, Module<T>*>>);
+        
+            virtual cml::Tensor<T> forward(const cml::Tensor<T>&) = 0;
+            cml::Tensor<T> operator()(const cml::Tensor<T>& x);
+        
+            void addModule(const std::string& key, uModule<T>& m);
+            void addModule(const std::string& key, uModule<T>&& m);
+            void addModule(uModule<T>& m, const std::string& key = "");
+            void addModule(uModule<T>&& m, const std::string& key = "");
+            template<template<typename> typename S, typename...Args>
+            void addModule(Args&&...args){
+                addModule(new_module<S, T>(std::forward<Args>(args)...));
             }
-        
-            virtual cml::Tensor forward(const cml::Tensor&) = 0;
-            cml::Tensor operator()(const cml::Tensor& x){ return forward(x); }
-        
-            void addModule(ModuleP&);
-    };
-    
-    template <typename T, typename...Args>
-    inline std::unique_ptr<Module> new_module(Args&&...args) {
-        return std::unique_ptr<Module>{new T(std::forward<Args>()...)};
-    }
-    
-    class Sequential: public Module {
-        public:
-            Sequential();
-            template<typename ...T>
-            Sequential(T&&...submodules): Module(std::forward<T>(submodules)...) {}
 
-            cml::Tensor forward(const cml::Tensor&) override;
+
+            void addParameter(uParameter<T>&& p, const std::string& key = "");
+            template<typename...Args>
+            void addParameter(const std::string& key, Args&&...args){
+                addParameter(new_parameter<T>(std::forward<Args>(args)...), key);
+            }
+
+
+            void apply(void (*fn)(Module<T>&), const bool& recursive = true);
+
+            Modules<T>& getModules();
+            Module<T>& operator[](const int& index);
+            Module<T>& operator[](const std::string& key);
+
+            Parameter<T>& getParam(const int& index);
+            Parameter<T>& getParam(const std::string& key);
+            Parameter<T>& operator()(const std::string& key);
+            Parameters<T>& getParams();
+
+            virtual std::ostream& print(std::ostream&, const std::string& indent) = 0;
+
     };
+    
+    template<typename T>
+    std::ostream& operator<<(std::ostream& out, cml::nn::Module<T>& module){
+        return module.print(out, "");
+    }
+
     
 }
 }
