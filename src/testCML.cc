@@ -24,6 +24,9 @@ void basicSequentialTest(){
         },
         new ReLU<>()
     };
+    model.addModule("R", new ReLU<>())
+         .addModule("T", new ReLU<>())
+         .addModule(new ReLU<>());
     cout << model << endl;
 
     auto relu1 = new ReLU<double>();
