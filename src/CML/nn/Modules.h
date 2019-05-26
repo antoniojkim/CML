@@ -62,17 +62,9 @@ namespace nn {
             Module<T>& addModule(Args&&...args){
                 return addModule(std::unique_ptr<Module<T>>(new S(std::forward<Args>(args)...)));
             }
-            template<typename S, typename...Args>
-            Module<T>& addModule(const std::string& key, Args&&...args){
-                return addModule(std::unique_ptr<Module<T>>(new S(std::forward<Args>(args)...)), key);
-            }
             template<template<typename> typename S, typename...Args>
             Module<T>& addModule(Args&&...args){
                 return addModule(std::unique_ptr<Module<T>>(new S<T>(std::forward<Args>(args)...)));
-            }
-            template<template<typename> typename S, typename...Args>
-            Module<T>& addModule(const std::string& key, Args&&...args){
-                return addModule(std::unique_ptr<Module<T>>(new S<T>(std::forward<Args>(args)...)), key);
             }
 
 
