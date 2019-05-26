@@ -64,15 +64,27 @@ void Module<T>::apply(void (*fn)(Module<T>&), const bool& recursive){
 ****************************** Submodule Methods ***********************************
 ************************************************************************************/
 
-template<typename T> void Module<T>::addModule(const string& key, uModule<T>& m){ this->addModule(std::move(m), key); }
-template<typename T> void Module<T>::addModule(const string& key, uModule<T>&& m){ this->addModule(std::move(m), key); }
-template<typename T> void Module<T>::addModule(uModule<T>& m, const string& key){ this->addModule(std::move(m), key); }
+template<typename T> Module<T>& Module<T>::addModule(Module<T>* m){
+    return addModule(std::unique_ptr<Module<T>>(m));
+}
+template<typename T> Module<T>& Module<T>::addModule(const std::string& key, Module<T>* m){
+    return addModule(std::unique_ptr<Module<T>>(m), key);
+}
+template<typename T> Module<T>& Module<T>::addModule(const string& key, uModule<T>& m){
+    return this->addModule(std::move(m), key);
+}
+template<typename T> Module<T>& Module<T>::addModule(const string& key, uModule<T>&& m){
+    return this->addModule(std::move(m), key);
+}
+template<typename T> Module<T>& Module<T>::addModule(uModule<T>& m, const string& key){
+    return this->addModule(std::move(m), key);
+}
 template<typename T> 
-void Module<T>::addModule(uModule<T>&& m, const string& key){
+Module<T>& Module<T>::addModule(uModule<T>&& m, const string& key){
     submodules.emplace_back(std::move(m));
     submodules.back()->parent = this;
     if (key == ""){
-        auto newkey = to_string(submodules.size());
+        auto newkey = to_string(submodules.size()-1);
         if (values.count(newkey) > 0){
             ostringstream error;
             error << "Key Already Exists: " << newkey;
@@ -90,6 +102,7 @@ void Module<T>::addModule(uModule<T>&& m, const string& key){
         values[key] = submodules.back().get();
         keys[submodules.back().get()] = key;
     }
+    return *this;
 }
 
 
@@ -113,10 +126,14 @@ Module<T>& Module<T>::operator[](const string& key){
     if (values.count(key) > 0){
         return *values[key];
     }
-    
+
     ostringstream error;
     error << "Invalid key: " << key;
     throw error.str();
+}
+template<typename T>
+Module<T>& Module<T>::operator()(const std::string& key, Module<T>* submodule){
+    return addModule(std::unique_ptr<Module<T>>(submodule), key);
 }
 
 
