@@ -67,40 +67,40 @@ void Module<T>::apply(void (*fn)(Module<T>&), const bool& recursive){
 template<typename T> Module<T>& Module<T>::addModule(Module<T>* m){
     return addModule(std::unique_ptr<Module<T>>(m));
 }
-template<typename T> Module<T>& Module<T>::addModule(const std::string& key, Module<T>* m){
-    return addModule(std::unique_ptr<Module<T>>(m), key);
+template<typename T> Module<T>& Module<T>::addModule(const std::string& alias, Module<T>* m){
+    return addModule(std::unique_ptr<Module<T>>(m), alias);
 }
-template<typename T> Module<T>& Module<T>::addModule(const string& key, uModule<T>& m){
-    return this->addModule(std::move(m), key);
+template<typename T> Module<T>& Module<T>::addModule(const string& alias, uModule<T>& m){
+    return this->addModule(std::move(m), alias);
 }
-template<typename T> Module<T>& Module<T>::addModule(const string& key, uModule<T>&& m){
-    return this->addModule(std::move(m), key);
+template<typename T> Module<T>& Module<T>::addModule(const string& alias, uModule<T>&& m){
+    return this->addModule(std::move(m), alias);
 }
-template<typename T> Module<T>& Module<T>::addModule(uModule<T>& m, const string& key){
-    return this->addModule(std::move(m), key);
+template<typename T> Module<T>& Module<T>::addModule(uModule<T>& m, const string& alias){
+    return this->addModule(std::move(m), alias);
 }
 template<typename T> 
-Module<T>& Module<T>::addModule(uModule<T>&& m, const string& key){
+Module<T>& Module<T>::addModule(uModule<T>&& m, const string& alias){
     submodules.emplace_back(std::move(m));
     submodules.back()->parent = this;
-    if (key == ""){
+    if (alias == ""){
         auto newkey = to_string(submodules.size()-1);
         if (values.count(newkey) > 0){
             ostringstream error;
-            error << "Key Already Exists: " << newkey;
+            error << "alias Already Exists: " << newkey;
             throw error.str();
         }
         values[newkey] = submodules.back().get();
         keys[submodules.back().get()] = newkey;
     }
     else{
-        if (values.count(key) > 0){
+        if (values.count(alias) > 0){
             ostringstream error;
-            error << "Key Already Exists: " << key;
+            error << "alias Already Exists: " << alias;
             throw error.str();
         }
-        values[key] = submodules.back().get();
-        keys[submodules.back().get()] = key;
+        values[alias] = submodules.back().get();
+        keys[submodules.back().get()] = alias;
     }
     return *this;
 }
@@ -122,18 +122,14 @@ Module<T>& Module<T>::operator[](const int& index){
     throw error.str();
 }
 template<typename T>
-Module<T>& Module<T>::operator[](const string& key){
-    if (values.count(key) > 0){
-        return *values[key];
+Module<T>& Module<T>::operator[](const string& alias){
+    if (values.count(alias) > 0){
+        return *values[alias];
     }
 
     ostringstream error;
-    error << "Invalid key: " << key;
+    error << "Invalid alias: " << alias;
     throw error.str();
-}
-template<typename T>
-Module<T>& Module<T>::operator()(const std::string& key, Module<T>* submodule){
-    return addModule(std::unique_ptr<Module<T>>(submodule), key);
 }
 
 
@@ -142,18 +138,13 @@ Module<T>& Module<T>::operator()(const std::string& key, Module<T>* submodule){
 ****************************** Parameter Methods ***********************************
 ************************************************************************************/
 
-template<typename T> 
-void Module<T>::addParameter(uParameter<T>&& p, const string& key){
-    params.add(std::move(p), key);
-}
-
 
 template<typename T>
 Parameter<T>& Module<T>::getParam(const int& index){ return params[index]; }
 template<typename T>
-Parameter<T>& Module<T>::getParam(const string& key){ return params[key]; }
+Parameter<T>& Module<T>::getParam(const string& alias){ return params[alias]; }
 template<typename T>
-Parameter<T>& Module<T>::operator()(const string& key){ return params[key]; }
+Parameter<T>& Module<T>::operator()(const string& alias){ return params[alias]; }
 template<typename T>
 Parameters<T>& Module<T>::getParams(){ return params; }
 

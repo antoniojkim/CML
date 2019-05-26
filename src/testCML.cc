@@ -17,16 +17,16 @@ using namespace cml::optim;
 
 void basicSequentialTest(){
     auto model = nn::Sequential<>{
-        new ReLU(),
-        new nn::Sequential{
-            new ReLU(),
-            new ReLU()
+        new ReLU<>(),
+        new nn::Sequential<>{
+            new ReLU<>(),
+            new ReLU<>()
         },
-        new ReLU()
+        new ReLU<>()
     };
-    model.addModule("R", new ReLU())
-         .addModule("T", new ReLU())
-         .addModule(new ReLU());
+    model.addModule("R", new ReLU<>())
+         .addModule("T", new ReLU<>())
+         .addModule(new ReLU<>());
     cout << model << endl;
 
     auto relu1 = new ReLU<double>();
