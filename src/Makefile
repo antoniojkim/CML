@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g -std=c++14 -Wall -MMD -Werror=vla
+CXXFLAGS = -g -std=c++17 -Wall -MMD -Werror=vla
 EXEC = testCML
 
 TENSORS = $(wildcard CML/Tensors/*.cc)
