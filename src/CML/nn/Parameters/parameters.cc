@@ -13,19 +13,11 @@ using namespace cml::nn;
 ********************************* Constructors *************************************
 ************************************************************************************/
 
-template<typename T>
-Parameter<T>::Parameter(Parameter<T>& p): cml::Tensor<T>(std::move(p.toTensor())) {}
-
 
 
 /***********************************************************************************
 *********************************** Methods ****************************************
 ************************************************************************************/
-
-template<typename T> template<class U>
-uParameter<U> Parameter<T>::to(){
-    return std::make_unique<Parameter<U>>(this);
-}
 
 template<typename T> 
 cml::Tensor<T>& Parameter<T>::toTensor(){

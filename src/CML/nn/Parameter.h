@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "../Dtypes.h"
 #include "../Tensor.h"
 
 namespace cml {
@@ -20,12 +21,16 @@ namespace nn {
             bool requires_grad = true;
 
         public:
-            Parameter(Parameter<T>& p);
-            template<typename...Args> 
+            template<typename U>
+            Parameter(Parameter<U>& p): cml::Tensor<T>(p.toTensor()) {}
+            template<typename...Args, DisableIf<is_related<Parameter<T>, Args...>::value>...> 
             Parameter(Args&&... args): cml::Tensor<T>(std::forward<Args>(args)...) {}
 
-            template<class U> uParameter<U> to();
+            template<class U> Parameter<U> to(){ return Parameter<U>(*this); }
 
+            /*
+                Gets the parameter Tensor
+            */
             cml::Tensor<T>& toTensor();
     };
 
