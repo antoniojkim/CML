@@ -41,6 +41,13 @@ void basicSequentialTest(){
     cout << doubleModel << endl;
 }
 void simpleParamTest(){
+    auto p = Parameter<double>{2, 3};
+    p(0, 0) = 5.5;
+    p(1, 1) = 10;
+    cout << p << endl;
+    auto p2 = p.to<int>();
+    cout << p2 << endl;
+
     auto paramTest = nn::Sequential<>{
         {"l1", new Linear<>(2, 4)}
     };
