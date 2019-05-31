@@ -61,7 +61,7 @@ namespace nn {
 
     template<typename T>
     std::ostream& operator<<(std::ostream& out, Parameter<T>& p){
-        return out << t.toTensor();
+        return out << p.toTensor();
     }
 
     /*

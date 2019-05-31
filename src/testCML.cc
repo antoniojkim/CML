@@ -55,7 +55,14 @@ void simpleParamTest(){
     cout << paramTest["l1"]("weights") << endl;
 }
 
+void basicTensorTest(){
+    auto t = Tensor<>(2, 3);
+    cout << t << endl;
+    auto t2 = t*2;
+}
+
 int main(){
-    basicSequentialTest();
-    simpleParamTest();
+    // basicSequentialTest();
+    // simpleParamTest();
+    basicTensorTest();
 }
