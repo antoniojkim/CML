@@ -24,6 +24,16 @@ cml::Tensor<T>& Parameter<T>::toTensor(){
     return static_cast<cml::Tensor<T>&>(*this);
 }
 
+template<typename T> 
+Parameter<T>& Parameter<T>::operator+=(const T& gradient){
+    this->gradient += gradient;
+    return *this;
+}
+template<typename T> 
+void Parameter<T>::zeroGrad(){
+    this->gradient = (T)(0);
+}
+
 
 /***********************************************************************************
 ******************************** Parameters Class **********************************

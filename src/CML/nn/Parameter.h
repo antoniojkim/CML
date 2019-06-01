@@ -22,8 +22,8 @@ namespace nn {
     */
     template <typename T>
     class Parameter: public Tensor<T> {
-        protected:
-            bool requires_grad = true;
+        bool requires_grad = true;
+        T gradient;
 
         public:
             /*
@@ -52,6 +52,15 @@ namespace nn {
                 cannot be changed.
             */
             template<class U> Parameter<U> to(){ return Parameter<U>(*this); }
+
+            /*
+                Adds to the parameter's gradient
+            */
+            Parameter<T>& operator+=(const T&);
+            /*
+                Zeros out the gradient. Useful as gradients are accumulated.
+            */
+            void zeroGrad();
 
             /*
                 Gets the parameter Tensor data

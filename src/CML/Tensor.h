@@ -5,6 +5,7 @@
 
 namespace cml {
 
+
     template <class T = float> struct Tensor;
     template <class T = float> struct DCG; // Dynamic Compute Graph
 
@@ -13,28 +14,45 @@ namespace cml {
     
     template <class T>
     class Tensor: public DMatrix<T>{
-        DCG<T>* graph = nullptr;
+        const long int R, C;
 
         public:
             template<typename U>
-            Tensor(Tensor<U>& t): DMatrix<T>{std::move(t.data().template cast<T>())} {}
+            Tensor(Tensor<U>& t): DMatrix<T>{std::move(t.data().template cast<T>())}, R{t.rows()}, C{t.cols()} {}
             template<typename U>
-            Tensor(Tensor<U>&& t): DMatrix<T>{std::move(t.data().template cast<T>())} {}
+            Tensor(Tensor<U>&& t): DMatrix<T>{std::move(t.data().template cast<T>())}, R{t.rows()}, C{t.cols()} {}
             template<typename U>
-            Tensor(DMatrix<U>& m): DMatrix<T>{std::move(m.template cast<T>())} {}
+            Tensor(DMatrix<U>& m): DMatrix<T>{std::move(m.template cast<T>())}, R{m.rows()}, C{m.cols()} {}
             template<typename U>
-            Tensor(DMatrix<U>&& m): DMatrix<T>{std::move(m.template cast<T>())} {}
+            Tensor(DMatrix<U>&& m): DMatrix<T>{std::move(m.template cast<T>())}, R{m.rows()}, C{m.cols()} {}
             Tensor(const int& R);
             Tensor(const int& R, const int& C);
             // Tensor(const int& R, const int& C, const int& D);
 
-            DMatrix<T>& data();
+            ~Tensor();
 
-            Tensor<T> operator*(const long long& scalar);
+            Tensor<T>& operator=(Tensor<T>& scalar);
+            Tensor<T>& operator=(Tensor<T>&& scalar);
+
+            DMatrix<T>& data();
+            long int rows();
+            long int cols();
+
+            void fill(const T& coefficient);
+
+            // Tensor<T> operator+(const T& scalar);
+            // Tensor<T> operator-(const T& scalar);
+            Tensor<T> operator*(const T& scalar);
+            
+            DCG<T>* graph = nullptr;
     };
 
     template<typename T>
-    inline Tensor<T> operator*(const long long& scalar, Tensor<T>& t){ return t*scalar; }
+    inline Tensor<T> operator+(const T& scalar, Tensor<T>& t){ return t+scalar; }
+    // template<typename T>
+    // inline Tensor<T> operator-(const T& scalar, Tensor<T>& t){ return (t*-1)+scalar; }
+    template<typename T>
+    inline Tensor<T> operator*(const T& scalar, Tensor<T>& t){ return t*scalar; }
     
     template<typename T>
     std::ostream& operator<<(std::ostream& out, Tensor<T>& t){
