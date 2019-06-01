@@ -1,7 +1,7 @@
 
 #include "../../Dtypes.h"
 #include "../Linear.h"
-#include "../../Functions.h"
+#include "../../Functions/Linear.h"
 
 using namespace std;
 using namespace cml::nn;
