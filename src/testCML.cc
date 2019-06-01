@@ -58,7 +58,9 @@ void simpleParamTest(){
 void basicTensorTest(){
     auto t = Tensor<>(2, 3);
     cout << t << endl;
-    auto t2 = t*2;
+    t.fill(1.2);
+    cout << t << endl;
+    cout << t*2 << endl;
 }
 
 int main(){

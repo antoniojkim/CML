@@ -18,7 +18,7 @@ ReLU<T>::ReLU(const bool& inplace): inplace {inplace} {}
 ************************************************************************************/
 
 template<typename T>
-Tensor<T> ReLU<T>::forward(const Tensor<T>& x){
+Tensor<T> ReLU<T>::forward(Tensor<T>& x){
 //     if (inplace){
 //         for (auto& e : x){
 //             if (e < 0) e = 0;

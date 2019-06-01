@@ -86,8 +86,8 @@ namespace nn {
 
                     e.g.    Instead of model.forward(x), you can use model(x)
             */
-            virtual cml::Tensor<T> forward(const cml::Tensor<T>&) = 0;
-            cml::Tensor<T> operator()(const cml::Tensor<T>& x);
+            virtual cml::Tensor<T> forward(cml::Tensor<T>&) = 0;
+            cml::Tensor<T> operator()(cml::Tensor<T>& x);
         
             /*
                 The following methods allow you to add a submodule to your module.
