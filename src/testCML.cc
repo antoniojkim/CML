@@ -63,7 +63,9 @@ void basicTensorTest(){
     cout << t << endl;
     t.fill(-1.2);
     cout << t << endl;
-    cout << ReLU(t) << endl;
+    t = ReLU(t);
+    cout << t << endl;
+    cout << t.graph << endl;
 }
 
 int main(){

@@ -17,6 +17,18 @@ namespace cml {
         const long int R, C;
 
         public:
+
+            Tensor(Tensor<T>& t);
+            Tensor(Tensor<T>&& t);
+            Tensor(DMatrix<T>& m);
+            Tensor(DMatrix<T>&& m);
+            Tensor(const int& R);
+            Tensor(const int& R, const int& C);
+            // Tensor(const int& R, const int& C, const int& D);
+
+            /*
+                Constructors that cast the input if type is not T
+            */
             template<typename U>
             Tensor(Tensor<U>& t): DMatrix<T>{std::move(t.data().template cast<T>())}, R{t.rows()}, C{t.cols()} {}
             template<typename U>
@@ -25,9 +37,6 @@ namespace cml {
             Tensor(DMatrix<U>& m): DMatrix<T>{std::move(m.template cast<T>())}, R{m.rows()}, C{m.cols()} {}
             template<typename U>
             Tensor(DMatrix<U>&& m): DMatrix<T>{std::move(m.template cast<T>())}, R{m.rows()}, C{m.cols()} {}
-            Tensor(const int& R);
-            Tensor(const int& R, const int& C);
-            // Tensor(const int& R, const int& C, const int& D);
 
             ~Tensor();
 
