@@ -15,6 +15,14 @@ using namespace Eigen;
 ********************************* Constructors *************************************
 ************************************************************************************/
 
+template<typename T>
+Tensor<T>::Tensor(Tensor<T>& t): DMatrix<T>{std::move(t.data())}, R{t.rows()}, C{t.cols()}, graph{t.graph} {}
+template<typename T>
+Tensor<T>::Tensor(Tensor<T>&& t): DMatrix<T>{std::move(t.data())}, R{t.rows()}, C{t.cols()}, graph{t.graph} {}
+template<typename T>
+Tensor<T>::Tensor(DMatrix<T>& m): DMatrix<T>{std::move(m)}, R{m.rows()}, C{m.cols()} {}
+template<typename T>
+Tensor<T>::Tensor(DMatrix<T>&& m): DMatrix<T>{std::move(m)}, R{m.rows()}, C{m.cols()} {}
 
 template<typename T>
 Tensor<T>::Tensor(const int& R): DMatrix<T>{R, 1}, R{R}, C{1} {}
@@ -28,19 +36,21 @@ Tensor<T>::~Tensor(){
 
 
 template<typename T>
-Tensor<T>& Tensor<T>::operator=(Tensor<T>& scalar){
-    if (scalar.rows() != R || scalar.cols() != C){
-        this->data().resize(scalar.rows(), scalar.cols());
+Tensor<T>& Tensor<T>::operator=(Tensor<T>& t){
+    if (t.rows() != R || t.cols() != C){
+        this->data().resize(t.rows(), t.cols());
     }
-    this->data() = std::move(scalar.data());
+    this->data() = std::move(t.data());
+    this->graph = t.graph;
     return *this;
 }
 template<typename T>
-Tensor<T>& Tensor<T>::operator=(Tensor<T>&& scalar){
-    if (scalar.rows() != R || scalar.cols() != C){
-        this->data().resize(scalar.rows(), scalar.cols());
+Tensor<T>& Tensor<T>::operator=(Tensor<T>&& t){
+    if (t.rows() != R || t.cols() != C){
+        this->data().resize(t.rows(), t.cols());
     }
-    this->data() = std::move(scalar.data());
+    this->data() = std::move(t.data());
+    this->graph = t.graph;
     return *this;
 }
 
