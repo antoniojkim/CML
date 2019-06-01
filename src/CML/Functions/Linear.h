@@ -35,6 +35,15 @@ namespace Function {
         }
     };
 
+    template<typename T>
+    inline Tensor<T> Linear(Tensor<T>& input, Tensor<T>& weights){
+        return Linear::forward(input, weights);
+    }
+    template<typename T>
+    inline Tensor<T> Linear(Tensor<T>& input, Tensor<T>& weights, Tensor<T>& bias){
+        return Linear::forward(input, weights, bias);
+    }
+
 };
 };
 

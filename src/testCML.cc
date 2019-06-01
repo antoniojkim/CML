@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "CML/Tensor.h"
+#include "CML/Functions.h"
 #include "CML/nn/Containers.h"
 #include "CML/nn/Linear.h"
 #include "CML/nn/Nonlinear.h"
@@ -56,11 +57,13 @@ void simpleParamTest(){
 }
 
 void basicTensorTest(){
+    using Function::ReLU;
+
     auto t = Tensor<>(2, 3);
     cout << t << endl;
-    t.fill(1.2);
+    t.fill(-1.2);
     cout << t << endl;
-    cout << t*2 << endl;
+    cout << ReLU(t) << endl;
 }
 
 int main(){
