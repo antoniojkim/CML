@@ -27,7 +27,7 @@ namespace nn {
             Parameter<T>& getWeights();
             Parameter<T>& getBias();
 
-            cml::Tensor<T> forward(cml::Tensor<T>&) override;
+            cml::tensor<T> forward(cml::tensor<T>) override;
 
             std::ostream& print(std::ostream&, const std::string& indent) override;
 

@@ -26,7 +26,7 @@ namespace nn {
         public:
             ReLU(const bool& inplace = false);
 
-            cml::Tensor<T> forward(cml::Tensor<T>&) override;
+            cml::tensor<T> forward(cml::tensor<T>) override;
 
             std::ostream& print(std::ostream&, const std::string& indent) override;
     };

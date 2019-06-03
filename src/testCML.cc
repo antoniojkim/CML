@@ -60,9 +60,9 @@ void basicTensorTest(){
     using Function::ReLU;
     using namespace Function;
 
-    auto t = Tensor<>(2, 3);
+    auto t = make_tensor<>(2, 3);
     cout << t << endl;
-    t.randomize();
+    t->randomize();
     cout << t << endl;
     t = ReLU(t);
     cout << t << endl;

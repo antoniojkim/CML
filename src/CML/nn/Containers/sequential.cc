@@ -24,7 +24,7 @@ Sequential<T>::Sequential(initializer_list<pair<string, Module<T>*>> dict): Modu
 ************************************************************************************/
 
 template<typename T>
-Tensor<T> Sequential<T>::forward(Tensor<T>& x) {
+tensor<T> Sequential<T>::forward(tensor<T> x) {
     auto y = x;
     for (auto& submodule : submodules){
         y = (*submodule)(y);

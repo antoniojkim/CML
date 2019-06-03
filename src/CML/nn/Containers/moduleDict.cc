@@ -22,7 +22,7 @@ ModuleDict<T>::ModuleDict(initializer_list<pair<string, Module<T>*>> dict): Modu
 ************************************************************************************/
 
 template<typename T>
-Tensor<T> ModuleDict<T>::forward(Tensor<T>& x) {
+tensor<T> ModuleDict<T>::forward(tensor<T> x) {
     auto y = x;
     for (auto& submodule : submodules){
         y = (*submodule)(y);

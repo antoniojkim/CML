@@ -18,11 +18,11 @@ using namespace Eigen;
 ************************************************************************************/
 
 template<typename T>
-Tensor<T>::Tensor(Tensor<T>& t): DMatrix<T>{std::move(t.data())}, R{t.rows()}, C{t.cols()}, graph{t.graph} {}
+Tensor<T>::Tensor(Tensor<T>& t): DMatrix<T>{t.data()}, R{t.rows()}, C{t.cols()}, graph{t.graph} {}
 template<typename T>
 Tensor<T>::Tensor(Tensor<T>&& t): DMatrix<T>{std::move(t.data())}, R{t.rows()}, C{t.cols()}, graph{t.graph} {}
 template<typename T>
-Tensor<T>::Tensor(DMatrix<T>& m): DMatrix<T>{std::move(m)}, R{m.rows()}, C{m.cols()} {}
+Tensor<T>::Tensor(DMatrix<T>& m): DMatrix<T>{m}, R{m.rows()}, C{m.cols()} {}
 template<typename T>
 Tensor<T>::Tensor(DMatrix<T>&& m): DMatrix<T>{std::move(m)}, R{m.rows()}, C{m.cols()} {}
 
@@ -32,12 +32,7 @@ template<typename T>
 Tensor<T>::Tensor(const int& R, const int& C): DMatrix<T>{std::move(DMatrix<T>::Zero(R, C))}, R{R}, C{C} {}
 
 template<typename T>
-Tensor<T>::~Tensor(){
-    if (graph && graph->root){
-        delete graph;
-        graph = nullptr;
-    }
-}
+Tensor<T>::~Tensor(){}
 
 
 template<typename T>
@@ -45,7 +40,7 @@ Tensor<T>& Tensor<T>::operator=(Tensor<T>& t){
     if (t.rows() != R || t.cols() != C){
         this->data().resize(t.rows(), t.cols());
     }
-    this->data() = std::move(t.data());
+    this->data() = t.data();
     this->graph = t.graph;
     t.graph = nullptr;
     return *this;
@@ -140,15 +135,15 @@ void Tensor<T>::randomize(const T& coefficient){
 // }
 
 template<typename T>
-Tensor<T> Tensor<T>::operator*(const T& scalar){
-    auto t = Tensor<T>(static_cast<DMatrix<T>>(
+tensor<T> Tensor<T>::operator*(const T& scalar){
+    auto t = make_tensor<T>(static_cast<DMatrix<T>>(
         this->data() * scalar
     ));
-    t.graph = new DCG<T>(this->graph);
-    t.graph->f = [scalar](Tensor<T>& output) -> Tensor<T> {
-        Tensor<T> t (1, 1);
-        t << scalar;
-        return t;
+    t->graph = make_graph<T>(this->graph);
+    t->graph->f = [scalar](tensor<T> output) -> tensor<T> {
+        auto u = make_tensor<T>(1, 1);
+        (*u) << scalar;
+        return u;
     };
     return t;
 }
