@@ -3,8 +3,6 @@ CXXFLAGS = -g -std=c++14 -DDEBUG -Wall -MMD -Werror=vla
 EXEC = testCML
 
 TENSORS = $(wildcard CML/Tensors/*.cc)
-F_LINEAR = $(wildcard CML/Functions/Linear/*.cc)
-F_NONLINEAR = $(wildcard CML/Functions/Nonlinear/*.cc)
 PARAMETERS = $(wildcard CML/nn/Parameters/*.cc)
 MODULES = $(wildcard CML/nn/Modules/*.cc)
 CONTAINERS = $(wildcard CML/nn/Containers/*.cc)

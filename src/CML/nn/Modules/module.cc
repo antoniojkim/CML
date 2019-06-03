@@ -60,6 +60,36 @@ void Module<T>::apply(void (*fn)(Module<T>&), const bool& recursive){
 }
 
 
+template<typename T>
+long int Module<T>::getNumParameters(const bool& recursive){
+    long int num = params.params.size();
+    if (recursive){
+        for (auto& submodule : submodules){
+            num += submodule->getNumParameters();
+        }
+    }
+    return num;
+}
+template<typename T>
+std::vector<Parameter<T>*> Module<T>::parameters(const bool& recursive){
+    std::vector<Parameter<T>*> parameters;
+    parameters.reserve(getNumParameters(recursive));
+    getParameters(parameters, recursive);
+    return parameters;
+}
+template<typename T>
+void Module<T>::getParameters(std::vector<Parameter<T>*>& parameters, const bool& recursive){
+    for (auto& param : params.params){
+        parameters.emplace_back(param.get());
+    }
+    if (recursive){
+        for (auto& submodule : submodules){
+            submodule->getParameters(parameters, recursive);
+        }
+    }
+}
+
+
 /***********************************************************************************
 ****************************** Submodule Methods ***********************************
 ************************************************************************************/

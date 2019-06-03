@@ -58,14 +58,16 @@ void simpleParamTest(){
 
 void basicTensorTest(){
     using Function::ReLU;
+    using namespace Function;
 
     auto t = Tensor<>(2, 3);
     cout << t << endl;
-    t.fill(-1.2);
+    t.randomize();
     cout << t << endl;
     t = ReLU(t);
     cout << t << endl;
-    cout << t.graph << endl;
+    cout << Sigmoid(t) << endl;
+    cout << Tanh(t) << endl;
 }
 
 int main(){
