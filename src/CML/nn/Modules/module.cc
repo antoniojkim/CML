@@ -45,7 +45,7 @@ void Module<T>::init(){
 }
 
 template<typename T>
-cml::Tensor<T> Module<T>::operator()(cml::Tensor<T>& x){
+cml::tensor<T> Module<T>::operator()(cml::tensor<T> x){
     return forward(x);
 }
 

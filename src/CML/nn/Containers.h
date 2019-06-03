@@ -20,7 +20,7 @@ namespace nn {
             Sequential(std::initializer_list<Module<T>*> submodules);
             Sequential(std::initializer_list<std::pair<std::string, Module<T>*>>);
 
-            cml::Tensor<T> forward(cml::Tensor<T>&) override;
+            cml::tensor<T> forward(cml::tensor<T>)override;
 
             std::ostream& print(std::ostream&, const std::string& indent) override;
     };
@@ -33,7 +33,7 @@ namespace nn {
             ModuleList();
             ModuleList(std::initializer_list<Module<T>*> submodules);
 
-            cml::Tensor<T> forward(cml::Tensor<T>&) override;
+            cml::tensor<T> forward(cml::tensor<T>)override;
 
             std::ostream& print(std::ostream&, const std::string& indent) override;
     };
@@ -47,7 +47,7 @@ namespace nn {
             ModuleDict();
             ModuleDict(std::initializer_list<std::pair<std::string, Module<T>*>>);
 
-            cml::Tensor<T> forward(cml::Tensor<T>&) override;
+            cml::tensor<T> forward(cml::tensor<T>)override;
 
             std::ostream& print(std::ostream&, const std::string& indent) override;
     };

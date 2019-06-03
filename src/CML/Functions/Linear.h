@@ -3,6 +3,7 @@
 
 #include "../Tensor.h"
 #include "../DCG.h"
+#include "../nn/Parameter.h"
 
 namespace cml {
 namespace Function {
@@ -10,37 +11,35 @@ namespace Function {
     struct Linear {
 
         template<typename T>
-        static Tensor<T> backward(Tensor<T>& output){
-            throw "Unimplemented Linear::backward(Tensor<T>& output)";
-        }
-
-
-        template<typename T>
-        static Tensor<T> forward(Tensor<T>& input, Tensor<T>& weights){
-            auto t = Tensor<T>(static_cast<DMatrix<T>>(
-                input.data() * weights.data().transpose()
+        static tensor<T> forward(tensor<T> input, nn::Parameter<T>& weights){
+            auto t = make_tensor<T>(static_cast<DMatrix<T>>(
+                input->data() * weights.data().transpose()
             ));
-            t.graph = new DCG<T>(input.graph);
-            t.graph->f = Linear::backward<T>;
+            t->graph = make_graph<T>(input->graph);
+            t->graph->f = [](tensor<T> output) -> tensor<T>{
+                throw "Unimplemented weights only Linear::backward(Tensor<T>& output)";
+            };
             return t;
         }
         template<typename T>
-        static Tensor<T> forward(Tensor<T>& input, Tensor<T>& weights, Tensor<T>& bias){
-            auto t = Tensor<T>(static_cast<DMatrix<T>>(
-                input.data() * weights.data().transpose() + bias.data()
+        static tensor<T> forward(tensor<T> input, nn::Parameter<T>& weights, nn::Parameter<T>& bias){
+            auto t = make_tensor<T>(static_cast<DMatrix<T>>(
+                input->data() * weights.data().transpose() + bias.data()
             ));
-            t.graph = new DCG<T>(input.graph);
-            t.graph->f = Linear::backward<T>;
+            t->graph = make_graph<T>(input->graph);
+            t->graph->f = [](tensor<T> output) -> tensor<T>{
+                throw "Unimplemented weights and bias Linear::backward(tensor<T>& output)";
+            };
             return t;
         }
     };
 
     template<typename T>
-    inline Tensor<T> Linear(Tensor<T>& input, Tensor<T>& weights){
+    inline tensor<T> Linear(tensor<T> input, nn::Parameter<T>& weights){
         return Linear::forward(input, weights);
     }
     template<typename T>
-    inline Tensor<T> Linear(Tensor<T>& input, Tensor<T>& weights, Tensor<T>& bias){
+    inline tensor<T> Linear(tensor<T> input, nn::Parameter<T>& weights, nn::Parameter<T>& bias){
         return Linear::forward(input, weights, bias);
     }
 

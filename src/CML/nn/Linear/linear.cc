@@ -32,9 +32,9 @@ Parameter<T>& Linear<T>::getBias(){
 
 
 template<typename T>
-cml::Tensor<T> Linear<T>::forward(cml::Tensor<T>& x){
-    return bias ? Function::Linear::forward(x, getWeights().toTensor(), getBias().toTensor()) :
-                  Function::Linear::forward(x, getWeights().toTensor());
+cml::tensor<T> Linear<T>::forward(cml::tensor<T> x){
+    return bias ? Function::Linear::forward(x, getWeights(), getBias()) :
+                  Function::Linear::forward(x, getWeights());
 }
 
 template<typename T>

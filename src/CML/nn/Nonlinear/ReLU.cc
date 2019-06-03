@@ -19,7 +19,7 @@ ReLU<T>::ReLU(const bool& inplace): inplace {inplace} {}
 ************************************************************************************/
 
 template<typename T>
-Tensor<T> ReLU<T>::forward(Tensor<T>& x){
+tensor<T> ReLU<T>::forward(tensor<T> x){
     return Function::ReLU::forward(x);
 }
 

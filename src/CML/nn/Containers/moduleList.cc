@@ -22,7 +22,7 @@ ModuleList<T>::ModuleList(std::initializer_list<Module<T>*> submodules): Module<
 ************************************************************************************/
 
 template<typename T>
-Tensor<T> ModuleList<T>::forward(Tensor<T>& x) {
+tensor<T> ModuleList<T>::forward(tensor<T> x) {
     auto y = x;
     for (auto& submodule : submodules){
         y = (*submodule)(y);
