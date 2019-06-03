@@ -10,10 +10,19 @@ namespace cml {
     template<class T>
     struct DCG { // Dynamic Compute Graph
         DCG* parent = nullptr;
+        bool root = true;
         std::function<Tensor<T>(Tensor<T>&)> f  ;
 
-        DCG(DCG<T>* parent): parent{parent} {}
-        ~DCG(){ if (parent) delete parent; }
+        DCG(DCG<T>* parent): parent{parent} {
+            if(parent) parent->root = false;
+        }
+        ~DCG(){
+            if (parent) {
+                delete parent;
+                parent = nullptr;
+            }
+        }
+
     };
 
 }

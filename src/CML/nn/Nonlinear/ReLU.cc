@@ -1,6 +1,6 @@
 #include "../Nonlinear.h"
 #include "../../Dtypes.h"
-#include "../../Functions/NonLinear.h"
+#include "../../Functions/NonLinear/ReLU.h"
 
 using namespace std;
 using namespace cml;

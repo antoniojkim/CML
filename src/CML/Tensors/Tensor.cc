@@ -2,6 +2,8 @@
 #include <iostream>
 #endif
 
+#include <random>
+
 #include "../Tensor.h"
 #include "../DCG.h"
 #include "../Dtypes.h"
@@ -25,13 +27,16 @@ template<typename T>
 Tensor<T>::Tensor(DMatrix<T>&& m): DMatrix<T>{std::move(m)}, R{m.rows()}, C{m.cols()} {}
 
 template<typename T>
-Tensor<T>::Tensor(const int& R): DMatrix<T>{R, 1}, R{R}, C{1} {}
+Tensor<T>::Tensor(const int& R): DMatrix<T>{std::move(DMatrix<T>::Zero(R, 1))}, R{R}, C{1} {}
 template<typename T>
-Tensor<T>::Tensor(const int& R, const int& C): DMatrix<T>{R, C}, R{R}, C{C} {}
+Tensor<T>::Tensor(const int& R, const int& C): DMatrix<T>{std::move(DMatrix<T>::Zero(R, C))}, R{R}, C{C} {}
 
 template<typename T>
 Tensor<T>::~Tensor(){
-    if (graph) delete graph;
+    if (graph && graph->root){
+        delete graph;
+        graph = nullptr;
+    }
 }
 
 
@@ -42,6 +47,7 @@ Tensor<T>& Tensor<T>::operator=(Tensor<T>& t){
     }
     this->data() = std::move(t.data());
     this->graph = t.graph;
+    t.graph = nullptr;
     return *this;
 }
 template<typename T>
@@ -51,6 +57,7 @@ Tensor<T>& Tensor<T>::operator=(Tensor<T>&& t){
     }
     this->data() = std::move(t.data());
     this->graph = t.graph;
+    t.graph = nullptr;
     return *this;
 }
 
@@ -74,6 +81,34 @@ template<typename T>
 void Tensor<T>::fill(const T& coefficient){
     data() = DMatrix<T>::Constant(R, C, coefficient);
 }
+template<typename T>
+void Tensor<T>::zero(){
+    data() = DMatrix<T>::Zero(R, C);
+}
+
+
+std::random_device rd;
+std::mt19937 e2(rd());
+std::normal_distribution<> gauss(0, 1);
+
+template<typename T>
+void Tensor<T>::randomize(){
+    data() = data().unaryExpr([](T x) -> T { return (T)gauss(e2); });
+}
+template<typename T>
+void Tensor<T>::randomize(const T& coefficient){
+    data() = data().unaryExpr([coefficient](T x) -> T { return (T)(gauss(e2) * coefficient); });
+}
+
+
+// template<typename T>
+// DCG<T>* Tensor<T>::graph(){ return g; }
+// template<typename T>
+// DCG<T>* Tensor<T>::release(){
+//     DCT<T>* graph = g;
+//     g = nullptr;
+//     return graph; 
+// }
 
 
 /***********************************************************************************
@@ -106,7 +141,9 @@ void Tensor<T>::fill(const T& coefficient){
 
 template<typename T>
 Tensor<T> Tensor<T>::operator*(const T& scalar){
-    auto t = Tensor<T>(static_cast<DMatrix<T>>(this->data() * scalar));
+    auto t = Tensor<T>(static_cast<DMatrix<T>>(
+        this->data() * scalar
+    ));
     t.graph = new DCG<T>(this->graph);
     t.graph->f = [scalar](Tensor<T>& output) -> Tensor<T> {
         Tensor<T> t (1, 1);

@@ -44,6 +44,7 @@ namespace nn {
             // stores mapping from submodules to their respective aliases
             std::map<Module<T>*, std::string> keys;
             void init();
+            void getParameters(std::vector<Parameter<T>*>&, const bool& recursive = true);
 
             /*
                 The following method can be used to add parameters to the module.
@@ -172,6 +173,20 @@ namespace nn {
                 which was used as a shorthand for forward. 
             */
             Parameter<T>& operator()(const std::string& alias);
+
+            /*
+                This method will get the number of parameters in the module.
+                If the recursive flag is set, it will recursively get the 
+                number of paramters of all submodules.
+            */
+            long int getNumParameters(const bool& recursive = true);
+            /*
+                This method will return a vector of pointers to the parameters.
+                This method is different from getParams as it is getting pointers
+                to the parameters and optionally getting pointers to parameteters
+                of submodules as well.
+            */
+            std::vector<Parameter<T>*> parameters(const bool& recursive = true);
 
             /*
                 This method can be used to apply a function to each submodule.

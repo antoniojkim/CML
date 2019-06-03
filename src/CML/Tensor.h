@@ -30,13 +30,13 @@ namespace cml {
                 Constructors that cast the input if type is not T
             */
             template<typename U>
-            Tensor(Tensor<U>& t): DMatrix<T>{std::move(t.data().template cast<T>())}, R{t.rows()}, C{t.cols()} {}
+            Tensor(Tensor<U>& t): Tensor{std::move(t.data().template cast<T>())} {}
             template<typename U>
-            Tensor(Tensor<U>&& t): DMatrix<T>{std::move(t.data().template cast<T>())}, R{t.rows()}, C{t.cols()} {}
+            Tensor(Tensor<U>&& t): Tensor{std::move(t.data().template cast<T>())} {}
             template<typename U>
-            Tensor(DMatrix<U>& m): DMatrix<T>{std::move(m.template cast<T>())}, R{m.rows()}, C{m.cols()} {}
+            Tensor(DMatrix<U>& m): Tensor{std::move(m.template cast<T>())} {}
             template<typename U>
-            Tensor(DMatrix<U>&& m): DMatrix<T>{std::move(m.template cast<T>())}, R{m.rows()}, C{m.cols()} {}
+            Tensor(DMatrix<U>&& m): Tensor{std::move(m.template cast<T>())} {}
 
             ~Tensor();
 
@@ -48,6 +48,9 @@ namespace cml {
             long int cols();
 
             void fill(const T& coefficient);
+            void zero();
+            void randomize();
+            void randomize(const T& coefficient);
 
             // Tensor<T> operator+(const T& scalar);
             // Tensor<T> operator-(const T& scalar);
