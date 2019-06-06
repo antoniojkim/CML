@@ -11,36 +11,56 @@ namespace Function {
     struct Linear {
 
         template<typename T>
-        static tensor<T> forward(tensor<T> input, nn::Parameter<T>& weights){
+        static tensor<T> forward(tensor<T> input, nn::Parameter<T>& weights, const bool& createGraph = true){
             auto t = make_tensor<T>(static_cast<DMatrix<T>>(
                 input->data() * weights.data().transpose()
             ));
-            t->graph = make_graph<T>(input->graph);
-            t->graph->f = [input, t](tensor<T> output) -> tensor<T>{
-                throw "Unimplemented weights only Linear::backward(Tensor<T>& output)";
-            };
+            if (createGraph){
+                t->graph = make_graph<T>(input->graph);
+                t->graph->f = [input, &weights](tensor<T> output) -> tensor<T>{
+                    auto dw = make_tensor<T>(static_cast<DMatrix<T>>(
+                        input->array() * output->array()
+                    ));
+                    weights += dw;
+
+                    return make_tensor<T>(static_cast<DMatrix<T>>(
+                        weights.data().transpose() * output->array()
+                    ));
+                };
+            }
             return t;
         }
         template<typename T>
-        static tensor<T> forward(tensor<T> input, nn::Parameter<T>& weights, nn::Parameter<T>& bias){
+        static tensor<T> forward(tensor<T> input, nn::Parameter<T>& weights, nn::Parameter<T>& bias, const bool& createGraph = true){
             auto t = make_tensor<T>(static_cast<DMatrix<T>>(
                 input->data() * weights.data().transpose() + bias.data()
             ));
-            t->graph = make_graph<T>(input->graph);
-            t->graph->f = [input, t](tensor<T> output) -> tensor<T>{
-                throw "Unimplemented weights and bias Linear::backward(tensor<T>& output)";
-            };
+            if (createGraph){
+                t->graph = make_graph<T>(input->graph);
+                t->graph->f = [input, &weights](tensor<T> output) -> tensor<T>{
+                    auto dw = make_tensor<T>(static_cast<DMatrix<T>>(
+                        input->array() * output->array()
+                    ));
+                    weights += dw;
+
+                    weights += output;
+
+                    return make_tensor<T>(static_cast<DMatrix<T>>(
+                        weights.data().transpose() * output->array()
+                    ));
+                };
+            }
             return t;
         }
     };
 
     template<typename T>
-    inline tensor<T> Linear(tensor<T> input, nn::Parameter<T>& weights){
-        return Linear::forward(input, weights);
+    inline tensor<T> Linear(tensor<T> input, nn::Parameter<T>& weights, const bool& createGraph = true){
+        return Linear::forward(input, weights, createGraph);
     }
     template<typename T>
-    inline tensor<T> Linear(tensor<T> input, nn::Parameter<T>& weights, nn::Parameter<T>& bias){
-        return Linear::forward(input, weights, bias);
+    inline tensor<T> Linear(tensor<T> input, nn::Parameter<T>& weights, nn::Parameter<T>& bias, const bool& createGraph = true){
+        return Linear::forward(input, weights, bias, createGraph);
     }
 
 };

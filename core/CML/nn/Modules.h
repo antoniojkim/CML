@@ -36,6 +36,7 @@ namespace nn {
     template <typename T> 
     class Module {
         protected:
+            bool gradientMode = true;
             Module<T>* parent = nullptr;
             Parameters<T> params;
             Modules<T> submodules;
@@ -195,6 +196,19 @@ namespace nn {
                 to each submodule's submodules and so on.
             */
             void apply(void (*fn)(Module<T>&), const bool& recursive = true);
+
+            /*
+                This method sets the module to evaluation mode. This disables
+                the creation of the dynamic graph used in backpropogation.
+            */
+            void evalMode();
+
+            /*
+                This method sets the module to gradient mode. This enables
+                the creation of the dynamic graph used in backpropogation.
+                The module is gradient mode by default.
+            */
+            void gradMode();
 
             /*
                 This pure virtual method is used to simply print out the module.

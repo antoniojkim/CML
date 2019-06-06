@@ -37,6 +37,16 @@ namespace cml {
 
     template <typename T, typename U>
     struct is_related<T, U> : std::is_same<Bare<T>, Bare<U>> {};
+
+    namespace nn {
+            
+        enum Reduction {
+            NONE,
+            SUM,
+            MEAN
+        };
+
+    }
     
 }
 

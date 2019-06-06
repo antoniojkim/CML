@@ -9,8 +9,9 @@ CONTAINERS = $(wildcard CML/nn/Containers/*.cc)
 VARIABLES = $(wildcard CML/nn/Variables/*.cc)
 LINEAR = $(wildcard CML/nn/Linear/*.cc)
 NONLINEAR = $(wildcard CML/nn/Nonlinear/*.cc)
+LOSS = $(wildcard CML/nn/Loss/*.cc)
 OPTIMIZER = $(wildcard CML/optim/Optimizers/*.cc)
-OBJECTS = $(TENSORS:.cc=.o) $(F_LINEAR:.cc=.o) $(F_NONLINEAR:.cc=.o)  $(PARAMETERS:.cc=.o) $(MODULES:.cc=.o) $(CONTAINERS:.cc=.o) $(LINEAR:.cc=.o) $(NONLINEAR:.cc=.o) $(OPTIMIZER:.cc=.o) testCML.o
+OBJECTS = $(TENSORS:.cc=.o) $(F_LINEAR:.cc=.o) $(F_NONLINEAR:.cc=.o)  $(PARAMETERS:.cc=.o) $(MODULES:.cc=.o) $(CONTAINERS:.cc=.o) $(LINEAR:.cc=.o) $(NONLINEAR:.cc=.o) $(LOSS:.cc=.o) $(OPTIMIZER:.cc=.o) testCML.o
 DEPENDS = ${OBJECTS:.o=.d}
 
 ${EXEC}: ${OBJECTS}

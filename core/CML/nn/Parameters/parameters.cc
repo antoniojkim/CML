@@ -25,13 +25,16 @@ cml::Tensor<T>& Parameter<T>::toTensor(){
 }
 
 template<typename T> 
-Parameter<T>& Parameter<T>::operator+=(const T& gradient){
-    this->gradient += gradient;
+Parameter<T>& Parameter<T>::operator+=(tensor<T> gradient){
+    if (gradient->rows() != this->gradient->rows() || gradient->cols() != this->gradient->cols()){
+        throw "Invalid gradient dimension passed in for incrementing parameter gradient";
+    }
+    this->gradient->data() += gradient->data();
     return *this;
 }
 template<typename T> 
 void Parameter<T>::zeroGrad(){
-    this->gradient = (T)(0);
+    this->gradient->data() = DMatrix<T>::Zero(this->rows(), this->cols());
 }
 
 
