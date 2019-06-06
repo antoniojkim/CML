@@ -58,6 +58,7 @@ void simpleParamTest(){
 
 void basicTensorTest(){
     using Function::ReLU;
+    using Function::Tanh;
     using namespace Function;
 
     auto t = make_tensor<>(2, 2);
@@ -66,8 +67,12 @@ void basicTensorTest(){
     cout << t << endl;
     t = ReLU(t);
     cout << t << endl;
-    cout << Sigmoid(t) << endl;
-    cout << Tanh(t) << endl;
+    cout << endl << "sigmoid:" << endl << Sigmoid(t) << endl;
+    cout << endl << "tanh:" << endl << Tanh(t) << endl;
+    cout << endl << "mean:" << endl << t->rowwise().mean() << endl;
+    cout << endl << "sum:" << endl << t->rowwise().sum() << endl;
+    cout << endl << "dot:" << endl << t->data()*t->data() << endl;
+    cout << endl << "mul:" << endl << t->array() * t->array() << endl;
 }
 
 int main(){

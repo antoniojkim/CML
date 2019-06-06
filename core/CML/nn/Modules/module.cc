@@ -90,6 +90,13 @@ void Module<T>::getParameters(std::vector<Parameter<T>*>& parameters, const bool
 }
 
 
+template<typename T>
+void Module<T>::evalMode(){ gradientMode = false; }
+
+template<typename T>
+void Module<T>::gradMode(){ gradientMode = true; }
+
+
 /***********************************************************************************
 ****************************** Submodule Methods ***********************************
 ************************************************************************************/

@@ -23,7 +23,7 @@ namespace nn {
     template <typename T>
     class Parameter: public Tensor<T> {
         bool requires_grad = true;
-        T gradient;
+        tensor<T> gradient;
 
         public:
             /*
@@ -35,13 +35,15 @@ namespace nn {
                 as it will automatically type cast it into type T.
             */
             template<typename U>
-            Parameter(Parameter<U>& p): cml::Tensor<T>(p.toTensor()) {}
+            Parameter(Parameter<U>& p): cml::Tensor<T>(p.toTensor()), 
+                                        gradient{make_tensor<T>(DMatrix<T>::Zero(this->rows(), this->cols()))} {}
             /*
                 In all other cases, it will construct the parameter object by
                 perfect forwarding all of the passed in arguments.
             */
             template<typename...Args, DisableIf<is_related<Parameter<T>, Args...>::value>...> 
-            Parameter(Args&&... args): cml::Tensor<T>(std::forward<Args>(args)...) {}
+            Parameter(Args&&... args): cml::Tensor<T>(std::forward<Args>(args)...),
+                                       gradient{make_tensor<T>(DMatrix<T>::Zero(this->rows(), this->cols()))} {}
 
 
             /*
@@ -56,7 +58,7 @@ namespace nn {
             /*
                 Adds to the parameter's gradient
             */
-            Parameter<T>& operator+=(const T&);
+            Parameter<T>& operator+=(tensor<T>);
             /*
                 Zeros out the gradient. Useful as gradients are accumulated.
             */

@@ -98,10 +98,10 @@ void Tensor<T>::randomize(const T& coefficient){
 }
 
 template<typename T>
-void Tensor<T>::readIDX(std::istream& in, const bool& readMagic = true){
-    if (readMagic){
-        int 
-    }
+void Tensor<T>::readIDX(std::istream& in, const bool& readMagic){
+    // if (readMagic){
+    //     int 
+    // }
 }
 
 

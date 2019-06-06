@@ -4,20 +4,15 @@
 #include "Modules.h"
 #include "Parameter.h"
 #include "../Tensor.h"
+#include "../Dtypes.h"
 
 namespace cml {
 namespace nn {
 
-    enum Reduction {
-        NONE,
-        SUM,
-        MEAN
-    };
 
     template<typename T = float>
     struct Criterion {
         virtual cml::tensor<T> forward(cml::tensor<T> actual, cml::tensor<T> expected) = 0;
-        virtual cml::tensor<T> backward() = 0;
     };
 
     template<typename T = float>
@@ -43,10 +38,9 @@ namespace nn {
         Reduction reduction;
         
         public:
-            ReLU(const Reduction& reduction = Reduction::MEAN);
+            MSELoss(const Reduction& reduction = Reduction::MEAN);
 
             cml::tensor<T> forward(cml::tensor<T> actual, cml::tensor<T> expected) override;
-            cml::tensor<T> backward() override;
     };
 
 }

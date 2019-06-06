@@ -17,6 +17,7 @@ namespace nn {
 
         using Module<T>::params;
         using Module<T>::addParameter;
+        using Module<T>::gradientMode;
         
         int in_features, out_features;
         bool bias;

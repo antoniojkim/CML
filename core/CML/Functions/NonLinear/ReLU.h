@@ -10,24 +10,33 @@ namespace Function {
     struct ReLU {
         
         template<typename T>
-        static tensor<T> backward(tensor<T> output){
-            throw "Unimplemented ReLU::backward(tensor<T>& output)";
-        }
-        
-        template<typename T>
-        static tensor<T> forward(tensor<T>& input){
+        static tensor<T> forward(tensor<T> input, const bool& createGraph = true){
             auto t = make_tensor<T>(static_cast<DMatrix<T>>(
-                input->data().cwiseAbs()
+                input->array().abs()
             ));
-            t->graph = make_graph<T>(input->graph);
-            t->graph->f = ReLU::backward<T>;
+            if (createGraph){
+                t->graph = make_graph<T>(input->graph);
+                t->graph->f = [input, t](tensor<T> output) -> tensor<T> {
+                    if (output != nullptr){
+                        return make_tensor<T>(static_cast<DMatrix<T>>(
+                            input->unaryExpr([](T x){ return (T)(x > 0 ? 1 : 0); }).array() *
+                            output->array()
+                        ));
+                    }
+                    return make_tensor<T>(static_cast<DMatrix<T>>(
+                        input->unaryExpr([](T x){ return (T)(x > 0 ? 1 : 0); })
+                    ));
+                };
+            }
             return t;
         }
 
     };
 
     template<typename T>
-    inline tensor<T> ReLU(tensor<T>& input){ return ReLU::forward(input); }
+    inline tensor<T> ReLU(tensor<T> input, const bool& createGraph = true){
+        return ReLU::forward(input, createGraph);
+    }
 
 };
 };
