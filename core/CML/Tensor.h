@@ -4,8 +4,9 @@
 #include <Eigen/Core>
 #include <memory>
 
-namespace cml {
+#include "Randomizer.h"
 
+namespace cml {
 
     template <class T = float> struct Tensor;
     template <class T = float> struct DCG; // Dynamic Compute Graph
@@ -66,7 +67,7 @@ namespace cml {
 
             void fill(const T& coefficient);
             void zero();
-            void randomize();
+            void randomize(Randomizer::Function<T> randomizer = Randomizer::Gaussian<T>);
             void randomize(const T& coefficient);
 
             // Tensor<T> operator+(const T& scalar);
@@ -78,7 +79,10 @@ namespace cml {
             */
             void readIDX(std::istream& in, const bool& readMagic = true);
             
+        
             std::shared_ptr<DCG<T>> graph = nullptr;
+            void backward();
+            
     };
 
     // template<typename T>

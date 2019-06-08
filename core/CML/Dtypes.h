@@ -11,6 +11,13 @@ namespace cml {
         template class T<long long>; \
         template class T<long>; \
         template class T<int>;
+    
+    #define INSTANTIATE_FUNCTION_TEMPLATES(T) \
+        template float T<float>(const float&); \
+        template double T<double>(const double&); \
+        template long long T<long long>(const long long&); \
+        template long T<long>(const long&); \
+        template int T<int>(const int&);
 
     /*
         The following 6 declarations come from:

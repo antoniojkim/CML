@@ -74,9 +74,33 @@ void basicTensorTest(){
     cout << endl << "dot:" << endl << t->data()*t->data() << endl;
     cout << endl << "mul:" << endl << t->array() * t->array() << endl;
 }
+void basicLinearTest(){
+    
+    auto model = nn::Sequential<>{
+        new Linear<>(2, 4),
+        new ReLU<>()
+    };
+    cout << model << endl;
+    cout << "weights:" << endl << model[0]("weights") << endl << endl;
+    
+    model.initWeights();
+    
+    cout << "weights.T:" << endl << model[0]("weights").transpose() << endl << endl;
+    
+    auto input = make_tensor<>(2, 1);
+    input->randomize();
+    
+    cout << "Input:" << endl << input << endl << endl;
+    
+    auto output = model(input);
+    
+    cout << "Output:" << endl << output << endl << endl;
+    
+}
 
 int main(){
     // basicSequentialTest();
     // simpleParamTest();
-    basicTensorTest();
+//     basicTensorTest();
+    basicLinearTest();
 }

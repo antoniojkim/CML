@@ -13,7 +13,7 @@ namespace Function {
         template<typename T>
         static tensor<T> forward(tensor<T> input, nn::Parameter<T>& weights, const bool& createGraph = true){
             auto t = make_tensor<T>(static_cast<DMatrix<T>>(
-                input->data() * weights.data().transpose()
+                weights.transpose() * input->data()
             ));
             if (createGraph){
                 t->graph = make_graph<T>(input->graph);
@@ -24,7 +24,7 @@ namespace Function {
                     weights += dw;
 
                     return make_tensor<T>(static_cast<DMatrix<T>>(
-                        weights.data().transpose() * output->array()
+                        weights.transpose().array() * output->array()
                     ));
                 };
             }
@@ -33,7 +33,7 @@ namespace Function {
         template<typename T>
         static tensor<T> forward(tensor<T> input, nn::Parameter<T>& weights, nn::Parameter<T>& bias, const bool& createGraph = true){
             auto t = make_tensor<T>(static_cast<DMatrix<T>>(
-                input->data() * weights.data().transpose() + bias.data()
+                weights.transpose() * input->data() + bias.data()
             ));
             if (createGraph){
                 t->graph = make_graph<T>(input->graph);
@@ -43,10 +43,10 @@ namespace Function {
                     ));
                     weights += dw;
 
-                    weights += output;
+                    weights += output; // d(bias) = 1*output
 
                     return make_tensor<T>(static_cast<DMatrix<T>>(
-                        weights.data().transpose() * output->array()
+                        weights.transpose().array() * output->array()
                     ));
                 };
             }

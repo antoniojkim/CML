@@ -15,6 +15,15 @@ namespace cml {
         std::function<tensor<T>(tensor<T>)> f  ;
 
         DCG(std::shared_ptr<DCG<T>>& parent): parent{parent} {}
+        
+        void backward(tensor<T> x = nullptr){
+            if (f){
+                auto y = f(x);
+                if (parent){
+                    parent->backward(y);
+                }
+            }
+        }
 
     };
 
