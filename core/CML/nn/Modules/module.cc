@@ -96,6 +96,23 @@ void Module<T>::evalMode(){ gradientMode = false; }
 template<typename T>
 void Module<T>::gradMode(){ gradientMode = true; }
 
+template<typename T>
+void Module<T>::initWeights(Randomizer::Function<T> randomizer){
+    initWeights(true, randomizer);
+}
+
+template<typename T>
+void Module<T>::initWeights(const bool& recursive, Randomizer::Function<T> randomizer){
+    for (auto& param : params.params){
+        param->randomize(randomizer);
+    }
+    if (recursive){
+        for (auto& submodule : submodules){
+            submodule->initWeights(recursive, randomizer);
+        }
+    }
+}
+
 
 /***********************************************************************************
 ****************************** Submodule Methods ***********************************

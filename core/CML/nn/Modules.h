@@ -15,6 +15,7 @@
 // #include "Nonlinear.h"
 #include "Parameter.h"
 #include "../Tensor.h"
+#include "../Randomizer.h"
 
 namespace cml {
 namespace nn {
@@ -209,6 +210,12 @@ namespace nn {
                 The module is gradient mode by default.
             */
             void gradMode();
+
+            /*
+                Initializes weight parameters
+            */
+            void initWeights(Randomizer::Function<T> randomizer = Randomizer::Gaussian<T>);
+            void initWeights(const bool& recursive, Randomizer::Function<T> randomizer = Randomizer::Gaussian<T>);
 
             /*
                 This pure virtual method is used to simply print out the module.

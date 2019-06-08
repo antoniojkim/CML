@@ -2,8 +2,6 @@
 #include <iostream>
 #endif
 
-#include <random>
-
 #include "../Tensor.h"
 #include "../DCG.h"
 #include "../Dtypes.h"
@@ -84,17 +82,13 @@ void Tensor<T>::zero(){
 }
 
 
-std::random_device rd;
-std::mt19937 e2(rd());
-std::normal_distribution<> gauss(0, 1);
-
 template<typename T>
-void Tensor<T>::randomize(){
-    data() = data().unaryExpr([](T x) -> T { return (T)gauss(e2); });
+void Tensor<T>::randomize(Randomizer::Function<T> randomizer){
+    data() = data().unaryExpr(randomizer);
 }
 template<typename T>
 void Tensor<T>::randomize(const T& coefficient){
-    data() = data().unaryExpr([coefficient](T x) -> T { return (T)(gauss(e2) * coefficient); });
+//     data() = data().unaryExpr([coefficient](T x) -> T { return (T)(gauss(e2) * coefficient); });
 }
 
 template<typename T>
@@ -102,6 +96,13 @@ void Tensor<T>::readIDX(std::istream& in, const bool& readMagic){
     // if (readMagic){
     //     int 
     // }
+}
+
+template<typename T>
+void Tensor<T>::backward(){
+    if (graph != nullptr){
+        graph->backward();
+    }
 }
 
 
