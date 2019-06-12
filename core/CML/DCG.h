@@ -11,17 +11,29 @@ namespace cml {
 
     template<class T>
     struct DCG { // Dynamic Compute Graph
-        std::shared_ptr<DCG<T>> parent = nullptr;
-        std::function<tensor<T>(tensor<T>)> f  ;
+        bool isLeaf = true;
+        tensor<T> gradient;
+        std::function<void(tensor<T>)> f;
 
-        DCG(std::shared_ptr<DCG<T>>& parent): parent{parent} {}
+        DCG(Tensor<T>* t, std::function<void(tensor<T>)> f): 
+            gradient{make_tensor<T>(t->rows(), t->cols(), false)}, f{f} {}
+
+
+        void accumulateGradient(const T& scalar){
+            gradient->data() += DMatrix<T>::Constant(gradient->rows(), gradient->cols(), scalar);
+        }
+        void accumulateGradient(tensor<T> t){
+            if (gradient->rows() != t->rows() || gradient->cols() != t->cols()){
+                throw "Dims do not match in accumuateGradient";
+            }
+            gradient->data() += t->data();
+        }
         
-        void backward(tensor<T> x = nullptr){
+        void backward(tensor<T> x = make_tensor<T>({1})){
             if (f){
-                auto y = f(x);
-                if (parent){
-                    parent->backward(y);
-                }
+//                 if (x) std::cout << x << std::endl;
+                f(x);
+                // f = nullptr;
             }
         }
 

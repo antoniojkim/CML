@@ -37,8 +37,8 @@ ostream& Sequential<T>::print(ostream& out, const string& indent){
     out << "Sequential {" << endl;
     for (auto& submodule: submodules){
         out << indent << "    ";
-        if (keys.count(submodule.get()) > 0){
-            out << keys[submodule.get()] << ":  ";
+        if (mValues.count(submodule.get()) > 0){
+            out << mValues[submodule.get()] << ":  ";
         }
         submodule->print(out, indent+"    ") << endl;
     }

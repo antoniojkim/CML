@@ -34,7 +34,7 @@ template<typename T>
 ostream& ModuleDict<T>::print(ostream& out, const string& indent){
     out << "ModuleDict {" << endl;
     for (auto& submodule : submodules){
-        out << indent << "    " << keys[submodule.get()] << ":  ";
+        out << indent << "    " << mValues[submodule.get()] << ":  ";
         submodule->print(out, indent+"    ") << endl;
     }
     out << indent << "}";

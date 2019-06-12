@@ -1,4 +1,5 @@
 
+#include <cassert>
 #include <iostream>
 #include <memory>
 #include <sstream>
@@ -9,12 +10,13 @@
 #include "CML/nn/Containers.h"
 #include "CML/nn/Linear.h"
 #include "CML/nn/Nonlinear.h"
-#include "CML/optim/Optimizer.h"
+#include "CML/nn/Loss.h"
+// #include "CML/optim/Optimizer.h"
 
 using namespace std;
 using namespace cml;
 using namespace cml::nn;
-using namespace cml::optim;
+// using namespace cml::optim;
 
 void basicSequentialTest(){
     auto model = nn::Sequential<>{
@@ -41,20 +43,6 @@ void basicSequentialTest(){
     };
     cout << doubleModel << endl;
 }
-void simpleParamTest(){
-    auto p = Parameter<double>{2, 3};
-    p(0, 0) = 5.5;
-    p(1, 1) = 10;
-    cout << p << endl;
-    auto p2 = p.to<int>();
-    cout << p2 << endl;
-
-    auto paramTest = nn::Sequential<>{
-        {"l1", new Linear<>(2, 4)}
-    };
-    cout << paramTest << endl;
-    cout << paramTest["l1"]("weights") << endl;
-}
 
 void basicTensorTest(){
     using Function::ReLU;
@@ -78,6 +66,8 @@ void basicLinearTest(){
     
     auto model = nn::Sequential<>{
         new Linear<>(2, 4),
+        new ReLU<>(),
+        new Linear<>(4, 2),
         new ReLU<>()
     };
     cout << model << endl;
@@ -85,7 +75,10 @@ void basicLinearTest(){
     
     model.initWeights();
     
-    cout << "weights.T:" << endl << model[0]("weights").transpose() << endl << endl;
+    cout << "weights.T:" << endl << model[0]("weights")->transpose() << endl << endl;
+    cout << "weights.T:" << endl << model[2]("weights")->transpose() << endl << endl;
+    
+    // auto criterion = MSELoss<>();
     
     auto input = make_tensor<>(2, 1);
     input->randomize();
@@ -96,11 +89,53 @@ void basicLinearTest(){
     
     cout << "Output:" << endl << output << endl << endl;
     
+    // auto expected = make_tensor<>(2, 1);
+    // expected->randomize();
+    
+    // auto loss = criterion(output, expected);
+    
+    // loss->backward();
+    
 }
+void basicGradTest1(){
+    auto a = make_tensor<>({2}, true);
+    auto b = make_tensor<>({3});
+    auto c = a*b;
+    c->backward();
+    assert(a->graph()->gradient->data(0, 0) == 3);
+}
+void basicGradTest2(){
+    auto a = make_tensor<>({2}, true);
+    auto b = make_tensor<>({3}, true);
+    auto c = a*b;
+    auto d = make_tensor<>({4}, true);
+    auto e =c*d;
+    e->backward();
+
+    assert(d->graph()->gradient->data(0, 0) == 6);
+    assert(b->graph()->gradient->data(0, 0) == 8);
+    assert(a->graph()->gradient->data(0, 0) == 12);
+}
+// void basicGradTest3(){
+//     auto a = make_tensor<>({{1, 2}, {3, 4}}, true);
+//     auto b = make_tensor<>({{5, 6}, {7, 8}}, true);
+//     auto c = a*b;
+//     cout << a << " * " << b << " = " << c << endl;
+//     c->backward();
+//     cout << a->graph()->gradient << endl;
+// }
 
 int main(){
-    // basicSequentialTest();
-    // simpleParamTest();
-//     basicTensorTest();
-    basicLinearTest();
+    try{
+        // basicSequentialTest();
+        // simpleParamTest();
+    //     basicTensorTest();
+        // basicLinearTest();
+        basicGradTest1();
+        basicGradTest2();
+        // basicGradTest3();a
+    } catch (const char* error){
+        cerr << error << endl;
+        throw error;
+    }
 }
