@@ -11,9 +11,6 @@
 #include <utility>
 #include <vector>
 
-// #include "Linear.h"
-// #include "Nonlinear.h"
-#include "Parameter.h"
 #include "../Tensor.h"
 #include "../Randomizer.h"
 
@@ -25,6 +22,10 @@ namespace nn {
     using uModule = std::unique_ptr<cml::nn::Module<T>>;
     template<typename T>
     using Modules = std::vector<uModule<T>>;
+    template<typename T>
+    using Parameter = tensor<T>;
+    template<typename T>
+    using Parameters = std::vector<tensor<T>>;
 
     /*
         The Module class is the base class for all neural network modules
@@ -37,16 +38,17 @@ namespace nn {
     template <typename T> 
     class Module {
         protected:
-            bool gradientMode = true;
             Module<T>* parent = nullptr;
             Parameters<T> params;
             Modules<T> submodules;
             // stores mapping from string aliases to the submodules
-            std::map<std::string, Module<T>*> values;
-            // stores mapping from submodules to their respective aliases
-            std::map<Module<T>*, std::string> keys;
+            std::map<std::string, Module<T>*> mKeys;
+            // stores mapping from submodules to the string aliases
+            std::map<Module<T>*, std::string> mValues;
+            // stores mapping from string aliases to the parameters
+            std::map<std::string, Parameter<T>*> pKeys;
             void init();
-            void getParameters(std::vector<Parameter<T>*>&, const bool& recursive = true);
+            void getParameters(std::vector<tensor<T>>&, const bool& recursive = true);
 
             /*
                 The following method can be used to add parameters to the module.
@@ -58,7 +60,8 @@ namespace nn {
             */
             template<typename...Args>
             void addParameter(const std::string& alias, Args&&...args){
-                params.add(new_parameter<T>(std::forward<Args>(args)...), alias);
+                params.emplace_back(make_tensor<T>(std::forward<Args>(args)...));
+                if (alias != ""){ pKeys[alias] = &params.back(); }
             }
         
         public:
@@ -142,7 +145,6 @@ namespace nn {
             Module<T>& operator[](const std::string& alias);
 
 
-
             Parameters<T>& getParams();
             /*
                 The following method can be used to get the invidual parameters
@@ -155,7 +157,7 @@ namespace nn {
                 Note that generally, the order of parameters is not usually known.
                 So, this method should be used with caution.
             */
-            Parameter<T>& getParam(const int& index);
+            Parameter<T> getParam(const int& index);
             /*
                 The following method can be used to get the individual parameters
                 using the alias that was provided when it was added.
@@ -166,7 +168,7 @@ namespace nn {
                 Since the order in which the paramters is not usually known, this
                 is the recommended way to access individual parameters.
             */
-            Parameter<T>& getParam(const std::string& alias);
+            Parameter<T> getParam(const std::string& alias);
             /*
                 The following overload of the operator() is used as a shorthand for
                 the method getParam(string).
@@ -174,7 +176,7 @@ namespace nn {
                 Note, this is not to be confused with the other overload for it
                 which was used as a shorthand for forward. 
             */
-            Parameter<T>& operator()(const std::string& alias);
+            Parameter<T> operator()(const std::string& alias);
 
             /*
                 This method will get the number of parameters in the module.
@@ -188,7 +190,7 @@ namespace nn {
                 to the parameters and optionally getting pointers to parameteters
                 of submodules as well.
             */
-            std::vector<Parameter<T>*> parameters(const bool& recursive = true);
+            std::vector<tensor<T>> parameters(const bool& recursive = true);
 
             /*
                 This method can be used to apply a function to each submodule.
@@ -199,17 +201,15 @@ namespace nn {
             void apply(void (*fn)(Module<T>&), const bool& recursive = true);
 
             /*
-                This method sets the module to evaluation mode. This disables
-                the creation of the dynamic graph used in backpropogation.
+                This method sets the computeGrad field for all
+                parameters to true.
             */
-            void evalMode();
-
+            void grad(const bool& recursive = true);
             /*
-                This method sets the module to gradient mode. This enables
-                the creation of the dynamic graph used in backpropogation.
-                The module is gradient mode by default.
+                This method sets the computeGrad field for all
+                parameters to false.
             */
-            void gradMode();
+            void noGrad(const bool& recursive = true);
 
             /*
                 Initializes weight parameters

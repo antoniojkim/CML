@@ -13,7 +13,7 @@ namespace nn {
     template<typename T = float>
     class Sequential: public Module<T> {
         using Module<T>::submodules;
-        using Module<T>::keys;
+        using Module<T>::mValues;
 
         public:
             Sequential();
@@ -41,7 +41,7 @@ namespace nn {
     template<typename T = float>
     class ModuleDict: public Module<T> {
         using Module<T>::submodules;
-        using Module<T>::keys;
+        using Module<T>::mValues;
 
         public:
             ModuleDict();

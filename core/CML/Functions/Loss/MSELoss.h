@@ -30,10 +30,16 @@ namespace Function {
                     ));
                     break;
             }
-            t->graph = make_graph<T>(actual->graph);
-            t->graph->f = [actual, expected, t](tensor<T> output) -> tensor<T> {
-                throw "Unimplemented MSELoss::backward(Tensor<T>& output)";
-            };
+            t->computeGrad = true;
+            t->initGraph([actual, expected, reduction](tensor<T> output) -> tensor<T> {
+                std::cout << "MSELoss.actual:" << std::endl << actual << std::endl;
+                std::cout << "MSELoss.expected:" << std::endl << expected << std::endl;
+                auto u = make_tensor<T>(static_cast<DMatrix<T>>(
+                    2*(actual->data() - expected->data())
+                ));
+                std::cout << "MSELoss.u:" << std::endl << u << std::endl;
+                return u;
+            });
             return t;
         }
 

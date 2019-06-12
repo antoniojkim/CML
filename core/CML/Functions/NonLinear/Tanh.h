@@ -12,28 +12,20 @@ namespace Function {
     struct Tanh {
         
         template<typename T>
-        static tensor<T> forward(tensor<T> input, const bool& createGraph = true){
+        static tensor<T> forward(tensor<T> input){
             auto t = make_tensor<T>(static_cast<DMatrix<T>>(
                 input->array().tanh()
             ));
-            if (createGraph){
-                t->graph = make_graph<T>(input->graph);
-                t->graph->f = [input](tensor<T> output) -> tensor<T> {
-                    if (output != nullptr){
-                        return make_tensor<T>(static_cast<DMatrix<T>>(
-                            input->unaryExpr([](T x){
-                                auto coshx = cosh(x);
-                                return (T)(1.0 / coshx*coshx);
-                            }).array() * output->array()
-                        ));
-                    }
-                    return make_tensor<T>(static_cast<DMatrix<T>>(
-                        input->unaryExpr([](T x){
-                            auto coshx = cosh(x);
-                            return (T)(1.0 / coshx*coshx);
-                        })
-                    ));
-                };
+            t->computeGrad = input->computeGrad;
+            if (t->computeGrad){
+                t->initGraph([input](tensor<T> output) -> void {
+                    // return make_tensor<T>(static_cast<DMatrix<T>>(
+                    //     input->unaryExpr([](T x){
+                    //         auto coshx = cosh(x);
+                    //         return (T)(1.0 / coshx*coshx);
+                    //     }).array() * output->array()
+                    // ));
+                });
             }
             return t;
         }
@@ -41,8 +33,8 @@ namespace Function {
     };
 
     template<typename T>
-    inline tensor<T> Tanh(tensor<T> input, const bool& createGraph = true){
-        return Tanh::forward(input, createGraph);
+    inline tensor<T> Tanh(tensor<T> input){
+        return Tanh::forward(input);
     }
 
 };

@@ -10,23 +10,21 @@ namespace Function {
     struct ReLU {
         
         template<typename T>
-        static tensor<T> forward(tensor<T> input, const bool& createGraph = true){
+        static tensor<T> forward(tensor<T> input){
             auto t = make_tensor<T>(static_cast<DMatrix<T>>(
                 input->array().abs()
             ));
-            if (createGraph){
-                t->graph = make_graph<T>(input->graph);
-                t->graph->f = [input, t](tensor<T> output) -> tensor<T> {
-                    if (output != nullptr){
-                        return make_tensor<T>(static_cast<DMatrix<T>>(
-                            input->unaryExpr([](T x){ return (T)(x > 0 ? 1 : 0); }).array() *
-                            output->array()
-                        ));
-                    }
-                    return make_tensor<T>(static_cast<DMatrix<T>>(
-                        input->unaryExpr([](T x){ return (T)(x > 0 ? 1 : 0); })
-                    ));
-                };
+            t->computeGrad = input->computeGrad;
+            if (t->computeGrad){
+                t->initGraph([input, t](tensor<T> output) -> void {
+                    // // std::cout << "ReLU.output:" << std::endl << output << std::endl;
+                    // auto u = make_tensor<T>(static_cast<DMatrix<T>>(
+                    //     input->unaryExpr([](T x){ return (T)(x > 0 ? 1 : 0); }).array() *
+                    //     output->array()
+                    // ));
+                    // // std::cout << "ReLU.u:" << std::endl << u << std::endl;
+                    // return u;
+                });
             }
             return t;
         }
@@ -34,8 +32,8 @@ namespace Function {
     };
 
     template<typename T>
-    inline tensor<T> ReLU(tensor<T> input, const bool& createGraph = true){
-        return ReLU::forward(input, createGraph);
+    inline tensor<T> ReLU(tensor<T> input){
+        return ReLU::forward(input);
     }
 
 };

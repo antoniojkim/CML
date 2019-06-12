@@ -39,8 +39,8 @@ Module<T>::Module(std::initializer_list<std::pair<std::string, Module<T>*>> dict
 template<typename T>
 void Module<T>::init(){
     for (unsigned int i = 0; i<this->submodules.size(); ++i){
-        values[std::to_string(i)] = this->submodules[i].get();
-        keys[this->submodules[i].get()] = std::to_string(i);
+        mKeys[std::to_string(i)] = this->submodules[i].get();
+        mValues[this->submodules[i].get()] = std::to_string(i);
     }
 }
 
@@ -62,7 +62,7 @@ void Module<T>::apply(void (*fn)(Module<T>&), const bool& recursive){
 
 template<typename T>
 long int Module<T>::getNumParameters(const bool& recursive){
-    long int num = params.params.size();
+    long int num = params.size();
     if (recursive){
         for (auto& submodule : submodules){
             num += submodule->getNumParameters();
@@ -71,16 +71,16 @@ long int Module<T>::getNumParameters(const bool& recursive){
     return num;
 }
 template<typename T>
-std::vector<Parameter<T>*> Module<T>::parameters(const bool& recursive){
-    std::vector<Parameter<T>*> parameters;
+std::vector<Parameter<T>> Module<T>::parameters(const bool& recursive){
+    std::vector<Parameter<T>> parameters;
     parameters.reserve(getNumParameters(recursive));
     getParameters(parameters, recursive);
     return parameters;
 }
 template<typename T>
-void Module<T>::getParameters(std::vector<Parameter<T>*>& parameters, const bool& recursive){
-    for (auto& param : params.params){
-        parameters.emplace_back(param.get());
+void Module<T>::getParameters(std::vector<Parameter<T>>& parameters, const bool& recursive){
+    for (auto& param : params){
+        parameters.emplace_back(param);
     }
     if (recursive){
         for (auto& submodule : submodules){
@@ -91,10 +91,27 @@ void Module<T>::getParameters(std::vector<Parameter<T>*>& parameters, const bool
 
 
 template<typename T>
-void Module<T>::evalMode(){ gradientMode = false; }
-
+void Module<T>::grad(const bool& recursive){
+    for (auto& param : params){
+        param->computeGrad = true;
+    }
+    if (recursive){
+        for (auto& submodule : submodules){
+            submodule->grad(recursive);
+        }
+    }
+}
 template<typename T>
-void Module<T>::gradMode(){ gradientMode = true; }
+void Module<T>::noGrad(const bool& recursive){
+    for (auto& param : params){
+        param->computeGrad = false;
+    }
+    if (recursive){
+        for (auto& submodule : submodules){
+            submodule->grad(recursive);
+        }
+    }
+}
 
 template<typename T>
 void Module<T>::initWeights(Randomizer::Function<T> randomizer){
@@ -103,7 +120,7 @@ void Module<T>::initWeights(Randomizer::Function<T> randomizer){
 
 template<typename T>
 void Module<T>::initWeights(const bool& recursive, Randomizer::Function<T> randomizer){
-    for (auto& param : params.params){
+    for (auto& param : params){
         param->randomize(randomizer);
     }
     if (recursive){
@@ -139,22 +156,22 @@ Module<T>& Module<T>::addModule(uModule<T>&& m, const string& alias){
     submodules.back()->parent = this;
     if (alias == ""){
         auto newkey = to_string(submodules.size()-1);
-        if (values.count(newkey) > 0){
+        if (mKeys.count(newkey) > 0){
             ostringstream error;
             error << "alias Already Exists: " << newkey;
             throw error.str();
         }
-        values[newkey] = submodules.back().get();
-        keys[submodules.back().get()] = newkey;
+        mKeys[newkey] = submodules.back().get();
+        mValues[submodules.back().get()] = newkey;
     }
     else{
-        if (values.count(alias) > 0){
+        if (mKeys.count(alias) > 0){
             ostringstream error;
             error << "alias Already Exists: " << alias;
             throw error.str();
         }
-        values[alias] = submodules.back().get();
-        keys[submodules.back().get()] = alias;
+        mKeys[alias] = submodules.back().get();
+        mValues[submodules.back().get()] = alias;
     }
     return *this;
 }
@@ -177,8 +194,8 @@ Module<T>& Module<T>::operator[](const int& index){
 }
 template<typename T>
 Module<T>& Module<T>::operator[](const string& alias){
-    if (values.count(alias) > 0){
-        return *values[alias];
+    if (mKeys.count(alias) > 0){
+        return *mKeys[alias];
     }
 
     ostringstream error;
@@ -194,11 +211,28 @@ Module<T>& Module<T>::operator[](const string& alias){
 
 
 template<typename T>
-Parameter<T>& Module<T>::getParam(const int& index){ return params[index]; }
+Parameter<T> Module<T>::getParam(const int& index){
+    if (index >= 0 && index < (int) params.size()){
+        return params[index];
+    }
+    else if (index < 0 && -index <= (int) params.size()){
+        return params[params.size()+index];
+    }
+
+    std::ostringstream error;
+    error << "Invalid index: " << index << ",  params.size() == " << params.size();
+    throw error.str();
+}
 template<typename T>
-Parameter<T>& Module<T>::getParam(const string& alias){ return params[alias]; }
+Parameter<T> Module<T>::getParam(const string& alias){ 
+    if (pKeys.count(alias) > 0){  return *(pKeys[alias]);  }
+    
+    std::ostringstream error;
+    error << "Invalid key: " << alias;
+    throw error.str();
+}
 template<typename T>
-Parameter<T>& Module<T>::operator()(const string& alias){ return params[alias]; }
+Parameter<T> Module<T>::operator()(const string& alias){ return getParam(alias); }
 template<typename T>
 Parameters<T>& Module<T>::getParams(){ return params; }
 

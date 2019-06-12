@@ -15,46 +15,76 @@ using namespace Eigen;
 ********************************* Constructors *************************************
 ************************************************************************************/
 
+// template<typename T>
+// Tensor<T>::Tensor(tensor<T> t): DMatrix<T>{t->data()}, computeGrad{t->computeGrad} {}
+// template<typename T>
+// Tensor<T>::Tensor(Tensor<T>& t): DMatrix<T>{t.data()}, computeGrad{t.computeGrad} {}
 template<typename T>
-Tensor<T>::Tensor(tensor<T> t): DMatrix<T>{t->data()}, R{t->rows()}, C{t->cols()}, graph{t->graph} {}
+Tensor<T>::Tensor(Tensor<T>&& t): DMatrix<T>{std::move(t.data())}, dcg{std::move(t.dcg)}, computeGrad{t.computeGrad} {}
 template<typename T>
-Tensor<T>::Tensor(Tensor<T>& t): DMatrix<T>{t.data()}, R{t.rows()}, C{t.cols()}, graph{t.graph} {}
+Tensor<T>::Tensor(DMatrix<T>& m): DMatrix<T>{m} {}
 template<typename T>
-Tensor<T>::Tensor(Tensor<T>&& t): DMatrix<T>{std::move(t.data())}, R{t.rows()}, C{t.cols()}, graph{t.graph} {}
-template<typename T>
-Tensor<T>::Tensor(DMatrix<T>& m): DMatrix<T>{m}, R{m.rows()}, C{m.cols()} {}
-template<typename T>
-Tensor<T>::Tensor(DMatrix<T>&& m): DMatrix<T>{std::move(m)}, R{m.rows()}, C{m.cols()} {}
+Tensor<T>::Tensor(DMatrix<T>&& m): DMatrix<T>{std::move(m)} {}
 
 template<typename T>
-Tensor<T>::Tensor(const int& R): DMatrix<T>{std::move(DMatrix<T>::Zero(R, 1))}, R{R}, C{1} {}
-template<typename T>
-Tensor<T>::Tensor(const int& R, const int& C): DMatrix<T>{std::move(DMatrix<T>::Zero(R, C))}, R{R}, C{C} {}
-
-template<typename T>
-Tensor<T>::~Tensor(){}
-
-
-template<typename T>
-Tensor<T>& Tensor<T>::operator=(Tensor<T>& t){
-    if (t.rows() != R || t.cols() != C){
-        this->data().resize(t.rows(), t.cols());
+Tensor<T>::Tensor(std::initializer_list<T> data, const bool& computeGrad): 
+        DMatrix<T>{data.size(), 1},
+        computeGrad{computeGrad} {
+// #ifdef DEBUG
+//     cout << "Initialized 1d data" << endl;
+// #endif
+    unsigned int i = 0;
+    for (auto& e : data){
+        this->data()(i, 0) = e;
+        ++i;
     }
-    this->data() = t.data();
-    this->graph = t.graph;
-    t.graph = nullptr;
-    return *this;
 }
 template<typename T>
-Tensor<T>& Tensor<T>::operator=(Tensor<T>&& t){
-    if (t.rows() != R || t.cols() != C){
-        this->data().resize(t.rows(), t.cols());
+Tensor<T>::Tensor(std::initializer_list<std::initializer_list<T>> data, const bool& computeGrad): 
+        DMatrix<T>{data.size(), data.begin()->size()},
+        computeGrad{computeGrad} {
+// #ifdef DEBUG
+//     cout << "Initialized 2d data" << endl;
+// #endif
+    unsigned int i, j;
+
+    i = 0;
+    for (auto& row : data){
+        j = 0;
+        for (auto& e : row){
+            this->data()(i, j) = e;
+            ++j;
+        }
+        ++i;
     }
-    this->data() = std::move(t.data());
-    this->graph = t.graph;
-    t.graph = nullptr;
-    return *this;
 }
+template<typename T>
+Tensor<T>::Tensor(const int& R, const int& C, const bool& computeGrad): 
+        DMatrix<T>{std::move(DMatrix<T>::Zero(R, C))}, 
+        computeGrad{computeGrad} {
+// #ifdef DEBUG
+//     cout << "Initialized R and C" << endl;
+// #endif
+}
+
+
+// template<typename T>
+// Tensor<T>& Tensor<T>::operator=(Tensor<T>& t){
+//     if (t.rows() != this->rows() || t.cols() != this->cols()){
+//         this->data().resize(t.rows(), t.cols());
+//     }
+//     this->data() = t.data();
+//     return *this;
+// }
+// template<typename T>
+// Tensor<T>& Tensor<T>::operator=(Tensor<T>&& t){
+//     if (t.rows() != this->rows() || t.cols() != this->cols()){
+//         this->data().resize(t.rows(), t.cols());
+//     }
+//     this->data() = std::move(t.data());
+//     this->dcg = std::move(t.dcg);
+//     return *this;
+// }
 
 
 
@@ -67,18 +97,25 @@ DMatrix<T>& Tensor<T>::data(){
     return static_cast<DMatrix<T>&>(*this);
 }
 template<typename T>
-long int Tensor<T>::rows(){ return R; }
+T& Tensor<T>::data(const int& R, const int& C){
+    return data()(R, C);
+}
+
 template<typename T>
-long int Tensor<T>::cols(){ return C; }
+vector<long int> Tensor<T>::shape(){ return {this->rows(), this->cols()}; }
+template<typename T>
+std::ostream& Tensor<T>::info(std::ostream& out){
+    return out << "{" << this->rows() << ", " << this->cols() << "}";
+}
 
 
 template<typename T>
 void Tensor<T>::fill(const T& coefficient){
-    data() = DMatrix<T>::Constant(R, C, coefficient);
+    data() = DMatrix<T>::Constant(this->rows(), this->cols(), coefficient);
 }
 template<typename T>
 void Tensor<T>::zero(){
-    data() = DMatrix<T>::Zero(R, C);
+    data() = DMatrix<T>::Zero(this->rows(), this->cols());
 }
 
 
@@ -98,55 +135,40 @@ void Tensor<T>::readIDX(std::istream& in, const bool& readMagic){
     // }
 }
 
+
 template<typename T>
-void Tensor<T>::backward(){
-    if (graph != nullptr){
-        graph->backward();
+void Tensor<T>::initGraph(std::function<void(tensor<T>)> f){
+    if (!dcg){
+        dcg = make_unique<DCG<T>>(this, std::forward<std::function<void(tensor<T>)>>(f));
+    }
+    else{
+        throw "Called initGraph when graph already exists";
     }
 }
 
-
-/***********************************************************************************
-****************************** Arithmetic Methods **********************************
-************************************************************************************/
-
-// template<typename T>
-// Tensor<T> Tensor<T>::operator+(const T& scalar){
-//     auto t = Tensor<T>(static_cast<DMatrix<T>>(this->data() + scalar));
-//     t.graph = new DCG<T>(this->graph);
-//     t.graph->f = [](Tensor<T>& output) -> Tensor<T> {
-//         Tensor<T> t (1, 1);
-//         t << (T)(1);
-//         return t;
-//     };
-//     return t;
-// }
-
-// template<typename T>
-// Tensor<T> Tensor<T>::operator-(const T& scalar){
-//     auto t = Tensor<T>(static_cast<DMatrix<T>>(this->data() - scalar));
-//     t.graph = new DCG<T>(this->graph);
-//     t.graph->f = [](Tensor<T>& output) -> Tensor<T> {
-//         Tensor<T> t (1, 1);
-//         t << (T)(-1);
-//         return t;
-//     };
-//     return t;
-// }
+template<typename T>
+std::unique_ptr<DCG<T>>& Tensor<T>::graph(){
+    if (!dcg){
+        if (computeGrad){
+            initGraph(nullptr);
+        }
+        else{
+            throw "Getting graph of tensor with computeGrad == false";
+        }
+    }
+    return dcg;
+}
 
 template<typename T>
-tensor<T> Tensor<T>::operator*(const T& scalar){
-    auto t = make_tensor<T>(static_cast<DMatrix<T>>(
-        this->data() * scalar
-    ));
-    t->graph = make_graph<T>(this->graph);
-    t->graph->f = [scalar](tensor<T> output) -> tensor<T> {
-        auto u = make_tensor<T>(1, 1);
-        (*u) << scalar;
-        return u;
-    };
-    return t;
+void Tensor<T>::backward(){
+    if (dcg){
+        dcg->backward();
+    }
+    else{
+        throw "Called backward on nonexistent graph";
+    }
 }
+
 
 
 /***********************************************************************************

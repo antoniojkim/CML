@@ -2,7 +2,6 @@
 #define __CML_NN_LINEAR_H__
 
 #include "Modules.h"
-#include "Parameter.h"
 #include "../Tensor.h"
 
 namespace cml {
@@ -17,7 +16,6 @@ namespace nn {
 
         using Module<T>::params;
         using Module<T>::addParameter;
-        using Module<T>::gradientMode;
         
         int in_features, out_features;
         bool bias;
