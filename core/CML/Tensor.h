@@ -22,6 +22,9 @@ namespace cml {
     template<class T>
     using tensor = std::shared_ptr<Tensor<T>>;
 
+    template<typename T>
+    using GradientFunction = std::function<std::vector<tensor<T>>(std::vector<tensor<T>>&, std::vector<tensor<T>>)>;
+
     /*
         This is the recommended way to construct a matrix
     */
@@ -91,7 +94,7 @@ namespace cml {
             void readIDX(std::istream& in, const bool& readMagic = true);
         
 
-            void initGraph(std::function<void(tensor<T>)> f);
+            void initGraph(std::vector<tensor<T>> params = {}, GradientFunction<T> f = nullptr);
             std::unique_ptr<DCG<T>>& graph();
             void backward();
             
@@ -143,8 +146,8 @@ namespace cml {
         ));
         u->computeGrad = t->computeGrad;
         if (u->computeGrad){
-            u->initGraph([scalar, t](tensor<T> output) -> void {
-                t->graph()->accumulateGradient(scalar);
+            u->initGraph([scalar](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
+                return {make_tensor<T>({scalar})};
             });
         }
         return u;
@@ -158,27 +161,40 @@ namespace cml {
         ));
         t->computeGrad = lhs->computeGrad | rhs->computeGrad;
         if (t->computeGrad){            
-            t->initGraph([lhs, rhs](tensor<T> output) -> void {
+            t->initGraph({lhs, rhs}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
+                auto lhs = params.at(0);
+                auto rhs = params.at(1);
+                auto output_grad = output.at(0);
+                tensor<T> lhs_grad = nullptr;
+                tensor<T> rhs_grad = nullptr;
+
                 if (lhs->computeGrad){
-                    auto gradient = rhs * output;
-                    if (lhs->graph()->isLeaf){
-                        lhs->graph()->accumulateGradient(gradient);
-                    }
-                    else{
-                        lhs->graph()->backward(gradient);
-                    }
+#ifdef DEBUG
+                    using namespace std;
+                    cout << "Tensor Multiplication Backward LHS:" << endl;
+                    cout << "   rhs.shape:  {" << rhs->rows() << ", " << rhs->cols() << "}" << endl;
+                    cout << "   output_grad.shape:  {" << output_grad->rows() << ", " << output_grad->cols() << "}" << endl;
+#endif
+                    lhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                        // TODO:  Check to see if order is correct
+                        output_grad->data() * rhs->transpose()
+                    ));
                 }
                 if (rhs->computeGrad){
-                    auto gradient = lhs * output;
-                    if (rhs->graph()->isLeaf){
-                        rhs->graph()->accumulateGradient(gradient);
-                    }
-                    else{
-                        rhs->graph()->backward(gradient);
-                    }
+#ifdef DEBUG
+                    using namespace std;
+                    cout << "Tensor Multiplication Backward RHS:" << endl;
+                    cout << "   lhs.shape:  {" << lhs->rows() << ", " << lhs->cols() << "}" << endl;
+                    cout << "   output_grad.shape:  {" << output_grad->rows() << ", " << output_grad->cols() << "}" << endl;
+#endif
+                    rhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                        // TODO:  Check to see if order is correct
+                        lhs->transpose() * output_grad->data()
+                    ));
                 }
+
+                return {lhs_grad, rhs_grad};
             });
-            t->graph()->isLeaf = false;
         }
         return t;
     }

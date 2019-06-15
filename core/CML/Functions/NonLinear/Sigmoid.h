@@ -18,13 +18,15 @@ namespace Function {
             ));
             t->computeGrad = input->computeGrad;
             if (t->computeGrad){
-                t->initGraph([input](tensor<T> output) -> void {
-                    // return make_tensor<T>(static_cast<DMatrix<T>>(
-                    //     input->unaryExpr([](T x){
-                    //         auto y = (T)(1.0 / (1.0 + exp(-x)));
-                    //         return y*(1-y);
-                    //     }).array() * output->array()
-                    // ));
+                t->initGraph({input}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
+                    tensor<T> output_grad = output.at(0);
+                    tensor<T> input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                        output_grad->unaryExpr([](T x){
+                            auto y = (T)(1.0 / (1.0 + exp(-x)));
+                            return y*(1-y);
+                        })
+                    ));
+                    return {input_grad};
                 });
             }
             return t;

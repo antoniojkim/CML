@@ -31,15 +31,15 @@ namespace Function {
                     break;
             }
             t->computeGrad = true;
-            t->initGraph([actual, expected, reduction](tensor<T> output) -> tensor<T> {
-                std::cout << "MSELoss.actual:" << std::endl << actual << std::endl;
-                std::cout << "MSELoss.expected:" << std::endl << expected << std::endl;
-                auto u = make_tensor<T>(static_cast<DMatrix<T>>(
-                    2*(actual->data() - expected->data())
-                ));
-                std::cout << "MSELoss.u:" << std::endl << u << std::endl;
-                return u;
-            });
+            // t->initGraph({actual, expected}, [reduction](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
+            //     std::cout << "MSELoss.actual:" << std::endl << actual << std::endl;
+            //     std::cout << "MSELoss.expected:" << std::endl << expected << std::endl;
+            //     auto u = make_tensor<T>(static_cast<DMatrix<T>>(
+            //         2*(actual->data() - expected->data())
+            //     ));
+            //     std::cout << "MSELoss.u:" << std::endl << u << std::endl;
+            //     return u;
+            // });
             return t;
         }
 

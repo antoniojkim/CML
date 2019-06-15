@@ -4,6 +4,7 @@
 #include <functional>
 #include <memory>
 #include <utility>
+#include <vector>
 
 #include "Tensor.h"
 
@@ -11,37 +12,24 @@ namespace cml {
 
     template<class T>
     struct DCG { // Dynamic Compute Graph
-        bool isLeaf = true;
+        std::vector<tensor<T>> params;
         tensor<T> gradient;
-        std::function<void(tensor<T>)> f;
+        GradientFunction<T> f;
+        bool isLeaf = true;
 
-        DCG(Tensor<T>* t, std::function<void(tensor<T>)> f): 
-            gradient{make_tensor<T>(t->rows(), t->cols(), false)}, f{f} {}
+        DCG(Tensor<T>* t, std::vector<tensor<T>> params, GradientFunction<T> f);
 
-
-        void accumulateGradient(const T& scalar){
-            gradient->data() += DMatrix<T>::Constant(gradient->rows(), gradient->cols(), scalar);
-        }
-        void accumulateGradient(tensor<T> t){
-            if (gradient->rows() != t->rows() || gradient->cols() != t->cols()){
-                throw "Dims do not match in accumuateGradient";
-            }
-            gradient->data() += t->data();
-        }
+        void accumulateGradient(const std::vector<tensor<T>>& gradients);
         
-        void backward(tensor<T> x = make_tensor<T>({1})){
-            if (f){
-//                 if (x) std::cout << x << std::endl;
-                f(x);
-                // f = nullptr;
-            }
-        }
+        void backward(std::vector<tensor<T>> x = {make_tensor<T>({1})});
 
     };
 
-    template<typename T, typename... Args>
-    inline std::shared_ptr<DCG<T>> make_graph(Args&&... args){
-        return std::make_shared<DCG<T>>(std::forward<Args>(args)...);
+    template<typename T>
+    inline std::shared_ptr<DCG<T>> make_graph(Tensor<T>* t, std::vector<tensor<T>> params, GradientFunction<T> f){
+        return std::make_shared<DCG<T>>(std::forward<Tensor<T>*>(t), 
+                                        std::forward<std::vector<tensor<T>>>(params), 
+                                        std::forward<GradientFunction<T>>(f));
     }
 
 }

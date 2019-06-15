@@ -13,6 +13,8 @@
 #include "CML/nn/Loss.h"
 // #include "CML/optim/Optimizer.h"
 
+#include "../test/basicGradients/basicGradientsTest.h"
+
 using namespace std;
 using namespace cml;
 using namespace cml::nn;
@@ -97,45 +99,16 @@ void basicLinearTest(){
     // loss->backward();
     
 }
-void basicGradTest1(){
-    auto a = make_tensor<>({2}, true);
-    auto b = make_tensor<>({3});
-    auto c = a*b;
-    c->backward();
-    assert(a->graph()->gradient->data(0, 0) == 3);
-}
-void basicGradTest2(){
-    auto a = make_tensor<>({2}, true);
-    auto b = make_tensor<>({3}, true);
-    auto c = a*b;
-    auto d = make_tensor<>({4}, true);
-    auto e =c*d;
-    e->backward();
-
-    assert(d->graph()->gradient->data(0, 0) == 6);
-    assert(b->graph()->gradient->data(0, 0) == 8);
-    assert(a->graph()->gradient->data(0, 0) == 12);
-}
-// void basicGradTest3(){
-//     auto a = make_tensor<>({{1, 2}, {3, 4}}, true);
-//     auto b = make_tensor<>({{5, 6}, {7, 8}}, true);
-//     auto c = a*b;
-//     cout << a << " * " << b << " = " << c << endl;
-//     c->backward();
-//     cout << a->graph()->gradient << endl;
-// }
 
 int main(){
-    try{
+    runbasicGradientsTest();
+    // try{
         // basicSequentialTest();
         // simpleParamTest();
     //     basicTensorTest();
         // basicLinearTest();
-        basicGradTest1();
-        basicGradTest2();
-        // basicGradTest3();a
-    } catch (const char* error){
-        cerr << error << endl;
-        throw error;
-    }
+    // } catch (const char* error){
+    //     cerr << error << endl;
+    //     throw;
+    // }
 }
