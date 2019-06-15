@@ -137,9 +137,10 @@ void Tensor<T>::readIDX(std::istream& in, const bool& readMagic){
 
 
 template<typename T>
-void Tensor<T>::initGraph(std::function<void(tensor<T>)> f){
+void Tensor<T>::initGraph(std::vector<tensor<T>> params, GradientFunction<T> f){
     if (!dcg){
-        dcg = make_unique<DCG<T>>(this, std::forward<std::function<void(tensor<T>)>>(f));
+        dcg = make_unique<DCG<T>>(this, std::forward<std::vector<tensor<T>>>(params), 
+                                        std::forward<GradientFunction<T>>(f));
     }
     else{
         throw "Called initGraph when graph already exists";
@@ -150,7 +151,7 @@ template<typename T>
 std::unique_ptr<DCG<T>>& Tensor<T>::graph(){
     if (!dcg){
         if (computeGrad){
-            initGraph(nullptr);
+            initGraph();
         }
         else{
             throw "Getting graph of tensor with computeGrad == false";
@@ -158,15 +159,16 @@ std::unique_ptr<DCG<T>>& Tensor<T>::graph(){
     }
     return dcg;
 }
-
+ 
 template<typename T>
 void Tensor<T>::backward(){
-    if (dcg){
-        dcg->backward();
+    if (this->rows() != 1 || this->cols() != 1){
+        throw "backward can only be called on a scalar tensor";
     }
-    else{
-        throw "Called backward on nonexistent graph";
-    }
+#ifdef DEBUG
+    cout << "Calling backward on a scalar tensor" << endl;
+#endif
+    graph()->backward();
 }
 
 

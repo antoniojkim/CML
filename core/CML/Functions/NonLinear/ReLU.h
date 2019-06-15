@@ -16,14 +16,12 @@ namespace Function {
             ));
             t->computeGrad = input->computeGrad;
             if (t->computeGrad){
-                t->initGraph([input, t](tensor<T> output) -> void {
-                    // // std::cout << "ReLU.output:" << std::endl << output << std::endl;
-                    // auto u = make_tensor<T>(static_cast<DMatrix<T>>(
-                    //     input->unaryExpr([](T x){ return (T)(x > 0 ? 1 : 0); }).array() *
-                    //     output->array()
-                    // ));
-                    // // std::cout << "ReLU.u:" << std::endl << u << std::endl;
-                    // return u;
+                t->initGraph({input}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
+                    tensor<T> output_grad = output.at(0);
+                    tensor<T> input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                        output_grad->unaryExpr([](T x){ return (T)(x < 0 ? 0 : 1); }).array()
+                    ));
+                    return {input_grad};
                 });
             }
             return t;
