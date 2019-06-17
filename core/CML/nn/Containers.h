@@ -17,12 +17,30 @@ namespace nn {
 
         public:
             Sequential();
-            Sequential(std::initializer_list<Module<T>*> submodules);
-            Sequential(std::initializer_list<std::pair<std::string, Module<T>*>>);
+            Sequential(std::initializer_list<Module<T>*> submodules): Module<T>{submodules} {}
+            Sequential(std::initializer_list<std::pair<std::string, Module<T>*>> dict): Module<T>{dict} {}
 
-            cml::tensor<T> forward(cml::tensor<T>)override;
+            cml::tensor<T> forward(cml::tensor<T> x) override {
+                auto y = x;
+                for (auto& submodule : submodules){
+                    y = (*submodule)(y);
+                }
+                return y;
+            }
 
-            std::ostream& print(std::ostream&, const std::string& indent) override;
+            std::ostream& print(std::ostream& out, const std::string& indent) override {
+                using namespace std;
+                out << "Sequential {" << endl;
+                for (auto& submodule: submodules){
+                    out << indent << "    ";
+                    if (mValues.count(submodule.get()) > 0){
+                        out << mValues[submodule.get()] << ":  ";
+                    }
+                    submodule->print(out, indent+"    ") << endl;
+                }
+                out << indent << "}";
+                return out;
+            }
     };
     
     template<typename T = float>
@@ -31,11 +49,26 @@ namespace nn {
 
         public:
             ModuleList();
-            ModuleList(std::initializer_list<Module<T>*> submodules);
+            ModuleList(std::initializer_list<Module<T>*> submodules): Module<T>{submodules} {}
 
-            cml::tensor<T> forward(cml::tensor<T>)override;
+            cml::tensor<T> forward(cml::tensor<T> x) override {
+                auto y = x;
+                for (auto& submodule : submodules){
+                    y = (*submodule)(y);
+                }
+                return y;
+            }
 
-            std::ostream& print(std::ostream&, const std::string& indent) override;
+            std::ostream& print(std::ostream& out, const std::string& indent) override {
+                using namespace std;
+                out << indent << "ModuleList {" << endl;
+                for (auto& submodule : submodules){
+                    out << indent << "    ";
+                    submodule->print(out, indent+"    ") << endl;
+                }
+                out << indent << "}";
+                return out;
+            }
     };
     
     template<typename T = float>
@@ -45,11 +78,26 @@ namespace nn {
 
         public:
             ModuleDict();
-            ModuleDict(std::initializer_list<std::pair<std::string, Module<T>*>>);
+            ModuleDict(std::initializer_list<std::pair<std::string, Module<T>*>> dict): Module<T>{dict} {}
 
-            cml::tensor<T> forward(cml::tensor<T>)override;
+            cml::tensor<T> forward(cml::tensor<T> x) override  {
+                auto y = x;
+                for (auto& submodule : submodules){
+                    y = (*submodule)(y);
+                }
+                return y;
+            }
 
-            std::ostream& print(std::ostream&, const std::string& indent) override;
+            std::ostream& print(std::ostream& out, const std::string& indent) override {
+                using namespace std;
+                out << "ModuleDict {" << endl;
+                for (auto& submodule : submodules){
+                    out << indent << "    " << mValues[submodule.get()] << ":  ";
+                    submodule->print(out, indent+"    ") << endl;
+                }
+                out << indent << "}";
+                return out;
+            }
     };
 
 }

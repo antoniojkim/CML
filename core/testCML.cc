@@ -102,6 +102,8 @@ void basicLinearTest(){
 
 int main(){
     runbasicGradientsTest();
+    DMatrix<string> strMat {2, 2};
+    cout << strMat << endl;
     // try{
         // basicSequentialTest();
         // simpleParamTest();

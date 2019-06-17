@@ -5,8 +5,6 @@ EXEC = testCML
 TENSORS = $(wildcard CML/Tensors/*.cc)
 # PARAMETERS = $(wildcard CML/nn/Parameters/*.cc)   $(PARAMETERS:.cc=.o)
 MODULES = $(wildcard CML/nn/Modules/*.cc)
-CONTAINERS = $(wildcard CML/nn/Containers/*.cc)
-VARIABLES = $(wildcard CML/nn/Variables/*.cc)
 LINEAR = $(wildcard CML/nn/Linear/*.cc)
 NONLINEAR = $(wildcard CML/nn/Nonlinear/*.cc)
 LOSS = $(wildcard CML/nn/Loss/*.cc)
