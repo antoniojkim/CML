@@ -14,6 +14,7 @@
 // #include "CML/optim/Optimizer.h"
 
 #include "../test/basicGradients/basicGradientsTest.h"
+#include "../test/mnist/readIDX.h"
 
 using namespace std;
 using namespace cml;
@@ -48,6 +49,7 @@ void basicSequentialTest(){
 
 void basicTensorTest(){
     using Function::ReLU;
+    using Function::Sigmoid;
     using Function::Tanh;
     using namespace Function;
 
@@ -100,10 +102,43 @@ void basicLinearTest(){
     
 }
 
+
+void softmaxTest(){
+    using Function::Softmax;
+
+    auto x = make_tensor<float>({{1}, {2}}, true);
+    auto y = Softmax<float>(x);
+    assert(y->data(0, 0) == 0.26894142f);
+    assert(y->data(1, 0) == 0.73105858f);
+}
+void mnistTest(){
+    using Function::Softmax;
+
+    softmaxTest();
+
+    auto model = nn::Sequential<>{
+        new Linear<>(728, 64),
+        new nn::Sigmoid<>(),
+        new Linear<>(64, 64), 
+        new nn::Sigmoid<>(),
+        new Linear<>(64, 10),
+        new nn::Softmax<>()
+    };
+    model.initWeights();
+    cout << model << endl;
+
+
+    auto testInput = make_tensor<>(728);
+    testInput->randomize();
+
+    auto y = model(testInput);
+    cout << y << endl;
+}
+
 int main(){
     runbasicGradientsTest();
-    DMatrix<string> strMat {2, 2};
-    cout << strMat << endl;
+    mnistTest();
+
     // try{
         // basicSequentialTest();
         // simpleParamTest();

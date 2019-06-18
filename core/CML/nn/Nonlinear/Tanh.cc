@@ -33,4 +33,4 @@ std::ostream& Tanh<T>::print(std::ostream& out, const std::string& indent){
 **************************** Template Instantiations *******************************
 ************************************************************************************/
 
-INSTANTIATE_CLASS_TEMPLATES(ReLU);
+INSTANTIATE_CLASS_TEMPLATES(Tanh);

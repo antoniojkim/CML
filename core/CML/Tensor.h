@@ -83,6 +83,8 @@ namespace cml {
             std::vector<long int> shape();
             std::ostream& info(std::ostream& out = std::cout);
 
+            // tensor<T> reshape(const int& R, const int& C);
+
             void fill(const T& coefficient);
             void zero();
             void randomize(Randomizer::Function<T> randomizer = Randomizer::Gaussian<T>);
@@ -111,9 +113,12 @@ namespace cml {
     */
     template<typename T>
     std::ostream& operator<<(std::ostream& out, tensor<T> t){
-        out << "cml::tensor({";
+        out << "cml::tensor({ ";
+        if (t->rows() > 1){
+            out << std::endl;
+        }
         // t->info(out) << " [";
-        out << t->data() << "}";
+        out << t->data() << " }";
         if (t->computeGrad){
             out << ", computeGrad = true";
         }

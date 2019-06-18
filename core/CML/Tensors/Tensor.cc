@@ -28,14 +28,14 @@ Tensor<T>::Tensor(DMatrix<T>&& m): DMatrix<T>{std::move(m)} {}
 
 template<typename T>
 Tensor<T>::Tensor(std::initializer_list<T> data, const bool& computeGrad): 
-        DMatrix<T>{data.size(), 1},
+        DMatrix<T>{1, data.size()},
         computeGrad{computeGrad} {
 // #ifdef DEBUG
 //     cout << "Initialized 1d data" << endl;
 // #endif
     unsigned int i = 0;
     for (auto& e : data){
-        this->data()(i, 0) = e;
+        this->data()(0, i) = e;
         ++i;
     }
 }
@@ -107,6 +107,12 @@ template<typename T>
 std::ostream& Tensor<T>::info(std::ostream& out){
     return out << "{" << this->rows() << ", " << this->cols() << "}";
 }
+
+
+// template<typename T>
+// tensor<T> Tensor<T>::reshape(const int& R, const int& C){
+//     return make_tensor<T>(DMatrix<T>(this->data(), R, C));
+// }
 
 
 template<typename T>
