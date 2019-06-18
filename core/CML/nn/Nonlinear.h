@@ -32,6 +32,25 @@ namespace nn {
     };
  
     template<typename T = float>
+    class Sigmoid: public Module<T> {
+        /*
+        Applies the Sigmoid function element-wise.
+        
+        Params:
+            inplace - can optionally do the operation in-place. Default: False
+        */
+        
+        bool inplace;
+        
+        public:
+            Sigmoid(const bool& inplace = false);
+
+            cml::tensor<T> forward(cml::tensor<T>) override;
+
+            std::ostream& print(std::ostream&, const std::string& indent) override;
+    };
+ 
+    template<typename T = float>
     class Tanh: public Module<T> {
         /*
         Applies the Tanh function element-wise.
@@ -44,6 +63,25 @@ namespace nn {
         
         public:
             Tanh(const bool& inplace = false);
+
+            cml::tensor<T> forward(cml::tensor<T>) override;
+
+            std::ostream& print(std::ostream&, const std::string& indent) override;
+    };
+ 
+    template<typename T = float>
+    class Softmax: public Module<T> {
+        /*
+        Applies the Softmax function element-wise.
+        
+        Params:
+            inplace - can optionally do the operation in-place. Default: False
+        */
+        
+        bool inplace;
+        
+        public:
+            Softmax(const bool& inplace = false);
 
             cml::tensor<T> forward(cml::tensor<T>) override;
 
