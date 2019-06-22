@@ -11,8 +11,8 @@ using namespace cml;
 
 template<typename T>
 DCG<T>::DCG(Tensor<T>* t, std::vector<tensor<T>> params, GradientFunction<T> f): 
-    params{params}, gradient{make_tensor<T>(t->rows(), t->cols(), false)}, f{f}, 
-    isLeaf{params.size() == 0 && f == nullptr} {}
+    params{params}, f{f}, isLeaf{params.size() == 0 && f == nullptr},
+    gradient{isLeaf ? make_tensor<T>(t->rows(), t->cols(), false) : nullptr} {}
 
 
 
@@ -57,6 +57,9 @@ void DCG<T>::backward(std::vector<tensor<T>> x){
         }
         for (unsigned int i = 0; i<params.size(); ++i){
             if (params[i]->computeGrad){
+                if (gradients[i] == nullptr){
+                    throw "Null Gradient for parameter";
+                }
                 params[i]->graph()->backward({gradients[i]});
             }
         }
