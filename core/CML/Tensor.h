@@ -80,6 +80,7 @@ namespace cml {
 
             DMatrix<T>& data();
             T& data(const int& R, const int& C);
+            T& item();
             std::vector<long int> shape();
             std::ostream& info(std::ostream& out = std::cout);
 

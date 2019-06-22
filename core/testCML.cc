@@ -13,13 +13,19 @@
 #include "CML/nn/Loss.h"
 // #include "CML/optim/Optimizer.h"
 
-#include "../test/basicGradients/basicGradientsTest.h"
+#include "../test/basicGradientsTest.h"
+#include "../test/softmaxTests.h"
 #include "../test/mnist/readIDX.h"
 
 using namespace std;
 using namespace cml;
 using namespace cml::nn;
 // using namespace cml::optim;
+
+#ifndef assert_equals
+#define assert_equals(x, y) (assert(int(x*1e6) == int(y*1e6)))
+#endif
+
 
 void basicSequentialTest(){
     auto model = nn::Sequential<>{
@@ -103,18 +109,8 @@ void basicLinearTest(){
 }
 
 
-void softmaxTest(){
-    using Function::Softmax;
-
-    auto x = make_tensor<float>({{1}, {2}}, true);
-    auto y = Softmax<float>(x);
-    assert(y->data(0, 0) == 0.26894142f);
-    assert(y->data(1, 0) == 0.73105858f);
-}
 void mnistTest(){
     using Function::Softmax;
-
-    softmaxTest();
 
     auto model = nn::Sequential<>{
         new Linear<>(728, 64),
@@ -137,6 +133,7 @@ void mnistTest(){
 
 int main(){
     runbasicGradientsTest();
+    softmaxTests();
     mnistTest();
 
     // try{

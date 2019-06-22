@@ -26,11 +26,15 @@ namespace Function {
 
                     if (t->cols() != 1) throw "Invalid shape for softmax_grad"; 
 
-                    auto input_grad  = nullptr;
-                    // = make_tensor<float>(static_cast<DMatrix<float>>(
-                    //     (static_cast<DMatrix<float>>(t->asDiagonal()) - 
-                    //      (t->data() * t->transpose())) * output_grad->data()
-                    // ));
+                    auto input_grad = make_tensor<float>(static_cast<DMatrix<float>>(
+                        (static_cast<DMatrix<float>>(t->asDiagonal()) - 
+                         (t->data() * t->transpose())) * output_grad->data()
+                    ));
+#ifdef DEBUG
+                    using namespace std;
+                    cout << "Softmax::input_grad = " << input_grad << endl;
+#endif
+
                     return {input_grad};
                 });
             }

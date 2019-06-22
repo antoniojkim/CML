@@ -100,6 +100,13 @@ template<typename T>
 T& Tensor<T>::data(const int& R, const int& C){
     return data()(R, C);
 }
+template<typename T>
+T& Tensor<T>::item(){
+    if (this->rows() != 1 || this->cols() != 1){
+        throw "item can only be called on a scalar tensor";
+    }
+    return data()(0, 0);
+}
 
 template<typename T>
 vector<long int> Tensor<T>::shape(){ return {this->rows(), this->cols()}; }
