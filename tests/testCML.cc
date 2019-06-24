@@ -12,9 +12,9 @@
 #include "../core/CML/nn/Nonlinear.h"
 #include "../core/CML/nn/Loss.h"
 
-#include "basicGradientsTest.h"
-#include "linearTests.h"
-#include "softmaxTests.h"
+#include "tests/basicGradientsTest.h"
+#include "tests/linearTests.h"
+#include "tests/softmaxTests.h"
 
 using namespace std;
 using namespace cml;

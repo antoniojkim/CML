@@ -59,17 +59,17 @@ IDX<N> readIDXFile(const std::string& file){
 // MNIST data can be downloaded here:  http://yann.lecun.com/exdb/mnist/
 
 inline IDX<1> readMNISTTrainingSetLabelFile(){
-    return readIDXFile<1>("train-labels-idx1-ubyte");
+    return readIDXFile<1>("data/train-labels-idx1-ubyte");
 }   
 inline IDX<1> readMNISTTestSetLabelFile(){
-    return readIDXFile<1>("t10k-labels-idx1-ubyte");
+    return readIDXFile<1>("data/t10k-labels-idx1-ubyte");
 }
 
 inline IDX<3> readMNISTTrainingSetImageFile(){
-    return readIDXFile<3>("train-images-idx3-ubyte");
+    return readIDXFile<3>("data/train-images-idx3-ubyte");
 }   
 inline IDX<3> readMNISTTestSetImageFile(){
-    return readIDXFile<3>("t10k-images-idx3-ubyte");
+    return readIDXFile<3>("data/t10k-images-idx3-ubyte");
 }
 
 #endif // __READIDX__
