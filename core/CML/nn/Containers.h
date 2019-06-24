@@ -16,7 +16,7 @@ namespace nn {
         using Module<T>::mValues;
 
         public:
-            Sequential();
+            Sequential(): Module<T>{} {}
             Sequential(std::initializer_list<Module<T>*> submodules): Module<T>{submodules} {}
             Sequential(std::initializer_list<std::pair<std::string, Module<T>*>> dict): Module<T>{dict} {}
 
@@ -48,7 +48,7 @@ namespace nn {
         using Module<T>::submodules;
 
         public:
-            ModuleList();
+            ModuleList(): Module<T>{} {}
             ModuleList(std::initializer_list<Module<T>*> submodules): Module<T>{submodules} {}
 
             cml::tensor<T> forward(cml::tensor<T> x) override {
@@ -77,7 +77,7 @@ namespace nn {
         using Module<T>::mValues;
 
         public:
-            ModuleDict();
+            ModuleDict(): Module<T>{} {}
             ModuleDict(std::initializer_list<std::pair<std::string, Module<T>*>> dict): Module<T>{dict} {}
 
             cml::tensor<T> forward(cml::tensor<T> x) override  {

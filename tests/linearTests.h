@@ -1,0 +1,58 @@
+#ifndef __CML_TESTS_LINEARTESTS_H__
+#define __CML_TESTS_LINEARTESTS_H__
+
+#include "test.h"
+#include "../core/CML/nn/Containers.h"
+
+void linearTest1(){
+    using namespace std;
+    using namespace cml;
+    using namespace cml::nn;
+    using Function::MSELoss;
+
+    auto model = Sequential<float>{
+        new Linear<>(3, 2),
+        new Sigmoid<>()
+    };
+    model.initWeights();
+    model[0]("weights")->set({{0.284576, -1.16315}, 
+                              {0.270818, 0.0148199}, 
+                              {-0.96044, -0.673953}});
+    model[0]("bias")->set({-0.365125, 0.889674}, true);
+
+    auto x = make_tensor<float>({{1.0}, {2.5}, {7.3}}, true);           
+    auto y = model(x);
+
+    assert_equals(y->data(0, 0), 0.00163461f);
+    assert_equals(y->data(1, 0),  0.00573006f);
+
+    auto z = make_tensor<float>({{0}, {1}});
+    auto loss = MSELoss<float>(y, z);
+    // assert_equals(loss->data(0, 0), 0.0723295f);
+
+    assert_equals(loss->item(),  0.494287729f);
+
+    loss->backward();
+
+    
+    assert_equals(x->gradient()->data(0, 0),  0.00658952f);
+    assert_equals(x->gradient()->data(1, 0),  -8.32261e-05f);
+    assert_equals(x->gradient()->data(2, 0),  0.0038151f);
+    assert_equals(model[0]("weights")->gradient()->data(0, 0),  2.66758e-06f);
+    assert_equals(model[0]("weights")->gradient()->data(0, 1),  -0.00566458f);
+    assert_equals(model[0]("weights")->gradient()->data(1, 0),  6.66894e-06f);
+    assert_equals(model[0]("weights")->gradient()->data(1, 1),  -0.0141615f);
+    assert_equals(model[0]("weights")->gradient()->data(2, 0),  1.94733e-05f);
+    assert_equals(model[0]("weights")->gradient()->data(2, 1),  -0.0413514f);
+    assert_equals(model[0]("bias")->gradient()->data(0, 0),  2.66758e-06f);
+    assert_equals(model[0]("bias")->gradient()->data(1, 0),  -0.00566458f);
+
+}
+
+
+void linearTests(){
+    linearTest1();
+    std::cout << "All Linear Tests Passed" << std::endl << std::endl;
+}
+
+#endif // __CML_TESTS_LINEARTESTS_H__
