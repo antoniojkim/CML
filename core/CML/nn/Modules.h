@@ -46,7 +46,7 @@ namespace nn {
             // stores mapping from submodules to the string aliases
             std::map<Module<T>*, std::string> mValues;
             // stores mapping from string aliases to the parameters
-            std::map<std::string, Parameter<T>*> pKeys;
+            std::map<std::string, Parameter<T>> pKeys;
             void init();
             void getParameters(std::vector<tensor<T>>&, const bool& recursive = true);
 
@@ -61,7 +61,7 @@ namespace nn {
             template<typename...Args>
             void addParameter(const std::string& alias, Args&&...args){
                 params.emplace_back(make_tensor<T>(std::forward<Args>(args)...));
-                if (alias != ""){ pKeys[alias] = &params.back(); }
+                if (alias != ""){ pKeys[alias] = params.back(); }
             }
         
         public:

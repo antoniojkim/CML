@@ -81,6 +81,8 @@ namespace cml {
             DMatrix<T>& data();
             T& data(const int& R, const int& C);
             T& item();
+            void set(std::initializer_list<T> data, const bool& transpose = false);
+            void set(std::initializer_list<std::initializer_list<T>> data);
             std::vector<long int> shape();
             std::ostream& info(std::ostream& out = std::cout);
 
@@ -99,6 +101,7 @@ namespace cml {
 
             void initGraph(std::vector<tensor<T>> params = {}, GradientFunction<T> f = nullptr);
             std::unique_ptr<DCG<T>>& graph();
+            tensor<T> gradient();
             void backward();
             
     };
@@ -114,12 +117,21 @@ namespace cml {
     */
     template<typename T>
     std::ostream& operator<<(std::ostream& out, tensor<T> t){
-        out << "cml::tensor({ ";
-        if (t->rows() > 1){
-            out << std::endl;
+        if (t == nullptr){
+            return out << "nullptr";
         }
-        // t->info(out) << " [";
-        out << t->data() << " }";
+        out << "cml::tensor({";
+        for (int i = 0; i<t->rows(); ++i){
+            if (i > 0) out << "," << std::endl << "             ";
+
+            out << "{";
+            for (int j = 0; j<t->cols(); ++j){
+                if (j > 0) out << ", ";
+                out << t->coeff(i, j);
+            }
+            out << "}";
+        }
+        out << "}";
         if (t->computeGrad){
             out << ", computeGrad = true";
         }
@@ -168,6 +180,10 @@ namespace cml {
         t->computeGrad = lhs->computeGrad | rhs->computeGrad;
         if (t->computeGrad){            
             t->initGraph({lhs, rhs}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
+#ifdef DEBUG
+                using namespace std;
+                cout << "Tensor Multiplication Backward" << endl;
+#endif
                 auto lhs = params.at(0);
                 auto rhs = params.at(1);
                 auto output_grad = output.at(0);
@@ -175,24 +191,12 @@ namespace cml {
                 tensor<T> rhs_grad = nullptr;
 
                 if (lhs->computeGrad){
-#ifdef DEBUG
-                    using namespace std;
-                    cout << "Tensor Multiplication Backward LHS:" << endl;
-                    cout << "   rhs.shape:  {" << rhs->rows() << ", " << rhs->cols() << "}" << endl;
-                    cout << "   output_grad.shape:  {" << output_grad->rows() << ", " << output_grad->cols() << "}" << endl;
-#endif
                     lhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                         // TODO:  Check to see if order is correct
                         output_grad->data() * rhs->transpose()
                     ));
                 }
                 if (rhs->computeGrad){
-#ifdef DEBUG
-                    using namespace std;
-                    cout << "Tensor Multiplication Backward RHS:" << endl;
-                    cout << "   lhs.shape:  {" << lhs->rows() << ", " << lhs->cols() << "}" << endl;
-                    cout << "   output_grad.shape:  {" << output_grad->rows() << ", " << output_grad->cols() << "}" << endl;
-#endif
                     rhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                         // TODO:  Check to see if order is correct
                         lhs->transpose() * output_grad->data()

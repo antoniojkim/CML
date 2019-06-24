@@ -25,6 +25,10 @@ namespace Function {
             if (t->computeGrad){
                 t->initGraph({input, weights, bias}, [](std::vector<tensor<T>>& params, 
                                                         std::vector<tensor<T>> output) -> std::vector<tensor<T>>{
+#ifdef DEBUG
+                    using namespace std;
+                    cout << "Linear::backward()" << endl;
+#endif
                     tensor<T> input = params.at(0);
                     tensor<T> weights = params.at(1);
                     tensor<T> bias = params.at(2);
@@ -34,9 +38,14 @@ namespace Function {
                     tensor<T> bias_grad = nullptr;
 
                     if (input->computeGrad){
+// #ifdef DEBUG
+//                         using namespace std;
+//                         cout << "    Weights:  " << weights->rows() << ", " << weights->cols() << endl;
+//                         cout << "    output_grad:  " << output_grad->rows() << ", " << output_grad->cols() << endl;
+// #endif
                         input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                             // TODO:  Check to see if order is correct
-                            weight_grad->data() * output_grad->data()
+                            weights->data() * output_grad->data()
                         ));
                     }
                     if (weights->computeGrad){
@@ -46,10 +55,16 @@ namespace Function {
                         ));
                     }
                     if (bias != nullptr && bias->computeGrad){
-                        // TODO:  implement bias gradient
-                        // bias_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                        // ));
+                        bias_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                            output_grad->rowwise().sum()
+                        ));
                     }
+
+// #ifdef DEBUG
+//                     cout << "    input_grad: " << input_grad << endl;
+//                     cout << "    weight_grad: " << weight_grad << endl;
+//                     cout << "    bias_grad: " << bias_grad << endl;
+// #endif
 
                     return {input_grad, weight_grad, bias_grad};
                 });

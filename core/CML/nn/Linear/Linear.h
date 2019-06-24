@@ -25,9 +25,9 @@ namespace nn {
         public:
             Linear(const int& in_features, const int& out_features, const bool& bias = true): 
                 in_features{in_features}, out_features{out_features}, bias{bias} {
-                addParameter("weights", in_features, out_features);
-                if (bias) addParameter("bias", out_features);
-            }
+                addParameter("weights", in_features, out_features, true);
+                if (bias) addParameter("bias", out_features, 1, true);
+            }   
 
             Parameter<T>& getWeights(){ return params[0]; }
             Parameter<T>& getBias(){

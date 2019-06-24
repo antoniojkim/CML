@@ -22,18 +22,18 @@ namespace Function {
             t->computeGrad = input->computeGrad;
             if (t->computeGrad){
                 t->initGraph({input}, [t](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
-                    tensor<T> output_grad = output.at(0);
+#ifdef DEBUG
+                    using namespace std;
+                    cout << "Softmax::backward" << endl;
+#endif
 
+                    tensor<T> output_grad = output.at(0);
                     if (t->cols() != 1) throw "Invalid shape for softmax_grad"; 
 
                     auto input_grad = make_tensor<float>(static_cast<DMatrix<float>>(
                         (static_cast<DMatrix<float>>(t->asDiagonal()) - 
                          (t->data() * t->transpose())) * output_grad->data()
                     ));
-#ifdef DEBUG
-                    using namespace std;
-                    cout << "Softmax::input_grad = " << input_grad << endl;
-#endif
 
                     return {input_grad};
                 });

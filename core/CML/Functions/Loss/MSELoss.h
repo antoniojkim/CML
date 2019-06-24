@@ -32,6 +32,10 @@ namespace Function {
             }
             t->computeGrad = true;
             t->initGraph({actual, expected}, [reduction](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
+#ifdef DEBUG
+                using namespace std;
+                cout << "Sigmoid::backward()" << endl;
+#endif
                 auto actual = params.at(0);
                 auto expected = params.at(1);
 
@@ -51,12 +55,11 @@ namespace Function {
                 tensor<T> actual_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                     c*(actual->data() - expected->data())
                 ));
-#ifdef DEBUG
-                using namespace std;
-                cout << "MSELoss::actual = " << actual << endl;
-                cout << "MSELoss::expected = " << expected << endl;
-                cout << "MSELoss::actual_grad = " << actual_grad << endl;
-#endif
+// #ifdef DEBUG
+//                 cout << "MSELoss::actual = " << actual << endl;
+//                 cout << "MSELoss::expected = " << expected << endl;
+//                 cout << "MSELoss::actual_grad = " << actual_grad << endl;
+// #endif
 
                 return {actual_grad, nullptr};
             });
