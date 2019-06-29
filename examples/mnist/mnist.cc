@@ -30,13 +30,24 @@ struct MNISTModel: public Sequential<float> {
 };
 
 void train_mnist_model(MNISTModel& model){
+    // Get Train Images
     clock_t start = clock();
-    cout << "Loading data from:  data/train-images-idx3-ubyte     " << flush;
+    cout << "Loading data from:  data/train-images-idx3-ubyte       " << flush;
     auto data = DataSource<float>(DataFormat::IDX, "data/train-images-idx3-ubyte");
+    data.data /= 255;
     clock_t end = clock();
-    cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;\
-
-    auto trainer = ModelTrainer<float>(model, data, "MSELoss", "SGD");
+    cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;
+    
+    // Get Train Labels
+    start = clock();
+    cout << "Loading labels from:  data/train-labels-idx1-ubyte     " << flush;
+    auto labels = DataSource<float>(DataFormat::IDX, "data/train-labels-idx1-ubyte");
+    labels.data /= 255;
+    end = clock();
+    cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;
+    
+    auto trainer = ModelTrainer<float>(model, data, labels, "MSELoss", "SGD");
+    trainer.shuffle();
     cout << trainer << endl;
 }
 
