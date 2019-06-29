@@ -27,6 +27,10 @@ namespace nn {
                 in_features{in_features}, out_features{out_features}, bias{bias} {
                 addParameter("weights", in_features, out_features, true);
                 if (bias) addParameter("bias", out_features, 1, true);
+
+                // Initialize Weights to random
+                params[0]->randomize();
+                if (bias) params[1]->randomize();
             }   
 
             Parameter<T>& getWeights(){ return params[0]; }
