@@ -1,22 +1,24 @@
 
+#include <ctime>
 #include <iostream>
 
+#include "../../core/ModelTrainer/modelTrainer.h"
 #include "../../core/CML/nn/Containers.h"
 #include "../../core/CML/nn/Linear.h"
 #include "../../core/CML/nn/Loss.h"
-#include "../../core/CML/nn/Modules.h"
 #include "../../core/CML/nn/Nonlinear.h"
-#include "readIDX.h"
+#include "../../core/CML/optim/Optimizer.h"
+#include "../../core/Utils/DataSource.h"
 
 using namespace std;
 using namespace cml;
 using namespace cml::nn;
+using namespace cml::optim;
 
 
-struct MNISTModel: public ModuleList<float> {
-    // using ModuleList::Module::addModule;
+struct MNISTModel: public Sequential<float> {
 
-    MNISTModel(): ModuleList{} {
+    MNISTModel(): Sequential{} {
         addModule<Linear>(728, 64);
         addModule<Sigmoid>();
         addModule<Linear>(64, 64);
@@ -28,38 +30,42 @@ struct MNISTModel: public ModuleList<float> {
 };
 
 void train_mnist_model(MNISTModel& model){
+    clock_t start = clock();
+    cout << "Loading data from:  data/train-images-idx3-ubyte     " << flush;
+    auto data = DataSource<float>(DataFormat::IDX, "data/train-images-idx3-ubyte");
+    clock_t end = clock();
+    cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;\
 
+    auto trainer = ModelTrainer<float>(model, data, "MSELoss", "SGD");
+    cout << trainer << endl;
 }
 
 int main(){
 
     auto model = MNISTModel();
-    model.initWeights();
-    model.grad();
     cout << model << endl;
     
-    auto criterion = nn::MSELoss<float>();
+    train_mnist_model(model);
 
+    // auto testInput = make_tensor<>(728);
+    // testInput->randomize();
 
-    auto testInput = make_tensor<>(728);
-    testInput->randomize();
+    // auto y = model(testInput);
+    // cout << y << endl;
 
-    auto y = model(testInput);
-    cout << y << endl;
+    // auto testExpected = make_tensor<>(10);
+    // testExpected->randomize();
 
-    auto testExpected = make_tensor<>(10);
-    testExpected->randomize();
+    // auto loss = criterion(y, testExpected);
+    // loss->backward();
 
-    auto loss = criterion(y, testExpected);
-    loss->backward();
-    
-    auto trainingImages = readMNISTTrainingSetImageFile();
-    auto trainingLabels = readMNISTTrainingSetLabelFile();
+    // auto trainingImages = readMNISTTrainingSetImageFile();
+    // auto trainingLabels = readMNISTTrainingSetLabelFile();
 
-    auto testImages = readMNISTTestSetImageFile();
-    auto testLabels = readMNISTTestSetLabelFile();
+    // auto testImages = readMNISTTestSetImageFile();
+    // auto testLabels = readMNISTTestSetLabelFile();
 
-    cout << trainingImages.size << endl;
+    // cout << trainingImages.size << endl;
 }
 /*
 float f1 = -187.33667, f2 = 0.0;

@@ -1,6 +1,9 @@
 #ifndef __CML_DTYPES_H__
 #define __CML_DTYPES_H__
 
+#include <initializer_list>
+#include <map>
+#include <string>
 #include <type_traits>
 
 namespace cml {
@@ -30,6 +33,9 @@ namespace cml {
 
     }
     
+//     typedef std::initializer_list<std::pair<std::string, double>> Kwargs;
+    typedef std::map<std::string, double> Kwargs;
+
 }
 
 #endif // __CML_DTYPES_H__
