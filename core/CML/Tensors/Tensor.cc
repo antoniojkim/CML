@@ -88,7 +88,7 @@ T& Tensor<T>::data(const int& R, const int& C){
 }
 template<typename T>
 T& Tensor<T>::item(){
-    if (this->rows() != 1 || this->cols() != 1){
+    if (!isScalar()){
         throw "item can only be called on a scalar tensor";
     }
     return data()(0, 0);
@@ -131,6 +131,8 @@ template<typename T>
 std::ostream& Tensor<T>::info(std::ostream& out){
     return out << "{" << this->rows() << ", " << this->cols() << "}";
 }
+template<typename T>
+bool Tensor<T>::isScalar(){ return this->rows() == 1 && this->cols() == 1; }
 
 
 // template<typename T>
@@ -196,7 +198,7 @@ tensor<T> Tensor<T>::gradient(){
  
 template<typename T>
 void Tensor<T>::backward(){
-    if (this->rows() != 1 || this->cols() != 1){
+    if (!isScalar()){
         throw "backward can only be called on a scalar tensor";
     }
 #ifdef DEBUG

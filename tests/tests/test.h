@@ -10,5 +10,6 @@
 
 #include "../../core/CML/Functions.h"
 #include "../../core/CML/Tensor.h"
+#include "../../core/CML/optim/Optimizer.h"
 
 #endif // __CML_TESTS_TEST_H__

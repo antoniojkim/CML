@@ -2,13 +2,13 @@
 #include <ctime>
 #include <iostream>
 
-#include "../../core/ModelTrainer/modelTrainer.h"
 #include "../../core/CML/nn/Containers.h"
 #include "../../core/CML/nn/Linear.h"
 #include "../../core/CML/nn/Loss.h"
 #include "../../core/CML/nn/Nonlinear.h"
 #include "../../core/CML/optim/Optimizer.h"
 #include "../../core/Utils/DataSource.h"
+#include "../../core/Utils/ModelTrainer.h"
 
 using namespace std;
 using namespace cml;
@@ -19,12 +19,11 @@ using namespace cml::optim;
 struct MNISTModel: public Sequential<float> {
 
     MNISTModel(): Sequential{} {
-        addModule<Linear>(728, 64);
+        addModule<Linear>(784, 64);
         addModule<Sigmoid>();
         addModule<Linear>(64, 64);
         addModule<Sigmoid>();
         addModule<Linear>(64, 10);
-        addModule<Softmax>();
     }
 
 };
@@ -33,22 +32,32 @@ void train_mnist_model(MNISTModel& model){
     // Get Train Images
     clock_t start = clock();
     cout << "Loading data from:  data/train-images-idx3-ubyte       " << flush;
+    
     auto data = DataSource<float>(DataFormat::IDX, "data/train-images-idx3-ubyte");
     data.data /= 255;
+    
     clock_t end = clock();
     cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;
+    
+    
     
     // Get Train Labels
     start = clock();
     cout << "Loading labels from:  data/train-labels-idx1-ubyte     " << flush;
+    
     auto labels = DataSource<float>(DataFormat::IDX, "data/train-labels-idx1-ubyte");
     labels.data /= 255;
+    
     end = clock();
     cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;
     
-    auto trainer = ModelTrainer<float>(model, data, labels, "MSELoss", "SGD");
-    trainer.shuffle();
+    
+    
+    auto trainer = ModelTrainer<float>(model, data, labels, "CrossEntropyLoss", "SGD");
     cout << trainer << endl;
+    trainer.verbose();
+    
+    trainer.train();
 }
 
 int main(){

@@ -84,6 +84,7 @@ namespace cml {
             void set(std::initializer_list<T> data, const bool& transpose = false);
             void set(std::initializer_list<std::initializer_list<T>> data);
             std::vector<long int> shape();
+            bool isScalar();
             std::ostream& info(std::ostream& out = std::cout);
 
             // tensor<T> reshape(const int& R, const int& C);

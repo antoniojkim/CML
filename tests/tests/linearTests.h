@@ -5,20 +5,21 @@
 #include "../../core/CML/nn/Containers.h"
 
 void linearTest1(){
-    using namespace std;
     using namespace cml;
     using namespace cml::nn;
+    using namespace cml::optim;
     using Function::MSELoss;
 
     auto model = Sequential<float>{
         new Linear<>(3, 2),
         new Sigmoid<>()
     };
-    model.initWeights();
     model[0]("weights")->set({{0.284576, -1.16315}, 
                               {0.270818, 0.0148199}, 
                               {-0.96044, -0.673953}});
     model[0]("bias")->set({-0.365125, 0.889674}, true);
+    
+    auto optimizer = optim::SGD<float>(model.parameters(), {{"lr", 0.01}});
 
     auto x = make_tensor<float>({{1.0}, {2.5}, {7.3}}, true);           
     auto y = model(x);
@@ -46,6 +47,17 @@ void linearTest1(){
     assert_equals(model[0]("weights")->gradient()->data(2, 1),  -0.0413514f);
     assert_equals(model[0]("bias")->gradient()->data(0, 0),  2.66758e-06f);
     assert_equals(model[0]("bias")->gradient()->data(1, 0),  -0.00566458f);
+    
+    optimizer.step();
+    
+    assert_equals(model[0]("weights")->data(0, 0),  0.2845759690f);
+    assert_equals(model[0]("weights")->data(0, 1),  -1.1630933285f);
+    assert_equals(model[0]("weights")->data(1, 0),  0.2708179355f);
+    assert_equals(model[0]("weights")->data(1, 1),  0.0149615137f);
+    assert_equals(model[0]("weights")->data(2, 0),  -0.9604401588f);
+    assert_equals(model[0]("weights")->data(2, 1),  -0.6735394597f);
+    assert_equals(model[0]("bias")->data(0, 0),  -0.3651250303f);
+    assert_equals(model[0]("bias")->data(1, 0),  0.8897306323f);
 
 }
 

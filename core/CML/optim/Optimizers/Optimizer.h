@@ -14,6 +14,13 @@ namespace optim {
             nn::Parameters<T> params;
             Optimizer(nn::Parameters<T>& params):  params {std::move(params)} {}
             Optimizer(nn::Parameters<T>&& params): params {std::move(params)} {}
+        
+        public:
+            void zeroGrad(){
+                for (auto& param : params){
+                    param->gradient()->zero();
+                }
+            }
     };    
     
 }
