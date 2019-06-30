@@ -14,7 +14,7 @@ namespace Function {
             tensor<T> t = nullptr;
             if (bias != nullptr)
                 t = make_tensor<T>(static_cast<DMatrix<T>>(
-                    weights->transpose() * input->data() + bias->data()
+                    (weights->transpose() * input->data()).colwise() + bias->data().col(0)
                 ));
             else
                 t = make_tensor<T>(static_cast<DMatrix<T>>(

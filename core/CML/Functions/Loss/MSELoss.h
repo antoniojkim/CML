@@ -34,7 +34,7 @@ namespace Function {
             t->initGraph({actual, expected}, [reduction](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
 #ifdef DEBUG
                 using namespace std;
-                cout << "Sigmoid::backward()" << endl;
+                cout << "MSELoss::backward()" << endl;
 #endif
                 auto actual = params.at(0);
                 auto expected = params.at(1);

@@ -6,15 +6,18 @@
 #include <string>
 
 #include "Loss/MSELoss.h"
+#include "Loss/CrossEntropyLoss.h"
 
 namespace cml {
     
     enum Criterions {
-        MSELOSS
+        MSELOSS,
+        CROSSENTROPYLOSS
     };
 
     std::map<std::string, Criterions> CriterionMap {
-        {"MSELoss", Criterions::MSELOSS}
+        {"MSELoss", Criterions::MSELOSS},
+        {"CrossEntropyLoss", Criterions::CROSSENTROPYLOSS}
     };
 
     template<typename T>
@@ -26,6 +29,8 @@ namespace cml {
         switch(CriterionMap[criterion]){
             case Criterions::MSELOSS:
                 return std::make_unique<nn::MSELoss<T>>();
+            case Criterions::CROSSENTROPYLOSS:
+                return std::make_unique<nn::CrossEntropyLoss<T>>();
             default:
                 throw "Invalid Criterion Provided: " + criterion;
         }
