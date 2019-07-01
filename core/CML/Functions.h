@@ -3,6 +3,7 @@
 
 #include "Functions/Linear.h"
 #include "Functions/NonLinear.h"
+#include "Functions/Loss.h"
 
 /*
 All Included Classes above will have a forward, operator(), and backward method implemented.

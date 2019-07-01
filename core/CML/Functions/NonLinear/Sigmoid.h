@@ -19,13 +19,26 @@ namespace Function {
             t->computeGrad = input->computeGrad;
             if (t->computeGrad){
                 t->initGraph({input}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
+#ifdef DEBUG
+                    using namespace std;
+                    cout << "Sigmoid::backward()" << endl;
+#endif
+                    tensor<T> input = params.at(0);
                     tensor<T> output_grad = output.at(0);
+
+// #ifdef DEBUG
+//                     cout << "    input: " << input->rows() << ", " << input->cols() << endl;
+//                     cout << "    output_grad: " << output_grad->rows() << ", " << output_grad->cols() << endl;
+// #endif
                     tensor<T> input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                        output_grad->unaryExpr([](T x){
+                        input->unaryExpr([](T x){
                             auto y = (T)(1.0 / (1.0 + exp(-x)));
                             return y*(1-y);
-                        })
+                        }).array() * output_grad->array()
                     ));
+// #ifdef DEBUG
+//                     cout << "    input_grad: " << input_grad << endl;
+// #endif
                     return {input_grad};
                 });
             }

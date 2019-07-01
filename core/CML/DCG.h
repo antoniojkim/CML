@@ -13,9 +13,9 @@ namespace cml {
     template<class T>
     struct DCG { // Dynamic Compute Graph
         std::vector<tensor<T>> params;
-        tensor<T> gradient;
         GradientFunction<T> f;
         bool isLeaf = true;
+        tensor<T> gradient;
 
         DCG(Tensor<T>* t, std::vector<tensor<T>> params, GradientFunction<T> f);
 

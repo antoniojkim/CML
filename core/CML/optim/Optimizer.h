@@ -1,42 +1,38 @@
-#ifndef __CML_NN_OPTIMIZER_H__
-#define __CML_NN_OPTIMIZER_H__
+#ifndef __CML_OPTIM_OPTIMIZER_H__
+#define __CML_OPTIM_OPTIMIZER_H__
 
-#include <vector>
+#include <map>
+#include <memory>
+#include <string>
 
-#include "../nn/Parameter.h"
+#include "Optimizers/SGD.h"
+#include "../Dtypes.h"
+#include "../nn/Modules.h"
 
 namespace cml {
-namespace optim {
     
-    template<typename T>
-    struct Optimizer {
-        virtual void step() = 0;
-        protected:
-            cml::nn::Parameters<T> params;
-            Optimizer(cml::nn::Parameters<T>& params):  params {std::move(params)} {}
-            Optimizer(cml::nn::Parameters<T>&& params): params {std::move(params)} {}
+    enum Optimizers {
+        SGD
     };
-    
-    template<typename T>
-    class SGD: public Optimizer<T> {
-        double lr; // learning Rate
-        double momentum; // momentum factor
-        double weight_decay; // weight decay (L2 penalty)
-        double dampening; // dampening for momentum
-        bool nesterov; // enables Nesterov momentum
-    
-        public:
-            SGD(cml::nn::Parameters<T>& params,
-                const double& lr, 
-                const double& momentum = 0, 
-                const double& weight_decay = 0,
-                const double& dampening = 0,
-                const bool& nesterov = false);
-                
-            void step() override;
+
+    std::map<std::string, Optimizers> OptimizerMap {
+        {"SGD", Optimizers::SGD}
     };
+
+    template<typename T>
+    std::unique_ptr<optim::Optimizer<T>> make_optimizer(const std::string& optimizer, nn::Module<T>& model, Kwargs kwargs) {
+        if (!OptimizerMap.count(optimizer)){
+            throw "Invalid Optimizer Provided: " + optimizer;
+        }
+
+        switch(OptimizerMap[optimizer]){
+            case Optimizers::SGD:
+                return std::make_unique<optim::SGD<T>>(model.parameters(), std::forward<Kwargs>(kwargs));
+            default:
+                throw "Invalid Optimizer Provided: " + optimizer;
+        }
+    }
     
-}
 }
 
-#endif // __CML_NN_OPTIMIZER_H__
+#endif // __CML_OPTIM_OPTIMIZER_H__
