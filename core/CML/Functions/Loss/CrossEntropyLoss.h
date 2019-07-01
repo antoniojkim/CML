@@ -18,26 +18,30 @@ namespace Function {
             if (expected->rows() > 1){
                 throw "CrossEntropyLoss::forward:  Expected tensor is not scalar";
             }
-            auto p = Softmax<T>(actual);
+//             auto p = Softmax<T>(actual);
+            
+            // This is more stable
+            auto p = static_cast<DMatrix<T>>(actual->rowwise() - static_cast<DMatrix<T>>(actual->array().exp().colwise().sum().log()).row(0));
             int m = expected->cols();
             T sum_log_likelihood = 0;
             for (int i = 0; i<m; ++i){
-                sum_log_likelihood += -log(p->data(expected->data(0, i), i));
+                sum_log_likelihood -= p(expected->data(0, i), i);
             }
             tensor<T> t = make_tensor<T>({sum_log_likelihood / m});
             t->computeGrad = true;
-            t->initGraph({actual, expected}, [m, p](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
+            t->initGraph({actual, expected}, [m, p{std::move(p)}](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) mutable -> std::vector<tensor<T>> {
 #ifdef DEBUG
                 using namespace std;
                 cout << "CrossEntropyLoss::backward()" << endl;
 #endif
                 auto expected = params.at(1);
 
-                tensor<T> actual_grad = p;
+                p = p.array().exp();
                 for (int i = 0; i<m; ++i){
-                    actual_grad->data(expected->data(0, i), i) -= 1;
+                    p(expected->data(0, i), i) -= 1;
                 }
-                actual_grad->data() /= m;
+                p /= m;
+                tensor<T> actual_grad = make_tensor<T>(p);
 
                 return {actual_grad, nullptr};
             });

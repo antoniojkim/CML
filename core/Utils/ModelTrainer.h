@@ -2,6 +2,7 @@
 #define __CML_MODELTRAINER_MODELTRAINER_H__
 
 #include <algorithm>
+#include <ctime>
 #include <iostream>
 #include <initializer_list>
 #include <memory>
@@ -114,6 +115,9 @@ namespace cml {
             
             void train(){
                 using namespace std;
+                
+                
+                clock_t start, end;
             
                 unsigned int epoch = startingEpoch;
                 unsigned int endEpoch = startingEpoch + maxEpochs;
@@ -128,6 +132,8 @@ namespace cml {
                 
                 for (; epoch < endEpoch; ++epoch){
                     if (_verbose) cout << "Epoch " << epoch << ":" << endl;
+                    
+                    start = clock();
                     
                     model->grad();
                     totalLoss = 0;
@@ -153,6 +159,9 @@ namespace cml {
                         
                         ++iteration;
                     }
+                    
+                    end = clock();
+                    if (_verbose) cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;
                     
                     if (epoch%valFreq == 0 && val != nullptr && valLabels != nullptr){
                         using Function::Softmax;
