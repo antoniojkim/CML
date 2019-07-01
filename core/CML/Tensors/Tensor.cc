@@ -28,16 +28,12 @@ Tensor<T>::Tensor(DMatrix<T>&& m): DMatrix<T>{std::move(m)} {}
 
 template<typename T>
 Tensor<T>::Tensor(std::initializer_list<T> data, const bool& computeGrad): 
-        DMatrix<T>{data.size(), 1},
+        DMatrix<T>{1, data.size()},
         computeGrad{computeGrad} {
 // #ifdef DEBUG
 //     cout << "Initialized 1d data" << endl;
 // #endif
-    unsigned int i = 0;
-    for (auto& e : data){
-        this->data()(i, 0) = e;
-        ++i;
-    }
+    this->set(std::forward<std::initializer_list<T>>(data));
 }
 template<typename T>
 Tensor<T>::Tensor(std::initializer_list<std::initializer_list<T>> data, const bool& computeGrad): 
@@ -46,24 +42,14 @@ Tensor<T>::Tensor(std::initializer_list<std::initializer_list<T>> data, const bo
 // #ifdef DEBUG
 //     cout << "Initialized 2d data" << endl;
 // #endif
-    unsigned int i, j;
-
-    i = 0;
-    for (auto& row : data){
-        j = 0;
-        for (auto& e : row){
-            this->data()(i, j) = e;
-            ++j;
-        }
-        ++i;
-    }
+    this->set(std::forward<std::initializer_list<std::initializer_list<T>>>(data));
 }
 template<typename T>
 Tensor<T>::Tensor(const int& R, const int& C, const bool& computeGrad): 
-        DMatrix<T>{std::move(DMatrix<T>::Zero(R, C))}, 
-        computeGrad{computeGrad} {
+        DMatrix<T>{DMatrix<T>::Zero(R, C)}, computeGrad{computeGrad} {
 // #ifdef DEBUG
-//     cout << "Initialized R and C" << endl;
+//         using namespace std;
+//         cout << "Tensor::constructor(" << R << ", " << C << ")" << endl;
 // #endif
 }
 
@@ -100,6 +86,44 @@ template<typename T>
 T& Tensor<T>::data(const int& R, const int& C){
     return data()(R, C);
 }
+template<typename T>
+T& Tensor<T>::item(){
+    if (!isScalar()){
+        throw "item can only be called on a scalar tensor";
+    }
+    return data()(0, 0);
+}
+
+template<typename T>
+void Tensor<T>::set(std::initializer_list<T> data, const bool& transpose){
+    unsigned int i = 0;
+    if (transpose){
+        for (auto& e : data) {
+            this->data()(i, 0) = e;
+            ++i;
+        }
+    }
+    else{
+        for (auto& e : data){
+            this->data()(0, i) = e;
+            ++i;
+        }
+    }
+}
+template<typename T>
+void Tensor<T>::set(std::initializer_list<std::initializer_list<T>> data){
+    unsigned int i, j;
+
+    i = 0;
+    for (auto& row : data){
+        j = 0;
+        for (auto& e : row){
+            this->data()(i, j) = e;
+            ++j;
+        }
+        ++i;
+    }
+}
 
 template<typename T>
 vector<long int> Tensor<T>::shape(){ return {this->rows(), this->cols()}; }
@@ -107,6 +131,14 @@ template<typename T>
 std::ostream& Tensor<T>::info(std::ostream& out){
     return out << "{" << this->rows() << ", " << this->cols() << "}";
 }
+template<typename T>
+bool Tensor<T>::isScalar(){ return this->rows() == 1 && this->cols() == 1; }
+
+
+// template<typename T>
+// tensor<T> Tensor<T>::reshape(const int& R, const int& C){
+//     return make_tensor<T>(DMatrix<T>(this->data(), R, C));
+// }
 
 
 template<typename T>
@@ -121,7 +153,7 @@ void Tensor<T>::zero(){
 
 template<typename T>
 void Tensor<T>::randomize(Randomizer::Function<T> randomizer){
-    data() = data().unaryExpr(randomizer);
+    data() = this->unaryExpr(randomizer);
 }
 template<typename T>
 void Tensor<T>::randomize(const T& coefficient){
@@ -159,10 +191,14 @@ std::unique_ptr<DCG<T>>& Tensor<T>::graph(){
     }
     return dcg;
 }
+template<typename T>
+tensor<T> Tensor<T>::gradient(){
+    return graph()->gradient;
+}
  
 template<typename T>
 void Tensor<T>::backward(){
-    if (this->rows() != 1 || this->cols() != 1){
+    if (!isScalar()){
         throw "backward can only be called on a scalar tensor";
     }
 #ifdef DEBUG

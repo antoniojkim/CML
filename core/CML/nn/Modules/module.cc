@@ -225,7 +225,7 @@ Parameter<T> Module<T>::getParam(const int& index){
 }
 template<typename T>
 Parameter<T> Module<T>::getParam(const string& alias){ 
-    if (pKeys.count(alias) > 0){  return *(pKeys[alias]);  }
+    if (pKeys.count(alias) > 0){  return pKeys[alias];  }
     
     std::ostringstream error;
     error << "Invalid key: " << alias;
