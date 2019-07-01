@@ -25,3 +25,9 @@ Now that you have the dataset downloaded and prepared to go, you must compile th
 make
 ./mnist
 ```
+
+Running the above, you will see the verbose style output. The accuracies can be summed up as:
+
+![Accuracy](accuracy.png)
+
+Evidently, it does very well.
