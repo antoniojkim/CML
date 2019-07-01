@@ -21,9 +21,9 @@ typedef double mnistType;
 struct MNISTModel: public Sequential<mnistType> {
 
     MNISTModel(): Sequential{} {
-        addModule<Linear>(784, 30);
+        addModule<Linear>(784, 64);
         addModule<Sigmoid>();
-        addModule<Linear>(30, 10);
+        addModule<Linear>(64, 10);
     }
 
 };
@@ -77,8 +77,8 @@ void train_mnist_model(MNISTModel& model){
     
     auto trainer = ModelTrainer<mnistType>(model, data, labels, "CrossEntropyLoss", "SGD", {{"lr", 3.0}});
     trainer.setVal(valImages, valImageLabels);
-    trainer["numEpochs"] = 1;
-//     trainer.verbose();
+    trainer["numEpochs"] = 30;
+    trainer.verbose();
     cout << trainer << endl;
     
     trainer.train();
