@@ -22,5 +22,6 @@ wait
 Now that you have the dataset downloaded and prepared to go, you must compile the mnist example to run anything.
 
 ```bash
-make clean && make
+make
+./mnist
 ```
