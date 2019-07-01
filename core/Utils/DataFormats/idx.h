@@ -51,7 +51,7 @@ namespace idx {
         
         unsigned int numDims = ((magicNumber) & 0xff);
         int* dims = new int[numDims];
-        int R, C = 1;
+        int R = 0, C = 1;
         for (unsigned int i = 0; i < numDims; ++i){
             dims[i] = read_u32(f);
             if (i == 0){

@@ -56,6 +56,18 @@ namespace optim {
                     }
                 }
             }
+        
+        
+            std::ostream& print(std::ostream& out, const std::string& indent) override {
+                using namespace std;
+                out << indent << "SGD:" << endl;
+                out << indent << "    lr:           " << lr << endl;
+                out << indent << "    momentum:     " << momentum << endl;
+                out << indent << "    weight_decay: " << weight_decay << endl;
+                out << indent << "    dampening:    " << dampening << endl;
+                out << indent << "    nesterov:     " << nesterov << endl;
+                return out;
+            }
     };
     
 }
