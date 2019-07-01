@@ -18,6 +18,7 @@
 #include "../Utils/DataSource.h"
 
 namespace cml {
+    
 
     template<typename T = float>
     class ModelTrainer {
@@ -25,6 +26,8 @@ namespace cml {
         nn::Module<T>* model = nullptr;
         DataSource<T>* data = nullptr;
         DataSource<T>* labels = nullptr;
+        DataSource<T>* val = nullptr;
+        DataSource<T>* valLabels= nullptr;
         std::string criterionName;
         std::unique_ptr<nn::Criterion<T>> criterion;
         std::string optimizerName;
@@ -38,6 +41,7 @@ namespace cml {
         unsigned int startingIteration = 0;
         
         unsigned int maxEpochs = 1;
+        unsigned int valFreq = 1;
         
         bool _verbose = false;
 
@@ -57,8 +61,9 @@ namespace cml {
                     throw "Number of data samples does not match number of labels";
                 }
                 
+                std::cout << "kwargs:" << std::endl;
                 for (auto kv : kwargs){
-                    std::cout << kv.first << ": " << kv.second << std::endl;
+                    std::cout << "    " << kv.first << ": " << kv.second << std::endl;
                 }
                 
                 if (kwargs.count("batchSize")){
@@ -82,6 +87,24 @@ namespace cml {
                 }
             }
             
+            void setVal(DataSource<T>& val, DataSource<T>& labels){
+                this->val = &val;
+                this->valLabels = &labels;
+            }
+            
+            unsigned int& operator[](const std::string& key){
+                if (key == "batchSize")         return batchSize;
+                if (key == "subdivisions")      return subdivisions;
+                if (key == "numAccumulate")     return numAccumulate;
+                if (key == "startingEpoch")     return startingEpoch;
+                if (key == "startingIteration") return startingIteration;
+                if (key == "numEpochs")         return maxEpochs;
+                if (key == "maxEpochs")         return maxEpochs;
+                if (key == "valFreq")           return valFreq;
+                
+                throw "Invalid Key:  "+key;
+            }
+            
             void shuffle() {
                 Eigen::VectorXi indices = Eigen::VectorXi::LinSpaced(data->data.rows(), 0, data->data.rows());
                 std::random_shuffle(indices.data(), indices.data() + data->data.rows());
@@ -97,7 +120,6 @@ namespace cml {
                 unsigned int iteration = startingIteration;
                 
                 unsigned int blockSize = batchSize / subdivisions;
-                unsigned int finalBlockSize = data->data.rows() % blockSize;
                 double totalLoss;
                 
                 auto block = make_tensor<T>(data->data.cols(), blockSize);
@@ -107,27 +129,15 @@ namespace cml {
                 for (; epoch < endEpoch; ++epoch){
                     if (_verbose) cout << "Epoch " << epoch << ":" << endl;
                     
+                    model->grad();
                     totalLoss = 0;
                     optimizer->zeroGrad();
                    
                     shuffle();
                     for (unsigned int i = 0; i<data->data.rows(); i += blockSize){
-                        if (i+blockSize < data->data.rows()){
-                            block->data() = data->data.block(i, 0, blockSize, data->data.cols()).transpose();
-                        }
-                        else {
-                            block->block(0, 0, block->rows(), finalBlockSize) = data->data.block(i, 0, finalBlockSize, data->data.cols()).transpose();
-                            block->block(0, finalBlockSize, block->rows(), block->cols()-finalBlockSize) = DMatrix<T>::Zero(block->rows(), block->cols()-finalBlockSize);
-                        }
-                        
+                        loadData(block, data, i, blockSize);
                         auto output = model->forward(block);
-                        if (i+blockSize < data->data.rows()){
-                            label->data() = labels->data.block(i, 0, blockSize, labels->data.cols()).transpose();
-                        }
-                        else {
-                            label->block(0, 0, label->rows(), finalBlockSize) = labels->data.block(i, 0, finalBlockSize, labels->data.cols()).transpose();
-                            label->block(0, finalBlockSize, label->rows(), label->cols()-finalBlockSize) = DMatrix<T>::Zero(label->rows(), label->cols()-finalBlockSize);
-                        }
+                        loadData(label, labels, i, blockSize);
                         
                         auto loss = criterion->forward(output, label);
                         totalLoss += loss->item();
@@ -143,6 +153,26 @@ namespace cml {
                         
                         ++iteration;
                     }
+                    
+                    if (epoch%valFreq == 0 && val != nullptr && valLabels != nullptr){
+                        using Function::Softmax;
+                        model->noGrad();
+                        int maxRow, correct = 0, total = 0;
+                        for (unsigned int i = 0; i<val->data.rows(); i += blockSize){
+                            loadData(block, val, i, blockSize);
+                            auto output = Softmax<T>(model->forward(block));
+                            loadData(label, valLabels, i, blockSize);
+                            
+                            for (unsigned int j = 0; j<blockSize; ++j){
+                                output->col(j).maxCoeff(&maxRow);
+                                if (maxRow == label->data(0, j)){
+                                    ++correct;
+                                }
+                                ++total;
+                            }
+                        }
+                        cout << "Validation:    Correct = " << correct << "   Accuracy = " << (double(correct)/total) << endl;
+                    }
                 }
             }
             
@@ -156,12 +186,25 @@ namespace cml {
                 out << "    model:          " << model << endl;
                 out << "    data:           " << data << endl;
                 out << "    criterion:      " << criterionName << endl;
-                out << "    optimizer:      " << optimizerName << endl << endl;
+                out << "    optimizer:      " << optimizerName << endl;
+                optimizer->print(out, "       ") << endl << endl;
                 out << "    batchSize:      " << batchSize << endl;
                 out << "    subdivisions:   " << subdivisions << endl;
                 out << "    numAccumulate:  " << numAccumulate << endl << endl;
                 out << "    maxEpochs:      " << maxEpochs << endl;
                 return out;
+            }
+            
+        private:            
+            void loadData(tensor<T> block, DataSource<T>* data, const int& i, const unsigned int& blockSize){
+                if (i+blockSize < data->data.rows()){
+                    block->data() = data->data.block(i, 0, blockSize, data->data.cols()).transpose();
+                }
+                else {
+                    unsigned int finalBlockSize = data->data.rows() % blockSize;
+                    block->block(0, 0, block->rows(), finalBlockSize) = data->data.block(i, 0, finalBlockSize, data->data.cols()).transpose();
+                    block->block(0, finalBlockSize, block->rows(), block->cols()-finalBlockSize) = DMatrix<T>::Zero(block->rows(), block->cols()-finalBlockSize);
+                }
             }
 
     };

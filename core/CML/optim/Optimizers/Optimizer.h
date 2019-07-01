@@ -1,6 +1,9 @@
 #ifndef __CML_OPTIM_OPTIMIZERS_OPTIMIZER_H__
 #define __CML_OPTIM_OPTIMIZERS_OPTIMIZER_H__
 
+#include <iostream>
+#include <string>
+
 #include "../../Tensor.h"
 #include "../../nn/Modules.h"
 
@@ -9,7 +12,6 @@ namespace optim {
     
     template<typename T>
     struct Optimizer {
-        virtual void step() = 0;
         protected:
             nn::Parameters<T> params;
             Optimizer(nn::Parameters<T>& params):  params {std::move(params)} {}
@@ -21,6 +23,9 @@ namespace optim {
                     param->gradient()->zero();
                 }
             }
+        
+            virtual void step() = 0;
+            virtual std::ostream& print(std::ostream& out, const std::string& indent = "") = 0;
     };    
     
 }

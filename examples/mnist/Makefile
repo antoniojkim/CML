@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g -std=c++14 -Wall -MMD -Werror=vla
+CXXFLAGS = -Ofast -std=c++14 -Wall -MMD -Werror=vla
 EXEC = mnist
 
 TENSORS = $(wildcard ../../core/CML/Tensors/*.cc)

@@ -15,15 +15,14 @@ using namespace cml;
 using namespace cml::nn;
 using namespace cml::optim;
 
+typedef double mnistType;
 
-struct MNISTModel: public Sequential<float> {
+struct MNISTModel: public Sequential<mnistType> {
 
     MNISTModel(): Sequential{} {
-        addModule<Linear>(784, 64);
+        addModule<Linear>(784, 256);
         addModule<Sigmoid>();
-        addModule<Linear>(64, 64);
-        addModule<Sigmoid>();
-        addModule<Linear>(64, 10);
+        addModule<Linear>(256, 10);
     }
 
 };
@@ -33,7 +32,7 @@ void train_mnist_model(MNISTModel& model){
     clock_t start = clock();
     cout << "Loading data from:  data/train-images-idx3-ubyte       " << flush;
     
-    auto data = DataSource<float>(DataFormat::IDX, "data/train-images-idx3-ubyte");
+    auto data = DataSource<mnistType>(DataFormat::IDX, "data/train-images-idx3-ubyte");
     data.data /= 255;
     
     clock_t end = clock();
@@ -45,17 +44,41 @@ void train_mnist_model(MNISTModel& model){
     start = clock();
     cout << "Loading labels from:  data/train-labels-idx1-ubyte     " << flush;
     
-    auto labels = DataSource<float>(DataFormat::IDX, "data/train-labels-idx1-ubyte");
-    labels.data /= 255;
+    auto labels = DataSource<mnistType>(DataFormat::IDX, "data/train-labels-idx1-ubyte");
     
     end = clock();
     cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;
     
     
     
-    auto trainer = ModelTrainer<float>(model, data, labels, "CrossEntropyLoss", "SGD");
-    cout << trainer << endl;
+    // Get Val Images
+    start = clock();
+    cout << "Loading images from:  data/t10k-labels-idx1-ubyte     " << flush;
+    
+    auto valImages = DataSource<mnistType>(DataFormat::IDX, "data/t10k-images-idx3-ubyte");
+    valImages.data /= 255;
+    
+    end = clock();
+    cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;
+    
+    
+    
+    // Get Val Labels
+    start = clock();
+    cout << "Loading labels from:  data/t10k-labels-idx1-ubyte     " << flush;
+    
+    auto valImageLabels = DataSource<mnistType>(DataFormat::IDX, "data/t10k-labels-idx1-ubyte");
+    
+    end = clock();
+    cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;
+    
+    
+    
+    auto trainer = ModelTrainer<mnistType>(model, data, labels, "CrossEntropyLoss", "SGD", {{"lr", 0.001}});
+    trainer.setVal(valImages, valImageLabels);
+    trainer["numEpochs"] = 30;
     trainer.verbose();
+    cout << trainer << endl;
     
     trainer.train();
 }
