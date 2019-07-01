@@ -1,4 +1,5 @@
 
+#include <Eigen/Core>
 #include <ctime>
 #include <iostream>
 
@@ -20,9 +21,9 @@ typedef double mnistType;
 struct MNISTModel: public Sequential<mnistType> {
 
     MNISTModel(): Sequential{} {
-        addModule<Linear>(784, 256);
+        addModule<Linear>(784, 30);
         addModule<Sigmoid>();
-        addModule<Linear>(256, 10);
+        addModule<Linear>(30, 10);
     }
 
 };
@@ -74,16 +75,18 @@ void train_mnist_model(MNISTModel& model){
     
     
     
-    auto trainer = ModelTrainer<mnistType>(model, data, labels, "CrossEntropyLoss", "SGD", {{"lr", 0.001}});
+    auto trainer = ModelTrainer<mnistType>(model, data, labels, "CrossEntropyLoss", "SGD", {{"lr", 3.0}});
     trainer.setVal(valImages, valImageLabels);
-    trainer["numEpochs"] = 30;
-    trainer.verbose();
+    trainer["numEpochs"] = 1;
+//     trainer.verbose();
     cout << trainer << endl;
     
     trainer.train();
 }
 
 int main(){
+    
+    cout  << "Num Threads:  " << Eigen::nbThreads() << endl;
 
     auto model = MNISTModel();
     cout << model << endl;
