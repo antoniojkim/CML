@@ -4,7 +4,7 @@
 
 #include "../Modules.h"
 #include "../../Tensor.h"
-#include "../../Functions/Linear.h"
+#include "../../Functions/Linear/Linear.h"
 
 namespace cml {
 namespace nn {

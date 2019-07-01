@@ -15,6 +15,7 @@
 #include "tests/basicGradientsTest.h"
 #include "tests/linearTests.h"
 #include "tests/softmaxTests.h"
+#include "tests/convolutionTests.h"
 
 using namespace std;
 using namespace cml;
@@ -26,6 +27,7 @@ int main(){
         runbasicGradientsTest();
         linearTests();
         softmaxTests();
+        convolutionTests();
     } catch (const char* error){
         cerr << error << endl;
         throw;
