@@ -17,15 +17,15 @@
 namespace cml {
 namespace nn {
     
-    template<typename T> class Module;
-    template<typename T>
-    using uModule = std::unique_ptr<cml::nn::Module<T>>;
-    template<typename T>
-    using Modules = std::vector<uModule<T>>;
-    template<typename T>
-    using Parameter = tensor<T>;
-    template<typename T>
-    using Parameters = std::vector<tensor<T>>;
+    template<typename T, template <typename> class MatrixType> class Module;
+    template<typename T, template <typename> class MatrixType>
+    using uModule = std::unique_ptr<cml::nn::Module<T, MatrixType>>;
+    template<typename T, template <typename> class MatrixType>
+    using Modules = std::vector<uModule<T, MatrixType>>;
+    template<typename T, template <typename> class MatrixType>
+    using Parameter = tensor<T,MatrixType>;
+    template<typename T, template <typename> class MatrixType>
+    using Parameters = std::vector<tensor<T, MatrixType>>;
 
     /*
         The Module class is the base class for all neural network modules
@@ -35,7 +35,7 @@ namespace nn {
 
         TODO:  Add automatic casting when a module of a different template type is added.
     */
-    template <typename T> 
+    template <typename T, template <typename> class MatrixType> 
     class Module {
         protected:
             Module<T>* parent = nullptr;
