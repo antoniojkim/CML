@@ -6,7 +6,6 @@
 #include "../../Tensor.h"
 #include "../../DCG.h"
 #include "../../Dtypes.h"
-#include "../NonLinear/Softmax.h"
 
 namespace cml {
 namespace Function {
