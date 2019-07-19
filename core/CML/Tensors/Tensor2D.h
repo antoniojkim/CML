@@ -38,22 +38,27 @@ namespace cml {
     using Tensor2D = Tensor<T, DMatrix>;
     template <typename T>
     using tensor2d = std::shared_ptr<Tensor<T, DMatrix>>;
+    
+    template<typename T>
+    using Parameter2D = tensor<T, DMatrix>;
+    template<typename T>
+    using Parameter2Ds = std::vector<tensor<T, DMatrix>>;
 
 
     /*
         This is the recommended way to construct a matrix
     */
     template <class T, typename... Args>
-    inline tensor<T, DMatrix> make_tensor2d(Args&&... args) {
-        return std::make_shared<Tensor<T, DMatrix>>(std::forward<Args>(args)...);
+    inline tensor2d<T> make_tensor2d(Args&&... args) {
+        return std::make_shared<Tensor2D<T>>(std::forward<Args>(args)...);
     }
     template <class T>
-    inline tensor<T, DMatrix> make_tensor2d(tlist<T> data, const bool& computeGrad = false) {
-        return std::make_shared<Tensor<T, DMatrix>>(data, computeGrad);
+    inline tensor2d<T> make_tensor2d(tlist<T> data, const bool& computeGrad = false) {
+        return std::make_shared<Tensor2D<T>>(std::forward<tlist<T>>(data), computeGrad);
     }
     template <class T>
-    inline tensor<T, DMatrix> make_tensor2d(tlist<tlist<T>> data, const bool& computeGrad = false) {
-        return std::make_shared<Tensor<T, DMatrix>>(data, computeGrad);
+    inline tensor2d<T> make_tensor2d(tlist<tlist<T>> data, const bool& computeGrad = false) {
+        return std::make_shared<Tensor2D<T>>(std::forward<tlist<tlist<T>>>(data), computeGrad);
     }
     
 }

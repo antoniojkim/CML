@@ -131,6 +131,16 @@ namespace cml {
         return out << ")";
     }
     
+    
+    /***********************************************************************************
+    *********************************** Aliases ****************************************
+    ************************************************************************************/
+    
+    template<typename T, template <typename> class MatrixType>
+    using Parameter = tensor<T, MatrixType>;
+    template<typename T, template <typename> class MatrixType>
+    using Parameters = std::vector<tensor<T, MatrixType>>;
+    
     template<class T, template<typename> class MatrixType>
     using Variable = Tensor<T, MatrixType>; // A nice alias
 

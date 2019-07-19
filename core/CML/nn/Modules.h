@@ -22,10 +22,6 @@ namespace nn {
     using uModule = std::unique_ptr<cml::nn::Module<T, MatrixType>>;
     template<typename T, template <typename> class MatrixType>
     using Modules = std::vector<uModule<T, MatrixType>>;
-    template<typename T, template <typename> class MatrixType>
-    using Parameter = tensor<T,MatrixType>;
-    template<typename T, template <typename> class MatrixType>
-    using Parameters = std::vector<tensor<T, MatrixType>>;
 
     /*
         The Module class is the base class for all neural network modules
@@ -38,8 +34,6 @@ namespace nn {
     template <typename T, template <typename> class MatrixType> 
     class Module {
         protected:
-            Module<T>* parent = nullptr;
-            Parameters<T> params;
             Modules<T> submodules;
             // stores mapping from string aliases to the submodules
             std::map<std::string, Module<T>*> mKeys;
@@ -50,19 +44,6 @@ namespace nn {
             void init();
             void getParameters(std::vector<tensor<T>>&, const bool& recursive = true);
 
-            /*
-                The following method can be used to add parameters to the module.
-
-                Note that this method is protected. While this does not prevent
-                a subclass being created that contains the functionality to make
-                adding parameters public, it is recommended that parameters only
-                be added during module construction.
-            */
-            template<typename...Args>
-            void addParameter(const std::string& alias, Args&&...args){
-                params.emplace_back(make_tensor<T>(std::forward<Args>(args)...));
-                if (alias != ""){ pKeys[alias] = params.back(); }
-            }
         
         public:
             /*
@@ -183,14 +164,14 @@ namespace nn {
                 If the recursive flag is set, it will recursively get the 
                 number of paramters of all submodules.
             */
-            long int getNumParameters(const bool& recursive = true);
+            long int getNumParameters(const bool& recursive = true) = 0;
             /*
                 This method will return a vector of pointers to the parameters.
                 This method is different from getParams as it is getting pointers
                 to the parameters and optionally getting pointers to parameteters
                 of submodules as well.
             */
-            std::vector<tensor<T>> parameters(const bool& recursive = true);
+            std::vector<tensor<T>> parameters(const bool& recursive = true) = 0;
 
             /*
                 This method can be used to apply a function to each submodule.
