@@ -15,6 +15,7 @@ namespace nn {
         Parameters<T> params;
         using Module<T>::submodules;
         using Module<T>::mValues;
+        using Module<T>::pKeys;
         
         protected:
             
