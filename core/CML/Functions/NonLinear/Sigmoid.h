@@ -4,7 +4,7 @@
 #include <cmath>
 
 #include "../../Tensor.h"
-#include "../../DCG.h"
+
 
 namespace cml {
 namespace Function {
@@ -12,9 +12,9 @@ namespace Function {
     struct Sigmoid {
         
         template<typename T>
-        static tensor<T> forward(tensor<T> input){
+        static tensor<T> forward(tensor2d<T> input){
             auto t = make_tensor<T>(static_cast<DMatrix<T>>(
-                input->unaryExpr([](T x){ return (T)(1.0 / (1.0 + exp(-x))); })
+                input->data().unaryExpr([](T x){ return (T)(1.0 / (1.0 + exp(-x))); })
             ));
             t->computeGrad = input->computeGrad;
             if (t->computeGrad){
@@ -25,24 +25,26 @@ namespace Function {
 #endif
                     tensor<T> input = params.at(0);
                     tensor<T> output_grad = output.at(0);
-
-// #ifdef DEBUG
-//                     cout << "    input: " << input->rows() << ", " << input->cols() << endl;
-//                     cout << "    output_grad: " << output_grad->rows() << ", " << output_grad->cols() << endl;
-// #endif
                     tensor<T> input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                        input->unaryExpr([](T x){
+                        input->data().unaryExpr([](T x){
                             auto y = (T)(1.0 / (1.0 + exp(-x)));
                             return y*(1-y);
-                        }).array() * output_grad->array()
+                        }).array() * output_grad->data().array()
                     ));
-// #ifdef DEBUG
-//                     cout << "    input_grad: " << input_grad << endl;
-// #endif
                     return {input_grad};
                 });
             }
             return t;
+        }
+        
+        template<typename T>
+        static tensor<T> forward(tensor<T> input){
+            switch(input->getType()){
+                case TensorType::MATRIX:
+                    return forward(std::static_pointer_cast<Tensor2D<T>>(input));
+                default:
+                    throw UnsupportedOperationException("Sigmoid unsupported on Tensor type");
+            }
         }
 
     };

@@ -4,9 +4,7 @@
 #include <cmath>
 
 #include "../../Tensor.h"
-#include "../../DCG.h"
 #include "../../Dtypes.h"
-#include "../NonLinear/Softmax.h"
 
 namespace cml {
 namespace Function {
@@ -14,18 +12,19 @@ namespace Function {
     struct CrossEntropyLoss {
         
         template<typename T>
-        static tensor<T> forward(tensor<T> actual, tensor<T> expected){
-            if (expected->rows() > 1){
+        static tensor<T> forward(tensor2d<T> actual, tensor2d<T> expected){
+            if (expected->data().rows() > 1){
                 throw "CrossEntropyLoss::forward:  Expected tensor is not scalar";
             }
 //             auto p = Softmax<T>(actual);
             
             // This is more stable
-            auto p = static_cast<DMatrix<T>>(actual->rowwise() - static_cast<DMatrix<T>>(actual->array().exp().colwise().sum().log()).row(0));
-            int m = expected->cols();
+            auto p = static_cast<DMatrix<T>>(
+                actual->data().rowwise() - static_cast<DMatrix<T>>(actual->data().array().exp().colwise().sum().log()).row(0));
+            int m = expected->data().cols();
             T sum_log_likelihood = 0;
             for (int i = 0; i<m; ++i){
-                sum_log_likelihood -= p(expected->data(0, i), i);
+                sum_log_likelihood -= p(expected->at(0, i), i);
             }
             tensor<T> t = make_tensor<T>({sum_log_likelihood / m});
             t->computeGrad = true;
@@ -46,6 +45,21 @@ namespace Function {
                 return {actual_grad, nullptr};
             });
             return t;
+        }
+
+        template<typename T>
+        static tensor<T> forward(tensor<T> actual, tensor<T> expected){
+            if (actual->getType() != expected->getType()){
+                throw TensorTypeMismatchException();
+            }
+
+            switch(actual->getType()){
+                case TensorType::MATRIX:
+                    return forward(std::static_pointer_cast<Tensor2D<T>>(actual),
+                                   std::static_pointer_cast<Tensor2D<T>>(expected));
+                default:
+                    throw UnsupportedOperationException("CrossEntropyLoss unsupported for Tensor type");
+            }
         }
 
     };
