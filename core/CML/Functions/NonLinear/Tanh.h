@@ -4,7 +4,7 @@
 #include <cmath>
 
 #include "../../Tensor.h"
-#include "../../DCG.h"
+
 
 namespace cml {
 namespace Function {

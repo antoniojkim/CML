@@ -50,7 +50,6 @@ void softmaxTest3(){
     auto x = make_tensor<float>({{0.61579928, 0.07365664}
                                 , {0.46059955, 0.84609722}
                                 , {0.22933349, 0.71500119}}, true);
-    cout << x << endl;
     auto z = make_tensor<float>({1, 1});
 
     auto loss = CrossEntropyLoss<float>(x, z);

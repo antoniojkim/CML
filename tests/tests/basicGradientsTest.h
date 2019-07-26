@@ -6,6 +6,7 @@
 
 void basicGradientsTest1(){
     using namespace cml;
+    using namespace std;
 
     auto a = make_tensor<>({2}, true);
     auto b = make_tensor<>({3});
