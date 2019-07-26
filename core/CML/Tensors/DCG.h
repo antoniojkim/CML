@@ -19,7 +19,7 @@ namespace cml {
 
         DCG(Tensor<T>* t, std::vector<tensor<T>> params, GradientFunction<T> f);
 
-        void accumulateGradient(const std::vector<tensor<T>>& gradients);
+        void accumulateGradient(std::vector<tensor<T>>& gradients);
         
         void backward(std::vector<tensor<T>> x = {make_scalar<T>(1)});
 
@@ -51,13 +51,13 @@ namespace cml {
 
 
     template<typename T>
-    void DCG<T>::accumulateGradient(const std::vector<tensor<T>>& gradients){
+    void DCG<T>::accumulateGradient(std::vector<tensor<T>>& gradients){
         for (auto& g : gradients){
             if (gradient->shape() != g->shape()){
                 using namespace std;
                 cerr << "Dims do not match in accumuateGradient" << endl;
-                cerr << "    gradient.shape: {" << gradient->rows() << ", " << gradient->cols() << "}" << endl;
-                cerr << "    g.shape: {" << g->rows() << ", " << g->cols() << "}" << endl;
+                cerr << "    gradient.shape: " << gradient->shape() << endl;
+                cerr << "    g.shape: " << g->shape() << endl;
                 throw "Dims do not match in accumuateGradient";
             }
             gradient += g;

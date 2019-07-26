@@ -13,9 +13,8 @@ namespace Function {
         
         template<typename T>
         static tensor<T> forward(tensor2d<T> input){
-            auto max = input->maxCoeff();
-            using namespace std;
-            auto exps = (input->array() - max).exp();
+            auto max = input->data().maxCoeff();
+            auto exps = (input->data().array() - max).exp();
             auto sum = exps.sum();
             auto t = make_tensor<T>(static_cast<DMatrix<T>>( exps / sum ));
 
@@ -28,11 +27,11 @@ namespace Function {
 #endif
 
                     tensor<T> output_grad = output.at(0);
-                    if (t->cols() != 1) throw "Invalid shape for softmax_grad"; 
+                    if (t->data().cols() != 1) throw "Invalid shape for softmax_grad"; 
 
                     auto input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                        (static_cast<DMatrix<T>>(t->asDiagonal()) - 
-                         (t->data() * t->transpose())) * output_grad->data()
+                        (static_cast<DMatrix<T>>(t->data().asDiagonal()) - 
+                         (t->data() * t->data().transpose())) * output_grad->data()
                     ));
 
                     return {input_grad};

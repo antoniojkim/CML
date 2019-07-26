@@ -41,7 +41,7 @@ namespace Function {
                 T c = 0;
                 switch(reduction){
                     case nn::Reduction::MEAN:
-                        c = (T)(2.0/actual->data()->size());
+                        c = (T)(2.0/actual->data().size());
                         break;
                     case nn::Reduction::SUM:
                         c = (T)(2);
