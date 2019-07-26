@@ -2,7 +2,6 @@
 #define __CML_FUNCTIONS_LINEAR_LINEAR_H__
 
 #include "../../Tensor.h"
-#include "../../DCG.h"
 
 namespace cml {
 namespace Function {

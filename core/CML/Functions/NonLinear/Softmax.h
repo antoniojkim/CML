@@ -4,7 +4,7 @@
 #include <cmath>
 
 #include "../../Tensor.h"
-#include "../../DCG.h"
+
 
 namespace cml {
 namespace Function {
@@ -12,7 +12,7 @@ namespace Function {
     struct Softmax {
         
         template<typename T>
-        static tensor<T> forward(tensor<T> input){
+        static tensor<T> forward(tensor2d<T> input){
             auto max = input->maxCoeff();
             using namespace std;
             auto exps = (input->array() - max).exp();
@@ -39,6 +39,16 @@ namespace Function {
                 });
             }
             return t;
+        }
+        
+        template<typename T>
+        static tensor<T> forward(tensor<T> input){
+            switch(input->getType()){
+                case TensorType::MATRIX:
+                    return forward(std::static_pointer_cast<Tensor2D<T>>(input));
+                default:
+                    throw UnsupportedOperationException("Softmax unsupported on Tensor type");
+            }
         }
 
     };

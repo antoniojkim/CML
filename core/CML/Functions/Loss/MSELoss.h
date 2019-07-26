@@ -2,7 +2,6 @@
 #define __CML_FUNCTIONS_LOSS_MEANSQUARED_H__
 
 #include "../../Tensor.h"
-#include "../../DCG.h"
 #include "../../Dtypes.h"
 
 namespace cml {
@@ -11,7 +10,7 @@ namespace Function {
     struct MSELoss {
         
         template<typename T>
-        static tensor<T> forward(tensor<T> actual, tensor<T> expected, const nn::Reduction& reduction = nn::Reduction::MEAN){
+        static tensor<T> forward(tensor2d<T> actual, tensor2d<T> expected, const nn::Reduction& reduction = nn::Reduction::MEAN){
             tensor<T> t = nullptr;
             switch(reduction){
                 case nn::Reduction::MEAN:
@@ -42,7 +41,7 @@ namespace Function {
                 T c = 0;
                 switch(reduction){
                     case nn::Reduction::MEAN:
-                        c = (T)(2.0/actual->size());
+                        c = (T)(2.0/actual->data()->size());
                         break;
                     case nn::Reduction::SUM:
                         c = (T)(2);
@@ -55,15 +54,27 @@ namespace Function {
                 tensor<T> actual_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                     c*(actual->data() - expected->data())
                 ));
-// #ifdef DEBUG
-//                 cout << "MSELoss::actual = " << actual << endl;
-//                 cout << "MSELoss::expected = " << expected << endl;
-//                 cout << "MSELoss::actual_grad = " << actual_grad << endl;
-// #endif
 
                 return {actual_grad, nullptr};
             });
             return t;
+        }
+        
+
+        template<typename T>
+        static tensor<T> forward(tensor<T> actual, tensor<T> expected, const nn::Reduction& reduction = nn::Reduction::MEAN){
+            if (actual->getType() != expected->getType()){
+                throw TensorTypeMismatchException();
+            }
+
+            switch(actual->getType()){
+                case TensorType::MATRIX:
+                    return forward(std::static_pointer_cast<Tensor2D<T>>(actual),
+                                   std::static_pointer_cast<Tensor2D<T>>(expected),
+                                   reduction);
+                default:
+                    throw UnsupportedOperationException("MSELoss unsupported for Tensor type");
+            }
         }
 
     };
@@ -73,7 +84,7 @@ namespace Function {
         return MSELoss::forward(actual, expected, reduction);
     }
 
-};
-};
+}
+}
 
 #endif // __CML_FUNCTIONS_LOSS_MEANSQUARED_H__

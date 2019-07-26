@@ -2,7 +2,7 @@
 #define __CML_FUNCTIONS_CONVOLUTION_CONV2D_H__
 
 #include "../../Tensor.h"
-#include "../../DCG.h"
+
 
 namespace cml {
 namespace Function {

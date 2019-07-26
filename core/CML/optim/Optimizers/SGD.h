@@ -19,7 +19,7 @@ namespace optim {
         bool nesterov = false; // enables Nesterov momentum
     
         public:
-            SGD(nn::Parameters<T>&& params, Kwargs kwargs = {}): Optimizer<T>{params} {
+            SGD(Parameters<T>&& params, Kwargs kwargs = {}): Optimizer<T>{params} {
                 
                 if (kwargs.count("lr")){ lr = kwargs["lr"]; }
                 if (kwargs.count("learning_rate")){ lr = kwargs["learning_rate"]; }

@@ -1,36 +1,40 @@
 #ifndef __CML_TENSORS_TENSORDIMENSION_H__
 #define __CML_TENSORS_TENSORDIMENSION_H__
 
-#include <Eigen/Core>
-#include "Tensor.h"
+#include <vector>
+#include <initializer_list>
+
 
 namespace cml {
 
-    template<typename T, template<typename> class MatrixType>
-    class TensorDimension {};
+    struct TensorDimension {
+        std::vector<unsigned int> dims;
+        
+        TensorDimension(std::vector<unsigned int>& dims): dims{dims} {}
+        TensorDimension(std::vector<unsigned int>&& dims): dims{dims} {}
+        TensorDimension(std::initializer_list<unsigned int>& dims): dims{dims} {}
+        TensorDimension(std::initializer_list<unsigned int>&& dims): dims{dims} {}
 
-    template <typename T>
-    using DMatrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;  // Dynamic Matrix
-
-    template<typename T>
-    struct TensorDimension<T, DMatrix> {
-        DMatrix<T>* m;
-
-        TensorDimension() {}
-        TensorDimension(DMatrix<T>* m): m{m} {}
-        TensorDimension(DMatrix<T>& m): m{&m} {}
-
-        void setMatrix(DMatrix<T>* m) { this->m = m; }
-        void setMatrix(DMatrix<T>& m) { this->m = &m; }
-
-        bool operator==(const TensorDimension<T, DMatrix>& other){
-            return m->rows() == other.m->rows() && m->cols() == other.m->cols();
+        bool operator==(const TensorDimension& other){
+            return dims == other.dims;
         }
-        bool operator!=(const TensorDimension<T, DMatrix>& other){
-            return m->rows() != other.m->rows() || m->cols() != other.m->cols();
+        bool operator!=(const TensorDimension& other){
+            return dims != other.dims;
         }
         bool isScalar(){
-            return m->rows() == 1 && m->cols() == 1;
+            for (auto& d : dims){
+                if (d > 1) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        unsigned int size(){
+            unsigned int s = 1;
+            for (auto& d : dims){
+                s *= d;
+            }
+            return s;
         }
 
     };

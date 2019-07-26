@@ -13,9 +13,9 @@ namespace optim {
     template<typename T>
     struct Optimizer {
         protected:
-            nn::Parameters<T> params;
-            Optimizer(nn::Parameters<T>& params):  params {std::move(params)} {}
-            Optimizer(nn::Parameters<T>&& params): params {std::move(params)} {}
+            Parameters<T> params;
+            Optimizer(Parameters<T>& params):  params {std::move(params)} {}
+            Optimizer(Parameters<T>&& params): params {std::move(params)} {}
         
         public:
             void zeroGrad(){
