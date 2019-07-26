@@ -4,7 +4,6 @@
 #include <cmath>
 
 #include "../../Tensor.h"
-
 #include "../../Dtypes.h"
 
 namespace cml {
@@ -22,10 +21,10 @@ namespace Function {
             // This is more stable
             auto p = static_cast<DMatrix<T>>(
                 actual->data().rowwise() - static_cast<DMatrix<T>>(actual->data().array().exp().colwise().sum().log()).row(0));
-            int m = expected->cols();
+            int m = expected->data().cols();
             T sum_log_likelihood = 0;
             for (int i = 0; i<m; ++i){
-                sum_log_likelihood -= p(expected->data(0, i), i);
+                sum_log_likelihood -= p(expected->at(0, i), i);
             }
             tensor<T> t = make_tensor<T>({sum_log_likelihood / m});
             t->computeGrad = true;

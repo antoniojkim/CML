@@ -25,13 +25,13 @@ namespace cml {
         
         public:
             Tensor2D(const T& t, const bool& computeGrad = false):
-                Tensor<T>({1, 1}, TensorType::MATRIX, computeGrad), m{1, 1} { fill(t); }
+                Tensor<T>(computeGrad, {1, 1}, TensorType::MATRIX), m{1, 1} { fill(t); }
             Tensor2D(const int& R, const int& C, const bool& computeGrad = false):
-                Tensor<T>({R, C}, TensorType::MATRIX, computeGrad), m{R, C} {}
+                Tensor<T>(computeGrad, {R, C}, TensorType::MATRIX), m{R, C} {}
             Tensor2D(DMatrix<T>& m, const bool& computeGrad = false):
-                Tensor<T>({m.rows(), m.cols()}, TensorType::MATRIX, computeGrad), m{m} {}
+                Tensor<T>(computeGrad, {m.rows(), m.cols()}, TensorType::MATRIX), m{m} {}
             Tensor2D(DMatrix<T>&& m, const bool& computeGrad = false):
-                Tensor<T>({m.rows(), m.cols()}, TensorType::MATRIX, computeGrad), m{m} {}
+                Tensor<T>(computeGrad, {m.rows(), m.cols()}, TensorType::MATRIX), m{m} {}
 
             inline DMatrix<T>& data() override { return m; }
         
@@ -67,7 +67,7 @@ namespace cml {
                     ++i;
                 }
             }
-            void set(std::initializer_list<std::initializer_list<std::initializer_list<T>>> values) {
+            void set(std::initializer_list<std::initializer_list<std::initializer_list<T>>> values) override {
                 throw "Cannot use 3D initializer_list to set values of Tensor2D";
             }
 
@@ -117,7 +117,7 @@ namespace cml {
     }
 #if SCALAR_TENSOR_DIM==2
     template <typename T = float>
-    inline tensor<T> make_scalar(const T& t, const bool& computeGrad = false) {
+    inline tensor<T> make_scalar(const T& t, const bool& computeGrad) {
         return std::make_shared<Tensor2D<T>>(t, computeGrad);
     }
 #endif
@@ -173,13 +173,13 @@ namespace cml {
                 if (lhs->computeGrad){
                     lhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                         // TODO:  Check to see if order is correct
-                        output_grad->data() * rhs->data()->transpose()
+                        output_grad->data() * rhs->data().transpose()
                     ));
                 }
                 if (rhs->computeGrad){
                     rhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                         // TODO:  Check to see if order is correct
-                        lhs->data()->transpose() * output_grad->data()
+                        lhs->data().transpose() * output_grad->data()
                     ));
                 }
 

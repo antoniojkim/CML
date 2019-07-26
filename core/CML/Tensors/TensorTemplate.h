@@ -51,10 +51,8 @@ namespace cml {
             TensorDimension dimensions;
             TensorType type = TensorType::NONE;
         
-            Tensor(std::vector<int>& v, TensorType type, const bool& computeGrad):
-                dimensions{v}, type{type}, computeGrad{computeGrad} {}
-            Tensor(std::vector<int>&& v, TensorType type, const bool& computeGrad):
-                dimensions{v}, type{type}, computeGrad{computeGrad} {}
+            Tensor(const bool& computeGrad, std::initializer_list<int> v, TensorType type):
+                computeGrad{computeGrad}, dimensions{std::forward<std::initializer_list<int>>(v)}, type{type} {}
         
         public:
             
@@ -96,7 +94,7 @@ namespace cml {
             
             virtual void set(std::initializer_list<T> values, const bool& transpose = false) = 0;
             virtual void set(std::initializer_list<std::initializer_list<T>> values) = 0;
-            virtual void set(std::initializer_list<std::initializer_list<std::initializer_list<T>>>&& values) = 0;
+            virtual void set(std::initializer_list<std::initializer_list<std::initializer_list<T>>> values) = 0;
             
             inline void operator=(std::initializer_list<T> values){
                 this->set(std::forward<std::initializer_list<T>>(values));
@@ -104,14 +102,13 @@ namespace cml {
             inline void operator=(std::initializer_list<std::initializer_list<T>> values){
                 this->set(std::forward<std::initializer_list<std::initializer_list<T>>>(values));
             };
-            inline void operator=(std::initializer_list<std::initializer_list<std::initializer_list<T>>>&& values){
-                this->set(std::forward<std::initializer_list<std::initializer_list<std::initializer_list<T>>>&&>(values));
+            inline void operator=(std::initializer_list<std::initializer_list<std::initializer_list<T>>> values){
+                this->set(std::forward<std::initializer_list<std::initializer_list<std::initializer_list<T>>>>(values));
             };
         
             virtual void fill(const T& coefficient) = 0;
             virtual void ones() = 0;
             virtual void zero() = 0;
-            virtual void random() = 0;
             virtual void randomize() = 0;
         
             virtual tensor<T> emptyCopy() = 0;
@@ -129,15 +126,24 @@ namespace cml {
             inline bool isScalar() { return dimensions.isScalar(); }
             inline unsigned int size() { return dimensions.size(); }
 
-
-            virtual inline void operator+=(tensor<T> t){ this->data() += t->data(); }
-            virtual inline void operator-=(tensor<T> t){ this->data() -= t->data(); }
-
             TensorType getType(){ return type; }
         
         
-            void initGraph(std::vector<tensor<T>> params = {}, GradientFunction<T> f = nullptr);
-            std::unique_ptr<DCG<T>>& graph();
+            void initGraph(std::vector<tensor<T>> params = {}, GradientFunction<T> f = nullptr){
+                if (!dcg) {
+                    dcg = std::make_unique<DCG<T>>(this, std::forward<std::vector<tensor<T>>>(params),
+                                                   std::forward<GradientFunction<T>>(f));
+                } else {
+                    throw "Called initGraph when graph already exists";
+                }
+            }
+            std::unique_ptr<DCG<T>>& graph(){
+                if (!dcg) {
+                    if (!computeGrad) throw "Getting graph of tensor with computeGrad == false";
+                    initGraph();
+                }
+                return dcg;
+            }
             tensor<T> gradient(){ return graph()->gradient; }
             void backward(){
                 if (!isScalar()) throw "backward can only be called on a scalar tensor";
@@ -150,7 +156,7 @@ namespace cml {
     };
     
     template <typename T>
-    inline tensor<T> make_scalar(const T& t);
+    inline tensor<T> make_scalar(const T& t, const bool& computeGrad = false);
     
     /***********************************************************************************
     *********************************** Aliases ****************************************

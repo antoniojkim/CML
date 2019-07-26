@@ -9,15 +9,15 @@ namespace Function {
     struct Linear {
 
         template<typename T>
-        static tensor<T> forward(tensor<T> input, tensor<T> weights, tensor<T> bias = nullptr){
+        static tensor<T> forward(tensor2d<T> input, tensor<T> weights, tensor<T> bias = nullptr){
             tensor<T> t = nullptr;
             if (bias != nullptr)
                 t = make_tensor<T>(static_cast<DMatrix<T>>(
-                    (weights->transpose() * input->data()).colwise() + bias->data().col(0)
+                    (weights->data().transpose() * input->data()).colwise() + bias->data().col(0)
                 ));
             else
                 t = make_tensor<T>(static_cast<DMatrix<T>>(
-                    weights->transpose() * input->data()
+                    weights->data().transpose() * input->data()
                 ));
 
             t->computeGrad = input->computeGrad || weights->computeGrad || (bias != nullptr && bias->computeGrad);
@@ -37,11 +37,6 @@ namespace Function {
                     tensor<T> bias_grad = nullptr;
 
                     if (input->computeGrad){
-// #ifdef DEBUG
-//                         using namespace std;
-//                         cout << "    Weights:  " << weights->rows() << ", " << weights->cols() << endl;
-//                         cout << "    output_grad:  " << output_grad->rows() << ", " << output_grad->cols() << endl;
-// #endif
                         input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                             // TODO:  Check to see if order is correct
                             weights->data() * output_grad->data()
@@ -50,25 +45,29 @@ namespace Function {
                     if (weights->computeGrad){
                         weight_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                             // TODO:  Check to see if order is correct
-                            input->data() * output_grad->transpose()
+                            input->data() * output_grad->data().transpose()
                         ));
                     }
                     if (bias != nullptr && bias->computeGrad){
                         bias_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                            output_grad->rowwise().sum()
+                            output_grad->data().rowwise().sum()
                         ));
                     }
-
-// #ifdef DEBUG
-//                     cout << "    input_grad: " << input_grad << endl;
-//                     cout << "    weight_grad: " << weight_grad << endl;
-//                     cout << "    bias_grad: " << bias_grad << endl;
-// #endif
 
                     return {input_grad, weight_grad, bias_grad};
                 });
             }
             return t;
+        }
+        
+        template<typename T>
+        static tensor<T> forward(tensor<T> input, tensor<T> weights, tensor<T> bias = nullptr){
+            switch(input->getType()){
+                case TensorType::MATRIX:
+                    return forward(std::static_pointer_cast<Tensor2D<T>>(input), weights, bias);
+                default:
+                    throw UnsupportedOperationException("Linear unsupported on Tensor type");
+            }
         }
     };
 

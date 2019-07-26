@@ -8,12 +8,10 @@
 namespace cml {
 
     struct TensorDimension {
-        std::vector<unsigned int> dims;
+        std::vector<int> dims;
         
-        TensorDimension(std::vector<unsigned int>& dims): dims{dims} {}
-        TensorDimension(std::vector<unsigned int>&& dims): dims{dims} {}
-        TensorDimension(std::initializer_list<unsigned int>& dims): dims{dims} {}
-        TensorDimension(std::initializer_list<unsigned int>&& dims): dims{dims} {}
+        TensorDimension(std::vector<int> dims): dims{dims} {}
+        TensorDimension(std::initializer_list<int> dims): dims{dims} {}
 
         bool operator==(const TensorDimension& other){
             return dims == other.dims;
@@ -29,8 +27,8 @@ namespace cml {
             }
             return true;
         }
-        unsigned int size(){
-            unsigned int s = 1;
+        int size(){
+            int s = 1;
             for (auto& d : dims){
                 s *= d;
             }
@@ -38,6 +36,21 @@ namespace cml {
         }
 
     };
+
+    std::ostream& operator<<(std::ostream& out, TensorDimension& dims){
+        out << "{";
+        bool first = true;
+        for (auto& d : dims.dims){
+            if (first){
+                out << " " << d;
+            }
+            else{
+                out << ", " << d;
+                first = false;
+            }
+        }
+        return out;
+    }
 
 }
 

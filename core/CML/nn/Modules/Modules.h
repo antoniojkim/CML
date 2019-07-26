@@ -371,9 +371,8 @@ namespace nn {
     template<typename T> 
     Module<T>& Module<T>::addModule(uModule<T>&& m, const std::string& alias){
         submodules.emplace_back(std::move(m));
-        submodules.back()->parent = this;
         if (alias == ""){
-            auto newkey = to_string(submodules.size()-1);
+            auto newkey = std::to_string(submodules.size()-1);
             if (mKeys.count(newkey) > 0){
                 std::ostringstream error;
                 error << "alias Already Exists: " << newkey;
