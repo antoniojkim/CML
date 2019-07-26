@@ -46,12 +46,12 @@ namespace cml {
                 unsigned int i = 0;
                 if (transpose){
                     for (auto& e : values) {
-                        m(0, i++) = e;
+                        m(i++, 0) = e;
                     }
                 }
                 else{
                     for (auto& e : values) {
-                        m(i++, 0) = e;
+                        m(0, i++) = e;
                     }
                 }
             }
@@ -76,8 +76,8 @@ namespace cml {
             inline void zero() override { m.setZero(); }
             inline void randomize() override { m.setRandom(); }
         
-            tensor<T> emptyCopy() override {
-                return make_tensor2d<T>(m.rows(), m.cols(), false);
+            tensor<T> copyLike() override {
+                return make_tensor<T>(DMatrix<T>::Zero(m.rows(), m.cols()), false);
             }
     };
 
@@ -104,7 +104,7 @@ namespace cml {
 #if VECTOR_TENSOR_DIM==2
     template <typename T = float>
     inline tensor<T> make_tensor(std::initializer_list<T> v, const bool& computeGrad = false) {
-        auto t = std::make_shared<Tensor2D<T>>(v.size(), 1, computeGrad);
+        auto t = std::make_shared<Tensor2D<T>>(1, v.size(), computeGrad);
         t->set(std::forward<std::initializer_list<T>>(v));
         return t;
     }

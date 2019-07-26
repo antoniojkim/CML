@@ -111,7 +111,7 @@ namespace cml {
             virtual void zero() = 0;
             virtual void randomize() = 0;
         
-            virtual tensor<T> emptyCopy() = 0;
+            virtual tensor<T> copyLike() = 0;
             /*
             void randomize(Randomizer::Function<T> randomizer = Randomizer::Gaussian<T>) {
                 throw "Tensor2D::randomize not implemented";

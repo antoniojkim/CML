@@ -6,5 +6,5 @@ if [ $? -ne 0 ]; then
 	vim -RZ log.txt
 else
 	rm log.txt
-	./testCML
+	gdb ./testCML
 fi
