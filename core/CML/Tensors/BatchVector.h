@@ -7,49 +7,41 @@
 #include "../Randomizer.h"
 
 namespace cml {
-    template <typename T, template<typename> class MatrixType = DMatrix>
-    class Tensor2D;
-    template <typename T, template<typename> class MatrixType = DMatrix>
-    using tensor2d = std::shared_ptr<Tensor2D<T, MatrixType>>;
-    
-    
-    template <class T, template<typename> class MatrixType = DMatrix, typename... Args>
-    tensor<T> make_tensor2d(Args&&... args);
-    template <typename T = float, template<typename> class MatrixType = DMatrix>
-    tensor<T> make_tensor(const int& R, const int& C, const bool& computeGrad);
-    template <class T, template<typename> class MatrixType = DMatrix>
-    tensor<T> make_tensor(MatrixType<T>& m, const bool& computeGrad = false);
-    template <class T, template<typename> class MatrixType = DMatrix>
-    tensor<T> make_tensor(MatrixType<T>&& m, const bool& computeGrad = false);
+    template <typename T> class BatchVector;
+    template <typename T> using batch_vector = std::shared_ptr<BatchVector<T>>;
 
-    template <typename T, template<typename> class MatrixType>
-    class Tensor2D: public Tensor<T> {
+    
+    template <class T, typename... Args>
+    tensor<T> make_batch_vector(Args&&... args);
+
+    template <typename T>
+    class BatchVector: public Tensor<T> {
         
-        MatrixType<T> m;
+        DMatrix<T> m;
+        int batchSize;
         
         public:
-            Tensor2D(const T& t, const bool& computeGrad = false):
-                Tensor<T>(computeGrad, {1, 1}, TensorType::MATRIX), m{1, 1} { fill(t); }
-            Tensor2D(const int& R, const int& C, const bool& computeGrad = false):
-                Tensor<T>(computeGrad, {R, C}, TensorType::MATRIX), m{R, C} {}
-            Tensor2D(DMatrix<T>& m, const bool& computeGrad = false):
-                Tensor<T>(computeGrad, {m.rows(), m.cols()}, TensorType::MATRIX), m{m} {}
-            Tensor2D(DMatrix<T>&& m, const bool& computeGrad = false):
-                Tensor<T>(computeGrad, {m.rows(), m.cols()}, TensorType::MATRIX), m{m} {}
+            /*
+                N:  the number of batches
+                R:  the number of rows in the vector
+             */
+            BatchVector(const int& N, const int& R, const int& batchSize):
+                Tensor<T>(false, {N, R}, TensorType::MATRIX), m{R, C}, batchSize{batchSize} {}
 
-            inline MatrixType<T>& data() override { return m; }
+            inline DMatrix<T>& data() override { return m; }
         
-            T& at(const int& R) override { return m(R, 0); };
-            T& at(const int& R, const int& C) override { return m(R, C); }
-            T& at(const int& C, const int& H, const int& W) override {
-                throw "Tensor2D::at:   Channel does not exist";
+            T& at(const int& N) override { throw UnsupportedOperationException("Cannot get scalar batch from BatchVector"); };
+            T& at(const int& N, const int& R) override { return m(N, R); }
+            T& at(const int& N, const int& R, const int& C) override {
+                throw UnsupportedOperationException("Cannot get matrix tensor from BatchVector");
             }
 
-            tensor<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) override {
-                return make_tensor2d<T>(m.block(startRow, startCol, numRows, numCols));
+            DMatrix<T>& block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) override {
+                return static_cast<DMatrix<T>>(m.block(startRow, startCol, numRows, numCols));
             }
+            inline DMatrix<T>& getBatch()
         
-
+        
             void set(std::initializer_list<T> values, const bool& transpose = false) override {
                 unsigned int i = 0;
                 if (transpose){
@@ -84,7 +76,7 @@ namespace cml {
             inline void zero() override { m.setZero(); }
             inline void randomize() override { m.setRandom(); }
         
-            tensor<T> zeroLike() override {
+            tensor<T> copyLike() override {
                 return make_tensor<T>(DMatrix<T>::Zero(m.rows(), m.cols()), false);
             }
     };
@@ -93,47 +85,48 @@ namespace cml {
     /*
         This is the recommended way to construct a matrix tensor
     */
-    template <typename T = float, template<typename> class MatrixType, typename... Args>
+    template <typename T = float, typename... Args>
     inline tensor<T> make_tensor2d(Args&&... args) {
-        return std::make_shared<Tensor2D<T, MatrixType>>(std::forward<Args>(args)...);
+        return std::make_shared<Tensor2D<T>>(std::forward<Args>(args)...);
     }
-    template <typename T = float, template<typename> class MatrixType>
+    template <typename T = float>
     inline tensor<T> make_tensor(const int& R, const int& C, const bool& computeGrad) {
-        return std::make_shared<Tensor2D<T, MatrixType>>(R, C, computeGrad);
+        return std::make_shared<Tensor2D<T>>(R, C, computeGrad);
     }
-    template <typename T = float, template<typename> class MatrixType>
-    inline tensor<T> make_tensor(MatrixType<T>& m, const bool& computeGrad) {
-        return std::make_shared<Tensor2D<T, MatrixType>>(m, computeGrad);
+    template <typename T = float>
+    inline tensor<T> make_tensor(DMatrix<T>& m, const bool& computeGrad) {
+        return std::make_shared<Tensor2D<T>>(m, computeGrad);
     }
-    template <typename T = float, template<typename> class MatrixType>
-    inline tensor<T> make_tensor(MatrixType<T>&& m, const bool& computeGrad) {
-        return std::make_shared<Tensor2D<T, MatrixType>>(std::forward<MatrixType<T>&&>(m), computeGrad);
+    template <typename T = float>
+    inline tensor<T> make_tensor(DMatrix<T>&& m, const bool& computeGrad) {
+        return std::make_shared<Tensor2D<T>>(std::forward<DMatrix<T>>(m), computeGrad);
     }
-
 #if VECTOR_TENSOR_DIM==2
-    template <typename T = float, template<typename> class MatrixType = DMatrix>
+    template <typename T = float>
     inline tensor<T> make_tensor(std::initializer_list<T> v, const bool& computeGrad = false) {
-        auto t = std::make_shared<Tensor2D<T, MatrixType>>(1, v.size(), computeGrad);
+        auto t = std::make_shared<Tensor2D<T>>(1, v.size(), computeGrad);
         t->set(std::forward<std::initializer_list<T>>(v));
         return t;
     }
 #endif
-    template <typename T = float, template<typename> class MatrixType = DMatrix>
+    template <typename T = float>
     inline tensor<T> make_tensor(std::initializer_list<std::initializer_list<T>> v, const bool& computeGrad = false) {
-        auto t = std::make_shared<Tensor2D<T, MatrixType>>(v.size(), v.begin()->size(), computeGrad);
+        auto t = std::make_shared<Tensor2D<T>>(v.size(), v.begin()->size(), computeGrad);
         t->set(std::forward<std::initializer_list<std::initializer_list<T>>>(v));
         return t;
     }
 #if SCALAR_TENSOR_DIM==2
-    template <typename T = float, template<typename> class MatrixType = DMatrix>
+    template <typename T = float>
     inline tensor<T> make_scalar(const T& t, const bool& computeGrad) {
-        return std::make_shared<Tensor2D<T, MatrixType>>(t, computeGrad);
+        return std::make_shared<Tensor2D<T>>(t, computeGrad);
     }
 #endif
 
-    template <typename T, template<typename> class MatrixType = DMatrix>
-    tensor<T> operator+(tensor2d<T, MatrixType> lhs, tensor2d<T, MatrixType> rhs){
-        auto t = make_tensor<T>(lhs->data() + rhs->data(), lhs->computeGrad | rhs->computeGrad);
+    template <typename T>
+    tensor<T> operator+(tensor2d<T> lhs, tensor2d<T> rhs){
+        auto t = make_tensor<T>(static_cast<DMatrix<T>>(
+            lhs->data() + rhs->data()
+        ), lhs->computeGrad | rhs->computeGrad);
 
         if (t->computeGrad){
             t->initGraph({lhs, rhs}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
@@ -144,9 +137,11 @@ namespace cml {
         return t;
     }
 
-    template <typename T, template<typename> class MatrixType = DMatrix>
-    tensor<T> operator-(tensor2d<T, MatrixType> lhs, tensor2d<T, MatrixType> rhs){
-        auto t = make_tensor<T>(lhs->data() - rhs->data(), lhs->computeGrad | rhs->computeGrad);
+    template <typename T>
+    tensor<T> operator-(tensor2d<T> lhs, tensor2d<T> rhs){
+        auto t = make_tensor<T>(static_cast<DMatrix<T>>(
+            lhs->data() - rhs->data()
+        ), lhs->computeGrad | rhs->computeGrad);
 
         if (t->computeGrad){
             t->initGraph({lhs, rhs}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
@@ -157,9 +152,11 @@ namespace cml {
         return t;
     }
 
-    template <typename T, template<typename> class MatrixType = DMatrix>
-    tensor<T> operator*(tensor2d<T, MatrixType> lhs, tensor2d<T, MatrixType> rhs){
-        auto t = make_tensor<T>(lhs->data() * rhs->data(), lhs->computeGrad | rhs->computeGrad);
+    template <typename T>
+    tensor<T> operator*(tensor2d<T> lhs, tensor2d<T> rhs){
+        auto t = make_tensor<T>(static_cast<DMatrix<T>>(
+            lhs->data() * rhs->data()
+        ), lhs->computeGrad | rhs->computeGrad);
 
         if (t->computeGrad){
             t->initGraph({lhs, rhs}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
@@ -174,16 +171,16 @@ namespace cml {
                 tensor<T> rhs_grad = nullptr;
 
                 if (lhs->computeGrad){
-                    lhs_grad = make_tensor<T>(
+                    lhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                         // TODO:  Check to see if order is correct
                         output_grad->data() * rhs->data().transpose()
-                    );
+                    ));
                 }
                 if (rhs->computeGrad){
-                    rhs_grad = make_tensor<T>(
+                    rhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                         // TODO:  Check to see if order is correct
                         lhs->data().transpose() * output_grad->data()
-                    );
+                    ));
                 }
 
                 return {lhs_grad, rhs_grad};

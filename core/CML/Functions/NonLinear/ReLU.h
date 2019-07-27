@@ -6,20 +6,23 @@
 
 namespace cml {
 namespace Function {
+
+    template <typename T>
+    using ReLUReturnType = Eigen::CwiseUnaryOp<Eigen::internal::scalar_abs_op<T>, Eigen::ArrayWrapper<DMatrix<T> > const> const;
     
     struct ReLU {
         
         template<typename T>
         static tensor<T> forward(tensor2d<T> input){
-            auto t = make_tensor<T>(static_cast<DMatrix<T>>(
+            auto t = make_tensor<T, ReLUReturnType>(
                 input->data().array().abs()
-            ));
+            );
             t->computeGrad = input->computeGrad;
             if (t->computeGrad){
                 t->initGraph({input}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
                     tensor<T> output_grad = output.at(0);
-                    tensor<T> input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                        output_grad->data().unaryExpr([](T x){ return (T)(x < 0 ? 0 : 1); }).array()
+                    tensor<T> input_grad = make_tensor<T, DMatrix>(static_cast<DMatrix<T>>(
+                        output_grad->data().unaryExpr([](T x){ return (T)(x < 0 ? 0 : 1); })
                     ));
                     return {input_grad};
                 });

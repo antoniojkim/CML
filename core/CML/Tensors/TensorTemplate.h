@@ -24,6 +24,10 @@ namespace cml {
 
     template <typename T>
     using DMatrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;  // Dynamic Matrix
+    // template <typename T>
+    // using cast_matrix = static_cast<DMatrix<T>>;
+    // template <typename T>
+    // using DBlock = Eigen::Block<T, Eigen::Dynamic, Eigen::Dynamic>;  // Dynamic Array
     template <typename T>
     using DArray = Eigen::Array<T, Eigen::Dynamic, Eigen::Dynamic>;  // Dynamic Array
 
@@ -90,6 +94,8 @@ namespace cml {
             inline T& data(const int& R){ return this->at(R); }
             inline T& data(const int& R, const int& C){ return this->at(R, C); }
             inline T& data(const int& C, const int& H, const int& W){ return this->at(C, H, W); }
+
+            virtual tensor<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) = 0;
             
             
             virtual void set(std::initializer_list<T> values, const bool& transpose = false) = 0;
@@ -111,7 +117,7 @@ namespace cml {
             virtual void zero() = 0;
             virtual void randomize() = 0;
         
-            virtual tensor<T> copyLike() = 0;
+            virtual tensor<T> zeroLike() = 0;
             /*
             void randomize(Randomizer::Function<T> randomizer = Randomizer::Gaussian<T>) {
                 throw "Tensor2D::randomize not implemented";

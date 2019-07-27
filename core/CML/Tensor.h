@@ -7,5 +7,4 @@
 #include "Tensors/Tensor2D.h"
 #include "Tensors/TensorOps.h"
 
-
 #endif // __CML_TENSOR_H__

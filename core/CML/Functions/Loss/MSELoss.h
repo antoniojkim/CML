@@ -6,7 +6,37 @@
 
 namespace cml {
 namespace Function {
-    
+
+    template <typename T, typename ActualType, typename ExpectedType>
+    using MSEMeanReturnType = Eigen::PartialReduxExpr<
+        Eigen::CwiseUnaryOp<
+            Eigen::internal::scalar_square_op<T>,
+            Eigen::ArrayWrapper<Eigen::CwiseBinaryOp<Eigen::internal::scalar_difference_op<T, T>, ActualType const,
+                                                    ExpectedType const> const> const> const,
+        Eigen::internal::member_mean<T>, 0> const;
+
+
+    template <typename T, typename ActualType, typename ExpectedType>
+    using MSESumReturnType = Eigen::PartialReduxExpr<
+        Eigen::CwiseUnaryOp<
+            Eigen::internal::scalar_square_op<T>,
+            Eigen::ArrayWrapper<Eigen::CwiseBinaryOp<Eigen::internal::scalar_difference_op<T, T>, ActualType const,
+                                                    ExpectedType const> const> const> const,
+        Eigen::internal::member_sum<T>, 0> const;
+
+
+    template <typename T, typename ActualType, typename ExpectedType>
+    using MSEReturnType = Eigen::CwiseUnaryOp<Eigen::internal::scalar_square_op<T>,
+        Eigen::ArrayWrapper<Eigen::CwiseBinaryOp<Eigen::internal::scalar_difference_op<T, T>,
+                                                    ActualType const, ExpectedType const> const> const> const
+
+    template <typename T>
+    using MSEGradientReturnType = Eigen::CwiseBinaryOp<
+        Eigen::internal::scalar_product_op<T, T>,
+        Eigen::CwiseNullaryOp<Eigen::internal::scalar_constant_op<T>, DMatrix<T> const> const,
+        Eigen::CwiseBinaryOp<Eigen::internal::scalar_difference_op<T, T>, DMatrix<T> const, DMatrix<T> const> const> const
+
+
     struct MSELoss {
         
         template<typename T>
@@ -14,19 +44,19 @@ namespace Function {
             tensor<T> t = nullptr;
             switch(reduction){
                 case nn::Reduction::MEAN:
-                    t = make_tensor<T>(static_cast<DMatrix<T>>(
+                    t = make_tensor<T, MSEMeanReturnType<T, decltype(actual->data()), decltype(expected->data())>>(
                         (actual->data() - expected->data()).array().square().colwise().mean()
-                    ));
+                    );
                     break;
                 case nn::Reduction::SUM:
-                    t = make_tensor<T>(static_cast<DMatrix<T>>(
+                    t = make_tensor<T, MSESumReturnType<T, decltype(actual->data()), decltype(expected->data())>>(
                         (actual->data() - expected->data()).array().square().colwise().sum()
-                    ));
+                    );
                     break;
                 default:
-                    t = make_tensor<T>(static_cast<DMatrix<T>>(
+                    t = make_tensor<T, MSEReturnType<T, decltype(actual->data()), decltype(expected->data())>>(
                         (actual->data() - expected->data()).array().square()
-                    ));
+                    );
                     break;
             }
             t->computeGrad = true;
@@ -51,9 +81,9 @@ namespace Function {
                         break;
                 }
 
-                tensor<T> actual_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                tensor<T> actual_grad = make_tensor<T, MSEGradientReturnType<T, decltype(actual->data()), decltype(expected->data())>>(
                     c*(actual->data() - expected->data())
-                ));
+                );
 
                 return {actual_grad, nullptr};
             });

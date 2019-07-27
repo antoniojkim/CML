@@ -1,10 +1,26 @@
 #!/bin/bash
 
 clear
-make > log.txt 2>&1
-if [ $? -ne 0 ]; then
-	vim -RZ log.txt
+if [ "$1" == "-m" ]; then
+	make
+	if [ $? -eq 0 ]; then
+		rm log.txt
+		if [ "$2" == "-n" ]; then
+			gdb ./testCML
+		else
+			gdb -ex run ./testCML
+		fi
+	fi
 else
-	rm log.txt
-	gdb ./testCML
+	make > log.txt 2>&1
+	if [ $? -ne 0 ]; then
+		vim -RZ log.txt
+	else
+		rm log.txt
+		if [ "$1" == "-n" ]; then
+			gdb ./testCML
+		else
+			gdb -ex run ./testCML
+		fi
+	fi
 fi
