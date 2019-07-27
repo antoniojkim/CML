@@ -1,7 +1,7 @@
 #ifndef __CML_FUNCTIONS_LOSS_MEANSQUARED_H__
 #define __CML_FUNCTIONS_LOSS_MEANSQUARED_H__
 
-#include "../../Tensor.h"
+#include "../../Tensors/Tensor2D.h"
 #include "../../Dtypes.h"
 
 namespace cml {

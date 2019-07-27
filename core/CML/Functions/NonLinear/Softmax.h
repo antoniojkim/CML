@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-#include "../../Tensor.h"
+#include "../../Tensors/Tensor2D.h"
 
 
 namespace cml {

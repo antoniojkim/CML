@@ -40,6 +40,10 @@ namespace cml {
             T& at(const int& C, const int& H, const int& W) override {
                 throw "Tensor2D::at:   Channel does not exist";
             }
+
+            DBlock<T>&& block(const int& startRow, const int& startCol, const int& numRows, const int& numCols){
+                return m.block(startRow, startCol, numRows, numCols);
+            }
         
         
             void set(std::initializer_list<T> values, const bool& transpose = false) override {
@@ -76,7 +80,7 @@ namespace cml {
             inline void zero() override { m.setZero(); }
             inline void randomize() override { m.setRandom(); }
         
-            tensor<T> copyLike() override {
+            tensor<T> zeroLike() override {
                 return make_tensor<T>(DMatrix<T>::Zero(m.rows(), m.cols()), false);
             }
     };
@@ -146,44 +150,6 @@ namespace cml {
         if (t->computeGrad){
             t->initGraph({lhs, rhs}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
                 return {make_scalar<T>(1), make_scalar<T>(-1)};
-            });
-        }
-
-        return t;
-    }
-
-    template <typename T>
-    tensor<T> operator*(tensor2d<T> lhs, tensor2d<T> rhs){
-        auto t = make_tensor<T>(static_cast<DMatrix<T>>(
-            lhs->data() * rhs->data()
-        ), lhs->computeGrad | rhs->computeGrad);
-
-        if (t->computeGrad){
-            t->initGraph({lhs, rhs}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
-#ifdef DEBUG
-                using namespace std;
-                cout << "Tensor2D Multiplication Backward" << endl;
-#endif
-                auto lhs = params.at(0);
-                auto rhs = params.at(1);
-                auto output_grad = output.at(0);
-                tensor<T> lhs_grad = nullptr;
-                tensor<T> rhs_grad = nullptr;
-
-                if (lhs->computeGrad){
-                    lhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                        // TODO:  Check to see if order is correct
-                        output_grad->data() * rhs->data().transpose()
-                    ));
-                }
-                if (rhs->computeGrad){
-                    rhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                        // TODO:  Check to see if order is correct
-                        lhs->data().transpose() * output_grad->data()
-                    ));
-                }
-
-                return {lhs_grad, rhs_grad};
             });
         }
 

@@ -1,7 +1,7 @@
 #ifndef __CML_FUNCTIONS_LINEAR_LINEAR_H__
 #define __CML_FUNCTIONS_LINEAR_LINEAR_H__
 
-#include "../../Tensor.h"
+#include "../../Tensors/Tensor2D.h"
 
 namespace cml {
 namespace Function {

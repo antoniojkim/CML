@@ -2,7 +2,7 @@
 #define __CML_NN_NONLINEAR_SIGMOID_H__
 
 #include "../Modules.h"
-#include "../../Tensor.h"
+#include "../../Tensors/Tensor2D.h"
 #include "../../Functions/NonLinear/Sigmoid.h"
 
 namespace cml {

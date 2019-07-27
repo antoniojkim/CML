@@ -1,7 +1,7 @@
 #ifndef __CML_NN_LOSS_CRITERION_H__
 #define __CML_NN_LOSS_CRITERION_H__
 
-#include "../../Tensor.h"
+#include "../../Tensors/Tensor2D.h"
 
 namespace cml {
 namespace nn {

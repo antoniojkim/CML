@@ -43,7 +43,7 @@ namespace cml {
         : params{params},
           f{f},
           isLeaf{params.size() == 0 && f == nullptr},
-          gradient{isLeaf ? t->copyLike() : nullptr} {}
+          gradient{isLeaf ? t->zeroLike() : nullptr} {}
 
     /***********************************************************************************
     *********************************** Methods ****************************************

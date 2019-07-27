@@ -6,7 +6,7 @@
 #include <string>
 
 #include "../Modules.h"
-#include "../../Tensor.h"
+#include "../../Tensors/Tensor2D.h"
 #include "../../Functions/NonLinear/ReLU.h"
 
 namespace cml {
