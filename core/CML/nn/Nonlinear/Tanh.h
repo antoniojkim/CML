@@ -2,7 +2,7 @@
 #define __CML_NN_NONLINEAR_TANH_H__
 
 #include "../Modules.h"
-#include "../../Tensor.h"
+#include "../../Tensors/Tensor2D.h"
 #include "../../Functions/NonLinear/Tanh.h"
 
 

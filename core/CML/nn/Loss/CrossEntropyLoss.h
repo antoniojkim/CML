@@ -2,7 +2,7 @@
 #define __CML_NN_LOSS_CROSSENTROPYLOSS_H__
 #include "../../Dtypes.h"
 #include "../../Functions/Loss/CrossEntropyLoss.h"
-#include "../../Tensor.h"
+#include "../../Tensors/Tensor2D.h"
 #include "Criterion.h"
 
 namespace cml {

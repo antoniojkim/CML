@@ -9,6 +9,7 @@
 
 #include "TensorDimension.h"
 #include "../../Utils/Exceptions.h"
+#include "../../Utils/TypeName.h"
 
 namespace cml {
 
@@ -24,6 +25,8 @@ namespace cml {
 
     template <typename T>
     using DMatrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;  // Dynamic Matrix
+    template <typename T>
+    using DBlock = Eigen::Block<DMatrix<T>, Eigen::Dynamic, Eigen::Dynamic, false>;  // Dynamic Block
     template <typename T>
     using DArray = Eigen::Array<T, Eigen::Dynamic, Eigen::Dynamic>;  // Dynamic Array
 
@@ -57,7 +60,7 @@ namespace cml {
         public:
             
             virtual DMatrix<T>& data(){
-                throw UnimplementedException("Tensor::data()");
+                throw UnimplementedException(type_name<decltype(*this)>() + "::data()");
             }
             T& item() {
                 if (this->isScalar()) return this->at(0);
@@ -91,6 +94,7 @@ namespace cml {
             inline T& data(const int& R, const int& C){ return this->at(R, C); }
             inline T& data(const int& C, const int& H, const int& W){ return this->at(C, H, W); }
             
+            virtual DBlock<T>&& block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) = 0;
             
             virtual void set(std::initializer_list<T> values, const bool& transpose = false) = 0;
             virtual void set(std::initializer_list<std::initializer_list<T>> values) = 0;
@@ -106,12 +110,18 @@ namespace cml {
                 this->set(std::forward<std::initializer_list<std::initializer_list<std::initializer_list<T>>>>(values));
             };
         
-            virtual void fill(const T& coefficient) = 0;
-            virtual void ones() = 0;
-            virtual void zero() = 0;
+            virtual void fill(const T& coefficient){
+                throw UnimplementedException(type_name<decltype(*this)>() + "::fill()");
+            }
+            virtual void ones(){
+                throw UnimplementedException(type_name<decltype(*this)>() + "::ones()");
+            }
+            virtual void zero(){
+                throw UnimplementedException(type_name<decltype(*this)>() + "::zero()");
+            }
             virtual void randomize() = 0;
         
-            virtual tensor<T> copyLike() = 0;
+            virtual tensor<T> zeroLike() = 0;
             /*
             void randomize(Randomizer::Function<T> randomizer = Randomizer::Gaussian<T>) {
                 throw "Tensor2D::randomize not implemented";
