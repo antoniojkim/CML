@@ -1,6 +1,9 @@
 #ifndef __CML_TENSORS_TENSOR2D_H__
 #define __CML_TENSORS_TENSOR2D_H__
 
+#define SCALAR_IS_TENSOR2D
+#define VECTOR_IS_TENSOR2D
+
 #include <Eigen/Core>
 #include "TensorTemplate.h"
 #include "DCG.h"
@@ -12,11 +15,13 @@ namespace cml {
     
     
     template <class T, typename... Args>
-    tensor<T> make_tensor2d(Args&&... args);
+    inline tensor<T> make_tensor2d(Args&&... args);
+    template <typename T = float>
+    inline tensor<T> make_tensor(const int& R, const int& C, const bool& computeGrad = false);
     template <class T>
-    tensor<T> make_tensor(DMatrix<T>& m, const bool& computeGrad = false);
+    inline tensor<T> make_tensor(DMatrix<T>& m, const bool& computeGrad = false);
     template <class T>
-    tensor<T> make_tensor(DMatrix<T>&& m, const bool& computeGrad = false);
+    inline tensor<T> make_tensor(DMatrix<T>&& m, const bool& computeGrad = false);
 
     template <typename T>
     class Tensor2D: public Tensor<T> {
@@ -31,34 +36,20 @@ namespace cml {
             Tensor2D(DMatrix<T>& m, const bool& computeGrad = false):
                 Tensor<T>(computeGrad, {m.rows(), m.cols()}, TensorType::MATRIX), m{m} {}
             Tensor2D(DMatrix<T>&& m, const bool& computeGrad = false):
-                Tensor<T>(computeGrad, {m.rows(), m.cols()}, TensorType::MATRIX), m{m} {}
+                Tensor<T>(computeGrad, {m.rows(), m.cols()}, TensorType::MATRIX), m{std::move(m)} {}
 
             inline DMatrix<T>& data() override { return m; }
         
             T& at(const int& R) override { return m(R, 0); };
             T& at(const int& R, const int& C) override { return m(R, C); }
-            T& at(const int& C, const int& H, const int& W) override {
-                throw "Tensor2D::at:   Channel does not exist";
-            }
 
-            DBlock<T>&& block(const int& startRow, const int& startCol, const int& numRows, const int& numCols){
+            DBlock<T> block(const int& startCol, const int& numCols) override {
+                return m.block(0, startCol, m.rows(), numCols);
+            }
+            DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols){
                 return m.block(startRow, startCol, numRows, numCols);
             }
         
-        
-            void set(std::initializer_list<T> values, const bool& transpose = false) override {
-                unsigned int i = 0;
-                if (transpose){
-                    for (auto& e : values) {
-                        m(i++, 0) = e;
-                    }
-                }
-                else{
-                    for (auto& e : values) {
-                        m(0, i++) = e;
-                    }
-                }
-            }
             void set(std::initializer_list<std::initializer_list<T>> values) override {
                 unsigned int i, j;
 
@@ -71,18 +62,19 @@ namespace cml {
                     ++i;
                 }
             }
-            void set(std::initializer_list<std::initializer_list<std::initializer_list<T>>> values) override {
-                throw "Cannot use 3D initializer_list to set values of Tensor2D";
-            }
+
+            inline int rows() override { return m.rows(); }
+            inline int cols() override { return m.cols(); }
 
             inline void fill(const T& coefficient) override { m.setConstant(coefficient); }
             inline void ones() override { m.setOnes(); }
             inline void zero() override { m.setZero(); }
-            inline void randomize() override { m.setRandom(); }
+            inline void randomize(const unsigned int& seed) override { srand(seed); m.setRandom(); }
         
             tensor<T> zeroLike() override {
                 return make_tensor<T>(DMatrix<T>::Zero(m.rows(), m.cols()), false);
             }
+
     };
 
 
@@ -103,9 +95,9 @@ namespace cml {
     }
     template <typename T = float>
     inline tensor<T> make_tensor(DMatrix<T>&& m, const bool& computeGrad) {
-        return std::make_shared<Tensor2D<T>>(std::forward<DMatrix<T>>(m), computeGrad);
+        return std::make_shared<Tensor2D<T>>(std::forward<DMatrix<T>&&>(m), computeGrad);
     }
-#if VECTOR_TENSOR_DIM==2
+#ifdef VECTOR_IS_TENSOR2D
     template <typename T = float>
     inline tensor<T> make_tensor(std::initializer_list<T> v, const bool& computeGrad = false) {
         auto t = std::make_shared<Tensor2D<T>>(1, v.size(), computeGrad);
@@ -119,8 +111,8 @@ namespace cml {
         t->set(std::forward<std::initializer_list<std::initializer_list<T>>>(v));
         return t;
     }
-#if SCALAR_TENSOR_DIM==2
-    template <typename T = float>
+#ifdef SCALAR_IS_TENSOR2D
+    template <typename T>
     inline tensor<T> make_scalar(const T& t, const bool& computeGrad) {
         return std::make_shared<Tensor2D<T>>(t, computeGrad);
     }

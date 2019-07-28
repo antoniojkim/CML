@@ -29,6 +29,22 @@ namespace cml {
     }
 
 
+    /***********************************************************************************
+    *************************** Tensor Inplace Division ********************************
+    ************************************************************************************/
+
+    template<typename T, typename U>
+    inline tensor<T> inplaceDivision(tensor2d<T> t, const U& scalar);
+
+    template<typename T, typename U>
+    tensor<T> inplaceDivision(tensor<T> t, const U& scalar);
+
+    template<typename T, typename U>
+    inline tensor<T> operator/=(tensor<T> t, const U& scalar){
+        return inplaceDivision(t, scalar);
+    }
+
+
 
     /***********************************************************************************
     ******************************* Tensor Increment ***********************************
