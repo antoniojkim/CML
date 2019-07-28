@@ -12,27 +12,10 @@ namespace nn {
     
     template<typename T = float>
     class Sequential: public Module<T> {
-        Parameters<T> params;
         using Module<T>::submodules;
         using Module<T>::mValues;
         using Module<T>::pKeys;
         
-        protected:
-            
-            /*
-                The following method can be used to add parameters to the sequence.
-
-                Note that this method is protected. While this does not prevent
-                a subclass being created that contains the functionality to make
-                adding parameters public, it is recommended that parameters only
-                be added during module construction.
-            */
-            template<typename...Args>
-            void addParameter(const std::string& alias, Args&&...args){
-                params.emplace_back(make_tensor<T>(std::forward<Args>(args)...));
-                if (alias != ""){ pKeys[alias] = params.back(); }
-            }
-
         public:
             Sequential(): Module<T>{} {}
             Sequential(std::initializer_list<Module<T>*> submodules): Module<T>{submodules} {}

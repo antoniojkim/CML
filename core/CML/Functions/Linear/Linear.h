@@ -9,21 +9,30 @@ namespace Function {
     struct Linear {
 
         template<typename T>
-        static tensor<T> forward(tensor2d<T> input, tensor<T> weights, tensor<T> bias = nullptr){
+        static tensor<T> forward(tensor<T> input, tensor<T> weights, tensor<T> bias = nullptr){
             tensor<T> t = nullptr;
-            if (bias != nullptr)
-                t = make_tensor<T>(static_cast<DMatrix<T>>(
-                    (weights->data().transpose() * input->data()).colwise() + bias->data().col(0)
-                ));
-            else
-                t = make_tensor<T>(static_cast<DMatrix<T>>(
-                    weights->data().transpose() * input->data()
-                ));
+            if (bias != nullptr){
+                // It is faster to combine the add and multiply operation
+                t = addMultiply(bias, input, weights->transpose());
+            }
+            else{
+                t = input * weights->transpose();
+            }
 
-            t->computeGrad = input->computeGrad || weights->computeGrad || (bias != nullptr && bias->computeGrad);
-            if (t->computeGrad){
-                t->initGraph({input, weights, bias}, [](std::vector<tensor<T>>& params, 
-                                                        std::vector<tensor<T>> output) -> std::vector<tensor<T>>{
+            return t;
+        }
+    };
+
+    template<typename T>
+    inline tensor<T> Linear(tensor<T> input, tensor<T> weights, tensor<T> bias = nullptr){
+        return Linear::forward(input, weights, bias);
+    }
+
+};
+};
+
+/*
+
 #ifdef DEBUG
                     using namespace std;
                     cout << "Linear::backward()" << endl;
@@ -55,28 +64,6 @@ namespace Function {
                     }
 
                     return {input_grad, weight_grad, bias_grad};
-                });
-            }
-            return t;
-        }
-        
-        template<typename T>
-        static tensor<T> forward(tensor<T> input, tensor<T> weights, tensor<T> bias = nullptr){
-            switch(input->getType()){
-                case TensorType::MATRIX:
-                    return forward(std::static_pointer_cast<Tensor2D<T>>(input), weights, bias);
-                default:
-                    throw UnsupportedOperationException("Linear unsupported on Tensor type");
-            }
-        }
-    };
-
-    template<typename T>
-    inline tensor<T> Linear(tensor<T> input, tensor<T> weights, tensor<T> bias = nullptr){
-        return Linear::forward(input, weights, bias);
-    }
-
-};
-};
+ */
 
 #endif //__CML_FUNCTIONS_LINEAR_LINEAR_H__ 
