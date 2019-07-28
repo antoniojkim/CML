@@ -109,10 +109,6 @@ namespace cml {
             virtual DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) {
                 throw UnsupportedOperationException(type_name<decltype(*this)>() + "::block(int, int, int, int)");
             }
-
-            virtual tensor<T> transpose() {
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::transpose()");
-            }
             
             virtual void set(std::initializer_list<T> values, const bool& transpose = false) {
                 throw UnsupportedOperationException(type_name<decltype(*this)>() + "::set(1D Initializer List)");

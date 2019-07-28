@@ -2,6 +2,7 @@
 #define __CML_FUNCTIONS_TENSOROPS_H__
 
 #include "TensorOps/TensorOps.h"
+#include "TensorOps/TensorTranspose.h"
 #include "TensorOps/TensorMultiplication.h"
 #include "TensorOps/TensorAddMultiply.h"
 #include "TensorOps/TensorInplaceDivision.h"

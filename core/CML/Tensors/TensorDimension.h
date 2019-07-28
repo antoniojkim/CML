@@ -84,6 +84,7 @@ namespace cml {
                 first = false;
             }
         }
+        out << " }";
         return out;
     }
 

@@ -25,6 +25,10 @@ namespace Function {
 #endif
                     tensor<T> input = params.at(0);
                     tensor<T> output_grad = output.at(0);
+#ifdef DEBUG
+                    cout << "    input:  " << input->rows() << ", " << input->cols() << endl;
+                    cout << "    output:  " << output_grad->rows() << ", " << output_grad->cols() << endl;
+#endif
                     tensor<T> input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                         input->data().unaryExpr([](T x){
                             auto y = (T)(1.0 / (1.0 + exp(-x)));

@@ -13,10 +13,10 @@ namespace Function {
             tensor<T> t = nullptr;
             if (bias != nullptr){
                 // It is faster to combine the add and multiply operation
-                t = addMultiply(bias, input, weights->transpose());
+                t = addMultiply(bias, transpose(weights), input);
             }
             else{
-                t = input * weights->transpose();
+                t = transpose(weights) * input;
             }
 
             return t;
@@ -52,13 +52,13 @@ namespace Function {
                         ));
                     }
                     if (weights->computeGrad){
-                        weight_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                        weight_grad = make_tensor<T>(static_cast<DMatrix<T>inpoutput_gradut
                             // TODO:  Check to see if order is correct
-                            input->data() * output_grad->data().transpose()
+                            input->data() * output_grad->data().transpose()inpoutput_gradut
                         ));
                     }
                     if (bias != nullptr && bias->computeGrad){
-                        bias_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                        bias_grad = make_tensor<T>(static_cast<DMatrix<T>>(inpoutput_gradut
                             output_grad->data().rowwise().sum()
                         ));
                     }
