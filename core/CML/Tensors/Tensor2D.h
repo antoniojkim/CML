@@ -29,6 +29,8 @@ namespace cml {
         DMatrix<T> m;
         
         public:
+            using Tensor<T>::computeGrad;
+
             Tensor2D(const T& t, const bool& computeGrad = false):
                 Tensor<T>(computeGrad, {1, 1}, TensorType::MATRIX), m{1, 1} { fill(t); }
             Tensor2D(const int& R, const int& C, const bool& computeGrad = false):
@@ -48,10 +50,6 @@ namespace cml {
             }
             DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols){
                 return m.block(startRow, startCol, numRows, numCols);
-            }
-
-            tensor<T> transpose() override {
-                return make_tensor<T>(static_cast<DMatrix<T>>(m.transpose()));
             }
         
             void set(std::initializer_list<std::initializer_list<T>> values) override {

@@ -11,8 +11,8 @@ namespace cml {
     template<typename T>
     tensor<T> addmatmul(tensor2d<T> t1, tensor2d<T> t2, tensor2d<T> t3){
         auto t = make_tensor<T>(static_cast<DMatrix<T>>(
-            t1->data().col(0) + (t2->data() * t3->data()).colwise()
-        ), t1->computeGrad, t2->computeGrad, t3->computeGrad);
+            (t2->data() * t3->data()).colwise() + t1->data().col(0)
+        ), t1->computeGrad || t2->computeGrad || t3->computeGrad);
 
         if (t->computeGrad){
             t->initGraph({t1, t2, t3}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
@@ -27,17 +27,23 @@ namespace cml {
                 tensor<T> t1_grad = nullptr;
                 tensor<T> t2_grad = nullptr;
                 tensor<T> t3_grad = nullptr;
+#ifdef DEBUG
+                cout << "    t1: " << t1->rows() << ", " << t1->cols() << "   computeGrad: " << t1->computeGrad << endl;
+                cout << "    t2: " << t2->rows() << ", " << t2->cols() << "   computeGrad: " << t2->computeGrad << endl;
+                cout << "    t3: " << t3->rows() << ", " << t3->cols() << "   computeGrad: " << t3->computeGrad << endl;
+                cout << "    output_grad: " << output_grad->rows() << ", " << output_grad->cols() << endl;
+#endif
 
-                if (t2->computeGrad){
-                    t2_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                        // TODO:  Check to see if order is correct
-                        output_grad->data() * t3->data().transpose()
-                    ));
-                }
                 if (t3->computeGrad){
                     t3_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                         // TODO:  Check to see if order is correct
-                        output_grad->data().transpose() * t2->data()
+                        t2->data().transpose() * output_grad->data()
+                    ));
+                }
+                if (t2->computeGrad){
+                    t2_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                        // TODO:  Check to see if order is correct
+                        t3->data() * output_grad->data().transpose()
                     ));
                 }
                 if (t1->computeGrad){
@@ -45,6 +51,18 @@ namespace cml {
                         output_grad->data().rowwise().sum()
                     ));
                 }
+
+#ifdef DEBUG
+                if (t1->computeGrad){
+                    cout << "    t1_grad: " << t1_grad->rows() << ", " << t1_grad->cols() << endl;
+                }
+                if (t2->computeGrad){
+                    cout << "    t2_grad: " << t2_grad->rows() << ", " << t2_grad->cols() << endl;
+                }
+                if (t3->computeGrad){
+                    cout << "    t3_grad: " << t3_grad->rows() << ", " << t3_grad->cols() << endl;
+                }
+#endif
 
                 return {t1_grad, t2_grad, t3_grad};
             });
@@ -61,9 +79,9 @@ namespace cml {
         if (t1->getType() == t2->getType() && t1->getType() == t3->getType()){
             switch(t1->getType()){
                 case TensorType::MATRIX:
-                    return addmm(std::static_pointer_cast<Tensor2D<T>>(t1),
-                                 std::static_pointer_cast<Tensor2D<T>>(t2),
-                                 std::static_pointer_cast<Tensor2D<T>>(t3));
+                    return addmatmul(std::static_pointer_cast<Tensor2D<T>>(t1),
+                                     std::static_pointer_cast<Tensor2D<T>>(t2),
+                                     std::static_pointer_cast<Tensor2D<T>>(t3));
                 default:
                     break;
             }

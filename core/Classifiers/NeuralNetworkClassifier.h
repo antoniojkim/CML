@@ -139,12 +139,16 @@ namespace cml {
                     totalLoss = 0;
                     optimizer->zeroGrad();
                    
+#ifndef DEBUG
                     shuffle();
+#endif
                     for (int i = 0; i<data->rows(); i += blockSize){
                         loadData(block, data, i, blockSize);
+#ifdef DEBUG
                         using namespace std;
                         cout << "l1.weights:  " << (*model)[0]("weights")->rows() << ", " << (*model)[0]("weights")->cols() << endl;
                         cout << "block:  " << block->rows() << ", " << block->cols() << endl;
+#endif
                         auto output = model->forward(block);
                         loadData(label, labels, i, blockSize);
                         
@@ -210,11 +214,11 @@ namespace cml {
         private:            
             void loadData(tensor<T> block, tensor<T> data, const int& i, const unsigned int& blockSize){
                 if (int(i+blockSize) < data->rows()){
-                    block->data() = data->block(i, blockSize);
+                    block->data() = data->block(i, blockSize).transpose();
                 }
                 else {
                     unsigned int finalBlockSize = data->rows() % blockSize;
-                    block->block(0, 0, block->rows(), finalBlockSize) = data->block(i, finalBlockSize);
+                    block->block(0, 0, block->rows(), finalBlockSize) = data->block(i, finalBlockSize).transpose();
                     block->block(0, finalBlockSize, block->rows(), block->cols()-finalBlockSize) = DMatrix<T>::Zero(block->rows(), block->cols()-finalBlockSize);
                 }
             }

@@ -13,6 +13,16 @@ namespace cml {
     ************************************************************************************/
 
     template<typename T>
+    tensor<T> transpose(tensor2d<T> t);
+
+    template<typename T>
+    tensor<T> transpose(tensor<T> t);
+
+    /***********************************************************************************
+    **************************** Tensor Multiplication *********************************
+    ************************************************************************************/
+
+    template<typename T>
     tensor<T> matmul(tensor2d<T> lhs, tensor2d<T> rhs);
 
     template<typename T>
@@ -37,7 +47,7 @@ namespace cml {
 
     template<typename T>
     tensor<T> addMultiply(tensor<T> lhs, tensor<T> rhs);
-    
+
 
 
     /***********************************************************************************
