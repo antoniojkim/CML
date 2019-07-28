@@ -27,7 +27,7 @@ namespace cml {
             T& at(const int& N, const int& R) override { return m(N, R); }
 
             DBlock<T> block(const int& index, const int& batchSize) override {
-                return m.block(0, index, m.rows(), std::min(batchSize, int(m.cols()-index)));
+                return m.block(index, 0, std::min(batchSize, int(m.rows()-index)), m.cols());
             }
 
             inline void randomize(const unsigned int& seed) override {

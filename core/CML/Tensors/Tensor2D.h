@@ -49,6 +49,10 @@ namespace cml {
             DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols){
                 return m.block(startRow, startCol, numRows, numCols);
             }
+
+            tensor<T> transpose() override {
+                return make_tensor<T>(static_cast<DMatrix<T>>(m.transpose()));
+            }
         
             void set(std::initializer_list<std::initializer_list<T>> values) override {
                 unsigned int i, j;
