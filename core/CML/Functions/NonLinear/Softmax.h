@@ -27,7 +27,7 @@ namespace Function {
 #endif
 
                     tensor<T> output_grad = output.at(0);
-                    if (t->data().cols() != 1) throw "Invalid shape for softmax_grad"; 
+                    if (t->cols() != 1) throw "Invalid shape for softmax_grad"; 
 
                     auto input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
                         (static_cast<DMatrix<T>>(t->data().asDiagonal()) - 

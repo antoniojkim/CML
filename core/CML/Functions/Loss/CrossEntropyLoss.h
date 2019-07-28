@@ -26,7 +26,7 @@ namespace Function {
             for (int i = 0; i<m; ++i){
                 sum_log_likelihood -= p(expected->at(0, i), i);
             }
-            tensor<T> t = make_tensor<T>({sum_log_likelihood / m});
+            tensor<T> t = make_scalar<T>(sum_log_likelihood / m);
             t->computeGrad = true;
             t->initGraph({actual, expected}, [m, p{std::move(p)}](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) mutable -> std::vector<tensor<T>> {
 #ifdef DEBUG
@@ -40,7 +40,7 @@ namespace Function {
                     p(expected->data(0, i), i) -= 1;
                 }
                 p /= m;
-                tensor<T> actual_grad = make_tensor<T>(p);
+                tensor<T> actual_grad = make_tensor<T>(std::move(p));
 
                 return {actual_grad, nullptr};
             });

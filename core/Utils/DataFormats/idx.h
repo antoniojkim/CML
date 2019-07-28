@@ -31,61 +31,64 @@ namespace idx {
     }
     
     template<typename T, typename U>
-    void read_t(std::istream& f, DMatrix<T>& data, int* dims, const int& R, const int& C){
-        if (data.rows() != R || data.cols() != C){
-            data.resize(R, C);
+    void read_t(std::istream& f, cml::DMatrix<T>& data, std::vector<int>& dims, const int& N, const int& R){
+        if (data.rows() != N || data.cols() != R){
+            data.resize(N, R);
         }
         
         U d;
-        for (int r = 0; r < R; ++r){
-            for (int c = 0; c < C; ++c){
+        for (int n = 0; n < N; ++n){
+            for (int r = 0; r < R; ++r){
                 read_U(f, d);
-                data(r, c) = d;
+                data(n, r) = d;
             }
         }
     }
     
-    template<typename T>
-    void read(std::istream& f, DMatrix<T>& data){
+    template<typename T, template<typename> class TensorType>
+    cml::tensor<T> read(std::istream& f){
         uint32_t magicNumber = read_u32(f);
         
         unsigned int numDims = ((magicNumber) & 0xff);
-        int* dims = new int[numDims];
-        int R = 0, C = 1;
+        std::vector<int> dims;
+        dims.reserve(numDims);
+        int N = 0, R = 1;
         for (unsigned int i = 0; i < numDims; ++i){
-            dims[i] = read_u32(f);
+            dims.emplace_back(read_u32(f));
             if (i == 0){
-                R = dims[i];
+                N = dims[i];
             }
             else {
-                C *= dims[i];
+                R *= dims[i];
             }
         }
+
+        cml::tensor<T> data = std::make_shared<TensorType<T>>(dims);
         
         switch((magicNumber >> 8) & 0xff){
             case 0x08:
-                read_t<T, uint8_t>(f, data, dims, R, C);
+                read_t<T, uint8_t>(f, data->data(), dims, N, R);
                 break;
             case 0x09:
-                read_t<T, int8_t>(f, data, dims, R, C);
+                read_t<T, int8_t>(f, data->data(), dims, N, R);
                 break;
             case 0x0B:
-                read_t<T, short>(f, data, dims, R, C);
+                read_t<T, short>(f, data->data(), dims, N, R);
                 break;
             case 0x0C:
-                read_t<T, int>(f, data, dims, R, C);
+                read_t<T, int>(f, data->data(), dims, N, R);
                 break;
             case 0x0D:
-                read_t<T, float>(f, data, dims, R, C);
+                read_t<T, float>(f, data->data(), dims, N, R);
                 break;
             case 0x0E:
-                read_t<T, double>(f, data, dims, R, C);
+                read_t<T, double>(f, data->data(), dims, N, R);
                 break;
             default:
                 throw "Invalid data type";
         }
         
-        delete[] dims;
+        return data;
     }
     
 }

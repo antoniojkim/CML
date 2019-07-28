@@ -11,6 +11,12 @@ namespace Randomizer {
     
     template<typename T>
     T Gaussian(const T& t);
+
+    inline Eigen::VectorXi eigenMatrixRandomizer(const int& size){
+        Eigen::VectorXi indices = Eigen::VectorXi::LinSpaced(size, 0, size);
+        std::random_shuffle(indices.data(), indices.data() + size);
+        return indices;
+    }
     
 } 
 }

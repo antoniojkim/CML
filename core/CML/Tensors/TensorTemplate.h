@@ -1,6 +1,7 @@
 #ifndef __CML_TENSORS_TENSOR_H__
 #define __CML_TENSORS_TENSOR_H__
 
+#include <ctime>
 #include <functional>
 #include <initializer_list>
 #include <iostream>
@@ -25,6 +26,8 @@ namespace cml {
 
     template <typename T>
     using DMatrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;  // Dynamic Matrix
+    template <typename T>
+    using RefMatrix = Eigen::Ref<DMatrix<T>>;  // Ref to Dynamic Matrix
     template <typename T>
     using DBlock = Eigen::Block<DMatrix<T>, Eigen::Dynamic, Eigen::Dynamic, false>;  // Dynamic Block
     template <typename T>
@@ -56,12 +59,12 @@ namespace cml {
         
             Tensor(const bool& computeGrad, std::initializer_list<int> v, TensorType type):
                 computeGrad{computeGrad}, dimensions{std::forward<std::initializer_list<int>>(v)}, type{type} {}
+            Tensor(const bool& computeGrad, std::vector<int>& v, TensorType type):
+                computeGrad{computeGrad}, dimensions{v}, type{type} {}
         
         public:
             
-            virtual DMatrix<T>& data(){
-                throw UnimplementedException(type_name<decltype(*this)>() + "::data()");
-            }
+            virtual DMatrix<T>& data() = 0;
             T& item() {
                 if (this->isScalar()) return this->at(0);
                 throw "Tensor::item:  Cannot get item from non scalar tensor";
@@ -71,20 +74,26 @@ namespace cml {
                 Get coefficients for vector tensors where:
                     - "R" is the row number
             */
-            virtual T& at(const int& R) = 0;
+            virtual T& at(const int& R) {
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::at(int)");
+            }
             /*
                 Get coefficients for matrix tensors where:
                     - "R" is the row number
                     - "C" is the column number
             */
-            virtual T& at(const int& R, const int& C) = 0;
+            virtual T& at(const int& R, const int& C) {
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::at(int, int)");
+            }
             /*
                 Get coefficients for 3d tensors where:
                     - "C" is the channel number
                     - "H" is the height
                     - "W" is the width
             */
-            virtual T& at(const int& C, const int& H, const int& W) = 0;
+            virtual T& at(const int& C, const int& H, const int& W) {
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::at(int, int, int)");
+            }
         
             inline T& operator()(const int& R){ return this->at(R); }
             inline T& operator()(const int& R, const int& C){ return this->at(R, C); }
@@ -94,11 +103,22 @@ namespace cml {
             inline T& data(const int& R, const int& C){ return this->at(R, C); }
             inline T& data(const int& C, const int& H, const int& W){ return this->at(C, H, W); }
             
-            virtual DBlock<T>&& block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) = 0;
+            virtual DBlock<T> block(const int& startCol, const int& numCols) {
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::block(int, int)");
+            }
+            virtual DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) {
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::block(int, int, int, int)");
+            }
             
-            virtual void set(std::initializer_list<T> values, const bool& transpose = false) = 0;
-            virtual void set(std::initializer_list<std::initializer_list<T>> values) = 0;
-            virtual void set(std::initializer_list<std::initializer_list<std::initializer_list<T>>> values) = 0;
+            virtual void set(std::initializer_list<T> values, const bool& transpose = false) {
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::set(1D Initializer List)");
+            }
+            virtual void set(std::initializer_list<std::initializer_list<T>> values) {
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::set(2D Initializer List)");
+            }
+            virtual void set(std::initializer_list<std::initializer_list<std::initializer_list<T>>> values) {
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::set(3D Initializer List)");
+            }
             
             inline void operator=(std::initializer_list<T> values){
                 this->set(std::forward<std::initializer_list<T>>(values));
@@ -111,30 +131,31 @@ namespace cml {
             };
         
             virtual void fill(const T& coefficient){
-                throw UnimplementedException(type_name<decltype(*this)>() + "::fill()");
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::fill()");
             }
             virtual void ones(){
-                throw UnimplementedException(type_name<decltype(*this)>() + "::ones()");
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::ones()");
             }
             virtual void zero(){
-                throw UnimplementedException(type_name<decltype(*this)>() + "::zero()");
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::zero()");
             }
-            virtual void randomize() = 0;
+            virtual void randomize(const unsigned int& seed = time(NULL)) {
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::randomize()");
+            }
+            virtual void randomize(const Eigen::VectorXi& indices) {
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::randomize(Eigen::VectorXi)");
+            }
         
-            virtual tensor<T> zeroLike() = 0;
-            /*
-            void randomize(Randomizer::Function<T> randomizer = Randomizer::Gaussian<T>) {
-                throw "Tensor2D::randomize not implemented";
+            virtual tensor<T> zeroLike() {
+                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::zeroLike()");
             }
-            void randomize(const T& coefficient) {
-                throw "Tensor2D::randomize not implemented";
-            }
-            */
         
             inline TensorDimension& dims() { return dimensions; }
             inline TensorDimension& shape() { return dimensions; }
             inline bool isScalar() { return dimensions.isScalar(); }
             inline unsigned int size() { return dimensions.size(); }
+            virtual inline int rows(){ return dimensions.size(); }
+            virtual inline int cols(){ return dimensions.numBatches(); }
 
             TensorType getType(){ return type; }
         
@@ -165,7 +186,7 @@ namespace cml {
 
     };
     
-    template <typename T>
+    template <typename T = float>
     inline tensor<T> make_scalar(const T& t, const bool& computeGrad = false);
     
     /***********************************************************************************
@@ -183,117 +204,37 @@ namespace cml {
     template<class T>
     using TensorFunction = Tensor<T>(*)(Tensor<T>&);
 
-
-//     /*
-//         This is the recommended way to construct a matrix
-//     */
-//     template <class T, template <typename> class MatrixType, typename... Args>
-//     inline tensor<T, MatrixType> make_tensor(Args&&... args) {
-//         return std::make_shared<Tensor<T, MatrixType>>(std::forward<Args>(args)...);
-//     }
-//     template <class T, template <typename> class MatrixType>
-//     inline tensor<T, MatrixType> make_tensor(tlist<T> data, const bool& computeGrad = false) {
-//         return std::make_shared<Tensor<T, MatrixType>>(data, computeGrad);
-//     }
-//     template <class T, template <typename> class MatrixType>
-//     inline tensor<T, MatrixType> make_tensor(tlist<tlist<T>> data, const bool& computeGrad = false) {
-//         return std::make_shared<Tensor<T, MatrixType>>(data, computeGrad);
-//     }
     
-//     template <typename T, template<typename> class MatrixType>
-//     class Tensor: public MatrixType<T>{
-        
-//         protected:
-//             std::unique_ptr<DCG<T, MatrixType>> dcg = nullptr;
-//             TensorDimension<T, MatrixType> dimensions;
+    template<typename T, template<typename> class MatrixType>
+    std::ostream& operator<<(std::ostream& out, Tensor<T>& t){
+        return out << t.data();
+    }
+    /*
+        Since the operator<< has been overloaded for the shared_ptr to
+        a Tensor type, to print the actual pointer, you must use the get() method
+    */
+    template<typename T, template<typename> class MatrixType>
+    std::ostream& operator<<(std::ostream& out, tensor<T> t){
+        if (t == nullptr){
+            return out << "cml::tensor::nullptr";
+        }
+        out << "cml::tensor({";
+        for (int i = 0; i<t->rows(); ++i){
+            if (i > 0) out << "," << std::endl << "             ";
 
-//         public:
-//             bool computeGrad = false; // If true, creates dynamic graph on forward pass
-
-//             Tensor(Tensor<T, MatrixType>&& t);
-//             Tensor(MatrixType<T>& m);
-//             Tensor(MatrixType<T>&& m);
-//             Tensor(tlist<T> data, const bool& computeGrad = false);
-//             Tensor(tlist<tlist<T>> data, const bool& computeGrad = false);
-//             template<typename... Dims>
-//             Tensor(const Dims&... dims, const bool& computeGrad = false);
-
-//             /*
-//                 Constructors that cast the input if type is not T
-//             */
-//             template<typename U>
-//             Tensor(Tensor<U, MatrixType>& t): Tensor{std::move(t.data().template cast<T>())} {}
-//             template<typename U>
-//             Tensor(Tensor<U, MatrixType>&& t): Tensor{std::move(t.data().template cast<T>())} {}
-//             template<typename U>
-//             Tensor(MatrixType<U>& m): Tensor{std::move(m.template cast<T>())} {}
-//             template<typename U>
-//             Tensor(MatrixType<U>&& m): Tensor{std::move(m.template cast<T>())} {}
-
-//             ~Tensor() = default;
-
-//             inline MatrixType<T>& data(){ return static_cast<MatrixType<T>&>(*this); }
-//             template<typename... Args>
-//             T& data(const Args&... args){ return this->data()(std::forward<Args>(args)...); }
-//             TensorDimension<T, MatrixType>& shape() {
-//                 return dimensions;
-//             }
-//             bool isScalar() {
-//                 return dimensions.isScalar();
-//             }
-
-//             void set(tlist<T> data, const bool& transpose = false);
-//             void set(tlist<tlist<T>> data);        
-
-//             void initGraph(std::vector<tensor<T, MatrixType>> params = {}, GradientFunction<T, MatrixType> f = nullptr);
-//             std::unique_ptr<DCG<T, MatrixType>>& graph(){
-//                 if (!dcg) {
-//                     if (!computeGrad) throw "Getting graph of tensor with computeGrad == false";
-//                     initGraph();
-//                 }
-//                 return dcg;
-//             }
-//             tensor<T, MatrixType> gradient(){ return graph()->gradient; }
-//             void backward(){
-//                 if (!isScalar()) throw "backward can only be called on a scalar tensor";
-// #ifdef DEBUG
-//                 std::cout << "Calling backward on a scalar tensor" << std::endl;
-// #endif
-//                 graph()->backward();
-//             }
-//     };
-
-    
-//     template<typename T, template<typename> class MatrixType>
-//     std::ostream& operator<<(std::ostream& out, Tensor<T, MatrixType>& t){
-//         return out << t.data();
-//     }
-//     /*
-//         Since the operator<< has been overloaded for the shared_ptr to
-//         a Tensor type, to print the actual pointer, you must use the get() method
-//     */
-//     template<typename T, template<typename> class MatrixType>
-//     std::ostream& operator<<(std::ostream& out, tensor<T, MatrixType> t){
-//         if (t == nullptr){
-//             return out << "nullptr";
-//         }
-//         out << "cml::tensor({";
-//         for (int i = 0; i<t->rows(); ++i){
-//             if (i > 0) out << "," << std::endl << "             ";
-
-//             out << "{";
-//             for (int j = 0; j<t->cols(); ++j){
-//                 if (j > 0) out << ", ";
-//                 out << t->coeff(i, j);
-//             }
-//             out << "}";
-//         }
-//         out << "}";
-//         if (t->computeGrad){
-//             out << ", computeGrad = true";
-//         }
-//         return out << ")";
-//     }
+            out << "{";
+            for (int j = 0; j<t->cols(); ++j){
+                if (j > 0) out << ", ";
+                out << t->coeff(i, j);
+            }
+            out << "}";
+        }
+        out << "}";
+        if (t->computeGrad){
+            out << ", computeGrad = true";
+        }
+        return out << ")";
+    }
     
 
 
