@@ -4,7 +4,6 @@
 #define SCALAR_IS_TENSOR2D
 #define VECTOR_IS_TENSOR2D
 
-#include <Eigen/Core>
 #include "TensorTemplate.h"
 #include "DCG.h"
 #include "../Randomizer.h"
