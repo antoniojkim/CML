@@ -144,11 +144,6 @@ namespace cml {
 #endif
                     for (int i = 0; i<data->rows(); i += blockSize){
                         loadData(block, data, i, blockSize);
-#ifdef DEBUG
-                        using namespace std;
-                        cout << "l1.weights:  " << (*model)[0]("weights")->rows() << ", " << (*model)[0]("weights")->cols() << endl;
-                        cout << "block:  " << block->rows() << ", " << block->cols() << endl;
-#endif
                         auto output = model->forward(block);
                         loadData(label, labels, i, blockSize);
                         

@@ -8,6 +8,9 @@
 #include <memory>
 #include <vector>
 
+#include <Eigen/Core>
+#include <unsupported/Eigen/CXX11/Tensor>
+
 #include "TensorDimension.h"
 #include "../../Utils/Exceptions.h"
 #include "../../Utils/TypeName.h"

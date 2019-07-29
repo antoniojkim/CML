@@ -37,7 +37,7 @@ void train_mnist_model(MNISTModel& model){
     cout << "Loading data from:  data/train-images-idx3-ubyte       " << flush;
 
 #ifdef DEBUG
-    auto data = idxBatchVectorReader.load("data/t10k-images-idx3-ubyte"); // idxBatchVectorReader.load("data/train-images-idx3-ubyte");
+    auto data = idxBatchVectorReader.load("data/t10k-images-idx3-ubyte");
 #else
     auto data = idxBatchVectorReader.load("data/train-images-idx3-ubyte");
 #endif
@@ -53,7 +53,7 @@ void train_mnist_model(MNISTModel& model){
     cout << "Loading labels from:  data/train-labels-idx1-ubyte     " << flush;
     
 #ifdef DEBUG
-    auto labels = idxBatchVectorReader.load("data/t10k-labels-idx1-ubyte"); // idxBatchVectorReader.load("data/train-labels-idx1-ubyte");
+    auto labels = idxBatchVectorReader.load("data/t10k-labels-idx1-ubyte");
 #else
     auto labels = idxBatchVectorReader.load("data/train-labels-idx1-ubyte");
 #endif
