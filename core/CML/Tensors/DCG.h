@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-#include "TensorTemplate.h"
+#include "TensorBase.h"
 
 namespace cml {
 
@@ -17,7 +17,7 @@ namespace cml {
         bool isLeaf = true;
         tensor<T> gradient;
 
-        DCG(Tensor<T>* t, std::vector<tensor<T>> params, GradientFunction<T> f);
+        DCG(TensorBase<T>* t, std::vector<tensor<T>> params, GradientFunction<T> f);
 
         void accumulateGradient(std::vector<tensor<T>>& gradients);
         
@@ -88,6 +88,45 @@ namespace cml {
             }
         }
     }
+
+
+
+
+    /***********************************************************************************
+    ****************************** Tensor DCG Methods **********************************
+    ************************************************************************************/
+
+    template <typename T, typename Rank>
+    void Tensor<T, Rank>::initGraph(std::vector<tensor<T>> params = {}, GradientFunction<T> f = nullptr){
+        if (!dcg) {
+            dcg = std::make_unique<DCG<T>>(this, std::forward<std::vector<tensor<T>>>(params),
+                                            std::forward<GradientFunction<T>>(f));
+        } else {
+            throw "Called initGraph when graph already exists";
+        }
+    }
+
+    template <typename T, typename Rank>
+    std::unique_ptr<DCG<T, Rank>>& Tensor<T, Rank>::graph(){
+        if (!dcg) {
+            if (!computeGrad) throw "Getting graph of tensor with computeGrad == false";
+            initGraph();
+        }
+        return dcg;
+    }
+
+    template <typename T, typename Rank>
+    tensor<T, Rank>& Tensor<T, Rank>::gradient(){ return graph()->gradient; }
+
+    template <typename T, typename Rank>
+    void Tensor<T, Rank>::backward(){
+        if (!isScalar()) throw "backward can only be called on a scalar tensor";
+#ifdef DEBUG
+        std::cout << "Calling backward on a scalar tensor" << std::endl;
+#endif
+        graph()->backward();
+    }
+
 }
 
 #endif // __CML_TENSORS_DCG_H__

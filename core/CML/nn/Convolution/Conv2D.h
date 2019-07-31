@@ -22,8 +22,8 @@ namespace nn {
         unsigned int groups; // Number of blocked connections from input channels to output channels. Default: 1
         bool bias; // If True, adds a learnable bias to the output. Default: True
 
-        tensor3d<T> weights;
-        tensor3d<T> bias;
+        tensor4d<T> weights;
+        tensor<T> bias;
 
         public:
             Conv2D(const unsigned int& inputChannels,
@@ -36,9 +36,12 @@ namespace nn {
                    const bool& bias = true):
                    inputChannels{inputChannels}, outputChannels{outputChannels},
                    kernelSize{kernelSize}, stride{stride}, padding{padding},
-                   dilation{dilation}, groups{groups}, {bias}, 
-                   weights(out_channels, in_channels/groups, kernelSize, kernelSize) {
+                   dilation{dilation}, groups{groups}, 
+                   weights{make_tensor<T>(out_channels, in_channels/groups, kernelSize, kernelSize)} {
                 int H_out = floor((()/stride)+1)
+                if (bias){
+                    this->bias = make_tensor<T>(out_channels);
+                }
             }
 
             Parameter<T>& getWeights(){ return params[0]; }

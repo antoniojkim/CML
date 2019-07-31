@@ -2,9 +2,10 @@
 #define __CML_TENSOR_H__
 
 
-#include "Tensors/Tensor2D.h"
-#include "Functions/TensorOps.h"
-#include "Tensors/BatchVector.h"
+#include "Tensors/Tensor.h"
+// #include "Tensors/Tensor2D.h"
+// #include "Functions/TensorOps.h"
+// #include "Tensors/BatchVector.h"
 
 
 #endif // __CML_TENSOR_H__

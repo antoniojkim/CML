@@ -1,0 +1,8 @@
+#!/bin/bash
+
+g++ --std=c++14 -Ofast -DEIGEN_TEST_CXX11=ON -fopenmp test.cc -o test > log.txt 2>&1 
+if [ $? -eq 0 ]; then
+    ./test
+else
+    vim -RZ log.txt
+fi

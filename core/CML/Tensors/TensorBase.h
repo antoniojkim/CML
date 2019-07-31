@@ -1,5 +1,5 @@
-#ifndef __CML_TENSORS_TENSOR_H__
-#define __CML_TENSORS_TENSOR_H__
+#ifndef __CML_TENSORS_TENSORBASE_H__
+#define __CML_TENSORS_TENSORBASE_H__
 
 #include <ctime>
 #include <functional>
@@ -12,20 +12,11 @@
 #include <unsupported/Eigen/CXX11/Tensor>
 
 #include "TensorDimension.h"
+
 #include "../../Utils/Exceptions.h"
 #include "../../Utils/TypeName.h"
 
 namespace cml {
-
-    template <typename T> class Tensor;
-    template <typename T> class DCG;  // Dynamic Compute Graph
-
-    /*
-        Note that the lower case tensor is used for a shared_ptr to a Tensor object.
-        Lowercase as it isn't a direct reference, but rather an indirect one.
-    */
-    template <typename T>
-    using tensor = std::shared_ptr<Tensor<T>>;
 
     template <typename T>
     using DMatrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;  // Dynamic Matrix
@@ -35,163 +26,81 @@ namespace cml {
     using DBlock = Eigen::Block<DMatrix<T>, Eigen::Dynamic, Eigen::Dynamic, false>;  // Dynamic Block
     template <typename T>
     using DArray = Eigen::Array<T, Eigen::Dynamic, Eigen::Dynamic>;  // Dynamic Array
+    template<typename T>
+    using MatrixMap = Eigen::Map<DMatrix<T>, 0, Eigen::Stride<0, 0> >;
+
+
+    template <typename T> class TensorBase;
+
+    /*
+        Note that the lower case tensor is used for a shared_ptr to a Tensor object.
+        Lowercase as it isn't a direct reference, but rather an indirect one.
+    */
+    template <typename T>
+    using tensor = std::shared_ptr<TensorBase<T>>;
+
 
     template <typename T>
     using GradientFunction = std::function<std::vector<tensor<T>>(std::vector<tensor<T>>&,
                                                                   std::vector<tensor<T>>)>;
 
-    enum TensorType {
-        NONE,
-        SCALAR,
-        VECTOR,
-        MATRIX,
-        _3D_,
-        _4D_,
-    };
-
+    
     template<typename T>
-    class Tensor {
+    class TensorBase {
         
         public:
             bool computeGrad = false; // If true, creates dynamic graph on forward pass
         
         protected:
-            std::unique_ptr<DCG<T>> dcg = nullptr;
-            TensorDimension dimensions;
-            TensorType type = TensorType::NONE;
-        
-            Tensor(const bool& computeGrad, std::initializer_list<int> v, TensorType type):
-                computeGrad{computeGrad}, dimensions{std::forward<std::initializer_list<int>>(v)}, type{type} {}
-            Tensor(const bool& computeGrad, std::vector<int>& v, TensorType type):
-                computeGrad{computeGrad}, dimensions{v}, type{type} {}
-        
+            TensorBase(const bool& computeGrad) : computeGrad{computeGrad} {}
+
         public:
-            
-            virtual DMatrix<T>& data() = 0;
+            /*
+                Get Matrix representation of Tensor
+            */
+            virtual MatrixMap<T> matrix() = 0;
             T& item() {
                 if (this->isScalar()) return this->at(0);
                 throw "Tensor::item:  Cannot get item from non scalar tensor";
             }
-            
-            /*
-                Get coefficients for vector tensors where:
-                    - "R" is the row number
-            */
-            virtual T& at(const int& R) {
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::at(int)");
-            }
-            /*
-                Get coefficients for matrix tensors where:
-                    - "R" is the row number
-                    - "C" is the column number
-            */
-            virtual T& at(const int& R, const int& C) {
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::at(int, int)");
-            }
-            /*
-                Get coefficients for 3d tensors where:
-                    - "C" is the channel number
-                    - "H" is the height
-                    - "W" is the width
-            */
-            virtual T& at(const int& C, const int& H, const int& W) {
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::at(int, int, int)");
-            }
-        
-            inline T& operator()(const int& R){ return this->at(R); }
-            inline T& operator()(const int& R, const int& C){ return this->at(R, C); }
-            inline T& operator()(const int& C, const int& H, const int& W){ return this->at(C, H, W); }
-        
-            inline T& data(const int& R){ return this->at(R); }
-            inline T& data(const int& R, const int& C){ return this->at(R, C); }
-            inline T& data(const int& C, const int& H, const int& W){ return this->at(C, H, W); }
-            
-            virtual DBlock<T> block(const int& startCol, const int& numCols) {
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::block(int, int)");
-            }
-            virtual DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) {
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::block(int, int, int, int)");
-            }
-            
-            virtual void set(std::initializer_list<T> values, const bool& transpose = false) {
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::set(1D Initializer List)");
-            }
-            virtual void set(std::initializer_list<std::initializer_list<T>> values) {
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::set(2D Initializer List)");
-            }
-            virtual void set(std::initializer_list<std::initializer_list<std::initializer_list<T>>> values) {
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::set(3D Initializer List)");
-            }
-            
-            inline void operator=(std::initializer_list<T> values){
-                this->set(std::forward<std::initializer_list<T>>(values));
-            };
-            inline void operator=(std::initializer_list<std::initializer_list<T>> values){
-                this->set(std::forward<std::initializer_list<std::initializer_list<T>>>(values));
-            };
-            inline void operator=(std::initializer_list<std::initializer_list<std::initializer_list<T>>> values){
-                this->set(std::forward<std::initializer_list<std::initializer_list<std::initializer_list<T>>>>(values));
-            };
-        
-            virtual void fill(const T& coefficient){
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::fill()");
-            }
-            virtual void ones(){
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::ones()");
-            }
-            virtual void zero(){
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::zero()");
-            }
-            virtual void randomize(const unsigned int& seed = time(NULL)) {
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::randomize()");
-            }
-            virtual void randomize(const Eigen::VectorXi& indices) {
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::randomize(Eigen::VectorXi)");
-            }
-        
-            virtual tensor<T> zeroLike() {
-                throw UnsupportedOperationException(type_name<decltype(*this)>() + "::zeroLike()");
-            }
-        
-            inline TensorDimension& dims() { return dimensions; }
-            inline TensorDimension& shape() { return dimensions; }
-            inline bool isScalar() { return dimensions.isScalar(); }
-            inline unsigned int size() { return dimensions.size(); }
-            virtual inline int rows(){ return dimensions.size(); }
-            virtual inline int cols(){ return dimensions.numBatches(); }
 
-            TensorType getType(){ return type; }
+            /*
+                Get coefficients of Tensor
+            */
+            virtual T& at(const int& d1) = 0;
+            virtual T& at(const int& d1, const int& d2) = 0;
+            virtual T& at(const int& d1, const int& d2, const int& d3) = 0;
+            virtual T& at(const int& d1, const int& d2, const int& d3, const int& d4) = 0;
+
+            inline T& operator()(const int& d1) { return this->at(d1); }
+            inline T& operator()(const int& d1, const int& d2) { return this->at(d1, d2); }
+            inline T& operator()(const int& d1, const int& d2, const int& d3) { return this->at(d1, d2, d3); }
+            inline T& operator()(const int& d1, const int& d2, const int& d3, const int& d4) { return this->at(d1, d2, d3, d4); }
+
+
+            virtual DBlock<T> block(const int& startCol, const int& numCols) = 0;
+            virtual DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) = 0;
+
+            virtual void fill(const T& coefficient) = 0;
+            virtual void ones() = 0;
+            virtual void zero() = 0;
+            virtual void randomize(const unsigned int& seed) = 0;
+
+            virtual tensor<T> constant(const T& s = 0, const bool& computeGrad = false) = 0;
+
         
+            virtual vector<int> shape() = 0;
+            virtual bool isScalar() = 0;
+            virtual int size() = 0;
+
         
-            void initGraph(std::vector<tensor<T>> params = {}, GradientFunction<T> f = nullptr){
-                if (!dcg) {
-                    dcg = std::make_unique<DCG<T>>(this, std::forward<std::vector<tensor<T>>>(params),
-                                                   std::forward<GradientFunction<T>>(f));
-                } else {
-                    throw "Called initGraph when graph already exists";
-                }
-            }
-            std::unique_ptr<DCG<T>>& graph(){
-                if (!dcg) {
-                    if (!computeGrad) throw "Getting graph of tensor with computeGrad == false";
-                    initGraph();
-                }
-                return dcg;
-            }
-            tensor<T> gradient(){ return graph()->gradient; }
-            void backward(){
-                if (!isScalar()) throw "backward can only be called on a scalar tensor";
-#ifdef DEBUG
-                std::cout << "Calling backward on a scalar tensor" << std::endl;
-#endif
-                graph()->backward();
-            }
+            void initGraph(std::vector<tensor<T>> params = {}, GradientFunction<T> f = nullptr);
+            std::unique_ptr<DCG<T, nDims>>& graph();
+            tensor<T, nDims>& gradient();
+            void backward();            
 
     };
-    
-    template <typename T = float>
-    inline tensor<T> make_scalar(const T& t, const bool& computeGrad = false);
-    
+        
     /***********************************************************************************
     *********************************** Aliases ****************************************
     ************************************************************************************/
@@ -202,14 +111,16 @@ namespace cml {
     using Parameters = std::vector<tensor<T>>;
     
     template<class T>
-    using Variable = Tensor<T>; // A nice alias
+    using Variable = tensor<T>; // A nice alias
 
-    template<class T>
-    using TensorFunction = Tensor<T>(*)(Tensor<T>&);
 
-    
-    template<typename T, template<typename> class MatrixType>
-    std::ostream& operator<<(std::ostream& out, Tensor<T>& t){
+    /***********************************************************************************
+    *********************************** Aliases ****************************************
+    ************************************************************************************/
+
+
+    template<typename T, typename nDims>
+    std::ostream& operator<<(std::ostream& out, Tensor<T, nDims>& t){
         return out << t.data();
     }
     /*
@@ -238,6 +149,8 @@ namespace cml {
         }
         return out << ")";
     }
+
+    
     
 
 
@@ -378,4 +291,4 @@ namespace cml {
 }
 
 
-#endif // __CML_TENSORS_TENSOR_H__
+#endif // __CML_TENSORS_TENSORBASE_H__
