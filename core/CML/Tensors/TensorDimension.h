@@ -9,9 +9,26 @@ namespace cml {
 
     struct TensorDimension {
         std::vector<int> dims;
+        int R, C;
         
-        TensorDimension(std::vector<int>& dims): dims{dims} {}
-        TensorDimension(std::initializer_list<int> dims): dims{dims} {}
+        TensorDimension(std::vector<int>& dims): 
+            dims{dims}, 
+            R{TensorDimension::calcRows(dims)}, 
+            R{TensorDimension::calcCols(dims)} {}
+        TensorDimension(std::initializer_list<int> dims): 
+            dims{dims}, 
+            R{TensorDimension::calcRows(dims)}, 
+            R{TensorDimension::calcCols(dims)} {}
+
+        template<typename T, typename nDims>
+        TensorDimension(const Eigen::Tensor<T, nDims>::Dimensions& dims){
+            this->dims.reserve(dims.size());
+            for (auto& d : dims){
+                this->dims.emplace_back(d);
+            }
+            R = TensorDimension::calcRows(this->dims);
+            C = TensorDimension::calcCols(this->dims);
+        }
 
         bool operator==(const TensorDimension& other){
             return dims == other.dims;
@@ -38,10 +55,17 @@ namespace cml {
             }
             return true;
         }
-        int numBatches(){
+        inline int& rows(){
+            return R;
+        }
+        inline int& cols(){
+            return C;
+        }
+
+        static int calcRows(std::vector<int>& dims){
             return dims[0];
         }
-        int size(){
+        static int calcCols(std::vector<int>& dims){
             int s = 0;
             for (auto& d : dims){
                 if (s == 0){
@@ -53,11 +77,10 @@ namespace cml {
             }
             return s;
         }
-
-        static int numBatches(std::vector<int>& dims){
-            return dims[0];
+        static int calcRows(std::initializer_list<int> dims){
+            return *(dims.begin());
         }
-        static int size(std::vector<int>& dims){
+        static int calcCols(std::initializer_list<int> dims){
             int s = 0;
             for (auto& d : dims){
                 if (s == 0){
