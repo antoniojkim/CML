@@ -5,10 +5,11 @@
 
 namespace cml {
 
+    // TODO: Make this more general, i.e. Eigen::Tensor contractions
     template<typename T>
-    tensor<T> transpose(tensor2d<T> t){
+    tensor<T> transpose(TensorBase<T>* t){
         auto u = make_tensor<T>(static_cast<DMatrix<T>>(
-            t->data().transpose()
+            t->matrix().transpose()
         ), t->computeGrad);
 
         if (u->computeGrad){
@@ -29,16 +30,16 @@ namespace cml {
         return u;
     }
 
-    template<typename T>
-    tensor<T> transpose(tensor<T> t){
-        switch(t->getType()){
-            case TensorType::MATRIX:
-                return transpose(std::static_pointer_cast<Tensor2D<T>>(t));
-            default:
-                break;
-        }
-        throw UnsupportedOperationException("Transpose:  " + type_name<decltype(t)>());
-    }
+//     template<typename T>
+//     tensor<T> transpose(tensor<T> t){
+//         switch(t->getType()){
+//             case TensorType::MATRIX:
+//                 return transpose(std::static_pointer_cast<Tensor2D<T>>(t));
+//             default:
+//                 break;
+//         }
+//         throw UnsupportedOperationException("Transpose:  " + type_name<decltype(t)>());
+//     }
 
 
 }

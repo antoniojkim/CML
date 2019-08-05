@@ -52,6 +52,8 @@ namespace cml {
             bool computeGrad = false; // If true, creates dynamic graph on forward pass
         
         protected:
+            std::unique_ptr<DCG<T>> dcg = nullptr;
+        
             TensorBase(const bool& computeGrad) : computeGrad{computeGrad} {}
 
         public:
@@ -59,6 +61,8 @@ namespace cml {
                 Get Matrix representation of Tensor
             */
             virtual MatrixMap<T> matrix() = 0;
+            virtual T* data() = 0;
+            tensor<T> transpose(){ return transpose(this); }
             T& item() {
                 if (this->isScalar()) return this->at(0);
                 throw "Tensor::item:  Cannot get item from non scalar tensor";
@@ -80,6 +84,9 @@ namespace cml {
 
             virtual DBlock<T> block(const int& startCol, const int& numCols) = 0;
             virtual DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) = 0;
+        
+            virtual void apply(T(*f)(const T& x)) = 0;
+            virtual tensor<T> abs() = 0;
 
             virtual void fill(const T& coefficient) = 0;
             virtual void ones() = 0;
@@ -87,11 +94,14 @@ namespace cml {
             virtual void randomize(const unsigned int& seed) = 0;
 
             virtual tensor<T> constant(const T& s = 0, const bool& computeGrad = false) = 0;
+        
+            virtual tensor<T> copy(T(*f)(const T& x)) = 0;
 
         
             virtual vector<int> shape() = 0;
             virtual bool isScalar() = 0;
             virtual int size() = 0;
+            virtual int numDims = 0;
 
         
             void initGraph(std::vector<tensor<T>> params = {}, GradientFunction<T> f = nullptr);
