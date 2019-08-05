@@ -26,10 +26,10 @@ namespace cml {
     };
 
     template <typename T>
-    inline std::shared_ptr<DCG<T>> make_graph(Tensor<T>* t,
+    inline std::shared_ptr<DCG<T>> make_graph(TensorBase<T>* t,
                                               std::vector<tensor<T>> params,
                                               GradientFunction<T> f) {
-        return std::make_shared<DCG<T>>(std::forward<Tensor<T>*>(t),
+        return std::make_shared<DCG<T>>(std::forward<TensorBase<T>*>(t),
                                         std::forward<std::vector<tensor<T>>>(params),
                                         std::forward<GradientFunction<T>>(f));
     }
@@ -39,11 +39,11 @@ namespace cml {
     ************************************************************************************/
 
     template <typename T>
-    DCG<T>::DCG(Tensor<T>* t, std::vector<tensor<T>> params, GradientFunction<T> f)
+    DCG<T>::DCG(TensorBase<T>* t, std::vector<tensor<T>> params, GradientFunction<T> f)
         : params{params},
           f{f},
           isLeaf{params.size() == 0 && f == nullptr},
-          gradient{isLeaf ? t->zeroLike() : nullptr} {}
+          gradient{isLeaf ? t->constant(0) : nullptr} {}
 
     /***********************************************************************************
     *********************************** Methods ****************************************

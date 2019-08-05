@@ -1,7 +1,9 @@
 #ifndef __CML_FUNCTIONS_NONLINEAR_RELU_H__
 #define __CML_FUNCTIONS_NONLINEAR_RELU_H__
 
-#include "../../Tensors/Tensor2D.h"
+#include <functional>
+
+#include "../../Tensor.h"
 
 
 namespace cml {
@@ -10,19 +12,23 @@ namespace Function {
     struct ReLU {
         
         template<typename T>
-        static tensor<T> forward(tensor2d<T> input){
-            auto t = make_tensor<T>(static_cast<DMatrix<T>>(
-                input->data().array().abs()
-            ));
+        static T gradient(const T& x){
+            return (T)(x < 0 ? 0 : 1);
+        }
+        
+        template<typename T>
+        static std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output){
+            tensor<T> output_grad = output.at(0);
+            tensor<T> input_grad = output_grad->copy(&gradient);
+            return {input_grad};
+        }
+        
+        template<typename T>
+        static tensor<T> forward(tensor<T> input){
+            auto t = input->abs();
             t->computeGrad = input->computeGrad;
             if (t->computeGrad){
-                t->initGraph({input}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
-                    tensor<T> output_grad = output.at(0);
-                    tensor<T> input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                        output_grad->data().unaryExpr([](T x){ return (T)(x < 0 ? 0 : 1); }).array()
-                    ));
-                    return {input_grad};
-                });
+                t->initGraph({input}, &backward);
             }
             return t;
         }

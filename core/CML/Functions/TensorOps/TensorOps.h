@@ -13,29 +13,29 @@ namespace cml {
     ************************************************************************************/
 
     template<typename T>
-    tensor<T> transpose(tensor2d<T> t);
-
+    tensor<T> transpose(TensorBase<T>* t);
+    
     template<typename T>
-    tensor<T> transpose(tensor<T> t);
+    inline tensor<T> transpose(tensor<T> t){
+        return transpose(t.get());
+    }
 
     /***********************************************************************************
     **************************** Tensor Multiplication *********************************
     ************************************************************************************/
 
     template<typename T>
-    tensor<T> matmul(tensor2d<T> lhs, tensor2d<T> rhs);
-
+    tensor<T> matmul(TensorBase<T>* lhs, TensorBase<T>* rhs);
+    
     template<typename T>
-    tensor<T> multiply(tensor<T> lhs, tensor<T> rhs);
-
-    template <typename T>
-    inline tensor<T> matmul(tensor<T> lhs, tensor<T> rhs) {
-        return multiply(lhs, rhs);
+    inline tensor<T> matmul(tensor<T> lhs, tensor<T> rhs){
+        return matmul(lhs.get(), rhs.get());
     }
 
+    // TODO:  Replace this with more general function, i.e. Eigen::Tensor Contractions
     template<typename T>
     inline tensor<T> operator*(tensor<T> lhs, tensor<T> rhs){
-        return multiply(lhs, rhs);
+        return matmul(lhs.get(), rhs.get());
     }
 
     /***********************************************************************************
@@ -46,16 +46,13 @@ namespace cml {
     tensor<T> addmatmul(tensor<T> t1, tensor<T> t2, tensor<T> t3);
 
     template<typename T>
-    tensor<T> addMultiply(tensor<T> lhs, tensor<T> rhs);
+    tensor<T> addMultiply(tensor<T> t1, tensor<T> t2, tensor<T> t3);
 
 
 
     /***********************************************************************************
     *************************** Tensor Inplace Division ********************************
     ************************************************************************************/
-
-    template<typename T, typename U>
-    inline tensor<T> inplaceDivision(tensor2d<T> t, const U& scalar);
 
     template<typename T, typename U>
     tensor<T> inplaceDivision(tensor<T> t, const U& scalar);
@@ -72,9 +69,6 @@ namespace cml {
     ************************************************************************************/
 
     template<typename T>
-    inline tensor<T> increment(tensor2d<T> lhs, tensor2d<T> rhs);
-
-    template<typename T>
     tensor<T> increment(tensor<T> lhs, tensor<T> rhs);
 
     template<typename T>
@@ -85,9 +79,6 @@ namespace cml {
     /***********************************************************************************
     ******************************* Tensor Decrement ***********************************
     ************************************************************************************/
-
-    template<typename T>
-    inline tensor<T> decrement(tensor2d<T> lhs, tensor2d<T> rhs);
 
     template<typename T>
     tensor<T> decrement(tensor<T> lhs, tensor<T> rhs);

@@ -12,36 +12,37 @@ namespace cml {
 
 
 
-    template <typename T, typename nDims> class Tensor;
-    template <typename T, typename nDims> class DCG;  // Dynamic Compute Graph
+    template <typename T, int nDims> class Tensor;
+    template <typename T> class DCG;  // Dynamic Compute Graph
 
 
-    template <typename T, typename nDims>
-    class Tensor{
+    template <typename T, int nDims>
+    class Tensor: public TensorBase<T>{
         
         protected:
             Eigen::Tensor<T, nDims> t;
-            TensorDimension dimensions;
-            std::unique_ptr<DCG<T, nDims>> dcg = nullptr;
 
         public:
 
             Tensor(const bool& computeGrad = false): 
                 TensorBase(computeGrad) {}
             Tensor(Tensor<T, nDims>&& other, const bool& computeGrad = false): 
-                TensorBase(computeGrad, other.dimensions()), t{std::move(other)} {}
+                TensorBase(computeGrad), t{std::move(other)} {}
             Tensor(initializer_list<int> d, const bool& computeGrad = false): 
-                TensorBase(computeGrad, d), t{d} {}
+                TensorBase(computeGrad), t{d} {}
+            Tensor(DMatrix<T>&& other, const bool& computeGrad = false): 
+                TensorBase(computeGrad),
+                t{std::move(Eigen::TensorMap<Eigen::Tensor<const T, 2>>(m.data(), {m.rows(), m.cols()}))} {}
 
             // template<typename... Args>
             // Tensor(Args&&... args): t{std::forward<Args>(args)...} {}
             
             inline MapMatrix<T> matrix() override {
-                constexpr auto R = t.dimension(0);
-                constexpr auto C = t.size() / R;
+                auto R = t.dimension(0);
+                auto C = t.size() / R;
                 return Eigen::Map<DMatrix<T>>(t.data(), R, C);
             }
-            Eigen::Tensor<T, nDims>& data() { return t; }
+            inline T* data() override { return t.data(); }
 
             T& at(const int& d1) override { return t(d1); }
             T& at(const int& d1, const int& d2) override { return t(d1, d2); }
@@ -53,6 +54,13 @@ namespace cml {
             }
             DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) override {
                 return this->matrix().block(startRow, startCol, numRows, numCols);
+            }
+            
+            void apply(T(*f)(const T& x)) override {
+                t = t.unaryExpr(std::ptr_fun(f));
+            }
+            tensor<T> abs() override {
+                return make_tensor<T, nDims>(t.abs());
             }
 
             /*
@@ -71,8 +79,14 @@ namespace cml {
             tensor<T> constant(const T& s, const bool& computeGrad) override { 
                 return make_tensor<T, nDims>(t.constant(s), computeGrad);
             }
+            tensor<T> copy(T(*f)(const T& x)) override {
+                return make_tensor<T, nDims>(t.unaryExpr(std::ptr_fun(f)), computeGrad);
+            }
         
-            vector<int> shape() override { return std::vector<int>(t.dimensions()); };
+            vector<int> shape() override {
+                auto d = t.dimensions();
+                return vector<int>(std::begin(d), std::end(d));
+            };
             bool isScalar() override {
                 const auto& dims = t.dimensions();
                 return dims.size == 1 && dims[0] == 1;
@@ -80,12 +94,15 @@ namespace cml {
             int size() override {
                 return t.size();
             }
+            int numDims override {
+                return t.NumDimensions;
+            }
 
 
-            inline tensor<T, nDims> matmul(tensor<T, nDims> other){
+            inline auto matmul(tensor<T> other){
                 return matmul(this, other.get());
             }
-            inline tensor<T, nDims> mm(tensor<T, nDims> other){
+            inline auto mm(tensor<T> other){
                 return matmul(this, other.get());
             }
     };
@@ -133,8 +150,14 @@ namespace cml {
 
     template<typename T, typename nDims>
     tensor<T> make_tensor(Tensor<T, nDims>&& other, const bool& computeGrad = false){
-        return std::make_shared<Tensor<T, nDims>>(std::move(other), computeGrad);
+        return std::make_shared<Tensor<T, nDims>>(std::forward<Tensor<T, nDims>&&>(other), computeGrad);
     }
+    template<typename T>
+    tensor<T> make_tensor(DMatrix&& other, const bool& computeGrad = false){
+        return std::make_shared<Tensor<T, 2>>(std::move(other), computeGrad);
+    }
+    
+    
 
 }
 
