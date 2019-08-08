@@ -1,8 +1,7 @@
 #ifndef __CML_FUNCTIONS_CONVOLUTION_CONV2D_H__
 #define __CML_FUNCTIONS_CONVOLUTION_CONV2D_H__
 
-#include "../../Tensors/Tensor2D.h"
-
+#include "../../Tensor.h"
 
 namespace cml {
 namespace Function {

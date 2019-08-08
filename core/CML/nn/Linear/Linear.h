@@ -3,7 +3,7 @@
 #define __CML_NN_LINEAR_LINEAR_H__
 
 #include "../Modules.h"
-#include "../../Tensors/Tensor2D.h"
+#include "../../Tensor.h"
 #include "../../Functions/Linear/Linear.h"
 
 namespace cml {

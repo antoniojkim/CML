@@ -3,8 +3,7 @@
 
 
 #include "Tensors/Tensor.h"
-// #include "Tensors/Tensor2D.h"
-// #include "Functions/TensorOps.h"
+#include "Functions/TensorOps.h"
 // #include "Tensors/BatchVector.h"
 
 

@@ -2,13 +2,13 @@
 #define __CML_NN_NONLINEAR_TANH_H__
 
 #include "../Modules.h"
-#include "../../Tensors/Tensor2D.h"
+#include "../../Tensor.h"
 #include "../../Functions/NonLinear/Tanh.h"
 
 
 namespace cml {
 namespace nn {
- 
+
     template<typename T = float>
     class Tanh: public Module<T> {
         /*
@@ -21,6 +21,7 @@ namespace nn {
         bool inplace;
         
         public:
+            // TODO: Add support for in-place
             Tanh(const bool& inplace = false): inplace {inplace} {}
 
             cml::tensor<T> forward(cml::tensor<T> x) override { return Function::Tanh::forward(x); }

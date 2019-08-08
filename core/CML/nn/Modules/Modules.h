@@ -11,7 +11,7 @@
 #include <utility>
 #include <vector>
 
-#include "../../Tensors/Tensor2D.h"
+#include "../../Tensor.h"
 #include "../../Randomizer.h"
 
 namespace cml {
