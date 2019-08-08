@@ -3,7 +3,8 @@
 
 #include <cmath>
 
-#include "../../Tensors/Tensor2D.h"
+#include "NonLinear.h"
+#include "../../Tensors/Tensor.h"
 
 
 namespace cml {
@@ -11,12 +12,14 @@ namespace Function {
     
     struct Softmax {
         
-        template<typename T>
-        static tensor<T> forward(tensor2d<T> input){
-            auto max = input->data().maxCoeff();
-            auto exps = (input->data().array() - max).exp();
+        template<typename T, int nDims>
+        static tensor<T> forward(Tensor<T, nDims> input){
+            auto max = input->tensor().maximum();
+            auto exps = input->tensor().unaryExpr([max](const T& x){
+                return std::exp(x - max);
+            });
             auto sum = exps.sum();
-            auto t = make_tensor<T>(static_cast<DMatrix<T>>( exps / sum ));
+            auto t = make_tensor<T>(static_cast<Eigen::Tensor<T, nDims>>( exps / sum ));
 
             t->computeGrad = input->computeGrad;
             if (t->computeGrad){
@@ -39,22 +42,16 @@ namespace Function {
             }
             return t;
         }
-        
-        template<typename T>
-        static tensor<T> forward(tensor<T> input){
-            switch(input->getType()){
-                case TensorType::MATRIX:
-                    return forward(std::static_pointer_cast<Tensor2D<T>>(input));
-                default:
-                    throw UnsupportedOperationException("Softmax unsupported on Tensor type");
-            }
-        }
 
     };
 
-    template<typename T = float>
-    inline tensor<T> Softmax(tensor<T> input){
+    template<typename T, int nDims>
+    inline tensor<T> Softmax(Tensor<T, nDims>* input){
         return Softmax::forward(input);
+    }
+    template<typename T>
+    inline tensor<T> Softmax(tensor<T> input){
+        return input->softmax();
     }
 
 };

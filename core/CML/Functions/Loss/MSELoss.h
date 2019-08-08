@@ -1,7 +1,7 @@
 #ifndef __CML_FUNCTIONS_LOSS_MEANSQUARED_H__
 #define __CML_FUNCTIONS_LOSS_MEANSQUARED_H__
 
-#include "../../Tensors/Tensor2D.h"
+#include "../../Tensors/Tensor.h"
 #include "../../Dtypes.h"
 
 namespace cml {
@@ -30,7 +30,7 @@ namespace Function {
                     break;
             }
             t->computeGrad = true;
-            t->initGraph({actual, expected}, [reduction](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
+            t->initGraph({actual, expected}, [reduction](std::vector<_tensor_<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
 #ifdef DEBUG
                 using namespace std;
                 cout << "MSELoss::backward()" << endl;

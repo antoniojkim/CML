@@ -8,5 +8,6 @@
 #include "TensorOps/TensorInplaceDivision.h"
 #include "TensorOps/TensorIncrement.h"
 #include "TensorOps/TensorDecrement.h"
+#include "TensorOps/TensorAbs.h"
 
 #endif // __CML_FUNCTIONS_TENSOROPS_H__

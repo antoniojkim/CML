@@ -7,13 +7,16 @@
 #include <unsupported/Eigen/CXX11/Tensor>
 
 #include "TensorBase.h"
+#include "../Functions/TensorOps/TensorOps.h"
+#include "../Functions/NonLinear/NonLinear.h"
 
 namespace cml {
 
-
-
     template <typename T, int nDims> class Tensor;
-    template <typename T> class DCG;  // Dynamic Compute Graph
+
+    #ifndef CAST_TENSOR
+    #define CAST_TENSOR static_cast<Eigen::Tensor<T, nDims>>
+    #endif // CAST_TENSOR
 
 
     template <typename T, int nDims>
@@ -28,7 +31,7 @@ namespace cml {
                 TensorBase(computeGrad) {}
             Tensor(Tensor<T, nDims>&& other, const bool& computeGrad = false): 
                 TensorBase(computeGrad), t{std::move(other)} {}
-            Tensor(initializer_list<int> d, const bool& computeGrad = false): 
+            Tensor(std::initializer_list<int> d, const bool& computeGrad = false): 
                 TensorBase(computeGrad), t{d} {}
             Tensor(DMatrix<T>&& other, const bool& computeGrad = false): 
                 TensorBase(computeGrad),
@@ -37,12 +40,13 @@ namespace cml {
             // template<typename... Args>
             // Tensor(Args&&... args): t{std::forward<Args>(args)...} {}
             
-            inline MapMatrix<T> matrix() override {
+            inline MatrixMap<T> matrix() override {
                 auto R = t.dimension(0);
                 auto C = t.size() / R;
                 return Eigen::Map<DMatrix<T>>(t.data(), R, C);
             }
             inline T* data() override { return t.data(); }
+            inline Eigen::Tensor<T, nDims>& tensor(){ return t; }
 
             T& at(const int& d1) override { return t(d1); }
             T& at(const int& d1, const int& d2) override { return t(d1, d2); }
@@ -54,13 +58,6 @@ namespace cml {
             }
             DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) override {
                 return this->matrix().block(startRow, startCol, numRows, numCols);
-            }
-            
-            void apply(T(*f)(const T& x)) override {
-                t = t.unaryExpr(std::ptr_fun(f));
-            }
-            tensor<T> abs() override {
-                return make_tensor<T, nDims>(t.abs());
             }
 
             /*
@@ -79,11 +76,8 @@ namespace cml {
             tensor<T> constant(const T& s, const bool& computeGrad) override { 
                 return make_tensor<T, nDims>(t.constant(s), computeGrad);
             }
-            tensor<T> copy(T(*f)(const T& x)) override {
-                return make_tensor<T, nDims>(t.unaryExpr(std::ptr_fun(f)), computeGrad);
-            }
         
-            vector<int> shape() override {
+            std::vector<int> shape() override {
                 auto d = t.dimensions();
                 return vector<int>(std::begin(d), std::end(d));
             };
@@ -94,10 +88,29 @@ namespace cml {
             int size() override {
                 return t.size();
             }
-            int numDims override {
+            int numDims() override {
                 return t.NumDimensions;
             }
 
+
+
+            
+            void apply(T(*f)(const T& x)) override {
+                t = t.unaryExpr(std::ptr_fun(f));
+            }
+            inline tensor<T> abs() override {
+                return cml::abs(this);
+            }
+
+            tensor<T> expr(T(*f)(const T& x)) override {
+                return make_tensor<T, nDims>(t.unaryExpr(std::ptr_fun(f)), computeGrad);
+            }
+
+            tensor<T> multiply(tensor<T> other){
+                if (other.numDims() != nDims) throw "Invalid coefficient-wise multiplication";
+                auto o = static_cast<Tensor<T, nDims>*>(other.get());
+                return make_tensor<T, nDims>(t * o->t, computeGrad);
+            }
 
             inline auto matmul(tensor<T> other){
                 return matmul(this, other.get());
@@ -105,8 +118,16 @@ namespace cml {
             inline auto mm(tensor<T> other){
                 return matmul(this, other.get());
             }
+
+            inline tensor<T> softmax() override {
+                return cml::Functions::Softmax(this);
+            }
     };
 
+    template<typename T, typename nDims>
+    std::ostream& operator<<(std::ostream& out, Tensor<T, nDims>* t){
+        return out << t.tensor();
+    }
     
     template<typename T> using Tensor1D = Tensor<T, 1>;
     template<typename T> using Tensor2D = Tensor<T, 2>;

@@ -11,8 +11,7 @@
 #include <Eigen/Core>
 #include <unsupported/Eigen/CXX11/Tensor>
 
-#include "TensorDimension.h"
-
+#include "TensorDecl.h"
 #include "../../Utils/Exceptions.h"
 #include "../../Utils/TypeName.h"
 
@@ -29,20 +28,6 @@ namespace cml {
     template<typename T>
     using MatrixMap = Eigen::Map<DMatrix<T>, 0, Eigen::Stride<0, 0> >;
 
-
-    template <typename T> class TensorBase;
-
-    /*
-        Note that the lower case tensor is used for a shared_ptr to a Tensor object.
-        Lowercase as it isn't a direct reference, but rather an indirect one.
-    */
-    template <typename T>
-    using tensor = std::shared_ptr<TensorBase<T>>;
-
-
-    template <typename T>
-    using GradientFunction = std::function<std::vector<tensor<T>>(std::vector<tensor<T>>&,
-                                                                  std::vector<tensor<T>>)>;
 
     
     template<typename T>
@@ -85,29 +70,34 @@ namespace cml {
             virtual DBlock<T> block(const int& startCol, const int& numCols) = 0;
             virtual DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) = 0;
         
-            virtual void apply(T(*f)(const T& x)) = 0;
-            virtual tensor<T> abs() = 0;
-
             virtual void fill(const T& coefficient) = 0;
             virtual void ones() = 0;
             virtual void zero() = 0;
             virtual void randomize(const unsigned int& seed) = 0;
 
             virtual tensor<T> constant(const T& s = 0, const bool& computeGrad = false) = 0;
-        
-            virtual tensor<T> copy(T(*f)(const T& x)) = 0;
 
         
-            virtual vector<int> shape() = 0;
+            virtual std::vector<int> shape() = 0;
             virtual bool isScalar() = 0;
             virtual int size() = 0;
-            virtual int numDims = 0;
+            virtual int numDims() = 0;
 
         
             void initGraph(std::vector<tensor<T>> params = {}, GradientFunction<T> f = nullptr);
-            std::unique_ptr<DCG<T, nDims>>& graph();
-            tensor<T, nDims>& gradient();
+            std::unique_ptr<DCG<T>>& graph();
+            tensor<T>& gradient();
             void backward();            
+
+
+            virtual tensor<T> abs() = 0;
+
+            virtual void apply(T(*f)(const T& x)) = 0;
+            virtual tensor<T> expr(T(*f)(const T& x)) = 0;
+
+            virtual tensor<T> multiply(tensor<T> other) = 0;
+
+            virtual tensor<T> softmax() = 0;
 
     };
         
@@ -129,10 +119,6 @@ namespace cml {
     ************************************************************************************/
 
 
-    template<typename T, typename nDims>
-    std::ostream& operator<<(std::ostream& out, Tensor<T, nDims>& t){
-        return out << t.data();
-    }
     /*
         Since the operator<< has been overloaded for the shared_ptr to
         a Tensor type, to print the actual pointer, you must use the get() method

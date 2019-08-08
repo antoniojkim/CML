@@ -1,8 +1,9 @@
 #ifndef __CML_NN_LOSS_MSELOSS_H__
 #define __CML_NN_LOSS_MSELOSS_H__
+
 #include "../../Dtypes.h"
 #include "../../Functions/Loss/MSELoss.h"
-#include "../../Tensors/Tensor2D.h"
+#include "../../Tensor.h"
 #include "Criterion.h"
 
 namespace cml {

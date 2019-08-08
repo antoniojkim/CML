@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-#include "../../Tensors/Tensor2D.h"
+#include "../../Tensor.h"
 #include "../../nn/Modules.h"
 
 namespace cml {

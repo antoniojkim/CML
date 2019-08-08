@@ -1,12 +1,9 @@
 #ifndef __CML_FUNCTIONS_TENSOROPS_TENSOROPS_H__
 #define __CML_FUNCTIONS_TENSOROPS_TENSOROPS_H__
 
-
-#include "../../Tensors/TensorTemplate.h"
-#include "../../Tensors/Tensor2D.h"
+#include "../../Tensors/TensorDecl.h"
 
 namespace cml {
-
 
     /***********************************************************************************
     **************************** Tensor Multiplication *********************************

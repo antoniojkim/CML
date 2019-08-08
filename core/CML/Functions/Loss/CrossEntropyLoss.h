@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-#include "../../Tensors/Tensor2D.h"
+#include "../../Tensors/Tensor.h"
 #include "../../Dtypes.h"
 
 namespace cml {
@@ -11,17 +11,18 @@ namespace Function {
     
     struct CrossEntropyLoss {
         
-        template<typename T>
-        static tensor<T> forward(tensor2d<T> actual, tensor2d<T> expected){
-            if (expected->data().rows() > 1){
+        template<typename T, int nDims>
+        static tensor<T> forward(Tensor<T, nDims>* actual, Tensor<T, nDims>* expected){
+            if (expected->matrix().rows() > 1){
                 throw "CrossEntropyLoss::forward:  Expected tensor is not scalar";
             }
 //             auto p = Softmax<T>(actual);
             
+            // TODO: Convert this to use Eigen::Tensor instead of Eigen::Matrix
             // This is more stable
             auto p = static_cast<DMatrix<T>>(
-                actual->data().rowwise() - static_cast<DMatrix<T>>(actual->data().array().exp().colwise().sum().log()).row(0));
-            int m = expected->data().cols();
+                actual->matrix().rowwise() - static_cast<DMatrix<T>>(actual->matrix().array().exp().colwise().sum().log()).row(0));
+            int m = expected->matrix().cols();
             T sum_log_likelihood = 0;
             for (int i = 0; i<m; ++i){
                 sum_log_likelihood -= p(expected->at(0, i), i);
@@ -37,7 +38,7 @@ namespace Function {
 
                 p = p.array().exp();
                 for (int i = 0; i<m; ++i){
-                    p(expected->data(0, i), i) -= 1;
+                    p(expected->at(0, i), i) -= 1;
                 }
                 p /= m;
                 tensor<T> actual_grad = make_tensor<T>(std::move(p));
@@ -64,8 +65,8 @@ namespace Function {
 
     };
 
-    template<typename T>
-    inline tensor<T> CrossEntropyLoss(tensor<T> actual, tensor<T> expected){
+    template<typename T, int nDims>
+    inline tensor<T> CrossEntropyLoss(Tensor<T, nDims>* actual, Tensor<T, nDims>* expected){
         return CrossEntropyLoss::forward(actual, expected);
     }
 

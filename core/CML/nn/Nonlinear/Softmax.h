@@ -3,13 +3,13 @@
 
 
 #include "../Modules.h"
-#include "../../Tensors/Tensor2D.h"
+#include "../../Tensor.h"
 #include "../../Functions/NonLinear/Softmax.h"
 
 
 namespace cml {
 namespace nn {
- 
+
     template<typename T = float>
     class Softmax: public Module<T> {
         /*
