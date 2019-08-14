@@ -12,6 +12,7 @@
 #include <unsupported/Eigen/CXX11/Tensor>
 
 #include "TensorDecl.h"
+#include "../Dtypes.h"
 #include "../../Utils/Exceptions.h"
 #include "../../Utils/TypeName.h"
 
@@ -47,6 +48,7 @@ namespace cml {
             */
             virtual MatrixMap<T> matrix() = 0;
             virtual T* data() = 0;
+
             tensor<T> transpose(){ return transpose(this); }
             T& item() {
                 if (this->isScalar()) return this->at(0);
@@ -66,6 +68,8 @@ namespace cml {
             inline T& operator()(const int& d1, const int& d2, const int& d3) { return this->at(d1, d2, d3); }
             inline T& operator()(const int& d1, const int& d2, const int& d3, const int& d4) { return this->at(d1, d2, d3, d4); }
 
+            virtual void set(std::initializer_list<T> values, const bool& tranpose = false) = 0;
+            virtual void set(std::initializer_list<std::initializer_list<T>> values) = 0;
 
             virtual DBlock<T> block(const int& startCol, const int& numCols) = 0;
             virtual DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) = 0;
@@ -93,11 +97,14 @@ namespace cml {
             virtual tensor<T> abs() = 0;
 
             virtual void apply(T(*f)(const T& x)) = 0;
-            virtual tensor<T> expr(T(*f)(const T& x)) = 0;
+            virtual tensor<T> expr(T(*f)(const T& x), const bool& computeGrad = false) = 0;
 
+            virtual tensor<T> multiply(const T& scalar) = 0;
             virtual tensor<T> multiply(tensor<T> other) = 0;
 
             virtual tensor<T> softmax() = 0;
+            virtual tensor<T> MSELoss(tensor<T> expected, const nn::Reduction& reduction = nn::Reduction::MEAN) = 0;
+            virtual tensor<T> CrossEntropyLoss(tensor<T> expected) = 0;
 
     };
         

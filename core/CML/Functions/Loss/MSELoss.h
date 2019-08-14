@@ -8,81 +8,90 @@ namespace cml {
 namespace Function {
     
     struct MSELoss {
+
+        template<typename T, int nDims>
+        static std::vector<tensor<T>> mean_backward(std::vector<_tensor_<T>>& params, std::vector<tensor<T>> output) {
+            auto actual = CAST_TENSOR_NDIMS(params.at(0));
+            auto expected = CAST_TENSOR_NDIMS(params.at(1));
+
+            T c = (T)(2.0/actual->tensor().size());
+
+            tensor<T> actual_grad = make_tensor<T>(CAST_EIGEN_TENSOR(
+                c*(actual->tensor() - expected->tensor())
+            ));
+
+            return {actual_grad, nullptr};
+        }
+
+        template<typename T, int nDims>
+        static std::vector<tensor<T>> sum_backward(std::vector<_tensor_<T>>& params, std::vector<tensor<T>> output) {
+            auto actual = CAST_TENSOR_NDIMS(params.at(0));
+            auto expected = CAST_TENSOR_NDIMS(params.at(1));
+            
+            T c = (T)(2);
+
+            tensor<T> actual_grad = make_tensor<T>(CAST_EIGEN_TENSOR(
+                c*(actual->tensor() - expected->tensor())
+            ));
+
+            return {actual_grad, nullptr};
+        }
+
+        template<typename T, int nDims>
+        static std::vector<tensor<T>> backward(std::vector<_tensor_<T>>& params, std::vector<tensor<T>> output) {
+            auto actual = CAST_TENSOR_NDIMS(params.at(0));
+            auto expected = CAST_TENSOR_NDIMS(params.at(1));
+            
+            T c = (T)(2);
+
+            tensor<T> actual_grad = make_tensor<T>(CAST_EIGEN_TENSOR(
+                c*(actual->tensor() - expected->tensor())
+            ));
+
+            return {actual_grad, nullptr};
+        }
         
-        template<typename T>
-        static tensor<T> forward(tensor2d<T> actual, tensor2d<T> expected, const nn::Reduction& reduction = nn::Reduction::MEAN){
+        template<typename T, int nDims>
+        static tensor<T> forward(Tensor<T, nDims>* actual, Tensor<T, nDims>* expected, const nn::Reduction& reduction = nn::Reduction::MEAN){
             tensor<T> t = nullptr;
+            GradientFunction<T> gradient = nullptr;
             switch(reduction){
                 case nn::Reduction::MEAN:
-                    t = make_tensor<T>(static_cast<DMatrix<T>>(
-                        (actual->data() - expected->data()).array().square().colwise().mean()
+                    t = make_tensor<T>(CAST_EIGEN_TENSOR(
+                        (actual->tensor() - expected->tensor()).square().mean(Eigen::array<int, 1>({actual->numDims()-1}))
                     ));
+                    gradient = &mean_backward<T, nDims>;
                     break;
                 case nn::Reduction::SUM:
-                    t = make_tensor<T>(static_cast<DMatrix<T>>(
-                        (actual->data() - expected->data()).array().square().colwise().sum()
+                    t = make_tensor<T>(CAST_EIGEN_TENSOR(
+                        (actual->tensor() - expected->tensor()).square().sum(Eigen::array<int, 1>({actual->numDims()-1}))
                     ));
+                    gradient = &sum_backward<T, nDims>;
                     break;
                 default:
-                    t = make_tensor<T>(static_cast<DMatrix<T>>(
-                        (actual->data() - expected->data()).array().square()
+                    t = make_tensor<T>(CAST_EIGEN_TENSOR(
+                        (actual->tensor() - expected->tensor()).square()
                     ));
+                    gradient = &backward<T, nDims>;
                     break;
             }
             t->computeGrad = true;
-            t->initGraph({actual, expected}, [reduction](std::vector<_tensor_<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
-#ifdef DEBUG
-                using namespace std;
-                cout << "MSELoss::backward()" << endl;
-#endif
-                auto actual = params.at(0);
-                auto expected = params.at(1);
-
-                T c = 0;
-                switch(reduction){
-                    case nn::Reduction::MEAN:
-                        c = (T)(2.0/actual->data().size());
-                        break;
-                    case nn::Reduction::SUM:
-                        c = (T)(2);
-                        break;
-                    default:
-                        c = (T)(2);
-                        break;
-                }
-
-                tensor<T> actual_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                    c*(actual->data() - expected->data())
-                ));
-
-                return {actual_grad, nullptr};
-            });
+            t->initGraph({actual, expected}, gradient);
             return t;
-        }
-        
-
-        template<typename T>
-        static tensor<T> forward(tensor<T> actual, tensor<T> expected, const nn::Reduction& reduction = nn::Reduction::MEAN){
-            if (actual->getType() != expected->getType()){
-                throw TensorTypeMismatchException();
-            }
-
-            switch(actual->getType()){
-                case TensorType::MATRIX:
-                    return forward(std::static_pointer_cast<Tensor2D<T>>(actual),
-                                   std::static_pointer_cast<Tensor2D<T>>(expected),
-                                   reduction);
-                default:
-                    throw UnsupportedOperationException("MSELoss unsupported for Tensor type");
-            }
         }
 
     };
 
     template<typename T>
-    inline tensor<T> MSELoss(tensor<T> actual, tensor<T> expected, const nn::Reduction& reduction = nn::Reduction::MEAN){
+    inline tensor<T> MSELoss(tensor<T> actual, tensor<T> expected, const nn::Reduction& reduction){
+        return actual->MSELoss(expected, reduction);
+    }
+    template<typename T, int nDims>
+    inline tensor<T> MSELoss(Tensor<T, nDims>* actual, Tensor<T, nDims>* expected, const nn::Reduction& reduction){
         return MSELoss::forward(actual, expected, reduction);
     }
+
+
 
 }
 }

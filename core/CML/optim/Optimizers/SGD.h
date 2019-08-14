@@ -52,7 +52,7 @@ namespace optim {
             void step() override {
                 for (auto& param : params){
                     if (param->computeGrad){
-                        param->data() -= lr * param->gradient()->data();
+                        param -= lr * param->gradient();
                     }
                 }
             }
