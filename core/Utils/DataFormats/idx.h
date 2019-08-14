@@ -31,16 +31,17 @@ namespace idx {
     }
     
     template<typename T, typename U>
-    void read_t(std::istream& f, cml::DMatrix<T>& data, std::vector<int>& dims, const int& N, const int& R){
+    void read_t(std::istream& f, tensor<T> data, std::vector<int>& dims, const int& N, const int& R){
         if (data.rows() != N || data.cols() != R){
             data.resize(N, R);
         }
         
+        auto m = data->matrix();
         U d;
         for (int n = 0; n < N; ++n){
             for (int r = 0; r < R; ++r){
                 read_U(f, d);
-                data(n, r) = d;
+                m(n, r) = d;
             }
         }
     }
@@ -67,22 +68,22 @@ namespace idx {
         
         switch((magicNumber >> 8) & 0xff){
             case 0x08:
-                read_t<T, uint8_t>(f, data->data(), dims, N, R);
+                read_t<T, uint8_t>(f, data, dims, N, R);
                 break;
             case 0x09:
-                read_t<T, int8_t>(f, data->data(), dims, N, R);
+                read_t<T, int8_t>(f, data, dims, N, R);
                 break;
             case 0x0B:
-                read_t<T, short>(f, data->data(), dims, N, R);
+                read_t<T, short>(f, data, dims, N, R);
                 break;
             case 0x0C:
-                read_t<T, int>(f, data->data(), dims, N, R);
+                read_t<T, int>(f, data, dims, N, R);
                 break;
             case 0x0D:
-                read_t<T, float>(f, data->data(), dims, N, R);
+                read_t<T, float>(f, data, dims, N, R);
                 break;
             case 0x0E:
-                read_t<T, double>(f, data->data(), dims, N, R);
+                read_t<T, double>(f, data, dims, N, R);
                 break;
             default:
                 throw "Invalid data type";

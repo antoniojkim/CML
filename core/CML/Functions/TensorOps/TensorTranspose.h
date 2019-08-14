@@ -16,13 +16,9 @@ namespace cml {
             u->initGraph({t}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
 #ifdef DEBUG
                 using namespace std;
-                cout << "Tensor2D Transpose Backward" << endl;
+                cout << "Tensor Transpose Backward" << endl;
 #endif
                 auto output_grad = output.at(0);
-                // auto t_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                //     output_grad->data().transpose()
-                // ));
-
                 return {output_grad};
             });
         }

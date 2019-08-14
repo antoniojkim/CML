@@ -175,8 +175,8 @@ namespace cml {
                             loadData(label, valLabels, i, blockSize);
                             
                             for (unsigned int j = 0; j<blockSize; ++j){
-                                output->data().col(j).maxCoeff(&maxRow);
-                                if (maxRow == label->data(0, j)){
+                                output->matrix().col(j).maxCoeff(&maxRow);
+                                if (maxRow == label->at(0, j)){
                                     ++correct;
                                 }
                                 ++total;
@@ -209,7 +209,7 @@ namespace cml {
         private:            
             void loadData(tensor<T> block, tensor<T> data, const int& i, const unsigned int& blockSize){
                 if (int(i+blockSize) < data->rows()){
-                    block->data() = data->block(i, blockSize).transpose();
+                    block->matrix() = data->block(i, blockSize).transpose();
                 }
                 else {
                     unsigned int finalBlockSize = data->rows() % blockSize;

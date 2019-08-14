@@ -13,7 +13,7 @@ namespace Function {
     struct Softmax {
         
         template<typename T, int nDims>
-        static tensor<T> forward(Tensor<T, nDims> input){
+        static tensor<T> forward(Tensor<T, nDims>* input){
             auto max = input->tensor().maximum();
             auto exps = input->tensor().unaryExpr([max](const T& x){
                 return std::exp(x - max);
@@ -33,8 +33,8 @@ namespace Function {
                     if (t->cols() != 1) throw "Invalid shape for softmax_grad"; 
 
                     auto input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                        (static_cast<DMatrix<T>>(t->data().asDiagonal()) - 
-                         (t->data() * t->data().transpose())) * output_grad->data()
+                        (static_cast<DMatrix<T>>(t->matrix().asDiagonal()) - 
+                         (t->matrix() * t->matrix().transpose())) * output_grad->matrix()
                     ));
 
                     return {input_grad};

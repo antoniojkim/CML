@@ -6,7 +6,7 @@
 namespace cml {
 
     /***********************************************************************************
-    **************************** Tensor Multiplication *********************************
+    ****************************** Tensor Transpose ************************************
     ************************************************************************************/
 
     template<typename T>
@@ -16,6 +16,25 @@ namespace cml {
     inline tensor<T> transpose(tensor<T> t){
         return transpose(t.get());
     }
+
+    /***********************************************************************************
+    ************************* Tensor Scalar Multiplication *****************************
+    ************************************************************************************/
+
+    template<typename T, int nDims>
+    tensor<T> multiply(Tensor<T, nDims>* t, const T& scalar);
+
+    template<typename T, int nDims>
+    inline tensor<T> operator*(Tensor<T, nDims>* t, const T& scalar);
+
+    template<typename T, int nDims>
+    inline tensor<T> operator*(const T& scalar, Tensor<T, nDims>* t);
+
+    template<typename T>
+    inline tensor<T> operator*(tensor<T> t, const T& scalar);
+
+    template<typename T>
+    inline tensor<T> operator*(const T& scalar, tensor<T> t);
 
     /***********************************************************************************
     **************************** Tensor Multiplication *********************************
@@ -82,6 +101,18 @@ namespace cml {
 
     template<typename T>
     inline tensor<T> operator-=(tensor<T> lhs, tensor<T> rhs){ return decrement(lhs, rhs); }
+
+
+
+    /***********************************************************************************
+    ******************** Tensor Coefficient-wise Absolute Value ************************
+    ************************************************************************************/
+
+    template<typename T>
+    tensor<T> abs(tensor<T> input);
+
+    template<typename T, int nDims>
+    tensor<T> abs(Tensor<T, nDims>* input);
 
 }
 

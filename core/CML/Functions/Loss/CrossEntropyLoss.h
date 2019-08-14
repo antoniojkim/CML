@@ -13,12 +13,11 @@ namespace Function {
         
         template<typename T, int nDims>
         static tensor<T> forward(Tensor<T, nDims>* actual, Tensor<T, nDims>* expected){
-            if (expected->matrix().rows() > 1){
+            if (expected->numDims() > 2){
                 throw "CrossEntropyLoss::forward:  Expected tensor is not scalar";
             }
 //             auto p = Softmax<T>(actual);
             
-            // TODO: Convert this to use Eigen::Tensor instead of Eigen::Matrix
             // This is more stable
             auto p = static_cast<DMatrix<T>>(
                 actual->matrix().rowwise() - static_cast<DMatrix<T>>(actual->matrix().array().exp().colwise().sum().log()).row(0));
@@ -48,23 +47,13 @@ namespace Function {
             return t;
         }
 
-        template<typename T>
-        static tensor<T> forward(tensor<T> actual, tensor<T> expected){
-            if (actual->getType() != expected->getType()){
-                throw TensorTypeMismatchException();
-            }
-
-            switch(actual->getType()){
-                case TensorType::MATRIX:
-                    return forward(std::static_pointer_cast<Tensor2D<T>>(actual),
-                                   std::static_pointer_cast<Tensor2D<T>>(expected));
-                default:
-                    throw UnsupportedOperationException("CrossEntropyLoss unsupported for Tensor type");
-            }
-        }
 
     };
 
+    template<typename T>
+    inline tensor<T> CrossEntropyLoss(tensor<T> actual, tensor<T> expected){
+        return actual->CrossEntropyLoss(expected);
+    }
     template<typename T, int nDims>
     inline tensor<T> CrossEntropyLoss(Tensor<T, nDims>* actual, Tensor<T, nDims>* expected){
         return CrossEntropyLoss::forward(actual, expected);
