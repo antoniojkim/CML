@@ -7,7 +7,7 @@
 #include <unsupported/Eigen/CXX11/Tensor>
 
 #include "TensorDecl.h"
-#include "TensorBase.h"
+#include "../../Numeric/Numeric.h"
 #include "../Functions/TensorOps/TensorOps.h"
 #include "../Functions/NonLinear/NonLinear.h"
 #include "../Functions/Loss/Loss.h"
@@ -15,30 +15,39 @@
 namespace cml {
 
 
-    template <typename T, int nDims>
-    class Tensor: public TensorBase<T>{
+    template <typename T>
+    class Tensor {
+        
+        public:
+            bool computeGrad = false; // If true, creates dynamic graph on forward pass
         
         protected:
-            Eigen::Tensor<T, nDims> t;
+            std::vector<int> dims;
+            int S; // tensor size (i.e. number of values in the tensor)
+            std::shared_ptr<T[]> d; // object holding the tensor data
+            std::unique_ptr<DCG<T>> dcg = nullptr;
 
         public:
 
-            Tensor(const bool& computeGrad): TensorBase<T>(computeGrad) {}
-            Tensor(Tensor<T, nDims>&& other, const bool& computeGrad):  TensorBase<T>(computeGrad), t{std::move(other)} {}
-            Tensor(std::initializer_list<int> d, const bool& computeGrad):  TensorBase<T>(computeGrad), t{d} {}
-            Tensor(DMatrix<T>&& m, const bool& computeGrad): TensorBase<T>(computeGrad),
-                t{std::move(Eigen::TensorMap<Eigen::Tensor<const T, 2>>(m.data(), {m.rows(), m.cols()}))} {}
+            Tensor(const bool& computeGrad):
+                computeGrad(computeGrad) {}
+            Tensor(std::initializer_list<int> dims, const bool& computeGrad):  
+                computeGrad(computeGrad),
+                dims{std::begin(dims), std::end(dims)},
+                S{cml::numeric::product(dims)},
+                d{new T[S], std::default_delete<T[]>()} {}
+            // Tensor(Tensor<T, nDims>&& other, const bool& computeGrad):  computeGrad(computeGrad), t{std::move(other)} {}
+            // Tensor(DMatrix<T>&& m, const bool& computeGrad): computeGrad(computeGrad),
+            //     t{std::move(Eigen::TensorMap<Eigen::Tensor<const T, 2>>(m.data(), {m.rows(), m.cols()}))} {}
 
             // template<typename... Args>
             // Tensor(Args&&... args): t{std::forward<Args>(args)...} {}
             
-            inline MatrixMap<T> matrix() override {
-                auto R = t.dimension(0);
-                auto C = t.size() / R;
-                return Eigen::Map<DMatrix<T>>(t.data(), R, C);
-            }
-            inline T* data() override { return t.data(); }
-            inline Eigen::Tensor<T, nDims>& tensor(){ return t; }
+            MatrixMap<T> matrix() override;
+            inline std::shared_ptr<T[]> data() override { return d; }
+
+            template<int nDims>
+            Eigen::TensorMap<Eigen::Tensor<T, nDims>> tensor();
 
             T& at(const int& d1) override { return t(d1); }
             T& at(const int& d1, const int& d2) override { return t(d1, d2); }
@@ -116,6 +125,34 @@ namespace cml {
             }
     };
 
+    template<typename T>
+    MatrixMap<T> Tensor<T>::matrix() {
+        int R, C;
+        R = dims[0];
+        switch(dims.size()){
+            case 2:
+                C = dims[1];
+                break;
+            default;
+                C = s / R;
+                break;
+        }
+        return Eigen::Map<DMatrix<T>>(d, R, C);
+    }
+    template<typename T> template<int nDims>
+    Eigen::TensorMap<Eigen::Tensor<T, nDims>> Tensor<T>::tensor() {
+        if (int(nDims) != dims.size()){
+            std::ostringstream message;
+            message << "template nDims (" << nDims << ") does not match object's dim size (" << dims.size() << ")";
+            throw InvalidDimensionException(message);
+        }
+
+        std::array<int, nDims> arr;
+        std::copy_n(v1.begin(), nDims, arr.begin());
+
+        return Eigen::TensorMap<Eigen::Tensor<T, nDims>>(d, arr);
+    }
+
 
     // template<typename T, int nDims>
     // cml::tensor<T> Tensor<T, nDims>::multiply(cml::tensor<T> other){
@@ -125,19 +162,9 @@ namespace cml {
     // }
 
     template<typename T, int nDims>
-    std::ostream& operator<<(std::ostream& out, Tensor<T, nDims>* t){
-        return out << t.tensor();
+    std::ostream& operator<<(std::ostream& out, Tensor<T>* t){
+        return out << t->matrix();
     }
-    
-    template<typename T> using Tensor1D = Tensor<T, 1>;
-    template<typename T> using Tensor2D = Tensor<T, 2>;
-    template<typename T> using Tensor3D = Tensor<T, 3>;
-    template<typename T> using Tensor4D = Tensor<T, 4>;
-
-    template<typename T> using tensor1d = std::shared_ptr<Tensor1D<T>>;
-    template<typename T> using tensor2d = std::shared_ptr<Tensor2D<T>>;
-    template<typename T> using tensor3d = std::shared_ptr<Tensor3D<T>>;
-    template<typename T> using tensor4d = std::shared_ptr<Tensor4D<T>>;
 
 
     template <typename T>

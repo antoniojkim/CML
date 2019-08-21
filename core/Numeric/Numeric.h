@@ -19,6 +19,10 @@ namespace numeric {
     inline T product(const std::vector<T>& v){
         return T(std::accumulate(std::begin(v), std::end(v), T(1), std::multiplies<T>()));
     }
+    template<typename T>
+    inline T product(std::initializer_list<T> v){
+        return T(std::accumulate(std::begin(v), std::end(v), T(1), std::multiplies<T>()));
+    }
  
     inline bool any(const std::vector<bool>& v){
         return bool(std::accumulate(std::begin(v), std::end(v), false, std::logical_or<>()));

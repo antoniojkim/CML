@@ -2,10 +2,9 @@
 
 #include <exception>
 #include <string>
+#include <sstream>
 
 class UnimplementedException: public std::exception {
-    
-    std::string message;
     
     public:
         UnimplementedException(const std::string& message): message{message} {}
@@ -32,6 +31,19 @@ class UnsupportedOperationException: public std::exception {
     private:
         const char* what() const throw() {            
             return (std::string("Unsupported Operation Exception:  ") + message).c_str();
+        }
+};
+
+class InvalidDimensionException: public std::exception {
+    
+    std::string message;
+    
+    public:
+        InvalidDimensionException(const std::string& message): message{message} {}
+    
+    private:
+        const char* what() const throw() {            
+            return (std::string("Invalid Dimension Exception:  ") + message).c_str();
         }
 };
 
