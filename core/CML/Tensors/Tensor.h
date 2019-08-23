@@ -3,14 +3,8 @@
 
 #include <ostream>
 
-#include <Eigen/Core>
-#include <unsupported/Eigen/CXX11/Tensor>
-
 #include "TensorDecl.h"
-#include "../../Numeric/Numeric.h"
-#include "../Functions/TensorOps/TensorOps.h"
-#include "../Functions/NonLinear/NonLinear.h"
-#include "../Functions/Loss/Loss.h"
+#include "../../Utils/VectorUtils.h"
 
 namespace cml {
 
@@ -22,8 +16,8 @@ namespace cml {
             bool computeGrad = false; // If true, creates dynamic graph on forward pass
         
         protected:
-            std::vector<int> dims;
-            int S; // tensor size (i.e. number of values in the tensor)
+            std::vector<size_t> dims;
+            size_t S; // tensor size (i.e. number of values in the tensor)
             std::shared_ptr<T[]> d; // object holding the tensor data
             std::unique_ptr<DCG<T>> dcg = nullptr;
 
@@ -31,11 +25,19 @@ namespace cml {
 
             Tensor(const bool& computeGrad):
                 computeGrad(computeGrad) {}
-            Tensor(std::initializer_list<int> dims, const bool& computeGrad):  
+            Tensor(const std::vector<size_t>& dims, const bool& computeGrad = false):  
                 computeGrad(computeGrad),
                 dims{std::begin(dims), std::end(dims)},
                 S{cml::numeric::product(dims)},
                 d{new T[S], std::default_delete<T[]>()} {}
+            Tensor(std::initializer_list<size_t> dims, const bool& computeGrad = false):  
+                computeGrad(computeGrad),
+                dims{std::begin(dims), std::end(dims)},
+                S{cml::numeric::product(dims)},
+                d{new T[S], std::default_delete<T[]>()} {}
+                
+            template<size_t... dims>
+            void initialize();
             // Tensor(Tensor<T, nDims>&& other, const bool& computeGrad):  computeGrad(computeGrad), t{std::move(other)} {}
             // Tensor(DMatrix<T>&& m, const bool& computeGrad): computeGrad(computeGrad),
             //     t{std::move(Eigen::TensorMap<Eigen::Tensor<const T, 2>>(m.data(), {m.rows(), m.cols()}))} {}
@@ -43,19 +45,16 @@ namespace cml {
             // template<typename... Args>
             // Tensor(Args&&... args): t{std::forward<Args>(args)...} {}
             
-            MatrixMap<T> matrix() override;
-            inline std::shared_ptr<T[]> data() override { return d; }
+            MatrixMap<T> matrix();
+            inline std::shared_ptr<T[]> data() { return d; }
 
             template<int nDims>
             Eigen::TensorMap<Eigen::Tensor<T, nDims>> tensor();
 
-            T& at(const int& d1) override { return t(d1); }
-            T& at(const int& d1, const int& d2) override { return t(d1, d2); }
-            T& at(const int& d1, const int& d2, const int& d3) override { return t(d1, d2, d3); }
-            T& at(const int& d1, const int& d2, const int& d3, const int& d4) override { return t(d1, d2, d3, d4); }
+            T& at(std::initializer_list<int> dims);
 
-            inline void set(std::initializer_list<T> values) override { t->setValues(values); }
-            inline void set(std::initializer_list<std::initializer_list<T>> values) override { t->setValues(values); }
+            void set(std::initializer_list<T> values);
+            void set(std::initializer_list<std::initializer_list<T>> values);
 
             DBlock<T> block(const int& startCol, const int& numCols) override {
                 return this->matrix().block(0, startCol, t.dimension(0), numCols);
@@ -81,19 +80,18 @@ namespace cml {
                 return make_tensor<T, nDims>(t.constant(s), computeGrad);
             }
         
-            std::vector<int> shape() override {
-                auto d = t.dimensions();
-                return std::vector<int>(std::begin(d), std::end(d));
+            const std::vector<size_t>& shape() override {
+                return dims;
             };
             bool isScalar() override {
                 const auto& dims = t.dimensions();
                 return dims.size == 1 && dims[0] == 1;
             }
-            int size() override {
-                return t.size();
+            const size_t& size() override {
+                return S;
             }
-            int numDims() override {
-                return t.NumDimensions;
+            size_t numDims() override {
+                return dims.size();
             }
 
 
@@ -152,12 +150,16 @@ namespace cml {
 
         return Eigen::TensorMap<Eigen::Tensor<T, nDims>>(d, arr);
     }
+    
+    template<typename T>
+    T& Tensor<T>::at(std::initializer_list<int> dims){
 
+    }
 
     // template<typename T, int nDims>
     // cml::tensor<T> Tensor<T, nDims>::multiply(cml::tensor<T> other){
     //     if (other.numDims() != nDims) throw "Invalid coefficient-wise multiplication";
-    //     auto o = static_cast<Tensor<T, nDims>*>(other.get());
+    //     auto o = static_cast<tensor<T>>(other.get());
     //     return make_tensor<T, nDims>(CAST_EIGEN_TENSOR(t * o->t), computeGrad);
     // }
 

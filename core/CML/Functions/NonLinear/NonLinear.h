@@ -5,8 +5,6 @@
 
 namespace cml {
 
-    template<typename T, int nDims> class Tensor;
-
     namespace Function {
 
         template<typename T>
@@ -18,8 +16,6 @@ namespace cml {
         template<typename T>
         tensor<T> Tanh(tensor<T> input);
 
-        template<typename T, int nDims>
-        tensor<T> Softmax(Tensor<T, nDims>* input);
         template<typename T>
         tensor<T> Softmax(tensor<T> input);
 

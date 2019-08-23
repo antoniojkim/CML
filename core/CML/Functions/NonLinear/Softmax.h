@@ -13,7 +13,7 @@ namespace Function {
     struct Softmax {
         
         template<typename T, int nDims>
-        static tensor<T> forward(Tensor<T, nDims>* input){
+        static tensor<T> forward(tensor<T> input){
             auto max = input->tensor().maximum();
             auto exps = input->tensor().unaryExpr([max](const T& x){
                 return std::exp(x - max);
@@ -46,7 +46,7 @@ namespace Function {
     };
 
     template<typename T, int nDims>
-    inline tensor<T> Softmax(Tensor<T, nDims>* input){
+    inline tensor<T> Softmax(tensor<T> input){
         return Softmax::forward(input);
     }
     template<typename T>

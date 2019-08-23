@@ -6,7 +6,7 @@
 namespace cml {
 
     template<typename T, int nDims>
-    tensor<T> multiply(Tensor<T, nDims>* t, const T& scalar){
+    tensor<T> multiply(tensor<T> t, const T& scalar){
         auto u = make_tensor<T>(CAST_TENSOR(
             t->tensor() * scalar;
         ), t->computeGrad);
@@ -27,10 +27,10 @@ namespace cml {
     }
 
     template<typename T, int nDims>
-    inline tensor<T> operator*(Tensor<T, nDims>* t, const T& scalar){ return multiply(t, scalar); }
+    inline tensor<T> operator*(tensor<T> t, const T& scalar){ return multiply(t, scalar); }
 
     template<typename T, int nDims>
-    inline tensor<T> operator*(const T& scalar, Tensor<T, nDims>* t){ return multiply(t, scalar); }
+    inline tensor<T> operator*(const T& scalar, tensor<T> t){ return multiply(t, scalar); }
 
     template<typename T>
     inline tensor<T> operator*(tensor<T> t, const T& scalar){ return t->multiply(scalar); }

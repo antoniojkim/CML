@@ -19,7 +19,7 @@ namespace Function {
         }
 
         template<typename T>
-        static std::vector<tensor<T>> backward(std::vector<_tensor_<T>>& params, std::vector<tensor<T>> output) {
+        static std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output) {
             tensor<T> output_grad = output.at(0);
             tensor<T> input_grad = output_grad->expr(&gradient);
             return {input_grad};
