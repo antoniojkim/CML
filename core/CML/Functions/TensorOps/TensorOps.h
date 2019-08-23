@@ -10,7 +10,7 @@ namespace cml {
     ************************************************************************************/
 
     template<typename T>
-    tensor<T> transpose(TensorBase<T>* t);
+    tensor<T> transpose(tensor<T> t);
     
     template<typename T>
     inline tensor<T> transpose(tensor<T> t){
@@ -22,13 +22,13 @@ namespace cml {
     ************************************************************************************/
 
     template<typename T, int nDims>
-    tensor<T> multiply(Tensor<T, nDims>* t, const T& scalar);
+    tensor<T> multiply(tensor<T> t, const T& scalar);
 
     template<typename T, int nDims>
-    inline tensor<T> operator*(Tensor<T, nDims>* t, const T& scalar);
+    inline tensor<T> operator*(tensor<T> t, const T& scalar);
 
     template<typename T, int nDims>
-    inline tensor<T> operator*(const T& scalar, Tensor<T, nDims>* t);
+    inline tensor<T> operator*(const T& scalar, tensor<T> t);
 
     template<typename T>
     inline tensor<T> operator*(tensor<T> t, const T& scalar);
@@ -41,7 +41,7 @@ namespace cml {
     ************************************************************************************/
 
     template<typename T>
-    tensor<T> matmul(TensorBase<T>* lhs, TensorBase<T>* rhs);
+    tensor<T> matmul(tensor<T> lhs, tensor<T> rhs);
     
     template<typename T>
     inline tensor<T> matmul(tensor<T> lhs, tensor<T> rhs){
@@ -112,7 +112,7 @@ namespace cml {
     tensor<T> abs(tensor<T> input);
 
     template<typename T, int nDims>
-    tensor<T> abs(Tensor<T, nDims>* input);
+    tensor<T> abs(tensor<T> input);
 
 }
 

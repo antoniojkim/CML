@@ -4,7 +4,7 @@
 #include <cmath>
 
 #include "NonLinear.h"
-#include "../../Tensors/TensorBase.h"
+#include "../../Tensor.h"
 
 
 namespace cml {
@@ -23,7 +23,7 @@ namespace Function {
         }
         
         template<typename T>
-        std::vector<tensor<T>> backward(std::vector<_tensor_<T>>& params, std::vector<tensor<T>> output) {
+        std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output) {
 #ifdef DEBUG
             using namespace std;
             cout << "Sigmoid::backward()" << endl;

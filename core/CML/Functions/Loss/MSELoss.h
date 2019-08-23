@@ -10,7 +10,7 @@ namespace Function {
     struct MSELoss {
 
         template<typename T, int nDims>
-        static std::vector<tensor<T>> mean_backward(std::vector<_tensor_<T>>& params, std::vector<tensor<T>> output) {
+        static std::vector<tensor<T>> mean_backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output) {
             auto actual = CAST_TENSOR_NDIMS(params.at(0));
             auto expected = CAST_TENSOR_NDIMS(params.at(1));
 
@@ -24,7 +24,7 @@ namespace Function {
         }
 
         template<typename T, int nDims>
-        static std::vector<tensor<T>> sum_backward(std::vector<_tensor_<T>>& params, std::vector<tensor<T>> output) {
+        static std::vector<tensor<T>> sum_backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output) {
             auto actual = CAST_TENSOR_NDIMS(params.at(0));
             auto expected = CAST_TENSOR_NDIMS(params.at(1));
             
@@ -38,7 +38,7 @@ namespace Function {
         }
 
         template<typename T, int nDims>
-        static std::vector<tensor<T>> backward(std::vector<_tensor_<T>>& params, std::vector<tensor<T>> output) {
+        static std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output) {
             auto actual = CAST_TENSOR_NDIMS(params.at(0));
             auto expected = CAST_TENSOR_NDIMS(params.at(1));
             
@@ -52,7 +52,7 @@ namespace Function {
         }
         
         template<typename T, int nDims>
-        static tensor<T> forward(Tensor<T, nDims>* actual, Tensor<T, nDims>* expected, const nn::Reduction& reduction = nn::Reduction::MEAN){
+        static tensor<T> forward(tensor<T> actual, tensor<T> expected, const nn::Reduction& reduction = nn::Reduction::MEAN){
             tensor<T> t = nullptr;
             GradientFunction<T> gradient = nullptr;
             switch(reduction){
@@ -87,7 +87,7 @@ namespace Function {
         return actual->MSELoss(expected, reduction);
     }
     template<typename T, int nDims>
-    inline tensor<T> MSELoss(Tensor<T, nDims>* actual, Tensor<T, nDims>* expected, const nn::Reduction& reduction){
+    inline tensor<T> MSELoss(tensor<T> actual, tensor<T> expected, const nn::Reduction& reduction){
         return MSELoss::forward(actual, expected, reduction);
     }
 

@@ -7,7 +7,7 @@ namespace cml {
 
     // TODO: Make this more general, i.e. Eigen::Tensor contractions
     template<typename T>
-    tensor<T> transpose(TensorBase<T>* t){
+    tensor<T> transpose(tensor<T> t){
         auto u = make_tensor<T>(static_cast<DMatrix<T>>(
             t->matrix().transpose()
         ), t->computeGrad);

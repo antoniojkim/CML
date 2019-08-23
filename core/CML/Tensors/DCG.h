@@ -17,7 +17,7 @@ namespace cml {
         bool isLeaf = true;
         tensor<T> gradient;
 
-        DCG(TensorBase<T>* t, std::vector<tensor<T>> params, GradientFunction<T> f);
+        DCG(tensor<T> t, std::vector<tensor<T>> params, GradientFunction<T> f);
 
         void accumulateGradient(std::vector<tensor<T>>& gradients);
         
@@ -26,10 +26,10 @@ namespace cml {
     };
 
     template <typename T>
-    inline std::shared_ptr<DCG<T>> make_graph(TensorBase<T>* t,
+    inline std::shared_ptr<DCG<T>> make_graph(tensor<T> t,
                                               std::vector<tensor<T>> params,
                                               GradientFunction<T> f) {
-        return std::make_shared<DCG<T>>(std::forward<TensorBase<T>*>(t),
+        return std::make_shared<DCG<T>>(std::forward<tensor<T>>(t),
                                         std::forward<std::vector<tensor<T>>>(params),
                                         std::forward<GradientFunction<T>>(f));
     }
@@ -39,7 +39,7 @@ namespace cml {
     ************************************************************************************/
 
     template <typename T>
-    DCG<T>::DCG(TensorBase<T>* t, std::vector<tensor<T>> params, GradientFunction<T> f)
+    DCG<T>::DCG(tensor<T> t, std::vector<tensor<T>> params, GradientFunction<T> f)
         : params{params},
           f{f},
           isLeaf{params.size() == 0 && f == nullptr},

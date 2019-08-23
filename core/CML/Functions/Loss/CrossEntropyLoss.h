@@ -12,7 +12,7 @@ namespace Function {
     struct CrossEntropyLoss {
         
         template<typename T, int nDims>
-        static tensor<T> forward(Tensor<T, nDims>* actual, Tensor<T, nDims>* expected){
+        static tensor<T> forward(tensor<T> actual, tensor<T> expected){
             if (expected->numDims() > 2){
                 throw "CrossEntropyLoss::forward:  Expected tensor is not scalar";
             }
@@ -55,7 +55,7 @@ namespace Function {
         return actual->CrossEntropyLoss(expected);
     }
     template<typename T, int nDims>
-    inline tensor<T> CrossEntropyLoss(Tensor<T, nDims>* actual, Tensor<T, nDims>* expected){
+    inline tensor<T> CrossEntropyLoss(tensor<T> actual, tensor<T> expected){
         return CrossEntropyLoss::forward(actual, expected);
     }
 

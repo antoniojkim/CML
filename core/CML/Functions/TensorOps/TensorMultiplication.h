@@ -6,7 +6,7 @@
 namespace cml {
 
     template<typename T>
-    tensor<T> matmul(TensorBase<T>* lhs, TensorBase<T>* rhs){
+    tensor<T> matmul(tensor<T> lhs, tensor<T> rhs){
         auto t = make_tensor<T>(static_cast<DMatrix<T>>(
             lhs->matrix() * rhs->matrix()
         ), lhs->computeGrad || rhs->computeGrad);
@@ -47,10 +47,24 @@ namespace cml {
         Coefficient wise multiplication
      */
     template<typename T, int nDims>
-    tensor<T> multiply(Tensor<T, nDims>* lhs, Tensor<T, nDims>* rhs){
-        auto t = make_tensor<T>(CAST_EIGEN_TENSOR(
-            lhs->tensor() * rhs->tensor()
-        ), lhs->computeGrad || rhs->computeGrad);
+    tensor<T> multiply(tensor<T> lhs, tensor<T> rhs){
+
+        if (lhs->shape() != rhs->shape()){
+            CML_THROW("Tensor Multiplication:  Shapes do not match:  " << lhs->shape() << " != " << rhs->shape());
+        }
+
+        auto lhs_data = lhs->data();
+        auto rhs_data = rhs->data();
+
+        auto t = make_tensor<T>(lhs->shape(), lhs->computeGrad || rhs->computeGrad);
+        auto t_data = t->data();
+
+        const int& size = lhs->size();
+
+        for (int i = 0; i<size; ++i){
+            // t_data[i] = lhs_data[i] + rhs_data[i];
+            *(t_data++) = *(lhs_data++) + *(rhs_data++);
+        }
 
         if (t->computeGrad){
             t->initGraph({lhs, rhs}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {

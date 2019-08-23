@@ -4,6 +4,8 @@
 #include <string>
 #include <sstream>
 
+#define CML_THROW(x) std::ostringstream err; err << x; throw err.str()
+
 class UnimplementedException: public std::exception {
     
     public:

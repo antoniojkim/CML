@@ -3,6 +3,9 @@
 
 #include <initializer_list>
 
+#include <Eigen/Core>
+#include <unsupported/Eigen/CXX11/Tensor>
+
 namespace cml {
 
     template <typename T> class Tensor;
@@ -34,6 +37,18 @@ namespace cml {
     
     template<typename T>
     tensor<T> make_tensor(std::initializer_list<int> d1, const bool& computeGrad = false);
+    
+
+    template <typename T>
+    using DMatrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;  // Dynamic Matrix
+    template <typename T>
+    using RefMatrix = Eigen::Ref<DMatrix<T>>;  // Ref to Dynamic Matrix
+    template <typename T>
+    using DBlock = Eigen::Block<DMatrix<T>, Eigen::Dynamic, Eigen::Dynamic, false>;  // Dynamic Block
+    template <typename T>
+    using DArray = Eigen::Array<T, Eigen::Dynamic, Eigen::Dynamic>;  // Dynamic Array
+    template<typename T>
+    using MatrixMap = Eigen::Map<DMatrix<T>, 0, Eigen::Stride<0, 0> >;
 }
 
 #endif // __CML_TENSORS_TENSORDECL_H__

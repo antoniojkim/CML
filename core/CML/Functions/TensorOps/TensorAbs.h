@@ -13,14 +13,14 @@ namespace cml {
         }
         
         template<typename T>
-        static std::vector<tensor<T>> backward(std::vector<_tensor_<T>>& params, std::vector<tensor<T>> output){
+        static std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output){
             tensor<T> output_grad = output.at(0);
             tensor<T> input_grad = output_grad->expr(&gradient);
             return {input_grad};
         }
 
         template<typename T, int nDims>
-        static tensor<T> forward(Tensor<T, nDims>* input){
+        static tensor<T> forward(tensor<T> input){
             auto t = make_tensor<T, nDims>(input->tensor().abs());
             t->computeGrad = input->computeGrad;
             if (t->computeGrad){
@@ -36,7 +36,7 @@ namespace cml {
     }
 
     template<typename T, int nDims>
-    inline tensor<T> abs(Tensor<T, nDims>* input){
+    inline tensor<T> abs(tensor<T> input){
         return TensorAbs::forward(input);
     }
 
