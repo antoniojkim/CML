@@ -27,20 +27,6 @@ inline std::ostream& operator<<(std::ostream& out, std::initializer_list<T> v){ 
 
 namespace cml {
 
-    template<size_t... Args>
-    constexpr size_t sum() {
-    size_t sum = 1;
-    for(auto& a : { Args... }) sum += a;
-    return sum;
-    }
-
-    template<size_t... Args>
-    constexpr size_t product() {
-    size_t product = 1;
-    for(auto& a : { Args... }) product *= a;
-    return product;
-    }
-
     template<typename T, unsigned int N>
     struct NestedInitializerList {
         using type = std::initializer_list<typename NestedInitializerList<T, N - 1>::type>;
@@ -50,7 +36,7 @@ namespace cml {
     struct NestedInitializerList<T, 0> {
         using type = T;
     };
-    
+
 }
 
 

@@ -17,33 +17,21 @@ namespace cml {
         
         protected:
             std::vector<size_t> dims;
-            size_t S; // tensor size (i.e. number of values in the tensor)
-            std::shared_ptr<T[]> d; // object holding the tensor data
+            size_t S = 0; // tensor size (i.e. number of values in the tensor)
+            std::shared_ptr<T[]> d = nullptr; // object holding the tensor data
             std::unique_ptr<DCG<T>> dcg = nullptr;
 
         public:
 
-            Tensor(const bool& computeGrad):
-                computeGrad(computeGrad) {}
-            Tensor(const std::vector<size_t>& dims, const bool& computeGrad = false):  
-                computeGrad(computeGrad),
-                dims{std::begin(dims), std::end(dims)},
-                S{cml::numeric::product(dims)},
-                d{new T[S], std::default_delete<T[]>()} {}
-            Tensor(std::initializer_list<size_t> dims, const bool& computeGrad = false):  
-                computeGrad(computeGrad),
-                dims{std::begin(dims), std::end(dims)},
-                S{cml::numeric::product(dims)},
-                d{new T[S], std::default_delete<T[]>()} {}
+            Tensor(const bool& computeGrad);
+            Tensor(const std::vector<size_t>& dims, const bool& computeGrad = false);
+            Tensor(std::initializer_list<size_t> dims, const bool& computeGrad = false);
+            Tensor(const DMatrix<T>& m, const bool& computeGrad = false);
+            template<int nDims> 
+            Tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad = false);
                 
             template<size_t... dims>
             void initialize();
-            // Tensor(Tensor<T, nDims>&& other, const bool& computeGrad):  computeGrad(computeGrad), t{std::move(other)} {}
-            // Tensor(DMatrix<T>&& m, const bool& computeGrad): computeGrad(computeGrad),
-            //     t{std::move(Eigen::TensorMap<Eigen::Tensor<const T, 2>>(m.data(), {m.rows(), m.cols()}))} {}
-
-            // template<typename... Args>
-            // Tensor(Args&&... args): t{std::forward<Args>(args)...} {}
             
             MatrixMap<T> matrix();
             inline std::shared_ptr<T[]> data() { return d; }
@@ -56,25 +44,17 @@ namespace cml {
             void set(std::initializer_list<T> values);
             void set(std::initializer_list<std::initializer_list<T>> values);
 
-            DBlock<T> block(const int& startCol, const int& numCols) override {
-                return this->matrix().block(0, startCol, t.dimension(0), numCols);
+            DBlock<T> block(const int& startCol, const int& numCols) {
+                return this->matrix().block(0, startCol, dims[0], numCols);
             }
-            DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) override {
+            DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) {
                 return this->matrix().block(startRow, startCol, numRows, numCols);
             }
 
-            /*
-                Due to limitations of C++ template type deduction, cannot make a set
-                function that takes in an arbitrary dimension initializer list.
-                To explicitly set values, one must go through the tensor variable itself.
-                i.e.
-                    t.data().setValues(...);
-             */
-
-            void fill(const T& coefficient) override { t.setConstant(coefficient); }
-            void ones() override { t.setOnes(); }
-            void zero() override { t.setZero(); }
-            void randomize(const unsigned int& seed) override { srand(seed); t.setRandom(); }
+            void fill(const T& coefficient);
+            void ones();
+            void zero();
+            void randomize(const unsigned int& seed);
 
             cml::tensor<T> constant(const T& s, const bool& computeGrad) override { 
                 return make_tensor<T, nDims>(t.constant(s), computeGrad);
@@ -100,61 +80,28 @@ namespace cml {
             void apply(T(*f)(const T& x)) override {
                 t = t.unaryExpr(std::ptr_fun(f));
             }
-            inline cml::tensor<T> abs() override {
-                return cml::abs(this);
-            }
+            // inline cml::tensor<T> abs() override {
+            //     return cml::abs(this);
+            // }
 
-            cml::tensor<T> expr(T(*f)(const T& x), const bool& computeGrad) override {
-                return make_tensor<T, nDims>(CAST_EIGEN_TENSOR(t.unaryExpr(std::ptr_fun(f))), computeGrad);
-            }
+            // cml::tensor<T> expr(T(*f)(const T& x), const bool& computeGrad) override {
+            //     return make_tensor<T, nDims>(CAST_EIGEN_TENSOR(t.unaryExpr(std::ptr_fun(f))), computeGrad);
+            // }
 
-            inline cml::tensor<T> multiply(const T& scalar) override { return multiply(this, scalar); }
-            inline cml::tensor<T> multiply(cml::tensor<T> other){ return multiply(this, CAST_TENSOR_NDIMS(other.get())); }
+            // inline cml::tensor<T> multiply(const T& scalar) override { return multiply(this, scalar); }
+            // inline cml::tensor<T> multiply(cml::tensor<T> other){ return multiply(this, CAST_TENSOR_NDIMS(other.get())); }
 
-            inline auto matmul(cml::tensor<T> other){ return matmul(this, other.get()); }
-            inline auto mm(cml::tensor<T> other){ return matmul(this, other.get()); }
+            // inline auto matmul(cml::tensor<T> other){ return matmul(this, other.get()); }
+            // inline auto mm(cml::tensor<T> other){ return matmul(this, other.get()); }
 
-            inline cml::tensor<T> softmax() override { return cml::Function::Softmax(this); }
-            cml::tensor<T> MSELoss(cml::tensor<T> expected, const nn::Reduction& reduction) override {
-                return cml::Function::MSELoss(this, CAST_TENSOR_NDIMS(expected.get()), reduction);
-            }
-            cml::tensor<T> CrossEntropyLoss(cml::tensor<T> expected) {
-                return cml::Function::CrossEntropyLoss(this, CAST_TENSOR_NDIMS(expected.get()));
-            }
+            // inline cml::tensor<T> softmax() override { return cml::Function::Softmax(this); }
+            // cml::tensor<T> MSELoss(cml::tensor<T> expected, const nn::Reduction& reduction) override {
+            //     return cml::Function::MSELoss(this, CAST_TENSOR_NDIMS(expected.get()), reduction);
+            // }
+            // cml::tensor<T> CrossEntropyLoss(cml::tensor<T> expected) {
+            //     return cml::Function::CrossEntropyLoss(this, CAST_TENSOR_NDIMS(expected.get()));
+            // }
     };
-
-    template<typename T>
-    MatrixMap<T> Tensor<T>::matrix() {
-        int R, C;
-        R = dims[0];
-        switch(dims.size()){
-            case 2:
-                C = dims[1];
-                break;
-            default;
-                C = s / R;
-                break;
-        }
-        return Eigen::Map<DMatrix<T>>(d, R, C);
-    }
-    template<typename T> template<int nDims>
-    Eigen::TensorMap<Eigen::Tensor<T, nDims>> Tensor<T>::tensor() {
-        if (int(nDims) != dims.size()){
-            std::ostringstream message;
-            message << "template nDims (" << nDims << ") does not match object's dim size (" << dims.size() << ")";
-            throw InvalidDimensionException(message);
-        }
-
-        std::array<int, nDims> arr;
-        std::copy_n(v1.begin(), nDims, arr.begin());
-
-        return Eigen::TensorMap<Eigen::Tensor<T, nDims>>(d, arr);
-    }
-    
-    template<typename T>
-    T& Tensor<T>::at(std::initializer_list<int> dims){
-
-    }
 
     // template<typename T, int nDims>
     // cml::tensor<T> Tensor<T, nDims>::multiply(cml::tensor<T> other){
