@@ -62,8 +62,8 @@ namespace cml {
     template<typename T> template<size_t... dims>
     void Tensor<T>::initialize(){
         this->dims = {dims...};
-        S = cml::numeric::product<dims...>();data
-        d = std::make_shared<T[]>(new T[S], sdata
+        S = cml::numeric::product<dims...>();
+        d = std::make_shared<T[]>(new T[S], std::default_delete<T[]>());
     }
 
     template<typename T>
