@@ -29,7 +29,7 @@ namespace cml {
     inline std::shared_ptr<DCG<T>> make_graph(tensor<T> t,
                                               std::vector<tensor<T>> params,
                                               GradientFunction<T> f) {
-        return std::make_shared<DCG<T>>(std::forward<tensor<T>>(t),
+        return std::make_shared<DCG<T>>(t,
                                         std::forward<std::vector<tensor<T>>>(params),
                                         std::forward<GradientFunction<T>>(f));
     }
@@ -96,18 +96,19 @@ namespace cml {
     ****************************** Tensor DCG Methods **********************************
     ************************************************************************************/
 
-    template <typename T, typename Rank>
-    void Tensor<T, Rank>::initGraph(std::vector<tensor<T>> params = {}, GradientFunction<T> f = nullptr){
+    template <typename T>
+    void Tensor<T>::initGraph(std::vector<cml::tensor<T>> params = {}, GradientFunction<T> f = nullptr){
         if (!dcg) {
-            dcg = std::make_unique<DCG<T>>(this, std::forward<std::vector<tensor<T>>>(params),
-                                            std::forward<GradientFunction<T>>(f));
+            dcg = std::make_unique<DCG<T>>(this->shared_from_this(),
+                                           std::forward<std::vector<tensor<T>>>(params),
+                                           std::forward<GradientFunction<T>>(f));
         } else {
             throw "Called initGraph when graph already exists";
         }
     }
 
-    template <typename T, typename Rank>
-    std::unique_ptr<DCG<T, Rank>>& Tensor<T, Rank>::graph(){
+    template <typename T>
+    std::unique_ptr<DCG<T>>& Tensor<T>::graph(){
         if (!dcg) {
             if (!computeGrad) throw "Getting graph of tensor with computeGrad == false";
             initGraph();
@@ -115,11 +116,11 @@ namespace cml {
         return dcg;
     }
 
-    template <typename T, typename Rank>
-    tensor<T, Rank>& Tensor<T, Rank>::gradient(){ return graph()->gradient; }
+    template <typename T>
+    tensor<T> Tensor<T>::gradient(){ return graph()->gradient; }
 
-    template <typename T, typename Rank>
-    void Tensor<T, Rank>::backward(){
+    template <typename T>
+    void Tensor<T>::backward(){
         if (!isScalar()) throw "backward can only be called on a scalar tensor";
 #ifdef DEBUG
         std::cout << "Calling backward on a scalar tensor" << std::endl;

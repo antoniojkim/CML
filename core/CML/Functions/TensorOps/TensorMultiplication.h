@@ -50,7 +50,7 @@ namespace cml {
     tensor<T> multiply(tensor<T> lhs, tensor<T> rhs){
 
         if (lhs->shape() != rhs->shape()){
-            CML_THROW("Tensor Multiplication:  Shapes do not match:  " << lhs->shape() << " != " << rhs->shape());
+            throw CMLException("Tensor Multiplication:  Shapes do not match:  ",  lhs->shape(),  "!=",  rhs->shape());
         }
 
         auto lhs_data = lhs->data();
@@ -62,8 +62,8 @@ namespace cml {
         const int& size = lhs->size();
 
         for (int i = 0; i<size; ++i){
-            // t_data[i] = lhs_data[i] + rhs_data[i];
-            *(t_data++) = *(lhs_data++) + *(rhs_data++);
+            // t_data[i] = lhs_data[i] * rhs_data[i];
+            *(t_data++) = *(lhs_data++) * *(rhs_data++);
         }
 
         if (t->computeGrad){

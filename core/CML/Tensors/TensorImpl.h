@@ -8,32 +8,35 @@
 #include <unsupported/Eigen/CXX11/Tensor>
 
 #include "Tensor.h"
-#include "../../Numeric/Numeric.h"
 #include "../Functions/TensorOps/TensorOps.h"
+#include "../../Numeric/Numeric.h"
 
 namespace cml {
 
+    /******************************************************************
+     ************************* Constructors ***************************
+     ******************************************************************/
     
     template<typename T>
     Tensor<T>::Tensor(const bool& computeGrad):
         computeGrad(computeGrad) {}
     
     template<typename T>
-    Tensor<T>::Tensor(const std::vector<size_t>& dims, const bool& computeGrad = false):  
+    Tensor<T>::Tensor(const std::vector<size_t>& dims, const bool& computeGrad):  
         computeGrad(computeGrad),
         dims{std::begin(dims), std::end(dims)},
         S{cml::numeric::product(dims)},
         d{new T[S], std::default_delete<T[]>()} {}
     
     template<typename T>
-    Tensor<T>::Tensor(std::initializer_list<size_t> dims, const bool& computeGrad = false):  
+    Tensor<T>::Tensor(std::initializer_list<size_t> dims, const bool& computeGrad):  
         computeGrad(computeGrad),
         dims{std::begin(dims), std::end(dims)},
         S{cml::numeric::product(dims)},
         d{new T[S], std::default_delete<T[]>()} {}
 
     template<typename T>
-    Tensor<T>::Tensor(const DMatrix<T>& m, const bool& computeGrad = false): 
+    Tensor<T>::Tensor(const DMatrix<T>& m, const bool& computeGrad): 
         computeGrad{computeGrad},
         S{(size_t)(m.size())},
         dims{{m.rows(), m.cols()}},
@@ -46,7 +49,7 @@ namespace cml {
         std::copy(m_data, m_data+S, data);
     }
     template<typename T> template<int nDims>
-    Tensor<T>::Tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad = false): 
+    Tensor<T>::Tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad): 
         computeGrad{computeGrad},
         S{(size_t)(t.size())},
         dims{std::begin(t.dimensions()), std::end(t.dimensions())},
@@ -66,6 +69,49 @@ namespace cml {
         d = std::make_shared<T[]>(new T[S], std::default_delete<T[]>());
     }
 
+
+    /******************************************************************
+     ********************* make_tensor functions **********************
+     ******************************************************************/
+
+    template <typename T>
+    inline tensor<T> make_scalar(const T& t, const bool& computeGrad){
+        auto u = std::make_shared<Tensor<T>>({1}, computeGrad);
+        u->item() = t;
+        return u;
+    }
+    
+    template<typename T>
+    inline tensor<T> make_tensor(std::vector<size_t> dims, const bool& computeGrad){
+        return std::make_shared<Tensor<T>>(std::forward<std::vector<size_t>>(dims), computeGrad);
+    }
+    template<typename T>
+    inline tensor<T> make_tensor(std::initializer_list<size_t> dims, const bool& computeGrad){
+        return std::make_shared<Tensor<T>>(std::forward<std::initializer_list<size_t>>(dims), computeGrad);
+    }
+    template<typename T, size_t... dims>
+    inline tensor<T> make_tensor(const bool& computeGrad){
+        auto t = std::make_shared<Tensor<T>>(computeGrad);
+        throw UnimplementedException("make_tensor with variadic templates");
+//         t->initialize<dims...>();
+        return t;
+    }
+
+    template<typename T>
+    inline tensor<T> make_tensor(const DMatrix<T>& m, const bool& computeGrad){
+        return std::make_shared<Tensor<T>>(m, computeGrad);
+    }
+    template<typename T, int nDims>
+    inline tensor<T> make_tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad){
+        return std::make_shared<Tensor<T>>(t, computeGrad);
+    }
+
+
+
+    /******************************************************************
+     ***************** Tensor Access Member functions *****************
+     ******************************************************************/
+    
     template<typename T>
     MatrixMap<T> Tensor<T>::matrix() {
         int R, C;
@@ -74,8 +120,8 @@ namespace cml {
             case 2:
                 C = dims[1];
                 break;
-            default;
-                C = s / R;
+            default:
+                C = S / R;
                 break;
         }
         return Eigen::Map<DMatrix<T>>(d.get(), R, C);
@@ -89,7 +135,7 @@ namespace cml {
         }
 
         std::array<int, nDims> arr;
-        std::copy_n(v1.begin(), nDims, arr.begin());
+        std::copy_n(dims.begin(), nDims, arr.begin());
 
         return Eigen::TensorMap<Eigen::Tensor<T, nDims>>(d.get(), arr);
     }
@@ -97,7 +143,7 @@ namespace cml {
     template<typename T>
     T& Tensor<T>::at(std::initializer_list<int> dims){
         if (dims.size() >= this->dims.size()){
-            CML_THROW("Tensor::at:  Too many dims: " << dims.size());
+            throw CMLException("Tensor::at:  Too many dims: ", dims.size());
         }
 
         int index = 0, j = 0;
@@ -106,11 +152,36 @@ namespace cml {
         }
 
         if (index >= S){
-            CML_THROW("Tensor::at:  Invalid Indices: " << dims);
+            throw CMLException("Tensor::at:  Invalid Indices: ", dims);
         }
 
         return this->d[index];
     }
+    
+    template<typename T> template<typename... Dim>
+    T& Tensor<T>::at(Dim&&... dims){
+        if (sizeof...(dims) >= this->dims.size()){
+            throw CMLException("Tensor::at:  Too many dims: ", sizeof...(dims));
+        }
+
+        int index = 0, j = 0;
+        for (auto& d : {dims...}){
+            index += d * this->dims[j++];
+        }
+
+        if (index >= S){
+            throw CMLException("Tensor::at:  Invalid Indices: ", std::vector<size_t>({dims...}));
+        }
+
+        return this->d[index];
+    }
+    
+    
+
+
+    /******************************************************************
+     **************** Tensor Modifier Member functions ****************
+     ******************************************************************/
 
     template<typename T>
     inline void Tensor<T>::fill(const T& coefficient){
@@ -126,10 +197,21 @@ namespace cml {
     }
 
     template<typename T>
-    void Tensor<T>::randomize(const unsigned int& seed) {
-         srand(seed);
+    void Tensor<T>::randomize(cml::Random::Function<T> r){
+        std::transform(d, d+S, d, r);
+    }
+    
 
-         t.setRandom();
+    
+
+
+    /******************************************************************
+     ********************* Other Tensor Functions *********************
+     ******************************************************************/
+    
+    template<typename T>
+    std::ostream& operator<<(std::ostream& out, Tensor<T>* t){
+        return out << t->matrix();
     }
 
 }

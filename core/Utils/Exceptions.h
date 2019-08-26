@@ -4,9 +4,28 @@
 #include <string>
 #include <sstream>
 
-#define CML_THROW(x) std::ostringstream err; err << x; throw err.str()
+struct CMLException: public std::exception {
+    
+    std::string exceptionName;
+    std::ostringstream err;
+    
+    template<typename... Args>
+    CMLException(Args&&... args): exceptionName{""} {
+        for (auto& a : {args...}){
+            err << a << " ";
+        }
+    }
+    
+    const char* what() const throw() {            
+        return (exceptionName + err.str()).c_str();
+    }
+};
+
+#define CML_THROW(x) throw CMLException(x);
 
 class UnimplementedException: public std::exception {
+    
+    std::string message;
     
     public:
         UnimplementedException(const std::string& message): message{message} {}
