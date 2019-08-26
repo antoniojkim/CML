@@ -27,13 +27,6 @@ namespace cml {
         dims{std::begin(dims), std::end(dims)},
         S{cml::numeric::product(dims)},
         d{new T[S], std::default_delete<T[]>()} {}
-    
-    template<typename T>
-    Tensor<T>::Tensor(std::initializer_list<size_t> dims, const bool& computeGrad):  
-        computeGrad(computeGrad),
-        dims{std::begin(dims), std::end(dims)},
-        S{cml::numeric::product(dims)},
-        d{new T[S], std::default_delete<T[]>()} {}
 
     template<typename T>
     Tensor<T>::Tensor(const DMatrix<T>& m, const bool& computeGrad): 
@@ -62,12 +55,12 @@ namespace cml {
         std::copy(t_data, t_data+S, data);
     }
 
-    template<typename T> template<size_t... dims>
-    void Tensor<T>::initialize(){
-        this->dims = {dims...};
-        S = cml::numeric::product<dims...>();
-        d = std::make_shared<T[]>(new T[S], std::default_delete<T[]>());
-    }
+//     template<typename T> template<size_t... dims>
+//     void Tensor<T>::initialize(){
+//         this->dims = {dims...};
+//         S = cml::numeric::product<dims...>();
+//         d = std::make_shared<T[]>(new T[S], std::default_delete<T[]>());
+//     }
 
 
     /******************************************************************
@@ -92,8 +85,9 @@ namespace cml {
     template<typename T, size_t... dims>
     inline tensor<T> make_tensor(const bool& computeGrad){
         auto t = std::make_shared<Tensor<T>>(computeGrad);
-        throw UnimplementedException("make_tensor with variadic templates");
-//         t->initialize<dims...>();
+        t->dims = {dims...};
+        t->S = cml::numeric::product<dims...>();
+        t->d = std::make_shared<T[]>(new T[t->S], std::default_delete<T[]>());
         return t;
     }
 

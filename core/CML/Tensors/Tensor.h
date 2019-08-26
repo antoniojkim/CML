@@ -18,8 +18,6 @@ namespace cml {
     cml::tensor<U> make_tensor(const bool& computeGrad = false);
     template<typename U>
     cml::tensor<U> make_tensor(std::vector<size_t> dims, const bool& computeGrad = false);
-    template<typename U>
-    cml::tensor<U> make_tensor(std::initializer_list<size_t> dims, const bool& computeGrad = false);
     template<typename U, size_t... dims>
     cml::tensor<U> make_tensor(const bool& computeGrad = false);
 
@@ -50,8 +48,8 @@ namespace cml {
             template<int nDims> 
             Tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad);
                 
-            template<size_t... dims>
-            void initialize();
+//             template<size_t... dims>
+//             void initialize();
 
         public:        
             
@@ -157,8 +155,6 @@ namespace cml {
             friend cml::tensor<U> make_tensor(const bool& computeGrad);
             template<typename U>
             friend cml::tensor<U> make_tensor(std::vector<size_t> dims, const bool& computeGrad);
-            template<typename U>
-            friend cml::tensor<U> make_tensor(std::initializer_list<size_t> dims, const bool& computeGrad);
             template<typename U, size_t... dims>
             friend cml::tensor<U> make_tensor(const bool& computeGrad);
 
