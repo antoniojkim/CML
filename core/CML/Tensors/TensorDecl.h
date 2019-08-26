@@ -17,6 +17,11 @@ namespace cml {
     */
     template <typename T>
     using tensor = std::shared_ptr<Tensor<T>>;
+    
+    template <typename T>
+    using Parameter = tensor<T>;
+    template <typename T>
+    using Parameters = std::vector<Parameter<T>>;
 
 
     template <typename T>
@@ -30,13 +35,6 @@ namespace cml {
     #ifndef CAST_TENSOR
     #define CAST_TENSOR static_cast<Eigen::Tensor<T, nDims>>
     #endif // CAST_TENSOR
-
-
-    template <typename T>
-    inline tensor<T> make_scalar(const T& t, const bool& computeGrad = false);
-    
-    template<typename T>
-    tensor<T> make_tensor(std::initializer_list<int> d1, const bool& computeGrad = false);
     
 
     template <typename T>

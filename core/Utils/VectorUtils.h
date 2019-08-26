@@ -7,21 +7,14 @@
 template <typename Iterator>
 std::ostream& print(std::ostream& out, Iterator begin, Iterator end ) {
     out << "[";
-    bool first = true;
-    for (; begin != end; ++begin) {
-        if (first){
-            out << *begin;
-            first = false;
-        }
-        else{
-            out << ", " << *begin;
-        }
-    }
+    if (begin != end){ out << *(begin++); }
+    while (begin != end) { out << ", " << *(begin++); }
     out << "]";
     return out;
 }
+
 template<typename T>
-inline std::ostream& operator<<(std::ostream& out, const std::vector<T>& v){ return print(out, v.begin(), v.end()); }
+inline std::ostream& operator<<(std::ostream& out, std::vector<T>& v){ return print(out, v.begin(), v.end()); }
 template<typename T>
 inline std::ostream& operator<<(std::ostream& out, std::initializer_list<T> v){ return print(out, v.begin(), v.end()); }
 

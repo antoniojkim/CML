@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "../../Tensor.h"
-#include "../../Randomizer.h"
+#include "../../../Utils/Random.h"
 
 namespace cml {
 namespace nn {
@@ -208,8 +208,8 @@ namespace nn {
             /*
                 Initializes weight parameters
             */
-            void initWeights(Randomizer::Function<T> randomizer = Randomizer::Gaussian<T>);
-            void initWeights(const bool& recursive, Randomizer::Function<T> randomizer = Randomizer::Gaussian<T>);
+            void initWeights(Random::Function<T> r = &Random::Gaussian<T>);
+            void initWeights(const bool& recursive, Random::Function<T> r = &Random::Gaussian<T>);
 
             /*
                 This pure virtual method is used to simply print out the module.
@@ -332,18 +332,18 @@ namespace nn {
     }
 
     template<typename T>
-    void Module<T>::initWeights(Randomizer::Function<T> randomizer){
-        initWeights(true, randomizer);
+    void Module<T>::initWeights(Random::Function<T> r){
+        initWeights(true, r);
     }
 
     template<typename T>
-    void Module<T>::initWeights(const bool& recursive, Randomizer::Function<T> randomizer){
+    void Module<T>::initWeights(const bool& recursive, Random::Function<T> r){
         for (auto& param : params){
-            param->randomize(randomizer);
+            param->randomize(r);
         }
         if (recursive){
             for (auto& submodule : submodules){
-                submodule->initWeights(recursive, randomizer);
+                submodule->initWeights(recursive, r);
             }
         }
     }

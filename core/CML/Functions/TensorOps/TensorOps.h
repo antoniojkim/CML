@@ -8,14 +8,9 @@ namespace cml {
     /***********************************************************************************
     ****************************** Tensor Transpose ************************************
     ************************************************************************************/
-
-    template<typename T>
-    tensor<T> transpose(tensor<T> t);
     
     template<typename T>
-    inline tensor<T> transpose(tensor<T> t){
-        return transpose(t.get());
-    }
+    inline tensor<T> transpose(tensor<T> t);
 
     /***********************************************************************************
     ************************* Tensor Scalar Multiplication *****************************
@@ -42,16 +37,11 @@ namespace cml {
 
     template<typename T>
     tensor<T> matmul(tensor<T> lhs, tensor<T> rhs);
-    
-    template<typename T>
-    inline tensor<T> matmul(tensor<T> lhs, tensor<T> rhs){
-        return matmul(lhs.get(), rhs.get());
-    }
 
     // TODO:  Replace this with more general function, i.e. Eigen::Tensor Contractions
     template<typename T>
     inline tensor<T> operator*(tensor<T> lhs, tensor<T> rhs){
-        return matmul(lhs.get(), rhs.get());
+        return matmul(lhs, rhs);
     }
 
     /***********************************************************************************
