@@ -90,6 +90,18 @@ namespace cml {
         t->d = std::make_shared<T[]>(new T[t->S], std::default_delete<T[]>());
         return t;
     }
+    template<typename T, size_t... dims>
+    inline tensor<T> make_tensor(const bool& computeGrad){
+        auto t = std::make_shared<Tensor<T>>(computeGrad);
+        t->dims = {dims...};
+        t->S = cml::numeric::product<dims...>();
+        t->d = std::make_shared<T[]>(new T[t->S], std::default_delete<T[]>());
+        return t;
+    }
+    template<typename U, size_t... dims>
+    inline cml::tensor<U> make_tensor(nd_array<U, sizeof...(dims)> a, const bool& computeGrad){
+        
+    }
 
     template<typename T>
     inline tensor<T> make_tensor(const DMatrix<T>& m, const bool& computeGrad){

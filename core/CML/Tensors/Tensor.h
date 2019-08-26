@@ -20,6 +20,8 @@ namespace cml {
     cml::tensor<U> make_tensor(std::vector<size_t> dims, const bool& computeGrad = false);
     template<typename U, size_t... dims>
     cml::tensor<U> make_tensor(const bool& computeGrad = false);
+    template<typename U, size_t... dims>
+    cml::tensor<U> make_tensor(nd_array<U, sizeof...(dims)> a, const bool& computeGrad = false);
 
     template<typename U>
     cml::tensor<U> make_tensor(const DMatrix<U>& m, const bool& computeGrad = false);
@@ -157,6 +159,8 @@ namespace cml {
             friend cml::tensor<U> make_tensor(std::vector<size_t> dims, const bool& computeGrad);
             template<typename U, size_t... dims>
             friend cml::tensor<U> make_tensor(const bool& computeGrad);
+            template<typename U, size_t... dims>
+            friend cml::tensor<U> make_tensor(nd_array<U, sizeof...(dims)> a, const bool& computeGrad);
 
             template<typename U>
             friend cml::tensor<U> make_tensor(const DMatrix<U>& m, const bool& computeGrad);
