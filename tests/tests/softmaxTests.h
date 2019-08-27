@@ -10,11 +10,11 @@ void softmaxTest(){
     using Function::Softmax;
     using Function::MSELoss;
 
-    auto x = make_tensor<float>({{1}, {2}}, true);
+    auto x = make_tensor<float, 2, 1>({{1}, {2}}, true);
     auto y = Softmax<float>(x);
     assert(y->at(0, 0) == 0.26894142f);
     assert(y->at(1, 0) == 0.73105858f);
-    auto z = make_tensor<float>({{0}, {1}});
+    auto z = make_tensor<float, 2, 1>({{0}, {1}});
 
     auto loss = MSELoss<float>(y, z);
     assert_equals(loss->at(0, 0), 0.0723295f);
@@ -30,8 +30,8 @@ void softmaxTest2(){
     using namespace cml::nn;
     using Function::CrossEntropyLoss;
 
-    auto x = make_tensor<float>({{1}, {2}}, true);
-    auto z = make_tensor<float>({0});
+    auto x = make_tensor<float, 2, 1>({{1}, {2}}, true);
+    auto z = make_scalar<float>(0);
 
     auto loss = CrossEntropyLoss<float>(x, z);
     assert_equals(loss->item(), 1.3132617f);
@@ -47,15 +47,21 @@ void softmaxTest3(){
     using namespace cml::nn;
     using Function::CrossEntropyLoss;
 
-    auto x = make_tensor<float>({{0.61579928, 0.07365664}
-                                , {0.46059955, 0.84609722}
-                                , {0.22933349, 0.71500119}}, true);
-    auto z = make_tensor<float>({1, 1});
+    auto x = make_tensor<float, 3, 2>({{0.61579928, 0.07365664}, 
+                                       {0.46059955, 0.84609722}, 
+                                       {0.22933349, 0.71500119}}, true);
+    auto z = make_tensor<float, 2>({1, 1});
 
     auto loss = CrossEntropyLoss<float>(x, z);
     assert_equals(loss->item(), 0.9676999434641942f);
 
     loss->backward();
+
+//     auto expected = make_tensor<float, 3, 2>({
+//         {0.1971843564f, 0.0987346897f},
+//         {-0.3311620501f, -0.2862350747f},
+//         {0.1339776937f, 0.1875003850f}
+//     });
     assert_equals(x->gradient()->at(0, 0), 0.1971843564f);
     assert_equals(x->gradient()->at(0, 1), 0.0987346897f);
     assert_equals(x->gradient()->at(1, 0), -0.3311620501f);

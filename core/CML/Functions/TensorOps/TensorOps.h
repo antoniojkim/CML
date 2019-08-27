@@ -16,20 +16,14 @@ namespace cml {
     ************************* Tensor Scalar Multiplication *****************************
     ************************************************************************************/
 
-    template<typename T, int nDims>
-    tensor<T> multiply(tensor<T> t, const T& scalar);
+    template<typename T, typename U>
+    tensor<T> multiply(tensor<T> t, const U& scalar);
 
-    template<typename T, int nDims>
-    inline tensor<T> operator*(tensor<T> t, const T& scalar);
+    template<typename T, typename U>
+    inline tensor<T> operator*(tensor<T> t, const U& scalar){ return multiply(t, scalar); }
 
-    template<typename T, int nDims>
-    inline tensor<T> operator*(const T& scalar, tensor<T> t);
-
-    template<typename T>
-    inline tensor<T> operator*(tensor<T> t, const T& scalar);
-
-    template<typename T>
-    inline tensor<T> operator*(const T& scalar, tensor<T> t);
+    template<typename T, typename U>
+    inline tensor<T> operator*(const U& scalar, tensor<T> t){ return multiply(t, scalar); }
 
     /***********************************************************************************
     **************************** Tensor Multiplication *********************************

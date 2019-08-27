@@ -52,7 +52,11 @@ namespace optim {
             void step() override {
                 for (auto& param : params){
                     if (param->computeGrad){
-                        param -= lr * param->gradient();
+                        // Using the matrix mapping directly is quicker
+                        // as we know that the param gradient will not be computeGrad == true
+                        // Also, no temporary cml::tensor needs to be created to perform
+                        // the calculation.
+                        param->matrix() -= lr * param->gradient()->matrix();
                     }
                 }
             }

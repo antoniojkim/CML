@@ -11,12 +11,12 @@ namespace Function {
     
     struct CrossEntropyLoss {
         
-        template<typename T, int nDims>
+        template<typename T>
         static tensor<T> forward(tensor<T> actual, tensor<T> expected){
             if (expected->numDims() > 2){
                 throw "CrossEntropyLoss::forward:  Expected tensor is not scalar";
             }
-//             auto p = Softmax<T>(actual);
+            // auto p = Softmax<T>(actual);
             
             // This is more stable
             auto p = static_cast<DMatrix<T>>(
@@ -50,10 +50,6 @@ namespace Function {
 
     };
 
-    template<typename T>
-    inline tensor<T> CrossEntropyLoss(tensor<T> actual, tensor<T> expected){
-        return actual->CrossEntropyLoss(expected);
-    }
     template<typename T, int nDims>
     inline tensor<T> CrossEntropyLoss(tensor<T> actual, tensor<T> expected){
         return CrossEntropyLoss::forward(actual, expected);

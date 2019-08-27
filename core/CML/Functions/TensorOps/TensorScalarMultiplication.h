@@ -5,19 +5,18 @@
 
 namespace cml {
 
-    template<typename T, int nDims>
-    tensor<T> multiply(tensor<T> t, const T& scalar){
-        auto u = make_tensor<T>(CAST_TENSOR(
-            t->tensor() * scalar;
-        ), t->computeGrad);
+    template<typename T, typename U>
+    tensor<T> multiply(tensor<T> t, const U& scalar){
+        auto u = t->empty(t->computeGrad);
+        u->matrix() = t->matrix() * (T)(scalar);
 
-        if (t->computeGrad){
-            t->initGraph({t}, [scalar](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
+        if (u->computeGrad){
+            u->initGraph({t}, [scalar](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
 #ifdef DEBUG
                 using namespace std;
                 cout << "Tensor Scalar Multiplication Backward" << endl;
 #endif
-                tensor<T> t_grad = make_scalar<T>(scalar);
+                tensor<T> t_grad = make_scalar<T>((T)(scalar));
 
                 return {t_grad};
             });
@@ -25,18 +24,6 @@ namespace cml {
 
         return t;
     }
-
-    template<typename T, int nDims>
-    inline tensor<T> operator*(tensor<T> t, const T& scalar){ return multiply(t, scalar); }
-
-    template<typename T, int nDims>
-    inline tensor<T> operator*(const T& scalar, tensor<T> t){ return multiply(t, scalar); }
-
-    template<typename T>
-    inline tensor<T> operator*(tensor<T> t, const T& scalar){ return t->multiply(scalar); }
-
-    template<typename T>
-    inline tensor<T> operator*(const T& scalar, tensor<T> t){ return t->multiply(scalar); }
 
 }
 
