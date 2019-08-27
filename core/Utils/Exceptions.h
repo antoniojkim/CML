@@ -1,4 +1,5 @@
-#ifndef __EXCEPTIONS__
+#ifndef __CML_UTILS_EXCEPTIONS_H__
+#define __CML_UTILS_EXCEPTIONS_H__
 
 #include <exception>
 #include <string>
@@ -68,4 +69,4 @@ class InvalidDimensionException: public std::exception {
         }
 };
 
-#endif // __EXCEPTIONS__
+#endif // __CML_UTILS_EXCEPTIONS_H__

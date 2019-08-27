@@ -14,20 +14,20 @@ void linearTest1(){
         new Linear<>(3, 2),
         new Sigmoid<>()
     };
-    model[0]("weights")->set({{0.284576, -1.16315}, 
-                              {0.270818, 0.0148199}, 
-                              {-0.96044, -0.673953}});
-    model[0]("bias")->set({{{-0.365125}}, {{0.889674}}});
+    model[0]("weights")->set<3, 2>({{0.284576, -1.16315}, 
+                                    {0.270818, 0.0148199}, 
+                                    {-0.96044, -0.673953}});
+    model[0]("bias")->set<2, 1>({{-0.365125}, {0.889674}});
     
     auto optimizer = optim::SGD<float>(model.parameters(), {{"lr", 0.01}});
 
-    auto x = make_tensor<float>({{{1.0}}, {{2.5}}, {{7.3}}});   
+    auto x = make_tensor<float, 3, 1>({{1.0}, {2.5}, {7.3}});   
     auto y = model(x);
 
     assert_equals(y->at(0, 0), 0.00163461f);
     assert_equals(y->at(1, 0),  0.00573006f);
 
-    auto z = make_tensor<float>({{0}, {1}});
+    auto z = make_tensor<float, 2, 1>({{0}, {1}});
     auto loss = MSELoss<float>(y, z);
     // assert_equals(loss->at(0, 0), 0.0723295f);
 

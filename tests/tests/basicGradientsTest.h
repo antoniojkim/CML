@@ -30,8 +30,8 @@ void basicGradientsTest1(){
 
     using Function::ReLU;
 
-    a = make_tensor<float>({{-2.0f}, {3.0f}}, true);
-    b = make_tensor<float>({{5.0f, 8.0f}}, true);
+    a = make_tensor<float, 2, 1>({{-2.0f}, {3.0f}}, true);
+    b = make_tensor<float, 1, 2>({{5.0f, 8.0f}}, true);
     c = b*a;
     d = ReLU(c);
 

@@ -19,21 +19,17 @@ namespace cml {
             return {input_grad};
         }
 
-        template<typename T, int nDims>
+        template<typename T>
         static tensor<T> forward(tensor<T> input){
-            auto t = make_tensor<T, nDims>(input->tensor().abs());
-            t->computeGrad = input->computeGrad;
+            auto t = input->empty(input->computeGrad);
+            t->matrix() = input->matrix().abs();
+            
             if (t->computeGrad){
                 t->initGraph({input}, &backward);
             }
             return t;
         }
     };
-
-    template<typename T>
-    inline tensor<T> abs(tensor<T> input){
-        return input->abs();
-    }
 
     template<typename T, int nDims>
     inline tensor<T> abs(tensor<T> input){

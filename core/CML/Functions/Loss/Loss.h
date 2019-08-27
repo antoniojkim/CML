@@ -1,7 +1,7 @@
 #ifndef __CML_FUNCTIONS_LOSS_LOSS_H__
 #define __CML_FUNCTIONS_LOSS_LOSS_H__
 
-#include "../../Tensors/TensorDecl.h"
+#include "../../Tensor.h"
 #include "../../Dtypes.h"
 
 namespace cml {

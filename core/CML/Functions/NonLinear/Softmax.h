@@ -49,10 +49,6 @@ namespace Function {
     inline tensor<T> Softmax(tensor<T> input){
         return Softmax::forward(input);
     }
-    template<typename T>
-    inline tensor<T> Softmax(tensor<T> input){
-        return input->softmax();
-    }
 
 };
 };

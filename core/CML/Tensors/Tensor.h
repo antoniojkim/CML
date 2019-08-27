@@ -74,8 +74,8 @@ namespace cml {
                 CML_THROW("Tensor::item:  Cannot get item from non scalar tensor");
             }
         
-            void set(std::initializer_list<T> values);
-            void set(std::initializer_list<std::initializer_list<T>> values);
+            template<size_t... dims>
+            cml::tensor<T> set(nd_array<T, sizeof...(dims)> a);
 
             DBlock<T> block(const int& startCol, const int& numCols) {
                 return this->matrix().block(0, startCol, dims[0], numCols);
@@ -84,14 +84,21 @@ namespace cml {
                 return this->matrix().block(startRow, startCol, numRows, numCols);
             }
 
-            void fill(const T& coefficient);
+            void fill(const T& scalar);
             void ones();
             void zero();
             void randomize(cml::Random::Function<T> r = &cml::Random::Gaussian<T>);
 
-            cml::tensor<T> constant(const T& s, const bool& computeGrad) { 
+            cml::tensor<T> constant(const T& s, const bool& computeGrad = false) { 
                 auto t = make_tensor<T>(dims, computeGrad);
                 t.fill(s);
+                return t;
+            }
+            cml::tensor<T> empty(const bool& computeGrad = false) { 
+                auto t = make_tensor<T>(computeGrad);
+                t->dims = dims;
+                t->S = S;
+                t->d = std::make_shared<T[]>(new T[S], std::default_delete<T[]>());
                 return t;
             }
         
@@ -112,7 +119,7 @@ namespace cml {
             void initGraph(std::vector<cml::tensor<T>> params = {}, GradientFunction<T> f = nullptr);
             std::unique_ptr<DCG<T>>& graph();
             cml::tensor<T> gradient();
-            void backward();    
+            void backward();
             
             
             void apply(T(*f)(const T& x)) {
@@ -121,29 +128,14 @@ namespace cml {
         
         
             
-            // inline cml::tensor<T> abs() {
-            //     return cml::abs(this);
-            // }
+            cml::tensor<T> abs();
 
-            // cml::tensor<T> expr(T(*f)(const T& x), const bool& computeGrad) {
-            //     return make_tensor<T, nDims>(CAST_EIGEN_TENSOR(t.unaryExpr(std::ptr_fun(f))), computeGrad);
-            // }
-
-            // inline cml::tensor<T> multiply(const T& scalar) { return multiply(this, scalar); }
-            // inline cml::tensor<T> multiply(cml::tensor<T> other){ return multiply(this, CAST_TENSOR_NDIMS(other.get())); }
+            cml::tensor<T> expr(T(*f)(const T& x), const bool& computeGrad = false);
 
             inline cml::tensor<T> matmul(cml::tensor<T> other){ return matmul(this->shared_from_this(), other); }
             inline cml::tensor<T> mm(cml::tensor<T> other){ return matmul(this->shared_from_this(), other); }
         
             inline cml::tensor<T> transpose(cml::tensor<T> other){ return transpose(this->shared_from_this()); }
-
-            // inline cml::tensor<T> softmax() { return cml::Function::Softmax(this); }
-            // cml::tensor<T> MSELoss(cml::tensor<T> expected, const nn::Reduction& reduction) {
-            //     return cml::Function::MSELoss(this, CAST_TENSOR_NDIMS(expected.get()), reduction);
-            // }
-            // cml::tensor<T> CrossEntropyLoss(cml::tensor<T> expected) {
-            //     return cml::Function::CrossEntropyLoss(this, CAST_TENSOR_NDIMS(expected.get()));
-            // }
         
         
         
