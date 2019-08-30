@@ -14,11 +14,10 @@ namespace Function {
             auto actual = params.at(0);
             auto expected = params.at(1);
 
-            T c = (T)(2.0/actual.size());
+            T c = (T)(2.0/actual->size());
 
-            tensor<T> actual_grad = make_tensor<T>(CAST_EIGEN_TENSOR(
-                c*(actual - expected)
-            ));
+            tensor<T> actual_grad = actual->empty();
+            actual_grad->matrix() = c*(actual->matrix() - expected->matrix());
 
             return {actual_grad, nullptr};
         }
@@ -30,9 +29,8 @@ namespace Function {
             
             T c = (T)(2);
 
-            tensor<T> actual_grad = make_tensor<T>(CAST_EIGEN_TENSOR(
-                c*(actual - expected)
-            ));
+            tensor<T> actual_grad = actual->empty();
+            actual_grad->matrix() = c*(actual->matrix() - expected->matrix());
 
             return {actual_grad, nullptr};
         }
@@ -44,9 +42,8 @@ namespace Function {
             
             T c = (T)(2);
 
-            tensor<T> actual_grad = make_tensor<T>(CAST_EIGEN_TENSOR(
-                c*(actual - expected)
-            ));
+            tensor<T> actual_grad = actual->empty();
+            actual_grad->matrix() = c*(actual->matrix() - expected->matrix());
 
             return {actual_grad, nullptr};
         }
@@ -55,23 +52,23 @@ namespace Function {
         static tensor<T> forward(tensor<T> actual, tensor<T> expected, const nn::Reduction& reduction = nn::Reduction::MEAN){
             tensor<T> t = nullptr;
             GradientFunction<T> gradient = nullptr;
+            // TODO:  Make more general to support multidimensional MSELoss
             switch(reduction){
                 case nn::Reduction::MEAN:
-                    t = make_tensor<T>(CAST_EIGEN_TENSOR(
-                        (actual - expected).square().mean(Eigen::array<int, 1>({actual->numDims()-1}))
+                    t = make_tensor<T>(CAST_MATRIX(
+                        (actual->matrix() - expected->matrix()).array().square().colwise().mean()
                     ));
                     gradient = &mean_backward<T>;
                     break;
                 case nn::Reduction::SUM:
-                    t = make_tensor<T>(CAST_EIGEN_TENSOR(
-                        (actual - expected).square().sum(Eigen::array<int, 1>({actual->numDims()-1}))
+                    t = make_tensor<T>(CAST_MATRIX(
+                        (actual->matrix() - expected->matrix()).array().square().colwise().sum()
                     ));
                     gradient = &sum_backward<T>;
                     break;
                 default:
-                    t = make_tensor<T>(CAST_EIGEN_TENSOR(
-                        (actual - expected).square()
-                    ));
+                    t = actual->empty();
+                    t->matrix() = (actual->matrix() - expected->matrix()).array().square();
                     gradient = &backward<T>;
                     break;
             }
