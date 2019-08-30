@@ -8,7 +8,7 @@ void convolutionTest(){
     using namespace cml::nn;
     using Function::Softmax;
 
-    auto x = make_tensor<float>({{1}, {2}}, true);
+    auto x = make_tensor<float, 2, 1>({{1}, {2}}, true);
 }
 
 void convolutionTests(){

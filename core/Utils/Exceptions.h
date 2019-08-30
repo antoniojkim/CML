@@ -5,16 +5,21 @@
 #include <string>
 #include <sstream>
 
+#include "VectorUtils.h"
+
 struct CMLException: public std::exception {
     
-    std::string exceptionName;
+    std::string exceptionName = "";
     std::ostringstream err;
     
-    template<typename... Args>
-    CMLException(Args&&... args): exceptionName{""} {
-        for (auto& a : {args...}){
-            err << a << " ";
-        }
+    template<typename T>
+    CMLException(const T& t) {
+        err << t << " ";
+    }
+    template<typename T, typename... Args>
+    CMLException(const T& t, Args&&... rest) {
+        err << t << " ";
+        CMLException(std::forward<Args>(rest)...);
     }
     
     const char* what() const throw() {            

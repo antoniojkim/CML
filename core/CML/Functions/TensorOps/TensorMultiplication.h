@@ -7,9 +7,10 @@ namespace cml {
 
     template<typename T>
     tensor<T> matmul(tensor<T> lhs, tensor<T> rhs){
-        auto t = make_tensor<T>(static_cast<DMatrix<T>>(
-            lhs->matrix() * rhs->matrix()
-        ), lhs->computeGrad || rhs->computeGrad);
+        int R = lhs->rows();
+        int C = rhs->cols();
+        auto t = make_tensor<T>(R, C, lhs->computeGrad || rhs->computeGrad);
+        t->matrix() = lhs->matrix() * rhs->matrix();
 
         if (t->computeGrad){
             t->initGraph({lhs, rhs}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {

@@ -4,8 +4,9 @@
 #include <vector>
 #include <ostream>
 
-#include "Exceptions.h"
 #include "../Numeric/Numeric.h"
+
+class CMLException;
 
 template <typename Iterator>
 std::ostream& print(std::ostream& out, Iterator begin, Iterator end ) {
@@ -17,7 +18,7 @@ std::ostream& print(std::ostream& out, Iterator begin, Iterator end ) {
 }
 
 template<typename T>
-inline std::ostream& operator<<(std::ostream& out, std::vector<T>& v){ return print(out, v.begin(), v.end()); }
+inline std::ostream& operator<<(std::ostream& out, const std::vector<T>& v){ return print(out, v.begin(), v.end()); }
 template<typename T>
 inline std::ostream& operator<<(std::ostream& out, std::initializer_list<T> v){ return print(out, v.begin(), v.end()); }
 

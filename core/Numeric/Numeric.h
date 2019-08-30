@@ -24,17 +24,17 @@ namespace numeric {
         return T(std::accumulate(std::begin(v), std::end(v), T(1), std::multiplies<T>()));
     }
 
-    template<size_t... Args>
+    template<size_t... args>
     constexpr size_t sum() {
-        size_t sum = 1;
-        for(auto& a : { Args... }) sum += a;
+        size_t sum = 0;
+        for(size_t a : { args..., (size_t)(0) }) sum += a;
         return sum;
     }
-
-    template<size_t... Args>
+    
+    template<size_t... args>
     constexpr size_t product() {
         size_t product = 1;
-        for(auto& a : { Args... }) product *= a;
+        for(size_t a : { args..., (size_t)(1) }) product *= a;
         return product;
     }
 
