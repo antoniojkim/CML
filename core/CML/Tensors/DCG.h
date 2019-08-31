@@ -120,7 +120,7 @@ namespace cml {
 
     template <typename T>
     void Tensor<T>::backward(){
-        if (!isScalar()) throw CMLException("backward can only be called on a scalar tensor");
+        if (!isScalar()) throw CMLException("backward can only be called on a scalar tensor. Dims: ", dims);
 #ifdef DEBUG
         std::cout << "Calling backward on a scalar tensor" << std::endl;
 #endif

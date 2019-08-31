@@ -4,6 +4,7 @@
 #include <ostream>
 
 #include "TensorDecl.h"
+#include "../Dtypes.h"
 #include "../../Utils/Random.h"
 #include "../../Utils/Exceptions.h"
 #include "../../Utils/VectorUtils.h"
@@ -22,8 +23,6 @@ namespace cml {
             std::shared_ptr<T> d = nullptr; // object holding the tensor data
             std::unique_ptr<DCG<T>> dcg = nullptr;    
 
-
-        public:
             /*
             Note:  While the constructors are public, it is not recommended
                    to create a Tensor object outside of a shared pointer
@@ -34,12 +33,13 @@ namespace cml {
         
             Tensor(const bool& computeGrad = false);
             Tensor(const std::vector<size_t>& dims, const bool& computeGrad = false);
-            Tensor(std::initializer_list<size_t> dims, const bool& computeGrad = false);
+            // Tensor(std::initializer_list<size_t> dims, const bool& computeGrad = false);
             Tensor(const DMatrix<T>& m, const bool& computeGrad = false);
             Tensor(DMatrix<T>&& m, const bool& computeGrad = false);
             template<int nDims>
             Tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad = false);
             
+        public:
             MatrixMap<T> matrix();
             inline std::shared_ptr<T> data() { return d; }
 
@@ -121,37 +121,42 @@ namespace cml {
             /*
                 Static methods for instantiating Tensor object
             */
-            static cml::tensor<T> make_tensor(std::vector<size_t> dims, const bool& computeGrad = false);
+            static cml::tensor<T> make_tensor(const bool& computeGrad = false);
+            static cml::tensor<T> make_tensor(const std::vector<size_t>& dims, const bool& computeGrad = false);
         
-            template<typename... Dims>
-            static cml::tensor<T> make_tensor(Dims&&... dims, const bool& computeGrad = false);
+            // template<typename... Dims>
+            // static cml::tensor<T> make_tensor(Dims&&... dims);
 
-            template<size_t... dims>
+            template<size_t dim, size_t... dims>
             static cml::tensor<T> make_tensor(const bool& computeGrad = false);
 
-            static cml::tensor<T> make_tensor_from(const DMatrix<T>& m, const bool& computeGrad = false);
+            static cml::tensor<T> make_tensor(const DMatrix<T>& m, const bool& computeGrad = false);
 
             template<int nDims>
-            static cml::tensor<T> make_tensor_from(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad = false);
+            static cml::tensor<T> make_tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad = false);
 
     };
 
     template<typename T>
-    cml::tensor<T> make_tensor(std::vector<size_t> dims, const bool& computeGrad = false);
-    template<typename T, typename... Dims>
-    cml::tensor<T> make_tensor(Dims&&... dims);
-    template<typename T, size_t... dims>
     cml::tensor<T> make_tensor(const bool& computeGrad = false);
-    template<typename T, size_t... dims>
-    cml::tensor<T> make_tensor(nd_array<T, sizeof...(dims)> a, const bool& computeGrad = false);
+    template<typename T>
+    cml::tensor<T> make_tensor(const std::vector<size_t>& dims, const bool& computeGrad = false);
+
+    // template<typename T, typename... Dims>
+    // cml::tensor<T> make_tensor(Dims&&... dims);
+    
+    template<typename T, size_t dim, size_t... dims>
+    cml::tensor<T> make_tensor(const bool& computeGrad = false);
+    template<typename T, size_t dim, size_t... dims>
+    cml::tensor<T> make_tensor(nd_array<T, sizeof...(dims)+1> a, const bool& computeGrad = false);
     
     template <typename T>
     cml::tensor<T> make_scalar(const T& t, const bool& computeGrad = false);
 
     template<typename T>
-    cml::tensor<T> make_tensor_from(const DMatrix<T>& m, const bool& computeGrad = false);
+    cml::tensor<T> make_tensor(const DMatrix<T>& m, const bool& computeGrad = false);
     template<typename T, int nDims>
-    cml::tensor<T> make_tensor_from(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad = false);
+    cml::tensor<T> make_tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad = false);
     
 
 }

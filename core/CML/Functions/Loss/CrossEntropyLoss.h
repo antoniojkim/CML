@@ -38,7 +38,7 @@ namespace Function {
                     p((int)(expected->at(0, i)), i) -= 1;
                 }
                 p /= m;
-                tensor<T> actual_grad = make_tensor_from<T>(std::move(p));
+                tensor<T> actual_grad = make_tensor<T>(std::move(p));
 
                 return {actual_grad, nullptr};
             });
