@@ -13,17 +13,17 @@ namespace Function {
     struct Sigmoid {
         
         template<typename T>
-        T sigmoid(const T& x){
+        static T sigmoid(const T& x){
             return (T)(1.0 / (1.0 + exp(-x)));
         }
         template<typename T>
-        T gradient(const T& x){
+        static T gradient(const T& x){
             auto y = (T)(1.0 / (1.0 + exp(-x)));
             return y*(1-y);
         }
         
         template<typename T>
-        std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output) {
+        static std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output) {
 #ifdef DEBUG
             using namespace std;
             cout << "Sigmoid::backward()" << endl;
@@ -34,16 +34,16 @@ namespace Function {
             cout << "    input:  " << input->rows() << ", " << input->cols() << endl;
             cout << "    output:  " << output_grad->rows() << ", " << output_grad->cols() << endl;
 #endif
-            tensor<T> input_grad = input->expr(&gradient) * output_grad;
+            tensor<T> input_grad = input->expr(&gradient<T>) * output_grad;
             return {input_grad};
         }
         
         template<typename T>
         static tensor<T> forward(tensor<T> input){
-            auto t = input->expr(&sigmoid);
+            auto t = input->expr(&sigmoid<T>);
             t->computeGrad = input->computeGrad;
             if (t->computeGrad){
-                t->initGraph({input.get()}, &backward);
+                t->initGraph({input}, &backward<T>);
             }
             return t;
         }

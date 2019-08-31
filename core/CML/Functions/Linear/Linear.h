@@ -13,7 +13,7 @@ namespace Function {
             tensor<T> t = nullptr;
             if (bias != nullptr){
                 // It is faster to combine the add and multiply operation
-                t = addMultiply(bias, transpose(weights), input);
+                t = addMultiply(bias, weights->transpose(), input);
             }
             else{
                 t = transpose(weights) * input;

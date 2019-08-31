@@ -2,12 +2,14 @@
 #define __CML_TENSORS_TENSORIMPL_H__
 
 #include <algorithm>
+#include <memory>
 #include <ostream>
 
 #include <Eigen/Core>
 #include <unsupported/Eigen/CXX11/Tensor>
 
 #include "Tensor.h"
+#include "DCG.h"
 #include "../Functions/TensorOps/TensorOps.h"
 #include "../../Numeric/Numeric.h"
 
@@ -37,35 +39,29 @@ namespace cml {
     template<typename T>
     Tensor<T>::Tensor(const DMatrix<T>& m, const bool& computeGrad): 
         computeGrad{computeGrad},
+        dims{{(size_t)(m.rows()), (size_t)(m.cols())}},
         S{(size_t)(m.size())},
-        dims{{m.rows(), m.cols()}},
-        d{std::make_shared<T*>(new T[S], std::default_delete<T[]>())} {
-
-        T* data = *d;
-        T* m_data = m.data();
+        d{new T[S], std::default_delete<T[]>()} {
 
         // TODO: Possibly think about adding support for both row major and column major eigen matrices
-        std::copy(m_data, m_data+S, data);
+        this->matrix() = m;
     }
     template<typename T> template<int nDims>
     Tensor<T>::Tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad): 
         computeGrad{computeGrad},
-        S{(size_t)(t.size())},
         dims{std::begin(t.dimensions()), std::end(t.dimensions())},
-        d{std::make_shared<T*>(new T[S], std::default_delete<T[]>())} {
-
-        T* data = *d;
-        T* t_data = t.data();
+        S{(size_t)(t.size())},
+        d{new T[S], std::default_delete<T[]>()} {
 
         // TODO: Possibly think about adding support for both row major and column major eigen tensors
-        std::copy(t_data, t_data+S, data);
+        this->tensor<nDims>() = t;
     }
 
 //     template<typename T> template<size_t... dims>
 //     void Tensor<T>::initialize(){
 //         this->dims = {dims...};
 //         S = cml::numeric::product<dims...>();
-//         d = std::make_shared<T*>(new T[S], std::default_delete<T[]>());
+//         d = std::shared_ptr<T>(new T[S], std::default_delete<T[]>());
 //     }
 
 
@@ -88,13 +84,13 @@ namespace cml {
         if (sizeof...(dims) > 0){
             t->dims = {(size_t)(dims)...};
             t->S = cml::numeric::product(t->dims);
-            t->d = std::make_shared<T*>(new T[t->S], std::default_delete<T[]>());
+            t->d = std::shared_ptr<T>(new T[t->S], std::default_delete<T[]>());
         }
         return t;
     }
     template<typename T, typename... Dims>
     inline cml::tensor<T> make_tensor(Dims&&... dims){
-        return Tensor<T>::template make_tensor<Dims...>(std::forward<Dim>(dims)...);
+        return Tensor<T>::template make_tensor<Dims...>(std::forward<Dims>(dims)...);
     }
     
     template<typename T> template<size_t... dims>
@@ -104,20 +100,20 @@ namespace cml {
             t->dims = {(size_t)(dims)...};
             constexpr size_t P = cml::numeric::product<dims...>();
             t->S = P;
-            t->d = std::make_shared<T*>(new T[P], std::default_delete<T[]>());
+            t->d = std::shared_ptr<T>(new T[P], std::default_delete<T[]>());
         }
         return t;
     }
     template<typename T, size_t... dims>
     inline tensor<T> make_tensor(const bool& computeGrad){
-        return Tensor<T>::template make_tensor<dims...>(computeGrad);
+        return Tensor<T>::template make_tensor<dims...>(computeGrad);   
     }
     
     template<typename T, size_t... dims>
     inline cml::tensor<T> make_tensor(nd_array<T, sizeof...(dims)> a, const bool& computeGrad){
         auto t = make_tensor<T, dims...>(computeGrad);
         MultiDimensionalInitializerListProcessor<T, dims...>::process(std::forward<nd_array<T, sizeof...(dims)>>(a), 
-                                                                      (T*)(*t->data()));
+                                                                      (T*)(t->data().get()));
         return t;
     }
     
@@ -129,21 +125,21 @@ namespace cml {
     }
 
     template<typename T>
-    inline tensor<T> Tensor<T>::make_tensor(const DMatrix<T>& m, const bool& computeGrad){
+    inline tensor<T> Tensor<T>::make_tensor_from(const DMatrix<T>& m, const bool& computeGrad){
         return std::make_shared<Tensor<T>>(m, computeGrad);
     }
     template<typename T>
-    inline tensor<T> make_tensor(const DMatrix<T>& m, const bool& computeGrad){
-        return Tensor<T>::make_tensor(m, computeGrad);
+    inline tensor<T> make_tensor_from(const DMatrix<T>& m, const bool& computeGrad){
+        return Tensor<T>::make_tensor_from(m, computeGrad);
     }
     
     template<typename T> template<int nDims>
-    inline tensor<T> Tensor<T>::make_tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad){
+    inline tensor<T> Tensor<T>::make_tensor_from(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad){
         return std::make_shared<Tensor<T>>(t, computeGrad);
     }
     template<typename T, int nDims>
-    inline tensor<T> make_tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad){
-        return Tensor<T>::template make_tensor<nDims>(t, computeGrad);
+    inline tensor<T> make_tensor_from(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad){
+        return Tensor<T>::template make_tensor_from<nDims>(t, computeGrad);
     }
 
 
@@ -154,7 +150,7 @@ namespace cml {
     
     template<typename T>
     MatrixMap<T> Tensor<T>::matrix() {
-        return Eigen::Map<DMatrix<T>>(*d, rows(), cols());
+        return Eigen::Map<DMatrix<T>>(d.get(), rows(), cols());
     }
     template<typename T> template<int nDims>
     Eigen::TensorMap<Eigen::Tensor<T, nDims>> Tensor<T>::tensor() {
@@ -167,7 +163,7 @@ namespace cml {
         std::array<int, nDims> arr;
         std::copy_n(dims.begin(), nDims, arr.begin());
 
-        return Eigen::TensorMap<Eigen::Tensor<T, nDims>>(*d, arr);
+        return Eigen::TensorMap<Eigen::Tensor<T, nDims>>(d.get(), arr);
     }
     
     template<typename T>
@@ -185,7 +181,7 @@ namespace cml {
             throw CMLException("Tensor::at:  Invalid Indices: ", dims);
         }
 
-        return (*this->d)[index];
+        return this->d.get()[index];
     }
     
     template<typename T> template<typename... Dim>
@@ -203,7 +199,7 @@ namespace cml {
             throw CMLException("Tensor::at:  Invalid Indices: ", std::vector<size_t>({(size_t)(dims)...}));
         }
 
-        return (*this->d)[index];
+        return this->d.get()[index];
     }
     
     
@@ -214,12 +210,12 @@ namespace cml {
      ******************************************************************/
         
     template<typename T> template<size_t... Dims>
-    cml::tensor<T> Tensor<T>::set(nd_array<T, sizeof...(Dims)> a){
+    void Tensor<T>::set(nd_array<T, sizeof...(Dims)> a){
         if (cml::numeric::product<Dims...>() >= S){
             throw CMLException("Initializer list ", std::vector<size_t>({Dims...}), " has dimensions that exceed current tensor: ", this->dims);
         }
         MultiDimensionalInitializerListProcessor<T, Dims...>::process(std::forward<nd_array<T, sizeof...(Dims)>>(a),
-                                                                      (T*)(*d));
+                                                                      (T*)(d.get()));
     }
 
     template<typename T>
@@ -237,7 +233,7 @@ namespace cml {
 
     template<typename T>
     void Tensor<T>::randomize(cml::Random::Function<T> r){
-        std::transform(*d, *d+S, *d, r);
+        std::transform(d.get(), d.get()+S, d.get(), r);
     }
     
 
@@ -249,17 +245,26 @@ namespace cml {
     
     
     template<typename T>
-    inline cml::tensor<T> Tensor<T>::constant(const T& s, const bool& computeGrad) { 
-        auto t = make_tensor<T>(dims, computeGrad);
-        t.fill(s);
-        return t;
-    }
-    template<typename T>
     inline cml::tensor<T> Tensor<T>::empty(const bool& computeGrad) { 
         auto t = make_tensor<T>(computeGrad);
         t->dims = dims;
         t->S = S;
-        t->d = std::make_shared<T*>(new T[S], std::default_delete<T[]>());
+        t->d = std::shared_ptr<T>(new T[S], std::default_delete<T[]>());
+        return t;
+    }
+    template<typename T>
+    inline cml::tensor<T> Tensor<T>::zeroLike(const bool& computeGrad) { 
+        auto t = make_tensor<T>(computeGrad);
+        t->dims = dims;
+        t->S = S;
+        t->d = std::shared_ptr<T>(new T[S](), std::default_delete<T[]>());
+        return t;
+    }
+    template<typename T>
+    inline cml::tensor<T> Tensor<T>::constant(const T& s, const bool& computeGrad) {
+        if (s == 0){ return zeroLike(); }
+        auto t = empty();
+        t->fill(s);
         return t;
     }
     
@@ -269,13 +274,24 @@ namespace cml {
     }
 
     template<typename T>
-    inline cml::tensor<T> Tensor<T>::expr(T(*f)(const T& x), const bool& computeGrad) {
+    inline void Tensor<T>::apply(cml::UnaryFunction<T> f) {
+        this->matrix() = this->matrix().unaryExpr(std::ptr_fun(f));
+    }
+    template<typename T>
+    inline cml::tensor<T> Tensor<T>::expr(cml::UnaryFunction<T> f, const bool& computeGrad) {
         auto t = this->empty(computeGrad);
         t->matrix() = this->matrix().unaryExpr(std::ptr_fun(f));
         return t;
     }
 
+    template<typename T>
+    inline cml::tensor<T> Tensor<T>::matmul(cml::tensor<T> other){ return matmul(this->shared_from_this(), other); }
     
+    template<typename T>
+    inline cml::tensor<T> Tensor<T>::mm(cml::tensor<T> other){ return matmul(this->shared_from_this(), other); }
+
+    template<typename T>
+    inline cml::tensor<T> Tensor<T>::transpose(){ return cml::transpose(this->shared_from_this()); }
 
     /******************************************************************
      ********************* Other Tensor Functions *********************

@@ -1,7 +1,7 @@
 #ifndef __CML_FUNCTIONS_TENSOROPS_TENSORABS_H__
 #define __CML_FUNCTIONS_TENSOROPS_TENSORABS_H__
 
-#include "../../Tensors/Tensor.h"
+#include "TensorOps.h"
 
 namespace cml {
 
@@ -15,7 +15,7 @@ namespace cml {
         template<typename T>
         static std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output){
             tensor<T> output_grad = output.at(0);
-            tensor<T> input_grad = output_grad->expr(&gradient);
+            tensor<T> input_grad = output_grad->expr(&gradient<T>);
             return {input_grad};
         }
 
@@ -25,13 +25,13 @@ namespace cml {
             t->matrix() = input->matrix().abs();
             
             if (t->computeGrad){
-                t->initGraph({input}, &backward);
+                t->initGraph({input}, &backward<T>);
             }
             return t;
         }
     };
 
-    template<typename T, int nDims>
+    template<typename T>
     inline tensor<T> abs(tensor<T> input){
         return TensorAbs::forward(input);
     }

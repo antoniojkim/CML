@@ -8,9 +8,8 @@ namespace cml {
     // TODO: Make this more general, i.e. Eigen::Tensor contractions
     template<typename T>
     tensor<T> transpose(tensor<T> t){
-        auto u = make_tensor<T>(static_cast<DMatrix<T>>(
-            t->matrix().transpose()
-        ), t->computeGrad);
+        auto u = t->empty(t->computeGrad);
+        u->matrix() = t->matrix().transpose();
 
         if (u->computeGrad){
             u->initGraph({t}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {

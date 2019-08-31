@@ -95,9 +95,6 @@ namespace cml {
     template<typename T>
     tensor<T> abs(tensor<T> input);
 
-    template<typename T, int nDims>
-    tensor<T> abs(tensor<T> input);
-
 }
 
 #endif // __CML_FUNCTIONS_TENSOROPS_TENSOROPS_H__

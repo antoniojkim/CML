@@ -47,6 +47,9 @@ namespace cml {
     using DArray = Eigen::Array<T, Eigen::Dynamic, Eigen::Dynamic>;  // Dynamic Array
     template<typename T>
     using MatrixMap = Eigen::Map<DMatrix<T>, 0, Eigen::Stride<0, 0> >;
+
+    template<typename T>
+    using UnaryFunction = T(*)(const T&);
 }
 
 #endif // __CML_TENSORS_TENSORDECL_H__

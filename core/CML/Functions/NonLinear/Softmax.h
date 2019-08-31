@@ -12,16 +12,15 @@ namespace Function {
     
     struct Softmax {
         
-        template<typename T, int nDims>
+        template<typename T>
         static tensor<T> forward(tensor<T> input){
-            auto max = input->tensor().maximum();
-            auto exps = input->tensor().unaryExpr([max](const T& x){
-                return std::exp(x - max);
-            });
-            auto sum = exps.sum();
-            auto t = make_tensor<T>(static_cast<Eigen::Tensor<T, nDims>>( exps / sum ));
+            auto t = input->empty(input->computeGrad);
 
-            t->computeGrad = input->computeGrad;
+            auto max = input->matrix().maxCoeff();
+            auto exps = (input->matrix().array() - max).exp();
+            auto sum = exps.sum();
+            t->matrix() = exps / sum;
+            
             if (t->computeGrad){
                 t->initGraph({input}, [t](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
 #ifdef DEBUG
@@ -45,7 +44,7 @@ namespace Function {
 
     };
 
-    template<typename T, int nDims>
+    template<typename T>
     inline tensor<T> Softmax(tensor<T> input){
         return Softmax::forward(input);
     }

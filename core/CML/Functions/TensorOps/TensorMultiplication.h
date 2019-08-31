@@ -25,13 +25,13 @@ namespace cml {
                 tensor<T> rhs_grad = nullptr;
 
                 if (lhs->computeGrad){
-                    lhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                    lhs_grad = make_tensor_from<T>(static_cast<DMatrix<T>>(
                         // TODO:  Check to see if order is correct
                         output_grad->matrix() * rhs->matrix().transpose()
                     ));
                 }
                 if (rhs->computeGrad){
-                    rhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                    rhs_grad = make_tensor_from<T>(static_cast<DMatrix<T>>(
                         // TODO:  Check to see if order is correct
                         lhs->matrix().transpose() * output_grad->matrix()
                     ));

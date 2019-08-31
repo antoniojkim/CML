@@ -50,7 +50,7 @@ namespace Function {
 
     };
 
-    template<typename T, int nDims>
+    template<typename T>
     inline tensor<T> CrossEntropyLoss(tensor<T> actual, tensor<T> expected){
         return CrossEntropyLoss::forward(actual, expected);
     }
