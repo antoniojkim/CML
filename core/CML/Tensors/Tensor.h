@@ -1,7 +1,6 @@
 #ifndef __CML_TENSORS_TENSOR_H__
 #define __CML_TENSORS_TENSOR_H__
 
-#include <functional>
 #include <ostream>
 
 #include "TensorDecl.h"
@@ -51,8 +50,8 @@ namespace cml {
 
             T& at(std::initializer_list<int> dims);
         
-            template<typename... Dim>
-            T& at(Dim&&... dims);
+            template<typename... Dims>
+            T& at(Dims&&... dims);
             
 
             T& item() {

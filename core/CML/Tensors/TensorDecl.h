@@ -1,6 +1,7 @@
 #ifndef __CML_TENSORS_TENSORDECL_H__
 #define __CML_TENSORS_TENSORDECL_H__
 
+#include <functional>
 #include <initializer_list>
 
 #include <Eigen/Core>
@@ -25,8 +26,8 @@ namespace cml {
 
 
     template <typename T>
-    using GradientFunction = std::vector<tensor<T>>(*)(std::vector<tensor<T>>&,
-                                                       std::vector<tensor<T>>);
+    using GradientFunction = std::function<std::vector<tensor<T>>(std::vector<tensor<T>>&,
+                                                                  std::vector<tensor<T>>)>;
 
     #ifndef CAST_MATRIX
     #define CAST_MATRIX static_cast<DMatrix<T>>

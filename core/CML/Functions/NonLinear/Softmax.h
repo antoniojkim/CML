@@ -22,7 +22,7 @@ namespace Function {
             t->matrix() = exps / sum;
             
             if (t->computeGrad){
-                t->initGraph({input}, [t](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
+                t->initGraph(std::vector<tensor<T>>{{input}}, [t](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
 #ifdef DEBUG
                     using namespace std;
                     cout << "Softmax::backward" << endl;
@@ -31,7 +31,7 @@ namespace Function {
                     tensor<T> output_grad = output.at(0);
                     if (t->cols() != 1) throw "Invalid shape for softmax_grad"; 
 
-                    auto input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                    auto input_grad = make_tensor_from<T>(static_cast<DMatrix<T>>(
                         (static_cast<DMatrix<T>>(t->matrix().asDiagonal()) - 
                          (t->matrix() * t->matrix().transpose())) * output_grad->matrix()
                     ));
