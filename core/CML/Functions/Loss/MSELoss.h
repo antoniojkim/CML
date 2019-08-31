@@ -55,13 +55,13 @@ namespace Function {
             // TODO:  Make more general to support multidimensional MSELoss
             switch(reduction){
                 case nn::Reduction::MEAN:
-                    t = make_tensor_from<T>(CAST_MATRIX(
+                    t = make_tensor<T>(CAST_MATRIX(
                         (actual->matrix() - expected->matrix()).array().square().colwise().mean()
                     ));
                     gradient = &mean_backward<T>;
                     break;
                 case nn::Reduction::SUM:
-                    t = make_tensor_from<T>(CAST_MATRIX(
+                    t = make_tensor<T>(CAST_MATRIX(
                         (actual->matrix() - expected->matrix()).array().square().colwise().sum()
                     ));
                     gradient = &sum_backward<T>;

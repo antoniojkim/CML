@@ -36,6 +36,18 @@ namespace cml {
 //     typedef std::initializer_list<std::pair<std::string, double>> Kwargs;
     typedef std::map<std::string, double> Kwargs;
 
+
+    // This definition of the conjunction class comes from
+    // https://www.fluentcpp.com/2019/01/25/variadic-number-function-parameters-type/
+    template<bool...> struct bool_pack{};
+    template<class... Ts>
+    using conjunction = std::is_same<bool_pack<true,Ts::value...>, bool_pack<Ts::value..., true>>;
+
+    template<typename... T>
+    using AllIntegral =
+        typename std::enable_if<cml::conjunction<std::is_integral<T>...>::value>::type;
+
+    // std::is_convertible<T, std::string>::value
 }
 
 #endif // __CML_DTYPES_H__

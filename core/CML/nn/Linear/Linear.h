@@ -25,12 +25,16 @@ namespace nn {
         public:
             Linear(const size_t& in_features, const size_t& out_features, const bool& bias = true): 
                 in_features{in_features}, out_features{out_features}, bias{bias} {
-                addParameter("weights", in_features, out_features, true);
-                if (bias) addParameter("bias", out_features, 1, true);
 
-                // Initialize Weights to random
-                params[0]->randomize();
-                if (bias) params[1]->randomize();
+                addParameter("weights", in_features, out_features);
+                params[0]->randomize();  // Initialize Weights to random
+                params[0]->computeGrad = true;  // Enable automatic gradient calculation
+
+                if (bias){
+                    addParameter("bias", out_features);
+                    params[1]->randomize();  // Initialize Weights to random
+                    params[1]->computeGrad = true;  // Enable automatic gradient calculation
+                }
             }   
 
             Parameter<T> getWeights(){ return params[0]; }

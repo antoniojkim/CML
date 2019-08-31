@@ -54,7 +54,7 @@ namespace nn {
             */
             template<typename...Args>
             void addParameter(const std::string& alias, Args&&...args){
-                params.emplace_back(make_tensor<T, Args...>(std::forward<Args>(args)...));
+                params.emplace_back(make_tensor<T>(std::vector<size_t>({(size_t)(args)...})));
                 if (alias != ""){ pKeys[alias] = params.back(); }
             }
             

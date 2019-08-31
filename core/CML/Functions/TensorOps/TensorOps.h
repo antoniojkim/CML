@@ -35,7 +35,7 @@ namespace cml {
     // TODO:  Replace this with more general function, i.e. Eigen::Tensor Contractions
     template<typename T>
     inline tensor<T> operator*(tensor<T> lhs, tensor<T> rhs){
-        return matmul(lhs, rhs);
+        return multiply(lhs, rhs);
     }
 
     /***********************************************************************************
