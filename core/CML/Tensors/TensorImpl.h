@@ -149,7 +149,7 @@ namespace cml {
      ******************************************************************/
     
     template<typename T>
-    MatrixMap<T> Tensor<T>::matrix() {
+    inline MatrixMap<T> Tensor<T>::matrix() {
         return Eigen::Map<DMatrix<T>>(d.get(), rows(), cols());
     }
     template<typename T> template<int nDims>
@@ -168,7 +168,7 @@ namespace cml {
     
     template<typename T>
     T& Tensor<T>::at(std::initializer_list<int> dims){
-        if (dims.size() >= this->dims.size()){
+        if (dims.size() > this->dims.size()){
             throw CMLException("Tensor::at:  Too many dims: ", dims.size());
         }
 
@@ -184,10 +184,11 @@ namespace cml {
         return this->d.get()[index];
     }
     
-    template<typename T> template<typename... Dim>
-    T& Tensor<T>::at(Dim&&... dims){
-        if (sizeof...(dims) >= this->dims.size()){
-            throw CMLException("Tensor::at:  Too many dims: ", sizeof...(dims));
+    template<typename T> template<typename... Dims>
+    T& Tensor<T>::at(Dims&&... dims){
+        const size_t numDims = sizeof...(Dims);
+        if (numDims > this->dims.size()){
+            throw CMLException("Tensor::at:  Too many dims: ", numDims, " Expected: ", this->dims.size());
         }
 
         size_t index = 0, j = 0;

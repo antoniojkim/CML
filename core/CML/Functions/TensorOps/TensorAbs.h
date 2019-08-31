@@ -22,7 +22,7 @@ namespace cml {
         template<typename T>
         static tensor<T> forward(tensor<T> input){
             auto t = input->empty(input->computeGrad);
-            t->matrix() = input->matrix().abs();
+            t->matrix() = input->matrix().array().abs();
             
             if (t->computeGrad){
                 t->initGraph({input}, &backward<T>);
