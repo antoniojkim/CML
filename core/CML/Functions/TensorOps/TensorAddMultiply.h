@@ -10,7 +10,7 @@ namespace cml {
      */
     template<typename T>
     tensor<T> addmatmul(tensor<T> t1, tensor<T> t2, tensor<T> t3){
-        auto t = make_tensor<T>(static_cast<DMatrix<T>>(
+        auto t = make_tensor_from<T>(static_cast<DMatrix<T>>(
             (t2->matrix() * t3->matrix()).colwise() + t1->matrix().col(0)
         ), t1->computeGrad || t2->computeGrad || t3->computeGrad);
 
@@ -35,19 +35,19 @@ namespace cml {
 #endif
 
                 if (t3->computeGrad){
-                    t3_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                    t3_grad = make_tensor_from<T>(static_cast<DMatrix<T>>(
                         // TODO:  Check to see if order is correct
                         t2->matrix().transpose() * output_grad->matrix()
                     ));
                 }
                 if (t2->computeGrad){
-                    t2_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                    t2_grad = make_tensor_from<T>(static_cast<DMatrix<T>>(
                         // TODO:  Check to see if order is correct
                         t3->matrix() * output_grad->matrix().transpose()
                     ));
                 }
                 if (t1->computeGrad){
-                    t1_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                    t1_grad = make_tensor_from<T>(static_cast<DMatrix<T>>(
                         output_grad->matrix().rowwise().sum()
                     ));
                 }

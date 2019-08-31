@@ -1,5 +1,5 @@
-#ifndef __CML__UTILS_VECTORUTILS_H__
-#define __CML__UTILS_VECTORUTILS_H__
+#ifndef __CML_UTILS_VECTORUTILS_H__
+#define __CML_UTILS_VECTORUTILS_H__
 
 #include <vector>
 #include <ostream>
@@ -9,7 +9,7 @@
 class CMLException;
 
 template <typename Iterator>
-std::ostream& print(std::ostream& out, Iterator begin, Iterator end ) {
+std::ostream& print(std::ostream& out, Iterator begin, Iterator end){
     out << "[";
     if (begin != end){ out << *(begin++); }
     while (begin != end) { out << ", " << *(begin++); }
@@ -87,4 +87,4 @@ namespace cml {
 
 
 
-#endif // __CML__UTILS_VECTORUTILS_H__
+#endif // __CML_UTILS_VECTORUTILS_H__

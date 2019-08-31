@@ -16,7 +16,7 @@ void softmaxTest(){
     assert(y->at(1, 0) == 0.73105858f);
     auto z = make_tensor<float, 2, 1>({{0}, {1}});
 
-    auto loss = MSELoss<float>(y, z);
+    auto loss = MSELoss(y, z);
     assert_equals(loss->at(0, 0), 0.0723295f);
 
     loss->backward();
@@ -33,7 +33,7 @@ void softmaxTest2(){
     auto x = make_tensor<float, 2, 1>({{1}, {2}}, true);
     auto z = make_scalar<float>(0);
 
-    auto loss = CrossEntropyLoss<float>(x, z);
+    auto loss = CrossEntropyLoss(x, z);
     assert_equals(loss->item(), 1.3132617f);
 
     loss->backward();
@@ -52,7 +52,7 @@ void softmaxTest3(){
                                        {0.22933349, 0.71500119}}, true);
     auto z = make_tensor<float, 2>({1, 1});
 
-    auto loss = CrossEntropyLoss<float>(x, z);
+    auto loss = CrossEntropyLoss(x, z);
     assert_equals(loss->item(), 0.9676999434641942f);
 
     loss->backward();

@@ -1,4 +1,4 @@
-    #ifndef __CML_TENSORS_TENSOR_H__
+#ifndef __CML_TENSORS_TENSOR_H__
 #define __CML_TENSORS_TENSOR_H__
 
 #include <functional>
@@ -20,7 +20,7 @@ namespace cml {
         protected:
             std::vector<size_t> dims;
             size_t S = 0; // tensor size (i.e. number of values in the tensor)
-            std::shared_ptr<T*> d = nullptr; // object holding the tensor data
+            std::shared_ptr<T> d = nullptr; // object holding the tensor data
             std::unique_ptr<DCG<T>> dcg = nullptr;    
 
 
@@ -38,11 +38,11 @@ namespace cml {
             Tensor(std::initializer_list<size_t> dims, const bool& computeGrad = false);
             Tensor(const DMatrix<T>& m, const bool& computeGrad = false);
             Tensor(DMatrix<T>&& m, const bool& computeGrad = false);
-            template<int nDims> 
+            template<int nDims>
             Tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad = false);
             
             MatrixMap<T> matrix();
-            inline std::shared_ptr<T*> data() { return d; }
+            inline std::shared_ptr<T> data() { return d; }
 
             template<int nDims>
             Eigen::TensorMap<Eigen::Tensor<T, nDims>> tensor();
@@ -61,7 +61,7 @@ namespace cml {
             }
         
             template<size_t... dims>
-            cml::tensor<T> set(nd_array<T, sizeof...(dims)> a);
+            void set(nd_array<T, sizeof...(dims)> a);
 
             DBlock<T> block(const int& startCol, const int& numCols) {
                 return this->matrix().block(0, startCol, dims[0], numCols);
@@ -75,8 +75,9 @@ namespace cml {
             void zero();
             void randomize(cml::Random::Function<T> r = &cml::Random::Gaussian<T>);
 
-            cml::tensor<T> constant(const T& s, const bool& computeGrad = false);
             cml::tensor<T> empty(const bool& computeGrad = false);
+            cml::tensor<T> zeroLike(const bool& computeGrad = false);
+            cml::tensor<T> constant(const T& s, const bool& computeGrad = false);
         
             const std::vector<size_t>& shape() {
                 return dims;
@@ -98,26 +99,24 @@ namespace cml {
             }
 
         
-            void initGraph(std::vector<cml::tensor<T>> params = {}, GradientFunction<T> f = nullptr);
+            void initGraph(const std::vector<cml::tensor<T>>& params = {}, GradientFunction<T> f = nullptr);
             std::unique_ptr<DCG<T>>& graph();
             cml::tensor<T> gradient();
             void backward();
             
             
-            void apply(T(*f)(const T& x)) {
-                std::transform(d.get(), d.get()+S, d.get(), f);
-            }
         
         
             
             cml::tensor<T> abs();
 
-            cml::tensor<T> expr(T(*f)(const T& x), const bool& computeGrad = false);
+            void apply(cml::UnaryFunction<T> f);
+            cml::tensor<T> expr(cml::UnaryFunction<T> f, const bool& computeGrad = false);
 
-            inline cml::tensor<T> matmul(cml::tensor<T> other){ return matmul(this->shared_from_this(), other); }
-            inline cml::tensor<T> mm(cml::tensor<T> other){ return matmul(this->shared_from_this(), other); }
+            cml::tensor<T> matmul(cml::tensor<T> other);
+            cml::tensor<T> mm(cml::tensor<T> other);
         
-            inline cml::tensor<T> transpose(cml::tensor<T> other){ return transpose(this->shared_from_this()); }
+            cml::tensor<T> transpose();
         
         
             /*
@@ -131,10 +130,10 @@ namespace cml {
             template<size_t... dims>
             static cml::tensor<T> make_tensor(const bool& computeGrad = false);
 
-            static cml::tensor<T> make_tensor(const DMatrix<T>& m, const bool& computeGrad = false);
+            static cml::tensor<T> make_tensor_from(const DMatrix<T>& m, const bool& computeGrad = false);
 
             template<int nDims>
-            static cml::tensor<T> make_tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad = false);
+            static cml::tensor<T> make_tensor_from(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad = false);
 
     };
 
@@ -151,9 +150,9 @@ namespace cml {
     cml::tensor<T> make_scalar(const T& t, const bool& computeGrad = false);
 
     template<typename T>
-    cml::tensor<T> make_tensor(const DMatrix<T>& m, const bool& computeGrad = false);
+    cml::tensor<T> make_tensor_from(const DMatrix<T>& m, const bool& computeGrad = false);
     template<typename T, int nDims>
-    cml::tensor<T> make_tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad = false);
+    cml::tensor<T> make_tensor_from(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad = false);
     
 
 }
