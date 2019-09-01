@@ -27,63 +27,61 @@ struct PrintVariadic<>{
 
 struct CMLException: public std::exception {
     
+    std::string exceptionName;
     std::ostringstream err;
     
     template<typename... Args>
     CMLException(Args&&... args) {
         PrintVariadic<Args...>::print(err, std::forward<Args>(args)...);
     }
+
+    void setExceptionName(const std::string& s){ exceptionName = s; }
     
     const char* what() const throw() override {
-        return std::runtime_error(err.str()).what();
+        return std::runtime_error(exceptionName + err.str()).what();
     }
 };
 
 #define CML_THROW(x) throw CMLException(x);
 
-class UnimplementedException: public std::exception {
-    
-    std::string message;
-    
-    public:
-        UnimplementedException(const std::string& message): message{message} {}
-    
-    private:
-        const char* what() const throw() {            
-            return (std::string("Unimplemented Exception:  ") + message).c_str();
-        }
-};
+struct UnimplementedException: public CMLException {
 
-class TensorTypeMismatchException: public std::exception {
-    const char* what() const throw() {            
-        return "Tensor Type Mismatch Exception";
+    template<typename... Args>
+    UnimplementedException(Args&&... args): CMLException(std::forward<Args>(args)...) {
+        setExceptionName("UnimplementedException: ");
     }
 };
 
-class UnsupportedOperationException: public std::exception {
-    
-    std::string message;
-    
-    public:
-        UnsupportedOperationException(const std::string& message): message{message} {}
-    
-    private:
-        const char* what() const throw() {            
-            return (std::string("Unsupported Operation Exception:  ") + message).c_str();
-        }
+struct TensorTypeMismatchException: public CMLException {
+
+    template<typename... Args>
+    TensorTypeMismatchException(Args&&... args): CMLException(std::forward<Args>(args)...) {
+        setExceptionName("Tensor Type Mismatch Exception: ");
+    }
 };
 
-class InvalidDimensionException: public std::exception {
-    
-    std::string message;
-    
-    public:
-        InvalidDimensionException(const std::string& message): message{message} {}
-    
-    private:
-        const char* what() const throw() {            
-            return (std::string("Invalid Dimension Exception:  ") + message).c_str();
-        }
+struct UnsupportedOperationException: public CMLException {
+
+    template<typename... Args>
+    UnsupportedOperationException(Args&&... args): CMLException(std::forward<Args>(args)...) {
+        setExceptionName("UnsupportedOperationException: ");
+    }
+};
+
+struct InvalidDimensionException: public CMLException {
+
+    template<typename... Args>
+    InvalidDimensionException(Args&&... args): CMLException(std::forward<Args>(args)...) {
+        setExceptionName("InvalidDimensionException: ");
+    }
+};
+
+struct AssertionFailedException: public CMLException {
+
+    template<typename... Args>
+    AssertionFailedException(Args&&... args): CMLException(std::forward<Args>(args)...) {
+        setExceptionName("AssertionFailedException: ");
+    }
 };
 
 #endif // __CML_UTILS_EXCEPTIONS_H__

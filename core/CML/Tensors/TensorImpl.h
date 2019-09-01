@@ -39,9 +39,16 @@ namespace cml {
     template<typename T>
     Tensor<T>::Tensor(const DMatrix<T>& m, const bool& computeGrad):
         computeGrad{computeGrad},
-        dims{{(size_t)(m.rows()), (size_t)(m.cols())}},
         S{(size_t)(m.size())},
         d{new T[S], std::default_delete<T[]>()} {
+        
+        if (S == 1){
+            dims.emplace_back((size_t)(1));
+        }
+        else{
+            dims.emplace_back((size_t)(m.rows()));
+            dims.emplace_back((size_t)(m.cols()));
+        }
 
         // TODO: Possibly think about adding support for both row major and column major eigen matrices
         this->matrix() = m;
@@ -175,37 +182,49 @@ namespace cml {
     }
     
     template<typename T>
-    T& Tensor<T>::at(std::initializer_list<int> dims){
-        if (dims.size() > this->dims.size()){
-            throw CMLException("Tensor::at:  Too many dims: ", dims.size());
+    T& Tensor<T>::at(std::initializer_list<size_t> dims){
+        if (numDims != this->dims.size()){
+            throw CMLException("Tensor::at:  Invalid Indices: ", dims, "  Dims: ", this->dims);
         }
 
-        int index = 0, j = 0;
-        for (auto& d : dims){
-            index += d * this->dims[j++];
+        size_t index = 0, j = 0;
+        size_t s = S;
+        for (const auto& d : dims){
+            const auto m = this->dims[j++];
+            if (d > m){
+                throw CMLException("Tensor::at:  Index out of bounds.  Got: ", dims, "  Dims:", this->dims);
+            }
+            s /= m;
+            index += d * s;
         }
 
         if (index >= S){
-            throw CMLException("Tensor::at:  Invalid Indices: ", dims);
+            throw CMLException("Tensor::at:  Invalid Indices: ", dims, "  Dims: ", this->dims);
         }
 
         return this->d.get()[index];
     }
     
     template<typename T> template<typename... Dims>
-    T& Tensor<T>::at(Dims&&... dims){
+    T& Tensor<T>::at(const Dims&... dims){
         constexpr size_t numDims = sizeof...(Dims);
-        if (numDims > this->dims.size()){
-            throw CMLException("Tensor::at:  Too many dims: ", numDims, " Expected: ", this->dims.size());
+        if (numDims != this->dims.size()){
+            throw CMLException("Tensor::at:  Invalid Indices: ", std::vector<size_t>({(size_t)(dims)...}), "  Dims: ", this->dims);
         }
 
         size_t index = 0, j = 0;
-        for (auto& d : {dims...}){
-            index += d * this->dims[j++];
+        size_t s = S;
+        for (const auto& d : {dims...}){
+            const auto& m = this->dims[j++];
+            if (d >= m){
+                throw CMLException("Tensor::at:  Index out of bounds. ", d, ">=", m, "   Got: ", std::vector<size_t>({(size_t)(dims)...}), "  Dims:", this->dims);
+            }
+            s /= m;
+            index += d * s;
         }
 
         if (index >= S){
-            throw CMLException("Tensor::at:  Invalid Indices: ", std::vector<size_t>({(size_t)(dims)...}));
+            throw CMLException("Tensor::at:  ", index, ">=", S, "  Invalid Indices: ", std::vector<size_t>({(size_t)(dims)...}), "  Dims: ", this->dims);
         }
 
         return this->d.get()[index];
@@ -294,10 +313,10 @@ namespace cml {
     }
 
     template<typename T>
-    inline cml::tensor<T> Tensor<T>::matmul(cml::tensor<T> other){ return matmul(this->shared_from_this(), other); }
+    inline cml::tensor<T> Tensor<T>::matmul(cml::tensor<T> other){ return cml::matmul(this->shared_from_this(), other); }
     
     template<typename T>
-    inline cml::tensor<T> Tensor<T>::mm(cml::tensor<T> other){ return matmul(this->shared_from_this(), other); }
+    inline cml::tensor<T> Tensor<T>::mm(cml::tensor<T> other){ return cml::matmul(this->shared_from_this(), other); }
 
     template<typename T>
     inline cml::tensor<T> Tensor<T>::transpose(){ return cml::transpose(this->shared_from_this()); }

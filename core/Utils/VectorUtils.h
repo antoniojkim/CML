@@ -21,6 +21,8 @@ template<typename T>
 inline std::ostream& operator<<(std::ostream& out, const std::vector<T>& v){ return print(out, v.begin(), v.end()); }
 template<typename T>
 inline std::ostream& operator<<(std::ostream& out, std::initializer_list<T> v){ return print(out, v.begin(), v.end()); }
+template<typename T, int N>
+inline std::ostream& operator<<(std::ostream& out, std::array<T, N> a){ return print(out, a.begin(), a.end()); }
 
 namespace cml {
 
