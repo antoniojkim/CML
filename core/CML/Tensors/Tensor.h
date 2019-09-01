@@ -9,10 +9,10 @@
 #include "../../Utils/Exceptions.h"
 #include "../../Utils/VectorUtils.h"
 
-namespace cml {    
-
+namespace cml {
+    
     template <typename T>
-    class Tensor: std::enable_shared_from_this<Tensor<T>> {
+    class Tensor: public std::enable_shared_from_this<Tensor<T>> {
         
         public:
             bool computeGrad = false; // If true, creates dynamic graph on forward pass
@@ -24,11 +24,10 @@ namespace cml {
             std::unique_ptr<DCG<T>> dcg = nullptr;    
 
             /*
-            Note:  While the constructors are public, it is not recommended
-                   to create a Tensor object outside of a shared pointer
-                   as Tensor inherits from std::enable_shared_from_this.
-                   Always create tensor objects using only the make_tensor
-                   functions provided.
+            Note:  All constructors have been made protected to prevent object creation
+                   outside of a shared pointer. The reason behind this is that the tensor
+                   class inherits from std::enable_shared_from_this which requires that 
+                   all tensor objects exist within a shared pointer.
             */
         
             Tensor(const bool& computeGrad = false);
@@ -122,6 +121,7 @@ namespace cml {
                 Static methods for instantiating Tensor object
             */
             static cml::tensor<T> make_tensor(const bool& computeGrad = false);
+
             static cml::tensor<T> make_tensor(const std::vector<size_t>& dims, const bool& computeGrad = false);
         
             // template<typename... Dims>
@@ -139,6 +139,7 @@ namespace cml {
 
     template<typename T>
     cml::tensor<T> make_tensor(const bool& computeGrad = false);
+
     template<typename T>
     cml::tensor<T> make_tensor(const std::vector<size_t>& dims, const bool& computeGrad = false);
 

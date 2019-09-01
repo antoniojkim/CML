@@ -70,13 +70,15 @@ namespace cml {
      ******************************************************************/
 
     template<typename T>
-    inline tensor<T> Tensor<T>::make_tensor(const bool& computeGrad){ return cml::tensor<T>(new Tensor<T>(computeGrad)); }
+    inline tensor<T> Tensor<T>::make_tensor(const bool& computeGrad){
+        return std::shared_ptr<Tensor<T>>(new Tensor<T>(computeGrad));
+    }
     template<typename T>
     inline tensor<T> make_tensor(const bool& computeGrad){ return Tensor<T>::make_tensor(computeGrad); }
 
     template<typename T>
     inline tensor<T> Tensor<T>::make_tensor(const std::vector<size_t>& dims, const bool& computeGrad){
-        return cml::tensor<T>(new Tensor<T>(dims, computeGrad));
+        return std::shared_ptr<Tensor<T>>(new Tensor<T>(dims, computeGrad));
     }
     template<typename T>
     inline tensor<T> make_tensor(const std::vector<size_t>& dims, const bool& computeGrad){
@@ -100,7 +102,7 @@ namespace cml {
     
     template<typename T> template<size_t dim, size_t... dims>
     inline tensor<T> Tensor<T>::make_tensor(const bool& computeGrad){
-        auto t = cml::tensor<T>(new Tensor<T>(computeGrad));
+        auto t = std::shared_ptr<Tensor<T>>(new Tensor<T>(computeGrad));
         t->dims = {dim, (size_t)(dims)...};
 #ifdef DEBUG
         if (t->dims.size() != (sizeof...(dims))+1) throw CMLException("Incorrect behaviour");
@@ -132,7 +134,7 @@ namespace cml {
 
     template<typename T>
     inline tensor<T> Tensor<T>::make_tensor(const DMatrix<T>& m, const bool& computeGrad){
-        return cml::tensor<T>(new Tensor<T>(m, computeGrad));
+        return std::shared_ptr<Tensor<T>>(new Tensor<T>(m, computeGrad));
     }
     template<typename T>
     inline tensor<T> make_tensor(const DMatrix<T>& m, const bool& computeGrad){
@@ -141,7 +143,7 @@ namespace cml {
     
     template<typename T> template<int nDims>
     inline tensor<T> Tensor<T>::make_tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad){
-        return cml::tensor<T>(new Tensor<T>(t, computeGrad));
+        return std::shared_ptr<Tensor<T>>(new Tensor<T>(t, computeGrad));
     }
     template<typename T, int nDims>
     inline tensor<T> make_tensor(const Eigen::Tensor<T, nDims>& t, const bool& computeGrad){
