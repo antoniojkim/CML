@@ -47,15 +47,15 @@ namespace cml {
         
             inline cml::tensor<T> getShared(){ return this->shared_from_this(); }
 
-            T& at(std::initializer_list<int> dims);
+            T& at(std::initializer_list<size_t> dims);
         
             template<typename... Dims>
-            T& at(Dims&&... dims);
+            T& at(const Dims&... dims);
             
 
             T& item() {
                 if (this->isScalar()) return this->at(0);
-                CML_THROW("Tensor::item:  Cannot get item from non scalar tensor");
+                throw CMLException("Tensor::item:  Cannot get item from non scalar tensor");
             }
         
             template<size_t... dims>

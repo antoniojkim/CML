@@ -34,10 +34,9 @@ namespace cml {
     }
     template<typename T>
     tensor<T> matmul(tensor<T> lhs, tensor<T> rhs){
-        int R = lhs->rows();
-        int C = rhs->cols();
-        auto t = make_tensor<T>(R, C, lhs->computeGrad || rhs->computeGrad);
-        t->matrix() = lhs->matrix() * rhs->matrix();
+        auto t = make_tensor<T>(static_cast<DMatrix<T>>(
+            lhs->matrix() * rhs->matrix()
+        ), lhs->computeGrad || rhs->computeGrad);
 
         if (t->computeGrad){
             t->initGraph({lhs, rhs}, matmul_backward<T>);
@@ -57,8 +56,18 @@ namespace cml {
 #endif
         auto lhs = params.at(0);
         auto rhs = params.at(1);
-        tensor<T> lhs_grad = rhs;
-        tensor<T> rhs_grad = lhs;
+        auto output_grad = output.at(0);
+        tensor<T> lhs_grad = nullptr;
+        tensor<T> rhs_grad = nullptr;
+
+        if (lhs->computeGrad){
+            lhs_grad = lhs->empty();
+            lhs_grad->matrix() = rhs->matrix().array() * output_grad->matrix().array();
+        }
+        if (rhs->computeGrad){
+            rhs_grad = rhs->empty();
+            rhs_grad->matrix() = lhs->matrix().array() * output_grad->matrix().array();
+        }
 
         return {lhs_grad, rhs_grad};
     }

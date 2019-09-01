@@ -13,7 +13,7 @@ void basicGradientsTest1(){
     auto c = a*b;
     c->backward();
     
-    assert(a->gradient()->at(0, 0) == 3);
+    assert_equals(a->gradient()->item(), 3);
 
 
     a = make_scalar<float>(2.0f, true);
@@ -23,24 +23,24 @@ void basicGradientsTest1(){
     auto e = c*d;
     e->backward();
 
-    assert(d->gradient()->at(0, 0) == 6);
-    assert(b->gradient()->at(0, 0) == 8);
-    assert(a->gradient()->at(0, 0) == 12);
+    assert_equals(d->gradient()->item(), 6);
+    assert_equals(b->gradient()->item(), 8);
+    assert_equals(a->gradient()->item(), 12);
 
 
     using Function::ReLU;
 
     a = make_tensor<float, 2, 1>({{-2.0f}, {3.0f}}, true);
     b = make_tensor<float, 1, 2>({{5.0f, 8.0f}}, true);
-    c = b*a;
+    c = b->matmul(a);
     d = ReLU(c);
 
     d->backward();
 
-    assert(b->gradient()->at(0, 0) == -2);
-    assert(b->gradient()->at(0, 1) == 3);
-    assert(a->gradient()->at(0, 0) == 5);
-    assert(a->gradient()->at(1, 0) == 8);
+    assert_equals(b->gradient()->at(0, 0), -2);
+    assert_equals(b->gradient()->at(0, 1), 3);
+    assert_equals(a->gradient()->at(0, 0), 5);
+    assert_equals(a->gradient()->at(1, 0), 8);
 
 }
 
