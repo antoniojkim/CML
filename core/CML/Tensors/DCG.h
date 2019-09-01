@@ -39,7 +39,7 @@ namespace cml {
     ************************************************************************************/
 
     template <typename T>
-    DCG<T>::DCG(tensor<T> t, const std::vector<cml::tensor<T>>&, GradientFunction<T> f)
+    DCG<T>::DCG(tensor<T> t, const std::vector<cml::tensor<T>>& params, GradientFunction<T> f)
         : params{params},
           f{f},
           isLeaf{params.size() == 0 && f == nullptr},
