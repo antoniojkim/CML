@@ -9,13 +9,13 @@
 
 namespace cml {
 namespace nn {
-    
+
     template<typename T = float>
     class Sequential: public Module<T> {
         using Module<T>::submodules;
         using Module<T>::mValues;
         using Module<T>::pKeys;
-        
+
         public:
             Sequential(): Module<T>{} {}
             Sequential(std::initializer_list<Module<T>*> submodules): Module<T>{submodules} {}
@@ -42,10 +42,10 @@ namespace nn {
                 out << indent << "}";
                 return out;
             }
-            
+
     };
-    
-/*  
+
+/*
     // Commented out as they are too similar to Sequential
 
     template<typename T = float>
@@ -75,7 +75,7 @@ namespace nn {
                 return out;
             }
     };
-    
+
     template<typename T = float>
     class ModuleDict: public Module<T> {
         using Module<T>::submodules;

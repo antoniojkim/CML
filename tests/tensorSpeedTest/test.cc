@@ -131,7 +131,7 @@ int main (){
     // t.set({1, 2, 3, 4});
     t.set({{1, 2}, {3, 4}});
     cout << t.data() << endl;
-    
+
 
     /*
         Conclusion, using the unsupported Tensor Type isn't any slower than using the supported matrix type.

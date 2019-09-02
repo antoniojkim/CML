@@ -9,7 +9,7 @@
 
 namespace cml {
 namespace Function {
-    
+
     struct Tanh {
 
         template<typename T>
@@ -24,7 +24,7 @@ namespace Function {
             tensor<T> input_grad = output_grad->expr(&gradient);
             return {input_grad};
         }
-        
+
         template<typename T>
         static tensor<T> forward(tensor<T> input){
             auto t = input->expr(&std::tanh);

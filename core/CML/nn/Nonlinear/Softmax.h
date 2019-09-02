@@ -14,13 +14,13 @@ namespace nn {
     class Softmax: public Module<T> {
         /*
         Applies the Softmax function element-wise.
-        
+
         Params:
             inplace - can optionally do the operation in-place. Default: False
         */
-        
+
         bool inplace;
-        
+
         public:
             Softmax(const bool& inplace = false): inplace {inplace} {}
 
@@ -28,7 +28,7 @@ namespace nn {
 
             std::ostream& print(std::ostream& out, const std::string& indent) override { return out << "Softmax {}"; }
     };
-    
+
 }
 }
 

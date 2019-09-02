@@ -12,9 +12,9 @@ namespace cml {
 
     template <typename T>
     class BatchVector: public Tensor<T> {
-        
+
         DMatrix<T> m;
-        
+
         public:
             BatchVector(const int& N, const int& R):
                 Tensor<T>(false, {N, R}, TensorType::MATRIX), m{N, R} {}
@@ -23,7 +23,7 @@ namespace cml {
                   m{TensorDimension::numBatches(dims), TensorDimension::size(dims)} {}
 
             inline DMatrix<T>& data() override { return m; }
-        
+
             T& at(const int& N, const int& R) override { return m(N, R); }
 
             DBlock<T> block(const int& index, const int& batchSize) override {
@@ -50,7 +50,7 @@ namespace cml {
     inline tensor<T> make_batch_vector(Args&&... args) {
         return std::make_shared<BatchVector<T>>(std::forward<Args>(args)...);
     }
-    
+
 }
 
 #endif // __CML_TENSORS_BATCHVECTOR_H__

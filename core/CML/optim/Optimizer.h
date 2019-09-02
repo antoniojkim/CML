@@ -10,7 +10,7 @@
 #include "../nn/Modules.h"
 
 namespace cml {
-    
+
     enum Optimizers {
         SGD
     };
@@ -32,7 +32,7 @@ namespace cml {
                 throw "Invalid Optimizer Provided: " + optimizer;
         }
     }
-    
+
 }
 
 #endif // __CML_OPTIM_OPTIMIZER_H__

@@ -9,7 +9,7 @@
 #include "tools.h"
 
 namespace idx {
-    
+
     uint32_t read_u32(std::istream& f){
         uint32_t val;
         uint8_t bytes[4];
@@ -19,7 +19,7 @@ namespace idx {
 
         return val;
     }
-    
+
     template<typename U>
     inline void read_U(std::istream& f, U& d){
         if (f.good()){
@@ -29,13 +29,13 @@ namespace idx {
             throw "Invalid IDX read";
         }
     }
-    
+
     template<typename T, typename U>
     void read_t(std::istream& f, tensor<T> data, std::vector<int>& dims, const int& N, const int& R){
         if (data.rows() != N || data.cols() != R){
             data.resize(N, R);
         }
-        
+
         auto m = data->matrix();
         U d;
         for (int n = 0; n < N; ++n){
@@ -45,11 +45,11 @@ namespace idx {
             }
         }
     }
-    
+
     template<typename T, template<typename> class TensorType>
     cml::tensor<T> read(std::istream& f){
         uint32_t magicNumber = read_u32(f);
-        
+
         unsigned int numDims = ((magicNumber) & 0xff);
         std::vector<int> dims;
         dims.reserve(numDims);
@@ -65,7 +65,7 @@ namespace idx {
         }
 
         cml::tensor<T> data = std::make_shared<TensorType<T>>(dims);
-        
+
         switch((magicNumber >> 8) & 0xff){
             case 0x08:
                 read_t<T, uint8_t>(f, data, dims, N, R);
@@ -88,10 +88,10 @@ namespace idx {
             default:
                 throw "Invalid data type";
         }
-        
+
         return data;
     }
-    
+
 }
 
 #endif // __CML_UTILS_DATAFORMATS_IDX_H__

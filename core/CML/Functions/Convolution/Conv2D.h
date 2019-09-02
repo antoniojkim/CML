@@ -14,7 +14,7 @@ namespace Function {
 
             t->computeGrad = input->computeGrad || weights->computeGrad || (bias != nullptr && bias->computeGrad);
             if (t->computeGrad){
-                t->initGraph({input, weights, bias}, [](std::vector<tensor<T>>& params, 
+                t->initGraph({input, weights, bias}, [](std::vector<tensor<T>>& params,
                                                         std::vector<tensor<T>> output) -> std::vector<tensor<T>>{
 #ifdef DEBUG
                     using namespace std;
@@ -61,4 +61,4 @@ namespace Function {
 };
 };
 
-#endif //__CML_FUNCTIONS_CONVOLUTION_CONV2D_H__ 
+#endif //__CML_FUNCTIONS_CONVOLUTION_CONV2D_H__

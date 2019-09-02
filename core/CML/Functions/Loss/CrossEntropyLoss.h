@@ -8,22 +8,22 @@
 
 namespace cml {
 namespace Function {
-    
+
     struct CrossEntropyLoss {
-        
+
         template<typename T>
         static tensor<T> forward(tensor<T> actual, tensor<T> expected){
-            if (expected->numDims() > 2){
+            if (expected->numDims() > 1){
                 throw "CrossEntropyLoss::forward:  Expected tensor is not scalar";
             }
             // auto p = Softmax<T>(actual);
-            
+
             // This is more stable
-            auto p = static_cast<DMatrix<T>>(actual->matrix().rowwise() - static_cast<DMatrix<T>>(actual->matrix().array().exp().colwise().sum().log()).row(0));
-            int m = expected->matrix().cols();
+            auto p = static_cast<DMatrix<T>>(actual->matrix().colwise() - static_cast<DMatrix<T>>(actual->matrix().array().exp().rowwise().sum().log()).col(0));
+            int m = expected->matrix().rows();
             T sum_log_likelihood = 0;
             for (int i = 0; i<m; ++i){
-                sum_log_likelihood -= p((int)(expected->at(0, i)), i);
+                sum_log_likelihood -= p(i, (int)expected->at(i));
             }
             tensor<T> t = make_scalar<T>(sum_log_likelihood / m, true);
             t->initGraph({actual, expected}, [m, p{std::move(p)}](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) mutable -> std::vector<tensor<T>> {
@@ -35,7 +35,7 @@ namespace Function {
 
                 p = p.array().exp();
                 for (int i = 0; i<m; ++i){
-                    p((int)(expected->at(0, i)), i) -= 1;
+                    p(i, (int)expected->at(i)) -= 1;
                 }
                 p /= m;
                 tensor<T> actual_grad = make_tensor<T>(std::move(p));

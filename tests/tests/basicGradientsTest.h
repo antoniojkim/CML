@@ -12,12 +12,12 @@ void basicGradientsTest1(){
     auto b = make_scalar<float>(3.0f);
     auto c = a*b;
     c->backward();
-    
+
     assert_equals(a->gradient()->item(), 3);
 
 
     a = make_scalar<float>(2.0f, true);
-    b = make_scalar<float>(3.0f, true); 
+    b = make_scalar<float>(3.0f, true);
     c = a*b;
     auto d = make_scalar<float>(4.0f, true);
     auto e = c*d;

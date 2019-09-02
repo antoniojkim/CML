@@ -7,14 +7,14 @@
 #include <type_traits>
 
 namespace cml {
-    
+
     #define INSTANTIATE_CLASS_TEMPLATES(T) \
         template class T<float>; \
         template class T<double>; \
         template class T<long long>; \
         template class T<long>; \
         template class T<int>;
-    
+
     #define INSTANTIATE_FUNCTION_TEMPLATES(T) \
         template float T<float>(const float&); \
         template double T<double>(const double&); \
@@ -24,7 +24,7 @@ namespace cml {
 
 
     namespace nn {
-            
+
         enum Reduction {
             NONE,
             SUM,
@@ -32,7 +32,7 @@ namespace cml {
         };
 
     }
-    
+
 //     typedef std::initializer_list<std::pair<std::string, double>> Kwargs;
     typedef std::map<std::string, double> Kwargs;
 

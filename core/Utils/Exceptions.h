@@ -26,17 +26,20 @@ struct PrintVariadic<>{
 
 
 struct CMLException: public std::exception {
-    
+
     std::string exceptionName;
     std::ostringstream err;
-    
+
     template<typename... Args>
     CMLException(Args&&... args) {
         PrintVariadic<Args...>::print(err, std::forward<Args>(args)...);
     }
 
     void setExceptionName(const std::string& s){ exceptionName = s; }
-    
+
+    // template<typename T>
+    // CMLException& operator<<(const T& t){ err << t; return *this; }
+
     const char* what() const throw() override {
         return std::runtime_error(exceptionName + err.str()).what();
     }

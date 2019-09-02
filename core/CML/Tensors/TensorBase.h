@@ -19,16 +19,16 @@
 namespace cml {
 
 
-    
+
     template<typename T>
     class TensorBase {
-        
+
         public:
             bool computeGrad = false; // If true, creates dynamic graph on forward pass
-        
+
         protected:
             std::unique_ptr<DCG<T>> dcg = nullptr;
-        
+
             TensorBase(const bool& computeGrad) : computeGrad{computeGrad} {}
 
         public:
@@ -62,7 +62,7 @@ namespace cml {
 
             virtual DBlock<T> block(const int& startCol, const int& numCols) = 0;
             virtual DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) = 0;
-        
+
             virtual void fill(const T& coefficient) = 0;
             virtual void ones() = 0;
             virtual void zero() = 0;
@@ -70,17 +70,17 @@ namespace cml {
 
             virtual tensor<T> constant(const T& s = 0, const bool& computeGrad = false) = 0;
 
-        
+
             virtual std::vector<int> shape() = 0;
             virtual bool isScalar() = 0;
             virtual int size() = 0;
             virtual int numDims() = 0;
 
-        
+
             void initGraph(std::vector<tensor<T>> params = {}, GradientFunction<T> f = nullptr);
             std::unique_ptr<DCG<T>>& graph();
             tensor<T>& gradient();
-            void backward();            
+            void backward();
 
 
             virtual tensor<T> abs() = 0;
@@ -96,16 +96,16 @@ namespace cml {
             virtual tensor<T> CrossEntropyLoss(tensor<T> expected) = 0;
 
     };
-        
+
     /***********************************************************************************
     *********************************** Aliases ****************************************
     ************************************************************************************/
-    
+
     template<typename T>
     using Parameter = tensor<T>;
     template<typename T>
     using Parameters = std::vector<tensor<T>>;
-    
+
     template<class T>
     using Variable = tensor<T>; // A nice alias
 
@@ -142,8 +142,8 @@ namespace cml {
         return out << ")";
     }
 
-    
-    
+
+
 
 
 //     /***********************************************************************************
@@ -162,21 +162,21 @@ namespace cml {
 //     Tensor<T, MatrixType>::Tensor(MatrixType<T>&& m) : MatrixType<T>{std::move(m)}, dimensions{m} {}
 
 //     template<typename T, template<typename> class MatrixType>
-//     Tensor<T, MatrixType>::Tensor(tlist<T> data, const bool& computeGrad): 
+//     Tensor<T, MatrixType>::Tensor(tlist<T> data, const bool& computeGrad):
 //             MatrixType<T>{1, data.size()},
 //             computeGrad{computeGrad} {
 //         this->set(std::forward<tlist<T>>(data));
 //         dimensions.setMatrix(this->data());
 //     }
 //     template<typename T, template<typename> class MatrixType>
-//     Tensor<T, MatrixType>::Tensor(tlist<tlist<T>> data, const bool& computeGrad): 
+//     Tensor<T, MatrixType>::Tensor(tlist<tlist<T>> data, const bool& computeGrad):
 //             MatrixType<T>{data.size(), data.begin()->size()},
 //             computeGrad{computeGrad} {
 //         this->set(std::forward<tlist<tlist<T>>>(data));
 //         dimensions.setMatrix(this->data());
 //     }
 //     template<typename T, template<typename> class MatrixType> template<typename... Dims>
-//     Tensor<T, MatrixType>::Tensor(const Dims&... dims, const bool& computeGrad): 
+//     Tensor<T, MatrixType>::Tensor(const Dims&... dims, const bool& computeGrad):
 //             MatrixType<T>{std::forward<Dims>(dims)...}, computeGrad{computeGrad} {
 //         dimensions.setMatrix(this->data());
 //     }
@@ -219,29 +219,29 @@ namespace cml {
 //     /***********************************************************************************
 //     ****************************** Arithmetic Methods **********************************
 //     ************************************************************************************/
-    
-//     template<typename T, template<typename> class MatrixType> 
+
+//     template<typename T, template<typename> class MatrixType>
 //     tensor<T, MatrixType> operator*(const T& scalar, tensor<T, MatrixType> t){
 //         return tensorScalarMultiply(scalar, t);
 //     }
-//     template<typename T, template<typename> class MatrixType> 
+//     template<typename T, template<typename> class MatrixType>
 //     tensor<T, MatrixType> operator/(tensor<T, MatrixType> t, const T& scalar){
 //         return tensorScalarDivide(t, scalar);
 //     }
 
-//     template<typename T, template<typename> class MatrixType> 
+//     template<typename T, template<typename> class MatrixType>
 //     tensor<T, MatrixType> operator+(tensor<T, MatrixType> lhs, tensor<T, MatrixType> rhs){
 //         return tensorAdd(lhs, rhs);
 //     }
-//     template<typename T, template<typename> class MatrixType> 
+//     template<typename T, template<typename> class MatrixType>
 //     tensor<T, MatrixType> operator-(tensor<T, MatrixType> lhs, tensor<T, MatrixType> rhs){
 //         return tensorSubtract(lhs, rhs);
 //     }
-//     template<typename T, template<typename> class MatrixType> 
+//     template<typename T, template<typename> class MatrixType>
 //     tensor<T, MatrixType> operator*(tensor<T, MatrixType> lhs, tensor<T, MatrixType> rhs){
 //         return tensorMultiply(lhs, rhs);
 //     }
-//     template<typename T, template<typename> class MatrixType> 
+//     template<typename T, template<typename> class MatrixType>
 //     tensor<T, MatrixType> operator/(tensor<T, MatrixType> lhs, tensor<T, MatrixType> rhs){
 //         return tensorDivide(lhs, rhs);
 //     }
@@ -269,7 +269,7 @@ namespace cml {
 //         }
 //         return dcg;
 //     }
-    
+
 //     template<typename T, template<typename> class MatrixType>
 //     void Tensor<T, MatrixType>::backward(){
 //         if (!isScalar()) throw "backward can only be called on a scalar tensor";
@@ -278,7 +278,7 @@ namespace cml {
 // #endif
 //         graph()->backward();
 //     }
-    
+
 
 }
 
