@@ -6,7 +6,7 @@
 
 namespace cml {
 namespace Function {
-    
+
     struct MSELoss {
 
         template<typename T>
@@ -26,7 +26,7 @@ namespace Function {
         static std::vector<tensor<T>> sum_backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output) {
             auto actual = params.at(0);
             auto expected = params.at(1);
-            
+
             T c = (T)(2);
 
             tensor<T> actual_grad = actual->empty();
@@ -39,7 +39,7 @@ namespace Function {
         static std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output) {
             auto actual = params.at(0);
             auto expected = params.at(1);
-            
+
             T c = (T)(2);
 
             tensor<T> actual_grad = actual->empty();
@@ -47,7 +47,7 @@ namespace Function {
 
             return {actual_grad, nullptr};
         }
-        
+
         template<typename T>
         static tensor<T> forward(tensor<T> actual, tensor<T> expected, const nn::Reduction& reduction = nn::Reduction::MEAN){
             tensor<T> t = nullptr;

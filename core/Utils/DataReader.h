@@ -9,16 +9,16 @@
 #include "DataFormats/idx.h"
 
 namespace cml {
-    
+
     enum DataFormat {
         INVALID,
         IDX
     };
-    
+
     template<typename T, template<typename> class TensorType>
     struct DataReader {
         DataFormat format;
-        
+
         DataReader(const DataFormat& format): format{format} {}
 
         tensor<T> load(const std::string& path){
@@ -31,10 +31,10 @@ namespace cml {
                     throw "Invalid DataFormat";
             }
         }
-        
+
     };
-        
-    
+
+
 }
 
 #endif // __CML_UTILS_DATAREADER_H__

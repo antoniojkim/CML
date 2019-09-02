@@ -20,18 +20,16 @@ namespace cml {
         DCG(tensor<T> t, const std::vector<cml::tensor<T>>& params, GradientFunction<T> f);
 
         void accumulateGradient(std::vector<tensor<T>>& gradients);
-        
+
         void backward(std::vector<tensor<T>> x = {make_scalar<T>(1)});
 
     };
 
     template <typename T>
     inline std::shared_ptr<DCG<T>> make_graph(tensor<T> t,
-                                              std::vector<tensor<T>> params,
+                                              const std::vector<tensor<T>>& params,
                                               GradientFunction<T> f) {
-        return std::make_shared<DCG<T>>(t,
-                                        std::forward<std::vector<tensor<T>>>(params),
-                                        std::forward<GradientFunction<T>>(f));
+        return std::make_shared<DCG<T>>(t, params, f);
     }
 
     /***********************************************************************************
@@ -43,7 +41,14 @@ namespace cml {
         : params{params},
           f{f},
           isLeaf{params.size() == 0 && f == nullptr},
-          gradient{isLeaf ? t->constant(0) : nullptr} {}
+          gradient{isLeaf ? t->constant(0) : nullptr}
+    {
+#ifdef DEBUG
+        if (isLeaf && t->shape() != gradient->shape()){
+            throw CMLException("Gradient Shape does not match tensor: ", t->shape(), "!=", gradient->shape());
+        }
+#endif       
+    }
 
     /***********************************************************************************
     *********************************** Methods ****************************************
@@ -54,19 +59,16 @@ namespace cml {
     void DCG<T>::accumulateGradient(std::vector<tensor<T>>& gradients){
         for (auto& g : gradients){
             if (gradient->shape() != g->shape()){
-                using namespace std;
-                auto e = CMLException("Dims do not match in accumuateGradient");
-                // e.err << endl
-                //       << "    gradient.shape: " << gradient->shape() << endl
-                //       << "    g.shape: " << g->shape() << endl;
-                throw e;
+                throw CMLException("Dims do not match in accumulateGradient\n",
+                                   "    gradient.shape: ", gradient->shape(), "\n",
+                                   "    g.shape: ", g->shape(), "\n");
             }
             gradient += g;
         }
-    #ifdef DEBUG
+#ifdef DEBUG
         using namespace std;
         cout << "Accumulated Gradient" << endl;
-    #endif
+#endif
     }
 
     template<typename T>

@@ -6,12 +6,12 @@
 namespace cml {
 
     struct TensorAbs {
-        
+
         template<typename T>
         static T gradient(const T& x){
             return (T)(x < 0 ? 0 : 1);
         }
-        
+
         template<typename T>
         static std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output){
             tensor<T> output_grad = output.at(0);
@@ -23,7 +23,7 @@ namespace cml {
         static tensor<T> forward(tensor<T> input){
             auto t = input->empty(input->computeGrad);
             t->matrix() = input->matrix().array().abs();
-            
+
             if (t->computeGrad){
                 t->initGraph({input}, &backward<T>);
             }

@@ -30,7 +30,7 @@ namespace numeric {
         for(size_t a : { args..., (size_t)(0) }) sum += a;
         return sum;
     }
-    
+
     template<size_t... args>
     constexpr size_t product() {
         size_t product = 1;
@@ -51,7 +51,7 @@ namespace numeric {
     inline bool all(const std::initializer_list<bool>& v){
         return bool(std::accumulate(std::begin(v), std::end(v), true, std::logical_and<>()));
     }
-    
+
 }
 }
 

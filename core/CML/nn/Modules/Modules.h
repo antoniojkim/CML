@@ -16,7 +16,7 @@
 
 namespace cml {
 namespace nn {
-    
+
     template<typename T> class Module;
     template<typename T>
     using uModule = std::unique_ptr<cml::nn::Module<T>>;
@@ -31,7 +31,7 @@ namespace nn {
 
         TODO:  Add automatic casting when a module of a different template type is added.
     */
-    template <typename T> 
+    template <typename T>
     class Module {
         protected:
             Modules<T> submodules;
@@ -57,10 +57,10 @@ namespace nn {
                 params.emplace_back(make_tensor<T>(std::vector<size_t>({(size_t)(args)...})));
                 if (alias != ""){ pKeys[alias] = params.back(); }
             }
-            
+
         public:
             /*
-                Empty Module constructor. Submodules can be added after construction using the 
+                Empty Module constructor. Submodules can be added after construction using the
                 addModule methods.
             */
             Module();
@@ -78,7 +78,7 @@ namespace nn {
                 that can be used to reference it in the future.
             */
             Module(std::initializer_list<std::pair<std::string, Module<T>*>>);
-        
+
             /*
                 The forward method is a pure virtual method that must be overwritten by the subclass.
                 It is called when forward propagating through the model.
@@ -88,17 +88,17 @@ namespace nn {
             */
             virtual cml::tensor<T> forward(cml::tensor<T>) = 0;
             cml::tensor<T> operator()(cml::tensor<T> x);
-        
+
             /*
                 The following methods allow you to add a submodule to your module.
-                Multiple overloads are declared for ease of use, but they all perform 
+                Multiple overloads are declared for ease of use, but they all perform
                 the same action.
 
                 Methods that contain an alias parameter can be used to set an alias for
                 the submodule that can be used to reference it in the future.
 
                 Note that whatever submodule you pass in, the current module will assume
-                ownership of it. That is, it will free any and all submodules 
+                ownership of it. That is, it will free any and all submodules
                 when it goes out of scope.
             */
             Module<T>& addModule(Module<T>* m);
@@ -158,7 +158,7 @@ namespace nn {
 
                 The aliases will generally be specified in the documentation for
                 that specific module.
-                
+
                 Since the order in which the paramters is not usually known, this
                 is the recommended way to access individual parameters.
             */
@@ -168,13 +168,13 @@ namespace nn {
                 the method getParam(std::string).
 
                 Note, this is not to be confused with the other overload for it
-                which was used as a shorthand for forward. 
+                which was used as a shorthand for forward.
             */
             Parameter<T> operator()(const std::string& alias);
 
             /*
                 This method will get the number of parameters in the module.
-                If the recursive flag is set, it will recursively get the 
+                If the recursive flag is set, it will recursively get the
                 number of paramters of all submodules.
             */
             virtual long int getNumParameters(const bool& recursive = true);
@@ -219,7 +219,7 @@ namespace nn {
             virtual std::ostream& print(std::ostream&, const std::string& indent = "") = 0;
 
     };
-    
+
     template<typename T>
     std::ostream& operator<<(std::ostream& out, cml::nn::Module<T>& module){
         return module.print(out, "");
@@ -368,7 +368,7 @@ namespace nn {
     template<typename T> Module<T>& Module<T>::addModule(uModule<T>& m, const std::string& alias){
         return this->addModule(std::move(m), alias);
     }
-    template<typename T> 
+    template<typename T>
     Module<T>& Module<T>::addModule(uModule<T>&& m, const std::string& alias){
         submodules.emplace_back(std::move(m));
         if (alias == ""){
@@ -404,7 +404,7 @@ namespace nn {
         else if (index < 0 && -index <= (int) submodules.size()){
             return *submodules[submodules.size()+index];
         }
-        
+
         std::ostringstream error;
         error << "Invalid index: " << index << ",  submodules.size() == " << submodules.size();
         throw error.str();
@@ -441,9 +441,9 @@ namespace nn {
         throw error.str();
     }
     template<typename T>
-    Parameter<T> Module<T>::getParam(const std::string& alias){ 
+    Parameter<T> Module<T>::getParam(const std::string& alias){
         if (pKeys.count(alias) > 0){  return pKeys[alias];  }
-        
+
         std::ostringstream error;
         error << "Invalid key: " << alias;
         throw error.str();
@@ -453,7 +453,7 @@ namespace nn {
     template<typename T>
     Parameters<T>& Module<T>::getParams(){ return params; }
 
-    
+
 }
 }
 

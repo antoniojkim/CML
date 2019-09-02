@@ -45,7 +45,7 @@ namespace cml {
         return t;
     }
 
-    /*  
+    /*
         Coefficient wise multiplication
      */
     template<typename T>

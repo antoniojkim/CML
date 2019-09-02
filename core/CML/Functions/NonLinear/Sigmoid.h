@@ -9,9 +9,9 @@
 
 namespace cml {
 namespace Function {
-    
+
     struct Sigmoid {
-        
+
         template<typename T>
         static T sigmoid(const T& x){
             return (T)(1.0 / (1.0 + exp(-x)));
@@ -21,7 +21,7 @@ namespace Function {
             auto y = (T)(1.0 / (1.0 + exp(-x)));
             return y*(1-y);
         }
-        
+
         template<typename T>
         static std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output) {
 #ifdef DEBUG
@@ -37,7 +37,7 @@ namespace Function {
             tensor<T> input_grad = input->expr(&gradient<T>) * output_grad;
             return {input_grad};
         }
-        
+
         template<typename T>
         static tensor<T> forward(tensor<T> input){
             auto t = input->expr(&sigmoid<T>);

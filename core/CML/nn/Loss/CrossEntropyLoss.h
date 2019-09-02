@@ -12,7 +12,7 @@ namespace nn {
 
     template<typename T = float>
     class CrossEntropyLoss: public Criterion<T> {
-        
+
         public:
             CrossEntropyLoss() {}
 

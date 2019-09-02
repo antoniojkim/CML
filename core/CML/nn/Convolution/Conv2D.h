@@ -37,7 +37,7 @@ namespace cml {
                     const bool& bias = true):
                     inputChannels{inputChannels}, outputChannels{outputChannels},
                     kernelSize{kernelSize}, stride{stride}, padding{padding},
-                    dilation{dilation}, groups{groups}, 
+                    dilation{dilation}, groups{groups},
                     weights{make_ntensor<T>(out_channels, in_channels/groups, kernelSize, kernelSize)} {
                     // int H_out = floor((()/stride)+1)
                     if (bias){
@@ -57,16 +57,16 @@ namespace cml {
                 }
 
                 std::ostream& print(std::ostream& out, const std::string& indent) override {
-                    return out << "Conv2D { inputChannels: " << inputChannels << 
-                                        "  outputChannels: " << outputChannels << 
-                                        "  kernelSize: " << kernelSize << 
-                                        "  stride: " << stride << 
-                                        "  padding: " << padding << 
-                                        "  dilation: " << dilation << 
+                    return out << "Conv2D { inputChannels: " << inputChannels <<
+                                        "  outputChannels: " << outputChannels <<
+                                        "  kernelSize: " << kernelSize <<
+                                        "  stride: " << stride <<
+                                        "  padding: " << padding <<
+                                        "  dilation: " << dilation <<
                                         "  groups: " << groups << "  bias: " << (bias ? "true" : "false") << " }";
                 }
 
-                
+
 
         };
 

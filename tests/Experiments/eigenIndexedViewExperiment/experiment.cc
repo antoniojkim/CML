@@ -40,7 +40,7 @@ int main(){
     cout << m2 << endl << endl;
 
     DMatrix<float> p2 = m2.rowwise() - static_cast<DMatrix<float>>(m2.array().exp().colwise().sum().log()).row(0);
-    
+
     cout << p2 << endl << endl;
 
     float t2 = 0;

@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g -std=c++14 -Wall -MMD -Werror=vla
+CXXFLAGS = -g -std=c++14 -Wall -MMD -Werror=vla -DDEBUG
 EXEC = testCML
 
 # TENSORS = $(wildcard ../core/CML/Tensors/*.cc)        $(TENSORS:.cc=.o)

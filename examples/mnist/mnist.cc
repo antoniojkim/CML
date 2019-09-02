@@ -42,66 +42,66 @@ void train_mnist_model(MNISTModel& model){
     auto data = idxBatchVectorReader.load("data/train-images-idx3-ubyte");
 #endif
     data /= 255;
-    
+
     clock_t end = clock();
     cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;
-    
-    
-    
+
+
+
     // Get Train Labels
     start = clock();
     cout << "Loading labels from:  data/train-labels-idx1-ubyte     " << flush;
-    
+
 #ifdef DEBUG
     auto labels = idxBatchVectorReader.load("data/t10k-labels-idx1-ubyte");
 #else
     auto labels = idxBatchVectorReader.load("data/train-labels-idx1-ubyte");
 #endif
-    
+
     end = clock();
     cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;
-    
-    
-    
+
+
+
     // Get Val Images
     start = clock();
     cout << "Loading images from:  data/t10k-labels-idx1-ubyte     " << flush;
-    
+
     auto valImages = idxBatchVectorReader.load("data/t10k-images-idx3-ubyte");
     valImages /= 255;
-    
+
     end = clock();
     cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;
-    
-    
-    
+
+
+
     // Get Val Labels
     start = clock();
     cout << "Loading labels from:  data/t10k-labels-idx1-ubyte     " << flush;
-    
+
     auto valImageLabels = idxBatchVectorReader.load("data/t10k-labels-idx1-ubyte");
-    
+
     end = clock();
     cout << "Took " << double(end-start)/CLOCKS_PER_SEC << " seconds" << endl;
-    
-    
-    
+
+
+
     auto classifier = NeuralNetworkClassifier<mnistType>(model, data, labels, "CrossEntropyLoss", "SGD", {{"lr", 3.0}});
     classifier.setVal(valImages, valImageLabels);
     classifier["numEpochs"] = 30;
     classifier.verbose();
     cout << classifier << endl;
-    
+
     classifier.train();
 }
 
 int main(){
-    
+
     cout  << "Num Threads:  " << Eigen::nbThreads() << endl;
 
     auto model = MNISTModel();
     cout << model << endl;
-    
+
     train_mnist_model(model);
 
     // auto testInput = make_tensor<>(728);

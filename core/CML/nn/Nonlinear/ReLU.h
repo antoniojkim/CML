@@ -16,15 +16,15 @@ namespace nn {
     class ReLU: public Module<T> {
         /*
         Applies the rectified linear unit function element-wise:
-        
+
         ReLU(x) = max(0, x)
-        
+
         Params:
             inplace - can optionally do the operation in-place. Default: False
         */
-        
+
         bool inplace;
-        
+
         public:
             ReLU(const bool& inplace = false): inplace {inplace} {}
 
