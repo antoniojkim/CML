@@ -15,7 +15,7 @@ namespace cml {
         IDX
     };
 
-    template<typename T, template<typename> class TensorType>
+    template<typename T>
     struct DataReader {
         DataFormat format;
 
@@ -26,7 +26,7 @@ namespace cml {
 
             switch (format){
                 case DataFormat::IDX:
-                    return idx::read<T, TensorType>(file);
+                    return idx::read<T>(file);
                 default:
                     throw "Invalid DataFormat";
             }
