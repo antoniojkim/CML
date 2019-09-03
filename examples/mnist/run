@@ -1,10 +1,10 @@
 #!/bin/bash
 
 clear
-make > log.txt 2>&1
+make > log.cerr 2>&1
 if [ $? -ne 0 ]; then
-	vim -RZ log.txt
+	vim -RZ log.cerr
 else
-	rm log.txt
+	rm log.cerr
 	gdb -ex run ./mnist
 fi

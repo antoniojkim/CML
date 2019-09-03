@@ -30,7 +30,7 @@ struct MNISTModel: public Sequential<mnistType> {
 };
 
 void train_mnist_model(MNISTModel& model){
-    auto idxBatchVectorReader = DataReader<mnistType, BatchVector>(DataFormat::IDX);
+    auto idxBatchVectorReader = DataReader<mnistType>(DataFormat::IDX);
 
     // Get Train Images
     clock_t start = clock();

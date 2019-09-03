@@ -41,8 +41,6 @@ namespace cml {
     template <typename T>
     using DMatrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;  // Dynamic Matrix
     template <typename T>
-    using DCMatrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;  // Dynamic Matrix
-    template <typename T>
     using RefMatrix = Eigen::Ref<DMatrix<T>>;  // Ref to Dynamic Matrix
     template <typename T>
     using DBlock = Eigen::Block<DMatrix<T>, Eigen::Dynamic, Eigen::Dynamic, false>;  // Dynamic Block

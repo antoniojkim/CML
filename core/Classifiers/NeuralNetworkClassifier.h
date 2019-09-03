@@ -109,8 +109,9 @@ namespace cml {
             void shuffle() {
                 Eigen::VectorXi indices = Eigen::VectorXi::LinSpaced(data->rows(), 0, data->rows());
                 std::random_shuffle(indices.data(), indices.data() + data->rows());
-                data->randomize(indices);
-                labels->randomize(indices);
+                
+                data->matrix() = indices.asPermutation() * data->matrix();
+                labels->matrix() = indices.asPermutation() * labels->matrix();
             }
 
             void train(){
@@ -126,8 +127,8 @@ namespace cml {
                 unsigned int blockSize = batchSize / subdivisions;
                 double totalLoss;
 
-                auto block = make_tensor<T>(int(data->cols()), int(blockSize));
-                auto label = make_tensor<T>(int(labels->cols()), int(blockSize));
+                auto block = make_tensor<T>(std::vector<size_t>({size_t(data->cols()), size_t(blockSize)}));
+                auto label = make_tensor<T>(std::vector<size_t>({size_t(labels->cols()), size_t(blockSize)}));
 
 
                 for (; epoch < endEpoch; ++epoch){
@@ -142,7 +143,7 @@ namespace cml {
 #ifndef DEBUG
                     shuffle();
 #endif
-                    for (int i = 0; i<data->rows(); i += blockSize){
+                    for (size_t i = 0; i < data->rows(); i += blockSize){
                         loadData(block, data, i, blockSize);
                         auto output = model->forward(block);
                         loadData(label, labels, i, blockSize);
@@ -169,14 +170,14 @@ namespace cml {
                         using Function::Softmax;
                         model->noGrad();
                         int maxRow, correct = 0, total = 0;
-                        for (int i = 0; i<val->rows(); i += blockSize){
+                        for (size_t i = 0; i < val->rows(); i += blockSize){
                             loadData(block, val, i, blockSize);
                             auto output = Softmax<T>(model->forward(block));
                             loadData(label, valLabels, i, blockSize);
 
-                            for (unsigned int j = 0; j<blockSize; ++j){
+                            for (size_t j = 0; j<blockSize; ++j){
                                 output->matrix().col(j).maxCoeff(&maxRow);
-                                if (maxRow == label->at(0, j)){
+                                if (maxRow == label->at(j)){
                                     ++correct;
                                 }
                                 ++total;
@@ -208,11 +209,11 @@ namespace cml {
 
         private:
             void loadData(tensor<T> block, tensor<T> data, const int& i, const unsigned int& blockSize){
-                if (int(i+blockSize) < data->rows()){
+                if (size_t(i+blockSize) < data->rows()){
                     block->matrix() = data->block(i, blockSize).transpose();
                 }
                 else {
-                    unsigned int finalBlockSize = data->rows() % blockSize;
+                    size_t finalBlockSize = data->rows() % blockSize;
                     block->block(0, 0, block->rows(), finalBlockSize) = data->block(i, finalBlockSize).transpose();
                     block->block(0, finalBlockSize, block->rows(), block->cols()-finalBlockSize) = DMatrix<T>::Zero(block->rows(), block->cols()-finalBlockSize);
                 }
