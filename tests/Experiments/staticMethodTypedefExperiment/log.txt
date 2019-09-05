@@ -1,0 +1,25 @@
+In file included from /usr/include/x86_64-linux-gnu/c++/7/bits/c++allocator.h:33:0,
+                 from /usr/include/c++/7/bits/allocator.h:46,
+                 from /usr/include/c++/7/string:41,
+                 from /usr/include/c++/7/stdexcept:39,
+                 from /usr/include/c++/7/array:39,
+                 from /usr/include/c++/7/tuple:39,
+                 from /usr/include/c++/7/functional:54,
+                 from test.cc:3:
+/usr/include/c++/7/ext/new_allocator.h: In instantiation of ‘void __gnu_cxx::new_allocator<_Tp>::construct(_Up*, _Args&& ...) [with _Up = A<int>; _Args = {int}; _Tp = A<int>]’:
+/usr/include/c++/7/bits/alloc_traits.h:475:4:   required from ‘static void std::allocator_traits<std::allocator<_CharT> >::construct(std::allocator_traits<std::allocator<_CharT> >::allocator_type&, _Up*, _Args&& ...) [with _Up = A<int>; _Args = {int}; _Tp = A<int>; std::allocator_traits<std::allocator<_CharT> >::allocator_type = std::allocator<A<int> >]’
+/usr/include/c++/7/bits/shared_ptr_base.h:526:39:   required from ‘std::_Sp_counted_ptr_inplace<_Tp, _Alloc, _Lp>::_Sp_counted_ptr_inplace(_Alloc, _Args&& ...) [with _Args = {int}; _Tp = A<int>; _Alloc = std::allocator<A<int> >; __gnu_cxx::_Lock_policy _Lp = (__gnu_cxx::_Lock_policy)2]’
+/usr/include/c++/7/bits/shared_ptr_base.h:637:4:   required from ‘std::__shared_count<_Lp>::__shared_count(std::_Sp_make_shared_tag, _Tp*, const _Alloc&, _Args&& ...) [with _Tp = A<int>; _Alloc = std::allocator<A<int> >; _Args = {int}; __gnu_cxx::_Lock_policy _Lp = (__gnu_cxx::_Lock_policy)2]’
+/usr/include/c++/7/bits/shared_ptr_base.h:1295:35:   required from ‘std::__shared_ptr<_Tp, _Lp>::__shared_ptr(std::_Sp_make_shared_tag, const _Alloc&, _Args&& ...) [with _Alloc = std::allocator<A<int> >; _Args = {int}; _Tp = A<int>; __gnu_cxx::_Lock_policy _Lp = (__gnu_cxx::_Lock_policy)2]’
+/usr/include/c++/7/bits/shared_ptr.h:344:64:   required from ‘std::shared_ptr<_Tp>::shared_ptr(std::_Sp_make_shared_tag, const _Alloc&, _Args&& ...) [with _Alloc = std::allocator<A<int> >; _Args = {int}; _Tp = A<int>]’
+/usr/include/c++/7/bits/shared_ptr.h:690:14:   required from ‘std::shared_ptr<_Tp> std::allocate_shared(const _Alloc&, _Args&& ...) [with _Tp = A<int>; _Alloc = std::allocator<A<int> >; _Args = {int}]’
+/usr/include/c++/7/bits/shared_ptr.h:706:39:   required from ‘std::shared_ptr<_Tp> std::make_shared(_Args&& ...) [with _Tp = A<int>; _Args = {int}]’
+test.cc:30:37:   required from ‘static std::shared_ptr<A<T> > A<T>::make_a(const T&) [with int N = 2; T = int]’
+test.cc:36:36:   required from ‘std::shared_ptr<A<T> > make_A(const T&) [with T = int; int N = 2]’
+test.cc:51:30:   required from here
+/usr/include/c++/7/ext/new_allocator.h:136:4: error: ‘A<T>::A(const T&) [with T = int]’ is protected within this context
+  { ::new((void *)__p) _Up(std::forward<_Args>(__args)...); }
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:23:9: note: declared protected here
+         A(const T& t): t{t} {}
+         ^
