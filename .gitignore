@@ -1,0 +1,4 @@
+.vscode/
+*ipynb_checkpoint*
+Notes/
+examples/mnist/data/

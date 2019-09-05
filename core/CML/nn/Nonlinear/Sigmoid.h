@@ -12,13 +12,13 @@ namespace nn {
     class Sigmoid: public Module<T> {
         /*
         Applies the Sigmoid function element-wise.
-        
+
         Params:
             inplace - can optionally do the operation in-place. Default: False
         */
-        
+
         bool inplace;
-        
+
         public:
             Sigmoid(const bool& inplace = false): inplace {inplace} {}
 

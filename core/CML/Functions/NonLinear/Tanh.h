@@ -3,31 +3,34 @@
 
 #include <cmath>
 
-#include "../../Tensor.h"
-#include "../../DCG.h"
+#include "NonLinear.h"
+#include "../../Tensors/Tensor.h"
+
 
 namespace cml {
 namespace Function {
-    
+
     struct Tanh {
-        
+
+        template<typename T>
+        static T gradient(const T& x){
+            auto coshx = cosh(x);
+            return (T)(1.0 / coshx*coshx);
+        }
+
+        template<typename T>
+        static std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output) {
+            tensor<T> output_grad = output.at(0);
+            tensor<T> input_grad = output_grad->expr(&gradient);
+            return {input_grad};
+        }
+
         template<typename T>
         static tensor<T> forward(tensor<T> input){
-            auto t = make_tensor<T>(static_cast<DMatrix<T>>(
-                input->array().tanh()
-            ));
+            auto t = input->expr(&std::tanh);
             t->computeGrad = input->computeGrad;
             if (t->computeGrad){
-                t->initGraph({input}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
-                    tensor<T> output_grad = output.at(0);
-                    tensor<T> input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                        output_grad->unaryExpr([](T x){
-                            auto coshx = cosh(x);
-                            return (T)(1.0 / coshx*coshx);
-                        })
-                    ));
-                    return {input_grad};
-                });
+                t->initGraph({input.get()}, &backward);
             }
             return t;
         }

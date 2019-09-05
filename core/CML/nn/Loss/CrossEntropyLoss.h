@@ -1,5 +1,6 @@
 #ifndef __CML_NN_LOSS_CROSSENTROPYLOSS_H__
 #define __CML_NN_LOSS_CROSSENTROPYLOSS_H__
+
 #include "../../Dtypes.h"
 #include "../../Functions/Loss/CrossEntropyLoss.h"
 #include "../../Tensor.h"
@@ -11,7 +12,7 @@ namespace nn {
 
     template<typename T = float>
     class CrossEntropyLoss: public Criterion<T> {
-        
+
         public:
             CrossEntropyLoss() {}
 

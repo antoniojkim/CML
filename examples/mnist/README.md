@@ -1,6 +1,8 @@
 # MNIST
 
-The MNIST database is a large database of handwritten digits that is often used to introduce aspiring data scientists and machine learning enthusists to the world of neural networks. As such, it is also a great place to start showing off the power and versatility that the CML library offers.
+The MNIST database is a large database of handwritten digits that is often used to introduce aspiring data scientists and machine learning enthusiasts to the world of neural networks. As such, it is also a great place to start showing off the power and versatility that the CML library offers.
+
+I you don't already have the Eigen library installed, you can download it from [the official Eigen website] and move it to `/usr/local/include` so that your compiler knows that it exists.
 
 To start, first you must download the dataset from the official website. This can be done using the following script:
 
@@ -25,3 +27,9 @@ Now that you have the dataset downloaded and prepared to go, you must compile th
 make
 ./mnist
 ```
+
+Running the above, you will see the verbose style output. The accuracies can be summed up as:
+
+![Accuracy](accuracy.png)
+
+Evidently, it does very well.

@@ -14,7 +14,7 @@ namespace nn {
             return forward(actual, expected);
         }
     };
-    
+
 
 }
 }
