@@ -329,7 +329,7 @@ namespace cml {
     }
 
     template<typename T>
-    std::ostream& operator<<(std::ostream& out, Tensor<T>* t){
+    std::ostream& operator<<(std::ostream& out, tensor<T> t){
         return out << t->matrix();
     }
 

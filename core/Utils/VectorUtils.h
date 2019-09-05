@@ -17,14 +17,25 @@ namespace cml {
         out << "]";
         return out;
     }
+    template<typename T>
+    inline std::ostream& print(std::ostream& out, const std::vector<T>& v){
+        return cml::print(out, v.begin(), v.end());
+    }
+    template<typename T>
+    inline std::ostream& print(std::ostream& out, std::initializer_list<T> v){
+        return cml::print(out, v.begin(), v.end());
+    }
 }
 
 template<typename T>
-inline std::ostream& operator<<(std::ostream& out, const std::vector<T>& v){ return cml::print(out, v.begin(), v.end()); }
+inline std::ostream& operator<<(std::ostream& out, const std::vector<T>& v){ return cml::print(out, v); }
 template<typename T>
-inline std::ostream& operator<<(std::ostream& out, std::initializer_list<T> v){ return cml::print(out, v.begin(), v.end()); }
+inline std::ostream& operator<<(std::ostream& out, std::initializer_list<T> v){ return cml::print(out, v); }
 template<typename T, int N>
 inline std::ostream& operator<<(std::ostream& out, std::array<T, N> a){ return cml::print(out, a.begin(), a.end()); }
+
+// template std::ostream& operator<<<size_t>(std::ostream& out, const std::vector<size_t>& v);{ return cml::print(out, v.begin(), v.end()); }
+
 
 namespace cml {
 

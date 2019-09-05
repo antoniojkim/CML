@@ -66,10 +66,10 @@ namespace cml {
             template<size_t... dims>
             void set(nd_array<T, sizeof...(dims)> a);
 
-            DBlock<T> block(const int& startCol, const int& numCols) {
-                return this->matrix().block(0, startCol, dims[0], numCols);
+            auto block(const int& startRow, const int& numRows) {
+                return this->matrix().block(startRow, 0, numRows, cols());
             }
-            DBlock<T> block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) {
+            auto block(const int& startRow, const int& startCol, const int& numRows, const int& numCols) {
                 return this->matrix().block(startRow, startCol, numRows, numCols);
             }
 
