@@ -3,44 +3,47 @@
 
 #include <cmath>
 
+#include "NonLinear.h"
 #include "../../Tensor.h"
-#include "../../DCG.h"
+
 
 namespace cml {
 namespace Function {
-    
+
     struct Sigmoid {
-        
+
+        template<typename T>
+        static T sigmoid(const T& x){
+            return (T)(1.0 / (1.0 + exp(-x)));
+        }
+        template<typename T>
+        static T gradient(const T& x){
+            auto y = (T)(1.0 / (1.0 + exp(-x)));
+            return y*(1-y);
+        }
+
+        template<typename T>
+        static std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output) {
+            tensor<T> input = params.at(0);
+            tensor<T> output_grad = output.at(0);
+#ifdef DEBUG
+            using namespace std;
+            cout << "Sigmoid::backward()" << endl;
+            cout << "    input:  " << input->rows() << ", " << input->cols() << endl;
+            cout << "    output:  " << output_grad->rows() << ", " << output_grad->cols() << endl;
+#endif
+            tensor<T> input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                input->matrix().unaryExpr(std::ptr_fun(&gradient<T>)).array() * output_grad->matrix().array()
+            ));
+            return {input_grad};
+        }
+
         template<typename T>
         static tensor<T> forward(tensor<T> input){
-            auto t = make_tensor<T>(static_cast<DMatrix<T>>(
-                input->unaryExpr([](T x){ return (T)(1.0 / (1.0 + exp(-x))); })
-            ));
+            auto t = input->expr(&sigmoid<T>);
             t->computeGrad = input->computeGrad;
             if (t->computeGrad){
-                t->initGraph({input}, [](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) -> std::vector<tensor<T>> {
-#ifdef DEBUG
-                    using namespace std;
-                    cout << "Sigmoid::backward()" << endl;
-#endif
-                    tensor<T> input = params.at(0);
-                    tensor<T> output_grad = output.at(0);
-
-// #ifdef DEBUG
-//                     cout << "    input: " << input->rows() << ", " << input->cols() << endl;
-//                     cout << "    output_grad: " << output_grad->rows() << ", " << output_grad->cols() << endl;
-// #endif
-                    tensor<T> input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
-                        input->unaryExpr([](T x){
-                            auto y = (T)(1.0 / (1.0 + exp(-x)));
-                            return y*(1-y);
-                        }).array() * output_grad->array()
-                    ));
-// #ifdef DEBUG
-//                     cout << "    input_grad: " << input_grad << endl;
-// #endif
-                    return {input_grad};
-                });
+                t->initGraph({input}, &backward<T>);
             }
             return t;
         }

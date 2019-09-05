@@ -1,0 +1,41 @@
+experiment.cc:10:46: error: expected class-name before ‘{’ token
+ class A: public std::enable_shared_from_this {
+                                              ^
+In file included from /usr/include/x86_64-linux-gnu/c++/7/bits/c++allocator.h:33:0,
+                 from /usr/include/c++/7/bits/allocator.h:46,
+                 from /usr/include/c++/7/memory:63,
+                 from experiment.cc:2:
+/usr/include/c++/7/ext/new_allocator.h: In instantiation of ‘void __gnu_cxx::new_allocator<_Tp>::construct(_Up*, _Args&& ...) [with _Up = A; _Args = {const int&}; _Tp = A]’:
+/usr/include/c++/7/bits/alloc_traits.h:475:4:   required from ‘static void std::allocator_traits<std::allocator<_Tp1> >::construct(std::allocator_traits<std::allocator<_Tp1> >::allocator_type&, _Up*, _Args&& ...) [with _Up = A; _Args = {const int&}; _Tp = A; std::allocator_traits<std::allocator<_Tp1> >::allocator_type = std::allocator<A>]’
+/usr/include/c++/7/bits/shared_ptr_base.h:526:39:   required from ‘std::_Sp_counted_ptr_inplace<_Tp, _Alloc, _Lp>::_Sp_counted_ptr_inplace(_Alloc, _Args&& ...) [with _Args = {const int&}; _Tp = A; _Alloc = std::allocator<A>; __gnu_cxx::_Lock_policy _Lp = (__gnu_cxx::_Lock_policy)2]’
+/usr/include/c++/7/bits/shared_ptr_base.h:637:4:   required from ‘std::__shared_count<_Lp>::__shared_count(std::_Sp_make_shared_tag, _Tp*, const _Alloc&, _Args&& ...) [with _Tp = A; _Alloc = std::allocator<A>; _Args = {const int&}; __gnu_cxx::_Lock_policy _Lp = (__gnu_cxx::_Lock_policy)2]’
+/usr/include/c++/7/bits/shared_ptr_base.h:1295:35:   required from ‘std::__shared_ptr<_Tp, _Lp>::__shared_ptr(std::_Sp_make_shared_tag, const _Alloc&, _Args&& ...) [with _Alloc = std::allocator<A>; _Args = {const int&}; _Tp = A; __gnu_cxx::_Lock_policy _Lp = (__gnu_cxx::_Lock_policy)2]’
+/usr/include/c++/7/bits/shared_ptr.h:344:64:   required from ‘std::shared_ptr<_Tp>::shared_ptr(std::_Sp_make_shared_tag, const _Alloc&, _Args&& ...) [with _Alloc = std::allocator<A>; _Args = {const int&}; _Tp = A]’
+/usr/include/c++/7/bits/shared_ptr.h:690:14:   required from ‘std::shared_ptr<_Tp> std::allocate_shared(const _Alloc&, _Args&& ...) [with _Tp = A; _Alloc = std::allocator<A>; _Args = {const int&}]’
+/usr/include/c++/7/bits/shared_ptr.h:706:39:   required from ‘std::shared_ptr<_Tp> std::make_shared(_Args&& ...) [with _Tp = A; _Args = {const int&}]’
+experiment.cc:25:28:   required from here
+/usr/include/c++/7/ext/new_allocator.h:136:4: error: ‘A::A(const int&)’ is protected within this context
+  { ::new((void *)__p) _Up(std::forward<_Args>(__args)...); }
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+experiment.cc:15:5: note: declared protected here
+     A(const int& t): t{t} {}
+     ^
+In file included from /usr/include/x86_64-linux-gnu/c++/7/bits/c++allocator.h:33:0,
+                 from /usr/include/c++/7/bits/allocator.h:46,
+                 from /usr/include/c++/7/memory:63,
+                 from experiment.cc:2:
+/usr/include/c++/7/ext/new_allocator.h: In instantiation of ‘void __gnu_cxx::new_allocator<_Tp>::construct(_Up*, _Args&& ...) [with _Up = B; _Args = {const int&}; _Tp = B]’:
+/usr/include/c++/7/bits/alloc_traits.h:475:4:   required from ‘static void std::allocator_traits<std::allocator<_Tp1> >::construct(std::allocator_traits<std::allocator<_Tp1> >::allocator_type&, _Up*, _Args&& ...) [with _Up = B; _Args = {const int&}; _Tp = B; std::allocator_traits<std::allocator<_Tp1> >::allocator_type = std::allocator<B>]’
+/usr/include/c++/7/bits/shared_ptr_base.h:526:39:   required from ‘std::_Sp_counted_ptr_inplace<_Tp, _Alloc, _Lp>::_Sp_counted_ptr_inplace(_Alloc, _Args&& ...) [with _Args = {const int&}; _Tp = B; _Alloc = std::allocator<B>; __gnu_cxx::_Lock_policy _Lp = (__gnu_cxx::_Lock_policy)2]’
+/usr/include/c++/7/bits/shared_ptr_base.h:637:4:   required from ‘std::__shared_count<_Lp>::__shared_count(std::_Sp_make_shared_tag, _Tp*, const _Alloc&, _Args&& ...) [with _Tp = B; _Alloc = std::allocator<B>; _Args = {const int&}; __gnu_cxx::_Lock_policy _Lp = (__gnu_cxx::_Lock_policy)2]’
+/usr/include/c++/7/bits/shared_ptr_base.h:1295:35:   required from ‘std::__shared_ptr<_Tp, _Lp>::__shared_ptr(std::_Sp_make_shared_tag, const _Alloc&, _Args&& ...) [with _Alloc = std::allocator<B>; _Args = {const int&}; _Tp = B; __gnu_cxx::_Lock_policy _Lp = (__gnu_cxx::_Lock_policy)2]’
+/usr/include/c++/7/bits/shared_ptr.h:344:64:   required from ‘std::shared_ptr<_Tp>::shared_ptr(std::_Sp_make_shared_tag, const _Alloc&, _Args&& ...) [with _Alloc = std::allocator<B>; _Args = {const int&}; _Tp = B]’
+/usr/include/c++/7/bits/shared_ptr.h:690:14:   required from ‘std::shared_ptr<_Tp> std::allocate_shared(const _Alloc&, _Args&& ...) [with _Tp = B; _Alloc = std::allocator<B>; _Args = {const int&}]’
+/usr/include/c++/7/bits/shared_ptr.h:706:39:   required from ‘std::shared_ptr<_Tp> std::make_shared(_Args&& ...) [with _Tp = B; _Args = {const int&}]’
+experiment.cc:40:32:   required from here
+/usr/include/c++/7/ext/new_allocator.h:136:4: error: ‘B::B(const int&)’ is protected within this context
+  { ::new((void *)__p) _Up(std::forward<_Args>(__args)...); }
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+experiment.cc:33:5: note: declared protected here
+     B(const int& t): t{t} {}
+     ^

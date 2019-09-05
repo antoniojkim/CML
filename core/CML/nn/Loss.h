@@ -9,7 +9,7 @@
 #include "Loss/CrossEntropyLoss.h"
 
 namespace cml {
-    
+
     enum Criterions {
         MSELOSS,
         CROSSENTROPYLOSS
@@ -35,7 +35,7 @@ namespace cml {
                 throw "Invalid Criterion Provided: " + criterion;
         }
     }
-    
+
 }
 
 #endif // __CML_NN_LOSS_H__

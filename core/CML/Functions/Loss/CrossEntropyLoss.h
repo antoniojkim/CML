@@ -3,32 +3,35 @@
 
 #include <cmath>
 
-#include "../../Tensor.h"
-#include "../../DCG.h"
+#include "../../Tensors/Tensor.h"
 #include "../../Dtypes.h"
-#include "../NonLinear/Softmax.h"
 
 namespace cml {
 namespace Function {
-    
+
     struct CrossEntropyLoss {
-        
+
         template<typename T>
         static tensor<T> forward(tensor<T> actual, tensor<T> expected){
-            if (expected->rows() > 1){
-                throw "CrossEntropyLoss::forward:  Expected tensor is not scalar";
+            if (expected->numDims() > 1){
+                throw CMLException("CrossEntropyLoss::forward:  Expected tensor is not scalar: ", expected->numDims());
             }
-//             auto p = Softmax<T>(actual);
-            
+            // auto p = Softmax<T>(actual);
+
             // This is more stable
-            auto p = static_cast<DMatrix<T>>(actual->rowwise() - static_cast<DMatrix<T>>(actual->array().exp().colwise().sum().log()).row(0));
-            int m = expected->cols();
+            auto p = static_cast<DMatrix<T>>(actual->matrix().colwise() - static_cast<DMatrix<T>>(actual->matrix().array().exp().rowwise().sum().log()).col(0));
+#ifdef DEBUG
+            using namespace std;
+            cout << "CrossEntropyLoss::forward:" << endl;
+            cout << "    p.shape:  [" << p.rows() << ", " << p.cols() << "]" << endl;
+//             cout << "    expected:  [" << expected << "]" << endl;
+#endif
+            int m = expected->matrix().rows();
             T sum_log_likelihood = 0;
             for (int i = 0; i<m; ++i){
-                sum_log_likelihood -= p(expected->data(0, i), i);
+                sum_log_likelihood -= p(i, (int)expected->at(i));
             }
-            tensor<T> t = make_tensor<T>({sum_log_likelihood / m});
-            t->computeGrad = true;
+            tensor<T> t = make_scalar<T>(sum_log_likelihood / m, true);
             t->initGraph({actual, expected}, [m, p{std::move(p)}](std::vector<tensor<T>>& params, std::vector<tensor<T>> output) mutable -> std::vector<tensor<T>> {
 #ifdef DEBUG
                 using namespace std;
@@ -38,15 +41,16 @@ namespace Function {
 
                 p = p.array().exp();
                 for (int i = 0; i<m; ++i){
-                    p(expected->data(0, i), i) -= 1;
+                    p(i, (int)expected->at(i)) -= 1;
                 }
                 p /= m;
-                tensor<T> actual_grad = make_tensor<T>(p);
+                tensor<T> actual_grad = make_tensor<T>(std::move(p));
 
                 return {actual_grad, nullptr};
             });
             return t;
         }
+
 
     };
 

@@ -9,7 +9,7 @@
 #include "tools.h"
 
 namespace idx {
-    
+
     uint32_t read_u32(std::istream& f){
         uint32_t val;
         uint8_t bytes[4];
@@ -19,7 +19,7 @@ namespace idx {
 
         return val;
     }
-    
+
     template<typename U>
     inline void read_U(std::istream& f, U& d){
         if (f.good()){
@@ -29,65 +29,62 @@ namespace idx {
             throw "Invalid IDX read";
         }
     }
-    
+
     template<typename T, typename U>
-    void read_t(std::istream& f, DMatrix<T>& data, int* dims, const int& R, const int& C){
-        if (data.rows() != R || data.cols() != C){
-            data.resize(R, C);
-        }
-        
-        U d;
-        for (int r = 0; r < R; ++r){
-            for (int c = 0; c < C; ++c){
-                read_U(f, d);
-                data(r, c) = d;
-            }
+    void read_t(std::istream& f, cml::tensor<T> data, std::vector<size_t>& dims, const size_t& S){
+        if (data->size() != S){
+            throw CMLException("data.size() != S:  ", data->size(), "!=", S);
+        }   
+
+        auto d = data->data().get();
+        U u;
+        for (size_t i = 0; i < S; ++i){
+            read_U(f, u);
+            *(d++) = u;
         }
     }
-    
+
     template<typename T>
-    void read(std::istream& f, DMatrix<T>& data){
+    cml::tensor<T> read(std::istream& f){
         uint32_t magicNumber = read_u32(f);
-        
-        unsigned int numDims = ((magicNumber) & 0xff);
-        int* dims = new int[numDims];
-        int R = 0, C = 1;
+
+        size_t numDims = ((magicNumber) & 0xff);
+        std::vector<size_t> dims;
+        dims.reserve(numDims);
+        size_t S = 1;
         for (unsigned int i = 0; i < numDims; ++i){
-            dims[i] = read_u32(f);
-            if (i == 0){
-                R = dims[i];
-            }
-            else {
-                C *= dims[i];
-            }
+            dims.emplace_back((size_t)read_u32(f));
+            S *= dims[i];
         }
-        
+
+        cml::tensor<T> data = cml::make_tensor<T>(dims);
+
         switch((magicNumber >> 8) & 0xff){
             case 0x08:
-                read_t<T, uint8_t>(f, data, dims, R, C);
+                read_t<T, uint8_t>(f, data, dims, S);
                 break;
             case 0x09:
-                read_t<T, int8_t>(f, data, dims, R, C);
+                read_t<T, int8_t>(f, data, dims, S);
                 break;
             case 0x0B:
-                read_t<T, short>(f, data, dims, R, C);
+                read_t<T, short>(f, data, dims, S);
                 break;
             case 0x0C:
-                read_t<T, int>(f, data, dims, R, C);
+                read_t<T, int>(f, data, dims, S);
                 break;
             case 0x0D:
-                read_t<T, float>(f, data, dims, R, C);
+                read_t<T, float>(f, data, dims, S);
                 break;
             case 0x0E:
-                read_t<T, double>(f, data, dims, R, C);
+                read_t<T, double>(f, data, dims, S);
                 break;
             default:
                 throw "Invalid data type";
         }
-        
-        delete[] dims;
+
+        return data;
     }
-    
+
 }
 
 #endif // __CML_UTILS_DATAFORMATS_IDX_H__

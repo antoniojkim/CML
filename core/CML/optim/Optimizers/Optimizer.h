@@ -9,25 +9,25 @@
 
 namespace cml {
 namespace optim {
-    
+
     template<typename T>
     struct Optimizer {
         protected:
-            nn::Parameters<T> params;
-            Optimizer(nn::Parameters<T>& params):  params {std::move(params)} {}
-            Optimizer(nn::Parameters<T>&& params): params {std::move(params)} {}
-        
+            Parameters<T> params;
+            Optimizer(Parameters<T>& params):  params {std::move(params)} {}
+            Optimizer(Parameters<T>&& params): params {std::move(params)} {}
+
         public:
             void zeroGrad(){
                 for (auto& param : params){
                     param->gradient()->zero();
                 }
             }
-        
+
             virtual void step() = 0;
             virtual std::ostream& print(std::ostream& out, const std::string& indent = "") = 0;
-    };    
-    
+    };
+
 }
 }
 

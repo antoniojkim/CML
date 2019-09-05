@@ -8,19 +8,20 @@
 
 namespace cml {
 namespace nn {
- 
+
     template<typename T = float>
     class Tanh: public Module<T> {
         /*
         Applies the Tanh function element-wise.
-        
+
         Params:
             inplace - can optionally do the operation in-place. Default: False
         */
-        
+
         bool inplace;
-        
+
         public:
+            // TODO: Add support for in-place
             Tanh(const bool& inplace = false): inplace {inplace} {}
 
             cml::tensor<T> forward(cml::tensor<T> x) override { return Function::Tanh::forward(x); }
