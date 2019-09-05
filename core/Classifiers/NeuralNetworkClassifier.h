@@ -17,6 +17,7 @@
 #include "../CML/nn/Modules.h"
 #include "../CML/optim/Optimizer.h"
 #include "../Utils/DataReader.h"
+#include "../Utils/VectorUtils.h"
 
 namespace cml {
 
@@ -127,9 +128,15 @@ namespace cml {
                 unsigned int blockSize = batchSize / subdivisions;
                 double totalLoss;
 
-                auto block = make_tensor<T>(std::vector<size_t>({size_t(data->cols()), size_t(blockSize)}));
-                auto label = make_tensor<T>(std::vector<size_t>({size_t(labels->cols()), size_t(blockSize)}));
+                auto block = make_tensor<T>(std::vector<size_t>({size_t(blockSize), size_t(data->cols())}));
+                auto label = make_tensor<T>(std::vector<size_t>({size_t(blockSize)}));
 
+#ifdef DEBUG    
+                cout << "data.shape:    "; cml::print(cout, data->shape()) << endl;
+                cout << "labels.shape:  "; cml::print(cout, labels->shape()) << endl;
+                cout << "block.shape:   "; cml::print(cout, block->shape()) << endl;
+                cout << "label.shape:   "; cml::print(cout, label->shape()) << endl;
+#endif
 
                 for (; epoch < endEpoch; ++epoch){
                     if (_verbose) cout << "Epoch " << epoch << ":" << endl;
@@ -146,7 +153,7 @@ namespace cml {
                     for (size_t i = 0; i < data->rows(); i += blockSize){
                         loadData(block, data, i, blockSize);
                         auto output = model->forward(block);
-                        loadData(label, labels, i, blockSize);
+                        loadData(label, labels, i, blockSize, false);
 
                         auto loss = criterion->forward(output, label);
                         totalLoss += loss->item();
@@ -173,10 +180,10 @@ namespace cml {
                         for (size_t i = 0; i < val->rows(); i += blockSize){
                             loadData(block, val, i, blockSize);
                             auto output = Softmax<T>(model->forward(block));
-                            loadData(label, valLabels, i, blockSize);
+                            loadData(label, valLabels, i, blockSize, false);
 
                             for (size_t j = 0; j<blockSize; ++j){
-                                output->matrix().col(j).maxCoeff(&maxRow);
+                                output->matrix().row(j).maxCoeff(&maxRow);
                                 if (maxRow == label->at(j)){
                                     ++correct;
                                 }
@@ -196,7 +203,7 @@ namespace cml {
                 using namespace std;
                 out << "ModelTrainer:" << endl;
                 out << "    model:          " << model << endl;
-                out << "    data:           " << data << endl;
+                out << "    data:           " << data.get() << endl;
                 out << "    criterion:      " << criterionName << endl;
                 out << "    optimizer:      " << optimizerName << endl;
                 optimizer->print(out, "       ") << endl << endl;
@@ -208,14 +215,30 @@ namespace cml {
             }
 
         private:
-            void loadData(tensor<T> block, tensor<T> data, const int& i, const unsigned int& blockSize){
+            void loadData(tensor<T> block, tensor<T> data, const int& i, const unsigned int& blockSize, const bool& transpose = true){
                 if (size_t(i+blockSize) < data->rows()){
-                    block->matrix() = data->block(i, blockSize).transpose();
+// #ifdef DEBUG
+//                     auto lhs = block->matrix();
+//                     auto rhs = data->block(i, blockSize).transpose();
+//                     using namespace std;
+//                     cout << "lhs:  [" << lhs.rows() << ", " << lhs.cols() << "]" << endl;
+//                     cout << "rhs:  [" << rhs.rows() << ", " << rhs.cols() << "]" << endl;
+// #endif           
+                    block->matrix() = data->block(i, blockSize);
                 }
                 else {
-                    size_t finalBlockSize = data->rows() % blockSize;
-                    block->block(0, 0, block->rows(), finalBlockSize) = data->block(i, finalBlockSize).transpose();
-                    block->block(0, finalBlockSize, block->rows(), block->cols()-finalBlockSize) = DMatrix<T>::Zero(block->rows(), block->cols()-finalBlockSize);
+                    size_t finalBlockSize = data->cols() % blockSize;
+// #ifdef TEST
+//                     using namespace std;
+//                     cout << "block.shape = [" << block->rows() << ", " << block->cols() << "]" << endl;
+//                     cout << "finalBlockSize = " << finalBlockSize << endl;
+//                     auto lhs = block->block(finalBlockSize, 0, block->rows()-finalBlockSize, block->cols());
+//                     auto rhs = DMatrix<T>::Zero(block->rows()-finalBlockSize, block->cols());
+//                     cout << "lhs:  [" << lhs.rows() << ", " << lhs.cols() << "]" << endl;
+//                     cout << "rhs:  [" << rhs.rows() << ", " << rhs.cols() << "]" << endl;
+// #endif           
+                    block->block(0, 0, finalBlockSize, block->cols()) = data->block(i, finalBlockSize);
+                    block->block(finalBlockSize, 0, block->rows()-finalBlockSize, block->cols()) = DMatrix<T>::Zero(block->rows()-finalBlockSize, block->cols());
                 }
             }
 

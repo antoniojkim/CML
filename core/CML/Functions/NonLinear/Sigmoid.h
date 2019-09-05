@@ -24,17 +24,17 @@ namespace Function {
 
         template<typename T>
         static std::vector<tensor<T>> backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output) {
-#ifdef DEBUG
-            using namespace std;
-            cout << "Sigmoid::backward()" << endl;
-#endif
             tensor<T> input = params.at(0);
             tensor<T> output_grad = output.at(0);
 #ifdef DEBUG
+            using namespace std;
+            cout << "Sigmoid::backward()" << endl;
             cout << "    input:  " << input->rows() << ", " << input->cols() << endl;
             cout << "    output:  " << output_grad->rows() << ", " << output_grad->cols() << endl;
 #endif
-            tensor<T> input_grad = input->expr(&gradient<T>) * output_grad;
+            tensor<T> input_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                input->matrix().unaryExpr(std::ptr_fun(&gradient<T>)).array() * output_grad->matrix().array()
+            ));
             return {input_grad};
         }
 

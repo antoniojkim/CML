@@ -14,12 +14,18 @@ namespace Function {
         template<typename T>
         static tensor<T> forward(tensor<T> actual, tensor<T> expected){
             if (expected->numDims() > 1){
-                throw "CrossEntropyLoss::forward:  Expected tensor is not scalar";
+                throw CMLException("CrossEntropyLoss::forward:  Expected tensor is not scalar: ", expected->numDims());
             }
             // auto p = Softmax<T>(actual);
 
             // This is more stable
             auto p = static_cast<DMatrix<T>>(actual->matrix().colwise() - static_cast<DMatrix<T>>(actual->matrix().array().exp().rowwise().sum().log()).col(0));
+#ifdef DEBUG
+            using namespace std;
+            cout << "CrossEntropyLoss::forward:" << endl;
+            cout << "    p.shape:  [" << p.rows() << ", " << p.cols() << "]" << endl;
+//             cout << "    expected:  [" << expected << "]" << endl;
+#endif
             int m = expected->matrix().rows();
             T sum_log_likelihood = 0;
             for (int i = 0; i<m; ++i){
