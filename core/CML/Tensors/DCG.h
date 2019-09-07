@@ -58,7 +58,8 @@ namespace cml {
     template<typename T>
     void DCG<T>::accumulateGradient(std::vector<tensor<T>>& gradients){
         for (auto& g : gradients){
-            if (gradient->shape() != g->shape()){
+            if (gradient->shape() != g->shape() &&
+                !(g->numDims() == 2 && gradient->rows() == g->rows() && gradient->cols() == g->cols())){
                 throw CMLException("Dims do not match in accumulateGradient\n",
                                    "    gradient.shape: ", gradient->shape(), "\n",
                                    "    g.shape: ", g->shape(), "\n");

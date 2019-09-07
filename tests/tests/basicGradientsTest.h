@@ -27,13 +27,16 @@ void basicGradientsTest1(){
     assert_equals(b->gradient()->item(), 8);
     assert_equals(a->gradient()->item(), 12);
 
-
+}
+void basicGradientsTest2(){
+    using namespace cml;
+    using namespace std;
     using Function::ReLU;
 
-    a = make_tensor<float, 2, 1>({{-2.0f}, {3.0f}}, true);
-    b = make_tensor<float, 1, 2>({{5.0f, 8.0f}}, true);
-    c = b->matmul(a);
-    d = ReLU(c);
+    auto a = make_tensor<float, 2, 1>({{-2.0f}, {3.0f}}, true);
+    auto b = make_tensor<float, 1, 2>({{5.0f, 8.0f}}, true);
+    auto c = b->matmul(a);
+    auto d = ReLU(c);
 
     d->backward();
 
@@ -46,6 +49,8 @@ void basicGradientsTest1(){
 
 void runbasicGradientsTest(){
     basicGradientsTest1();
+    basicGradientsTest2();
+
     using namespace std;
     cout << "All Basic Gradient Tests Passed!" << endl << endl;
 }

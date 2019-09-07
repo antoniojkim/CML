@@ -17,8 +17,10 @@ namespace cml {
 #ifdef DEBUG
                 using namespace std;
                 cout << "Tensor Transpose Backward" << endl;
+                cout << "    t.shape:      "; print(cout, params.at(0)->shape()) << endl;
+                cout << "    output.shape: "; print(cout, output.at(0)->shape()) << endl;
 #endif
-                auto output_grad = output.at(0);
+                auto output_grad = output.at(0)->transpose();
                 return {output_grad};
             });
         }

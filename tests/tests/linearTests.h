@@ -14,50 +14,44 @@ void linearTest1(){
         new Linear<>(3, 2),
         new Sigmoid<>()
     };
-    model[0]("weights")->set<3, 2>({{0.284576, -1.16315},
-                                    {0.270818, 0.0148199},
-                                    {-0.96044, -0.673953}});                                    
-    model[0]("bias")->set<2, 1>({{-0.365125}, {0.889674}});
+    model[0]("weights")->set<2, 3>({{ 0.284576,  0.270818, -0.960440},
+                                    {-1.163150,  0.014820, -0.673953}});                                    
+    model[0]("bias")->set<2>({-0.365125,  0.889674});
 
     auto optimizer = optim::SGD<float>(model.parameters(), {{"lr", 0.01}});
 
-    auto x = make_tensor<float, 3, 1>({{1.0}, {2.5}, {7.3}}, true);
+    auto x = make_tensor<float, 1, 3>({{1.0, 2.5, 7.3}}, true);
     auto y = model(x);
+    
+    auto expected = make_tensor<float, 1, 2>({{0.00163461f, 0.00573006f}});
+    assert_equals(y, expected);
 
-    assert_equals(y->at(0, 0), 0.00163461f);
-    assert_equals(y->at(1, 0), 0.00573006f);
-
-    auto z = make_tensor<float, 2, 1>({{0}, {1}});
-    auto loss = MSELoss<float>(y, z);
+    auto z = make_tensor<float, 1, 2>({{0, 1}});
+    auto loss = MSELoss(y, z);
     // assert_equals(loss->at(0, 0), 0.0723295f);
 
     assert_equals(loss->item(),  0.494287729f);
 
     loss->backward();
 
+    auto expected_x_gradient = make_tensor<float, 1, 3>({{0.00658952f, -8.32261e-05f, 0.0038151f}});
+    assert_equals(x->gradient(), expected_x_gradient);
 
-    assert_equals(x->gradient()->at(0, 0),  0.00658952f);
-    assert_equals(x->gradient()->at(1, 0),  -8.32261e-05f);
-    assert_equals(x->gradient()->at(2, 0),  0.0038151f);
-    assert_equals(model[0]("weights")->gradient()->at(0, 0),  2.66758e-06f);
-    assert_equals(model[0]("weights")->gradient()->at(0, 1),  -0.00566458f);
-    assert_equals(model[0]("weights")->gradient()->at(1, 0),  6.66894e-06f);
-    assert_equals(model[0]("weights")->gradient()->at(1, 1),  -0.0141615f);
-    assert_equals(model[0]("weights")->gradient()->at(2, 0),  1.94733e-05f);
-    assert_equals(model[0]("weights")->gradient()->at(2, 1),  -0.0413514f);
-    assert_equals(model[0]("bias")->gradient()->at(0, 0),  2.66758e-06f);
-    assert_equals(model[0]("bias")->gradient()->at(1, 0),  -0.00566458f);
+    auto expected_weights_gradient = make_tensor<float, 2, 3>({{ 2.667576e-06f,  6.668939e-06f,  1.947330e-05f},
+                                                               {-5.664581e-03f, -1.416145e-02f, -4.135144e-02f}});
+    assert_equals(model[0]("weights")->gradient(), expected_weights_gradient);
+
+    auto expected_bias_gradient = make_tensor<float, 2>({ 2.667576e-06, -5.664581e-03});
+    assert_equals(model[0]("bias")->gradient(), expected_bias_gradient);
 
     optimizer.step();
 
-    assert_equals(model[0]("weights")->at(0, 0),  0.2845759690f);
-    assert_equals(model[0]("weights")->at(0, 1),  -1.1630933285f);
-    assert_equals(model[0]("weights")->at(1, 0),  0.2708179355f);
-    assert_equals(model[0]("weights")->at(1, 1),  0.0149615137f);
-    assert_equals(model[0]("weights")->at(2, 0),  -0.9604401588f);
-    assert_equals(model[0]("weights")->at(2, 1),  -0.6735394597f);
-    assert_equals(model[0]("bias")->at(0, 0),  -0.3651250303f);
-    assert_equals(model[0]("bias")->at(1, 0),  0.8897306323f);
+    auto expected_new_weights = make_tensor<float, 2, 3>({{ 0.2845759690f,  0.2708179355f, -0.9604401588f},
+                                                          {-1.1630933285f,  0.0149616143f, -0.6735394597f}});
+    assert_equals(model[0]("weights"), expected_new_weights);
+
+    auto expected_new_bias = make_tensor<float, 2>({-0.3651250005f,  0.8897309899f});
+    assert_equals(model[0]("bias"), expected_new_bias);
 
 }
 

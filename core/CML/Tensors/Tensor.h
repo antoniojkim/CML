@@ -41,6 +41,8 @@ namespace cml {
         public:
             MatrixMap<T> matrix();
             inline std::shared_ptr<T> data() { return d; }
+            inline T* begin() { return d.get(); }
+            inline T* end() { return d.get()+S; }
 
             template<int nDims>
             Eigen::TensorMap<Eigen::Tensor<T, nDims>> tensor();
@@ -59,8 +61,8 @@ namespace cml {
 
 
             T& item() {
-                if (this->isScalar()) return this->at(0);
-                throw CMLException("Tensor::item:  Cannot get item from non scalar tensor");
+                if (this->isScalar()) return *(d.get());
+                throw CMLException("Tensor::item:  Cannot get item from non scalar tensor: ", dims);
             }
 
             template<size_t... dims>
@@ -86,7 +88,7 @@ namespace cml {
                 return dims;
             };
             bool isScalar() {
-                return dims.size() == 1 && dims[0] == 1;
+                return S == 1; // dims.size() == 1 && dims[0] == 1;
             }
             const size_t& size() {
                 return S;
@@ -154,9 +156,13 @@ namespace cml {
     cml::tensor<T> make_tensor(const bool& computeGrad = false);
     template<typename T, size_t dim, size_t... dims>
     cml::tensor<T> make_tensor(nd_array<T, sizeof...(dims)+1> a, const bool& computeGrad = false);
+    template<typename T, size_t dim, size_t... dims>
+    cml::tensor<T> make_tensor(const DMatrix<T>& m, const bool& computeGrad = false);
 
     template <typename T>
     cml::tensor<T> make_scalar(const T& t, const bool& computeGrad = false);
+    template <typename T>
+    cml::tensor<T> make_scalar(const DMatrix<T>& m, const bool& computeGrad = false);
 
     template<typename T>
     cml::tensor<T> make_tensor(const DMatrix<T>& m, const bool& computeGrad = false);

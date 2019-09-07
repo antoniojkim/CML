@@ -2,10 +2,10 @@ CXX = g++
 CXXFLAGS = -Ofast -fopenmp -std=c++14 -Wall -MMD -Werror=vla # -DTEST # -DDEBUG
 EXEC = mnist
 
-TENSORS = $(wildcard ../../core/CML/Tensors/*.cc)
-MODULES = $(wildcard ../../core/CML/nn/Modules/*.cc)
+# TENSORS = $(wildcard ../../core/CML/Tensors/*.cc)  # $(TENSORS:.cc=.o)
+# MODULES = $(wildcard ../../core/CML/nn/Modules/*.cc)  # $(MODULES:.cc=.o)
 # OPTIMIZER = $(wildcard CML/optim/Optimizers/*.cc)     $(OPTIMIZER:.cc=.o)
-OBJECTS = $(TENSORS:.cc=.o) $(MODULES:.cc=.o) mnist.o
+OBJECTS = mnist.o
 DEPENDS = ${OBJECTS:.o=.d}
 
 ${EXEC}: ${OBJECTS}

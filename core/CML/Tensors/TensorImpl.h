@@ -39,16 +39,9 @@ namespace cml {
     template<typename T>
     Tensor<T>::Tensor(const DMatrix<T>& m, const bool& computeGrad):
         computeGrad{computeGrad},
+        dims{{(size_t)(m.rows()), (size_t)(m.cols())}},
         S{(size_t)(m.size())},
         d{new T[S], std::default_delete<T[]>()} {
-
-        if (S == 1){
-            dims.emplace_back((size_t)(1));
-        }
-        else{
-            dims.emplace_back((size_t)(m.rows()));
-            dims.emplace_back((size_t)(m.cols()));
-        }
 
         // TODO: Possibly think about adding support for both row major and column major eigen matrices
         this->matrix() = m;
@@ -131,11 +124,29 @@ namespace cml {
             std::forward<nd_array<T, sizeof...(dims)+1>>(a), (T*)(t->data().get()));
         return t;
     }
+    template<typename T, size_t dim, size_t... dims>
+    cml::tensor<T> make_tensor(const DMatrix<T>& m, const bool& computeGrad){
+        auto t = make_tensor<T, dim, dims...>(computeGrad);
+        if (t->size() != m.size()){
+            throw CMLException("Tensor size does not match matrix size: ", t->size(), " != ", m.size());
+        }
+        t->matrix() = m;
+        return t;
+    }
 
     template <typename T>
     inline tensor<T> make_scalar(const T& t, const bool& computeGrad){
         auto u = make_tensor<T, 1>(computeGrad);
         u->item() = t;
+        return u;
+    }
+    template <typename T>
+    cml::tensor<T> make_scalar(const DMatrix<T>& m, const bool& computeGrad){
+        if (m.rows() != 1 || m.cols() != 1){
+            throw CMLException("make_scalar:  dmatrix is not scalar: [", m.rows(), ", ", m.cols(), "]");
+        }
+        auto u = make_tensor<T, 1>(computeGrad);
+        u->item() = m(0, 0);
         return u;
     }
 

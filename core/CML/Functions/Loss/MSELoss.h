@@ -52,18 +52,24 @@ namespace Function {
         static tensor<T> forward(tensor<T> actual, tensor<T> expected, const nn::Reduction& reduction = nn::Reduction::MEAN){
             tensor<T> t = nullptr;
             GradientFunction<T> gradient = nullptr;
+#ifdef DEBUG
+            using namespace std;
+            cout << "CrossEntropyLoss::forward:" << endl;
+            cout << "    actual.shape:   "; print(cout, actual->shape()) << endl;
+            cout << "    expected.shape: "; print(cout, expected->shape()) << endl;
+#endif
             // TODO:  Make more general to support multidimensional MSELoss
             switch(reduction){
                 case nn::Reduction::MEAN:
-                    t = make_tensor<T>(CAST_MATRIX(
-                        (actual->matrix() - expected->matrix()).array().square().colwise().mean()
-                    ));
+                    t = make_scalar<T>(
+                        (actual->matrix() - expected->matrix()).array().square().mean()
+                    );
                     gradient = &mean_backward<T>;
                     break;
                 case nn::Reduction::SUM:
-                    t = make_tensor<T>(CAST_MATRIX(
-                        (actual->matrix() - expected->matrix()).array().square().colwise().sum()
-                    ));
+                    t = make_scalar<T>(
+                        (actual->matrix() - expected->matrix()).array().square().sum()
+                    );
                     gradient = &sum_backward<T>;
                     break;
                 default:

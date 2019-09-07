@@ -12,8 +12,7 @@ void softmaxTest(){
 
     auto x = make_tensor<float, 2, 1>({{1}, {2}}, true);
     auto y = Softmax<float>(x);
-    assert(y->at(0, 0) == 0.26894142f);
-    assert(y->at(1, 0) == 0.73105858f);
+    assert_equals(y, make_tensor<float, 2, 1>({{0.2689414322}, {0.7310585976}}));
     auto z = make_tensor<float, 2, 1>({{0}, {1}});
 
     auto loss = MSELoss(y, z);
@@ -56,18 +55,9 @@ void softmaxTest3(){
 
     loss->backward();
 
-//     auto expected = make_tensor<float, 2, 3>({
-//          {{ 0.1971843602, -0.3311620526,  0.1339776925},
-//           { 0.0987346902, -0.2862350717,  0.1875003816}}
-//     });
-    cout << "x:" << endl;
-    cout << x->gradient()->matrix() << endl;
-    assert_equals(x->gradient()->at(0, 0), 0.1971843564f);
-    assert_equals(x->gradient()->at(0, 1), -0.3311620526f);
-    assert_equals(x->gradient()->at(0, 2), 0.1339776925f);
-    assert_equals(x->gradient()->at(1, 0), 0.0987346902f);
-    assert_equals(x->gradient()->at(1, 1), -0.2862350717f);
-    assert_equals(x->gradient()->at(1, 2), 0.1875003850f);
+    auto expected_x_gradient = make_tensor<float, 2, 3>({{ 0.1971843602, -0.3311620526,  0.1339776925},
+                                                         { 0.0987346902, -0.2862350717,  0.1875003816}});
+    assert_equals(x->gradient(), expected_x_gradient);
 }
 
 void softmaxTests(){
