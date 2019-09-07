@@ -45,6 +45,50 @@ namespace cml {
         return t;
     }
 
+    template<typename T>
+    std::vector<tensor<T>> matmulT_backward(std::vector<tensor<T>>& params, std::vector<tensor<T>> output){
+#ifdef DEBUG
+        using namespace std;
+        cout << "Matrix Multiplication (Transpose) Backward" << endl;
+#endif
+        auto lhs = params.at(0);
+        auto rhs = params.at(1);
+        auto output_grad = output.at(0);
+        tensor<T> lhs_grad = nullptr;
+        tensor<T> rhs_grad = nullptr;
+
+        if (lhs->computeGrad){
+            lhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                // TODO:  Check to see if order is correct
+                output_grad->matrix() * rhs->matrix()
+            ));
+        }
+        if (rhs->computeGrad){
+            rhs_grad = make_tensor<T>(static_cast<DMatrix<T>>(
+                // TODO:  Check to see if order is correct
+                (lhs->matrix().transpose() * output_grad->matrix()).transpose()
+            ));
+        }
+
+        return {lhs_grad, rhs_grad};
+    }
+    /*
+        Matrix multiplication where rhs is transposed beforehand
+        i.e. lhs * rhs.T
+    */
+    template<typename T>
+    tensor<T> matmulT(tensor<T> lhs, tensor<T> rhs){
+        auto t = make_tensor<T>(static_cast<DMatrix<T>>(
+            lhs->matrix() * rhs->matrix().transpose()
+        ), lhs->computeGrad || rhs->computeGrad);
+
+        if (t->computeGrad){
+            t->initGraph({lhs, rhs}, matmulT_backward<T>);
+        }
+
+        return t;
+    }
+
     /*
         Coefficient wise multiplication
      */

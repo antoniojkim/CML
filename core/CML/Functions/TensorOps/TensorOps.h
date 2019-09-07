@@ -46,6 +46,9 @@ namespace cml {
     tensor<T> addmatmul(tensor<T> t1, tensor<T> t2, tensor<T> t3);
 
     template<typename T>
+    tensor<T> addmatmulT(tensor<T> t1, tensor<T> t2, tensor<T> t3);
+
+    template<typename T>
     tensor<T> addMultiply(tensor<T> t1, tensor<T> t2, tensor<T> t3);
 
 

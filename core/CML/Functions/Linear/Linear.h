@@ -12,11 +12,12 @@ namespace Function {
         static tensor<T> forward(tensor<T> input, tensor<T> weights, tensor<T> bias = nullptr){
             tensor<T> t = nullptr;
             if (bias != nullptr){
-                // It is faster to combine the add and multiply operation
-                t = addmatmul(bias, input, weights->transpose());
+                // It is faster to combine the add, matrix multiply and transpose operation
+                t = addmatmulT(bias, input, weights);
             }
             else{
-                t = input * weights->transpose();
+                // It is faster to combine the matrix multiply and transpose operation
+                t = matmulT(input, weights);
             }
 
             return t;
