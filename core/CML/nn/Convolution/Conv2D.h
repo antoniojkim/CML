@@ -3,8 +3,8 @@
 
 #include <cmath>
 
-#include "../../Modules.h"
-#include "../../Tensors/Tensor.h"
+#include "../Modules.h"
+#include "../../Tensor.h"
 #include "../../Functions/Convolution/Conv2D.h"
 
 namespace cml {
@@ -14,46 +14,52 @@ namespace cml {
         template<typename T = float>
         class Conv2D: public Module<T> {
 
-            unsigned int inputChannels; // Number of channels in input image
-            unsigned int outputChannels; // Number of channels in output image
-            unsigned int kernelSize; // Size of the convolving kernel
-            unsigned int stride; // Stride of the convolution. Default: 1
-            unsigned int padding; // Zero-padding added to both sides of the input. Default: 0
-            unsigned int dilation; // Spacing between kernel elements. Default: 1
-            unsigned int groups; // Number of blocked connections from input channels to output channels. Default: 1
+            using Module<T>::params;
+            using Module<T>::addParameter;
+
+            size_t inputChannels; // Number of channels in input image
+            size_t outputChannels; // Number of channels in output image
+            size_t kernelSize; // Size of the convolving kernel
+            size_t stride; // Stride of the convolution. Default: 1
+            size_t padding; // Zero-padding added to both sides of the input. Default: 0
+            size_t dilation; // Spacing between kernel elements. Default: 1
+            size_t groups; // Number of blocked connections from input channels to output channels. Default: 1
             bool bias; // If True, adds a learnable bias to the output. Default: True
 
-            ntensor<T, 4> weights;
-            ntensor<T, 1> bias;
-
             public:
-                Conv2D(const unsigned int& inputChannels,
-                    const unsigned int& outputChannels,
-                    const unsigned int& kernelSize,
-                    const unsigned int& stride = 1,
-                    const unsigned int& padding = 0,
-                    const unsigned int& dilation = 1,
-                    const unsigned int& groups = 1,
+                Conv2D(const size_t& inputChannels,
+                    const size_t& outputChannels,
+                    const size_t& kernelSize,
+                    const size_t& stride = 1,
+                    const size_t& padding = 0,
+                    const size_t& dilation = 1,
+                    const size_t& groups = 1,
                     const bool& bias = true):
                     inputChannels{inputChannels}, outputChannels{outputChannels},
                     kernelSize{kernelSize}, stride{stride}, padding{padding},
-                    dilation{dilation}, groups{groups},
-                    weights{make_ntensor<T>(out_channels, in_channels/groups, kernelSize, kernelSize)} {
+                    dilation{dilation}, groups{groups}, bias{bias} {
+
+                    addParameter("weights", outputChannels, inputChannels/groups, kernelSize, kernelSize);
+                    params[0]->randomize();  // Initialize Weights to random
+                    params[0]->computeGrad = true;  // Enable automatic gradient calculation
+
                     // int H_out = floor((()/stride)+1)
                     if (bias){
-                        this->bias = make_ntensor<T>(out_channels);
+                        addParameter("bias", outputChannels);
+                        params[1]->randomize();  // Initialize Weights to random
+                        params[1]->computeGrad = true;  // Enable automatic gradient calculation
                     }
                 }
 
                 Parameter<T>& getWeights(){ return params[0]; }
                 Parameter<T>& getBias(){
                     if (bias) return params[1];
-                    throw "Attempting to get bias from Linear layer without bias";
+                    throw "Attempting to get bias from Conv2D layer without bias";
                 }
 
                 cml::tensor<T> forward(cml::tensor<T> x) override {
-                    return bias ? Function::Conv2D::forward(x, getWeights(), getBias()) :
-                                  Function::Conv2D::forward(x, getWeights());
+                    return bias ? Function::Conv2D::forward(x, getWeights(), getBias(), stride, padding, dilation) :
+                                  Function::Conv2D::forward(x, getWeights(), (tensor<T>)(nullptr), stride, padding, dilation);
                 }
 
                 std::ostream& print(std::ostream& out, const std::string& indent) override {

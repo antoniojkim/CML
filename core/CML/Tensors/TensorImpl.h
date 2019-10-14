@@ -54,7 +54,7 @@ namespace cml {
         d{new T[S], std::default_delete<T[]>()} {
 
         // TODO: Possibly think about adding support for both row major and column major eigen tensors
-        this->tensor<nDims>() = t;
+        this->toTensor<nDims>() = t;
     }
 
 //     template<typename T> template<size_t... dims>
@@ -179,7 +179,7 @@ namespace cml {
         return Eigen::Map<DMatrix<T>>(d.get(), rows(), cols());
     }
     template<typename T> template<int nDims>
-    Eigen::TensorMap<Eigen::Tensor<T, nDims>> Tensor<T>::tensor() {
+    Eigen::TensorMap<Eigen::Tensor<T, nDims>> Tensor<T>::toTensor() {
         if (int(nDims) != dims.size()){
             throw InvalidDimensionException("template nDims (", nDims, ") does not match object's dim size (", dims.size(), ")");
         }

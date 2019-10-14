@@ -11,6 +11,7 @@
 #include "../core/CML/nn/Linear.h"
 #include "../core/CML/nn/Nonlinear.h"
 #include "../core/CML/nn/Loss.h"
+#include "../core/CML/nn/Convolution.h"
 #include "../core/Utils/Exceptions.h"
 
 #include "tests/basicGradientsTest.h"

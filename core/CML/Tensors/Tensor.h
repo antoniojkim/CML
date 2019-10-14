@@ -45,7 +45,7 @@ namespace cml {
             inline T* end() { return d.get()+S; }
 
             template<int nDims>
-            Eigen::TensorMap<Eigen::Tensor<T, nDims>> tensor();
+            Eigen::TensorMap<Eigen::Tensor<T, nDims>> toTensor();
 
             inline cml::tensor<T> getShared(){ return this->shared_from_this(); }
 

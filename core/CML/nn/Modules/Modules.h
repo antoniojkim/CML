@@ -256,7 +256,7 @@ namespace nn {
 
     template<typename T>
     void Module<T>::init(){
-        for (unsigned int i = 0; i<this->submodules.size(); ++i){
+        for (size_t i = 0; i<this->submodules.size(); ++i){
             mKeys[std::to_string(i)] = this->submodules[i].get();
             mValues[this->submodules[i].get()] = std::to_string(i);
         }

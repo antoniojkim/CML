@@ -39,7 +39,7 @@ inline std::ostream& operator<<(std::ostream& out, std::array<T, N> a){ return c
 
 namespace cml {
 
-    template<typename T, unsigned int N>
+    template<typename T, size_t N>
     struct MultiDimensionalInitializerList {
         using type = std::initializer_list<typename MultiDimensionalInitializerList<T, N - 1>::type>;
     };
@@ -49,7 +49,7 @@ namespace cml {
         using type = T;
     };
 
-    template<typename T, unsigned int N>
+    template<typename T, size_t N>
     using nd_array = typename MultiDimensionalInitializerList<T, N>::type;
 
     template<typename T, size_t... dims>

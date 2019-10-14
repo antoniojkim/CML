@@ -82,7 +82,7 @@ namespace cml {
             if (params.size() != gradients.size()){
                 throw CMLException("Number of Gradients does not match number of Parameters");
             }
-            for (unsigned int i = 0; i<params.size(); ++i){
+            for (size_t i = 0; i<params.size(); ++i){
                 if (params[i]->computeGrad){
                     if (gradients[i] == nullptr){
                         throw CMLException("Null Gradient for parameter");

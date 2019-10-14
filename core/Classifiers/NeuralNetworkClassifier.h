@@ -35,15 +35,15 @@ namespace cml {
         std::string optimizerName;
         std::unique_ptr<optim::Optimizer<T>> optimizer;
 
-        unsigned int batchSize = 32;
-        unsigned int subdivisions = 1;
-        unsigned int numAccumulate = 1;
+        size_t batchSize = 32;
+        size_t subdivisions = 1;
+        size_t numAccumulate = 1;
 
-        unsigned int startingEpoch = 0;
-        unsigned int startingIteration = 0;
+        size_t startingEpoch = 0;
+        size_t startingIteration = 0;
 
-        unsigned int maxEpochs = 1;
-        unsigned int valFreq = 1;
+        size_t maxEpochs = 1;
+        size_t valFreq = 1;
 
         bool _verbose = false;
 
@@ -69,19 +69,19 @@ namespace cml {
                 }
 
                 if (kwargs.count("batchSize")){
-                    batchSize = (unsigned int) kwargs["batchSize"];
+                    batchSize = (size_t) kwargs["batchSize"];
                 }
                 if (kwargs.count("subdivisions")){
-                    subdivisions = (unsigned int) kwargs["subdivisions"];
+                    subdivisions = (size_t) kwargs["subdivisions"];
                 }
                 if (kwargs.count("numAccumulate")){
-                    numAccumulate = (unsigned int) kwargs["numAccumulate"];
+                    numAccumulate = (size_t) kwargs["numAccumulate"];
                 }
                 if (kwargs.count("startingEpoch")){
-                    startingEpoch = (unsigned int) kwargs["startingEpoch"];
+                    startingEpoch = (size_t) kwargs["startingEpoch"];
                 }
                 if (kwargs.count("startingIteration")){
-                    startingIteration = (unsigned int) kwargs["startingIteration"];
+                    startingIteration = (size_t) kwargs["startingIteration"];
                 }
 
                 if (batchSize % subdivisions != 0){
@@ -94,7 +94,7 @@ namespace cml {
                 this->valLabels = labels;
             }
 
-            unsigned int& operator[](const std::string& key){
+            size_t& operator[](const std::string& key){
                 if (key == "batchSize")         return batchSize;
                 if (key == "subdivisions")      return subdivisions;
                 if (key == "numAccumulate")     return numAccumulate;
@@ -121,11 +121,11 @@ namespace cml {
 
                 clock_t start, end;
 
-                unsigned int epoch = startingEpoch;
-                unsigned int endEpoch = startingEpoch + maxEpochs;
-                unsigned int iteration = startingIteration;
+                size_t epoch = startingEpoch;
+                size_t endEpoch = startingEpoch + maxEpochs;
+                size_t iteration = startingIteration;
 
-                unsigned int blockSize = batchSize / subdivisions;
+                size_t blockSize = batchSize / subdivisions;
                 double totalLoss;
 
                 auto block = make_tensor<T>(std::vector<size_t>({size_t(blockSize), size_t(data->cols())}));
@@ -215,7 +215,7 @@ namespace cml {
             }
 
         private:
-            void loadData(tensor<T> block, tensor<T> data, const int& i, const unsigned int& blockSize, const bool& transpose = true){
+            void loadData(tensor<T> block, tensor<T> data, const int& i, const size_t& blockSize, const bool& transpose = true){
                 if (size_t(i+blockSize) < data->rows()){
 // #ifdef DEBUG
 //                     auto lhs = block->matrix();

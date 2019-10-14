@@ -52,7 +52,7 @@ namespace idx {
         std::vector<size_t> dims;
         dims.reserve(numDims);
         size_t S = 1;
-        for (unsigned int i = 0; i < numDims; ++i){
+        for (size_t i = 0; i < numDims; ++i){
             dims.emplace_back((size_t)read_u32(f));
             S *= dims[i];
         }
