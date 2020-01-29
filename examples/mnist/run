@@ -1,5 +1,22 @@
 #!/bin/bash
 
+if [ -d data ]; then
+	echo "MNIST data found at ./data"
+else
+	mkdir -p data
+	wget http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz -q -o /dev/null -P data/ &
+	wget http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz -q -o /dev/null -P data/ &
+	wget http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz -q -o /dev/null -P data/ &
+	wget http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz -q -o /dev/null -P data/ &
+	wait
+
+	gunzip data/train-images-idx3-ubyte.gz &
+	gunzip data/train-labels-idx1-ubyte.gz &
+	gunzip data/t10k-images-idx3-ubyte.gz &
+	gunzip data/t10k-labels-idx1-ubyte.gz &
+	wait
+fi
+
 clear
 make clean > /dev/null 2>&1
 make > log.cerr 2>&1

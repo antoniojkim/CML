@@ -2,4 +2,7 @@
 *ipynb_checkpoint*
 Notes/
 examples/mnist/data/
+examples/mnist/mnist
 examples/cifar10/data/
+*.o
+*.d
