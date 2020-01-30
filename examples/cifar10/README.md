@@ -9,10 +9,10 @@ To start, first you must download the dataset from the official website. This ca
 ```bash
 mkdir -p data
 wget https://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz -q -o /dev/null -P data/
-gunzip data/cifar-10-binary.tar.gz
+tar -xvzf data/cifar-10-binary.tar.gz
 ```
 
-Now that you have the dataset downloaded and prepared to go, you must compile the mnist example to run anything.
+Now that you have the dataset downloaded and prepared to go, you must compile the cifar10 example to run anything.
 
 ```bash
 make

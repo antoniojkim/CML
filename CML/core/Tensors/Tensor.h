@@ -75,6 +75,8 @@ namespace cml {
                 return this->matrix().block(startRow, startCol, numRows, numCols);
             }
 
+            cml::tensor<T> concat(cml::tensor<T> other, const unsigned int& axis = 0);
+
             void fill(const T& scalar);
             void ones();
             void zero();

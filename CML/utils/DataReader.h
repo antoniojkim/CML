@@ -12,7 +12,8 @@ namespace cml {
 
     enum DataFormat {
         INVALID,
-        IDX
+        IDX,
+        C10
     };
 
     template<typename T>

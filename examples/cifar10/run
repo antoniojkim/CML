@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ -d data ]; then
+	echo "CIFAR-10 data found at ./data"
+else
+	mkdir -p data
+	wget https://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz -q -o /dev/null -P data/
+	tar -xvzf data/cifar-10-binary.tar.gz -C ./data
+	rm data/cifar-10-binary.tar.gz
+fi
+
+clear
+make clean > /dev/null 2>&1
+make > log.cerr 2>&1
+if [ $? -ne 0 ]; then
+	vim -RZ log.cerr
+else
+	rm log.cerr
+	gdb -ex run ./cifar10
+fi
