@@ -2,15 +2,14 @@
 #include <Eigen/Core>
 #include <iostream>
 
-#include "CML/Core/nn/Containers.h"
-#include "CML/Core/nn/Linear.h"
-#include "CML/Core/nn/Loss.h"
-#include "CML/Core/nn/Nonlinear.h"
-#include "CML/Core/optim/Optimizer.h"
-#include "CML/Core/Tensor.h"
-#include "CML/Utils/DataReader.h"
-#include "CML/Utils/Timer.h"
-#include "CML/Classifiers/NeuralNetworkClassifier.h"
+#include "CML/core/nn/Containers.h"
+#include "CML/core/nn/Linear.h"
+#include "CML/core/nn/Loss.h"
+#include "CML/core/nn/Nonlinear.h"
+#include "CML/core/optim/Optimizer.h"
+#include "CML/core/Tensor.h"
+#include "CML/utils/DataReader.h"
+#include "CML/utils/Timer.h"
 
 using namespace std;
 using namespace cml;

@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-#include "../../Utils/VectorUtils.h"
+#include "../../utils/VectorUtils.h"
 
 namespace cml {
 
@@ -17,7 +17,7 @@ namespace cml {
         bool isLeaf = true;
         tensor<T> gradient;
 
-        DCG(tensor<T> t, const std::vector<cml::tensor<T>>& params, GradientFunction<T> f);
+        DCG(tensor<T> t, const std::vector<tensor<T>>& params, GradientFunction<T> f);
 
         void accumulateGradient(std::vector<tensor<T>>& gradients);
 
@@ -37,7 +37,7 @@ namespace cml {
     ************************************************************************************/
 
     template <typename T>
-    DCG<T>::DCG(tensor<T> t, const std::vector<cml::tensor<T>>& params, GradientFunction<T> f)
+    DCG<T>::DCG(tensor<T> t, const std::vector<tensor<T>>& params, GradientFunction<T> f)
         : params{params},
           f{f},
           isLeaf{params.size() == 0 && f == nullptr},
@@ -101,7 +101,7 @@ namespace cml {
     ************************************************************************************/
 
     template <typename T>
-    inline void Tensor<T>::initGraph(const std::vector<cml::tensor<T>>& params, GradientFunction<T> f){
+    inline void Tensor<T>::initGraph(const std::vector<tensor<T>>& params, GradientFunction<T> f){
         if (!dcg) {
             dcg = std::make_unique<DCG<T>>(this->shared_from_this(), params, f);
         } else {

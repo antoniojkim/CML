@@ -22,7 +22,7 @@ namespace nn {
         public:
             Sigmoid(const bool& inplace = false): inplace {inplace} {}
 
-            cml::tensor<T> forward(cml::tensor<T> x) override { return Function::Sigmoid::forward(x); }
+            tensor<T> forward(tensor<T> x) override { return Function::Sigmoid::forward(x); }
 
             std::ostream& print(std::ostream& out, const std::string& indent) override { return out << "Sigmoid {}"; }
     };

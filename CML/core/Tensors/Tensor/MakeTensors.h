@@ -7,8 +7,8 @@
 #include <Eigen/Core>
 #include <unsupported/Eigen/CXX11/Tensor>
 
-#include "Tensor.h"
-#include "../../Numeric/Numeric.h"
+#include "../Tensor.h"
+#include "../../../numeric/Numeric.h"
 
 namespace cml {
 
@@ -29,7 +29,7 @@ namespace cml {
     }
 
     // template<typename T> template<typename... Dims>
-    // inline cml::tensor<T> Tensor<T>::make_tensor(Dims&&... dims){
+    // inline tensor<T> Tensor<T>::make_tensor(Dims&&... dims){
     //     auto t = std::make_shared<Tensor<T>>();
     //     if (sizeof...(dims) > 0){
     //         t->dims = {(size_t)(dims)...};
@@ -39,7 +39,7 @@ namespace cml {
     //     return t;
     // }
     // template<typename T, typename... Dims>
-    // inline cml::tensor<T> make_tensor(Dims&&... dims){
+    // inline tensor<T> make_tensor(Dims&&... dims){
     //     return Tensor<T>::template make_tensor<Dims...>(std::forward<Dims>(dims)...);
     // }
 
@@ -61,14 +61,14 @@ namespace cml {
     }
 
     template<typename T, size_t dim, size_t... dims>
-    inline cml::tensor<T> make_tensor(nd_array<T, sizeof...(dims)+1> a, const bool& computeGrad){
+    inline tensor<T> make_tensor(nd_array<T, sizeof...(dims)+1> a, const bool& computeGrad){
         auto t = make_tensor<T, dim, dims...>(computeGrad);
         MultiDimensionalInitializerListProcessor<T, dim, dims...>::process(
             std::forward<nd_array<T, sizeof...(dims)+1>>(a), (T*)(t->data().get()));
         return t;
     }
     template<typename T, size_t dim, size_t... dims>
-    cml::tensor<T> make_tensor(const DMatrix<T>& m, const bool& computeGrad){
+    tensor<T> make_tensor(const DMatrix<T>& m, const bool& computeGrad){
         auto t = make_tensor<T, dim, dims...>(computeGrad);
         if (t->size() != m.size()){
             throw CMLException("Tensor size does not match matrix size: ", t->size(), " != ", m.size());
@@ -84,7 +84,7 @@ namespace cml {
         return u;
     }
     template <typename T>
-    cml::tensor<T> make_scalar(const DMatrix<T>& m, const bool& computeGrad){
+    tensor<T> make_scalar(const DMatrix<T>& m, const bool& computeGrad){
         if (m.rows() != 1 || m.cols() != 1){
             throw CMLException("make_scalar:  dmatrix is not scalar: [", m.rows(), ", ", m.cols(), "]");
         }

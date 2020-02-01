@@ -5,7 +5,7 @@
 #include <fstream>
 #include <string>
 
-#include "../CML/Tensor.h"
+#include "../core/Tensor.h"
 #include "DataFormats/idx.h"
 
 namespace cml {

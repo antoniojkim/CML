@@ -4,7 +4,7 @@
 #include "../../Tensors/Tensor.h"
 #include "../../Dtypes.h"
 
-namespace cml {
+// namespace cml {
 namespace Function {
 
     struct MSELoss {
@@ -93,6 +93,6 @@ namespace Function {
 
 
 }
-}
+// }
 
 #endif // __CML_FUNCTIONS_LOSS_MEANSQUARED_H__

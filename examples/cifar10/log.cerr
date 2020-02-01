@@ -1,1 +1,3107 @@
-make: *** No targets specified and no makefile found.  Stop.
+g++ -g -std=c++17 -I../../ -Wall -MMD -Werror=vla    -c -o cifar10.o cifar10.cc
+In file included from ../../CML/core/nn/Loss.h:8:0,
+                 from cifar10.cc:7:
+../../CML/core/nn/Loss/MSELoss.h:33:13: error: ‘Reduction’ in namespace ‘cml::cml::nn’ does not name a type
+         nn::Reduction reduction;
+             ^~~~~~~~~
+../../CML/core/nn/Loss/MSELoss.h:36:31: error: ‘Reduction’ in namespace ‘cml::cml::nn’ does not name a type
+             MSELoss(const nn::Reduction& reduction = nn::Reduction::MEAN): reduction{reduction} {}
+                               ^~~~~~~~~
+../../CML/core/nn/Loss/MSELoss.h:36:58: error: ‘cml::cml::nn::Reduction’ has not been declared
+             MSELoss(const nn::Reduction& reduction = nn::Reduction::MEAN): reduction{reduction} {}
+                                                          ^~~~~~~~~
+../../CML/core/nn/Loss/MSELoss.h: In constructor ‘cml::cml::nn::MSELoss<T>::MSELoss(const int&)’:
+../../CML/core/nn/Loss/MSELoss.h:36:76: error: class ‘cml::cml::nn::MSELoss<T>’ does not have any field named ‘reduction’
+             MSELoss(const nn::Reduction& reduction = nn::Reduction::MEAN): reduction{reduction} {}
+                                                                            ^~~~~~~~~
+../../CML/core/nn/Loss/MSELoss.h: In member function ‘cml::tensor<T> cml::cml::nn::MSELoss<T>::forward(cml::tensor<T>, cml::tensor<T>)’:
+../../CML/core/nn/Loss/MSELoss.h:39:34: error: ‘cml::cml::Function::MSELoss’ has not been declared
+                 return Function::MSELoss::forward(actual, expected, reduction);
+                                  ^~~~~~~
+../../CML/core/nn/Loss/MSELoss.h:39:69: error: ‘reduction’ was not declared in this scope
+                 return Function::MSELoss::forward(actual, expected, reduction);
+                                                                     ^~~~~~~~~
+../../CML/core/nn/Loss/MSELoss.h:39:69: note: suggested alternative: ‘conjunction’
+                 return Function::MSELoss::forward(actual, expected, reduction);
+                                                                     ^~~~~~~~~
+                                                                     conjunction
+In file included from /usr/include/c++/7/fstream:40:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/codecvt.h: At global scope:
+/usr/include/c++/7/bits/codecvt.h:69:14: error: ‘locale’ has not been declared
+     : public locale::facet, public codecvt_base
+              ^~~~~~
+/usr/include/c++/7/bits/codecvt.h:69:22: error: expected ‘{’ before ‘facet’
+     : public locale::facet, public codecvt_base
+                      ^~~~~
+/usr/include/c++/7/bits/codecvt.h:285:7: error: ‘__c_locale’ does not name a type; did you mean ‘uselocale’?
+       __c_locale   _M_c_locale_codecvt;
+       ^~~~~~~~~~
+       uselocale
+/usr/include/c++/7/bits/codecvt.h:288:14: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+       static locale::id   id;
+              ^~~~~~
+              locale_t
+/usr/include/c++/7/bits/codecvt.h:297:26: error: expected ‘)’ before ‘__cloc’
+       codecvt(__c_locale __cloc, size_t __refs = 0);
+                          ^~~~~~
+/usr/include/c++/7/bits/codecvt.h: In constructor ‘cml::std::codecvt<_InternT, _ExternT, _StateT>::codecvt(size_t)’:
+/usr/include/c++/7/bits/codecvt.h:293:2: error: class ‘cml::std::codecvt<_InternT, _ExternT, _StateT>’ does not have any field named ‘_M_c_locale_codecvt’
+  _M_c_locale_codecvt(0)
+  ^~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h: At global scope:
+/usr/include/c++/7/bits/codecvt.h:334:5: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+     locale::id codecvt<_InternT, _ExternT, _StateT>::id;
+     ^~~~~~
+     locale_t
+/usr/include/c++/7/bits/codecvt.h:339:14: error: invalid use of incomplete type ‘class cml::std::__codecvt_abstract_base<char, char, __mbstate_t>’
+     : public __codecvt_abstract_base<char, char, mbstate_t>
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:68:11: note: declaration of ‘class cml::std::__codecvt_abstract_base<char, char, __mbstate_t>’
+     class __codecvt_abstract_base
+           ^~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:341:20: error: ‘messages’ is not a class template
+       friend class messages<char>;
+                    ^~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:350:7: error: ‘__c_locale’ does not name a type; did you mean ‘uselocale’?
+       __c_locale   _M_c_locale_codecvt;
+       ^~~~~~~~~~
+       uselocale
+/usr/include/c++/7/bits/codecvt.h:353:14: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+       static locale::id id;
+              ^~~~~~
+              locale_t
+/usr/include/c++/7/bits/codecvt.h:359:26: error: expected ‘)’ before ‘__cloc’
+       codecvt(__c_locale __cloc, size_t __refs = 0);
+                          ^~~~~~
+/usr/include/c++/7/bits/codecvt.h:365:15: error: ‘result’ does not name a type
+       virtual result
+               ^~~~~~
+/usr/include/c++/7/bits/codecvt.h:371:15: error: ‘result’ does not name a type
+       virtual result
+               ^~~~~~
+/usr/include/c++/7/bits/codecvt.h:375:15: error: ‘result’ does not name a type
+       virtual result
+               ^~~~~~
+/usr/include/c++/7/bits/codecvt.h:402:14: error: invalid use of incomplete type ‘class cml::std::__codecvt_abstract_base<wchar_t, char, __mbstate_t>’
+     : public __codecvt_abstract_base<wchar_t, char, mbstate_t>
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:68:11: note: declaration of ‘class cml::std::__codecvt_abstract_base<wchar_t, char, __mbstate_t>’
+     class __codecvt_abstract_base
+           ^~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:404:20: error: ‘messages’ is not a class template
+       friend class messages<wchar_t>;
+                    ^~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:413:7: error: ‘__c_locale’ does not name a type; did you mean ‘uselocale’?
+       __c_locale   _M_c_locale_codecvt;
+       ^~~~~~~~~~
+       uselocale
+/usr/include/c++/7/bits/codecvt.h:416:14: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+       static locale::id   id;
+              ^~~~~~
+              locale_t
+/usr/include/c++/7/bits/codecvt.h:422:26: error: expected ‘)’ before ‘__cloc’
+       codecvt(__c_locale __cloc, size_t __refs = 0);
+                          ^~~~~~
+/usr/include/c++/7/bits/codecvt.h:428:15: error: ‘result’ does not name a type
+       virtual result
+               ^~~~~~
+/usr/include/c++/7/bits/codecvt.h:434:15: error: ‘result’ does not name a type
+       virtual result
+               ^~~~~~
+/usr/include/c++/7/bits/codecvt.h:439:15: error: ‘result’ does not name a type
+       virtual result
+               ^~~~~~
+/usr/include/c++/7/bits/codecvt.h:469:14: error: invalid use of incomplete type ‘class cml::std::__codecvt_abstract_base<char16_t, char, __mbstate_t>’
+     : public __codecvt_abstract_base<char16_t, char, mbstate_t>
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:68:11: note: declaration of ‘class cml::std::__codecvt_abstract_base<char16_t, char, __mbstate_t>’
+     class __codecvt_abstract_base
+           ^~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:478:14: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+       static locale::id   id;
+              ^~~~~~
+              locale_t
+/usr/include/c++/7/bits/codecvt.h:488:15: error: ‘result’ does not name a type
+       virtual result
+               ^~~~~~
+/usr/include/c++/7/bits/codecvt.h:494:15: error: ‘result’ does not name a type
+       virtual result
+               ^~~~~~
+/usr/include/c++/7/bits/codecvt.h:499:15: error: ‘result’ does not name a type
+       virtual result
+               ^~~~~~
+/usr/include/c++/7/bits/codecvt.h: In constructor ‘cml::std::codecvt<char16_t, char, __mbstate_t>::codecvt(size_t)’:
+/usr/include/c++/7/bits/codecvt.h:482:9: error: type ‘cml::std::__codecvt_abstract_base<char16_t, char, __mbstate_t>’ is not a direct base of ‘cml::std::codecvt<char16_t, char, __mbstate_t>’
+       : __codecvt_abstract_base<char16_t, char, mbstate_t>(__refs) { }
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h: At global scope:
+/usr/include/c++/7/bits/codecvt.h:526:14: error: invalid use of incomplete type ‘class cml::std::__codecvt_abstract_base<char32_t, char, __mbstate_t>’
+     : public __codecvt_abstract_base<char32_t, char, mbstate_t>
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:68:11: note: declaration of ‘class cml::std::__codecvt_abstract_base<char32_t, char, __mbstate_t>’
+     class __codecvt_abstract_base
+           ^~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:535:14: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+       static locale::id   id;
+              ^~~~~~
+              locale_t
+/usr/include/c++/7/bits/codecvt.h:545:15: error: ‘result’ does not name a type
+       virtual result
+               ^~~~~~
+/usr/include/c++/7/bits/codecvt.h:551:15: error: ‘result’ does not name a type
+       virtual result
+               ^~~~~~
+/usr/include/c++/7/bits/codecvt.h:556:15: error: ‘result’ does not name a type
+       virtual result
+               ^~~~~~
+/usr/include/c++/7/bits/codecvt.h: In constructor ‘cml::std::codecvt<char32_t, char, __mbstate_t>::codecvt(size_t)’:
+/usr/include/c++/7/bits/codecvt.h:539:9: error: type ‘cml::std::__codecvt_abstract_base<char32_t, char, __mbstate_t>’ is not a direct base of ‘cml::std::codecvt<char32_t, char, __mbstate_t>’
+       : __codecvt_abstract_base<char32_t, char, mbstate_t>(__refs) { }
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h: At global scope:
+/usr/include/c++/7/bits/codecvt.h:599:28: error: ‘string’ does not name a type; did you mean ‘stdin’?
+       codecvt_byname(const string& __s, size_t __refs = 0)
+                            ^~~~~~
+                            stdin
+/usr/include/c++/7/bits/codecvt.h: In constructor ‘cml::std::codecvt_byname<_InternT, _ExternT, _StateT>::codecvt_byname(const int&, size_t)’:
+/usr/include/c++/7/bits/codecvt.h:600:28: error: request for member ‘c_str’ in ‘__s’, which is of non-class type ‘const int’
+       : codecvt_byname(__s.c_str(), __refs) { }
+                            ^~~~~
+/usr/include/c++/7/bits/codecvt.h: At global scope:
+/usr/include/c++/7/bits/codecvt.h:619:28: error: ‘string’ does not name a type; did you mean ‘stdin’?
+       codecvt_byname(const string& __s, size_t __refs = 0)
+                            ^~~~~~
+                            stdin
+/usr/include/c++/7/bits/codecvt.h: In constructor ‘cml::std::codecvt_byname<char16_t, char, __mbstate_t>::codecvt_byname(const int&, size_t)’:
+/usr/include/c++/7/bits/codecvt.h:620:28: error: request for member ‘c_str’ in ‘__s’, which is of non-class type ‘const int’
+       : codecvt_byname(__s.c_str(), __refs) { }
+                            ^~~~~
+/usr/include/c++/7/bits/codecvt.h: At global scope:
+/usr/include/c++/7/bits/codecvt.h:637:28: error: ‘string’ does not name a type; did you mean ‘stdin’?
+       codecvt_byname(const string& __s, size_t __refs = 0)
+                            ^~~~~~
+                            stdin
+/usr/include/c++/7/bits/codecvt.h: In constructor ‘cml::std::codecvt_byname<char32_t, char, __mbstate_t>::codecvt_byname(const int&, size_t)’:
+/usr/include/c++/7/bits/codecvt.h:638:28: error: request for member ‘c_str’ in ‘__s’, which is of non-class type ‘const int’
+       : codecvt_byname(__s.c_str(), __refs) { }
+                            ^~~~~
+/usr/include/c++/7/bits/codecvt.h: At global scope:
+/usr/include/c++/7/bits/codecvt.h:653:5: error: ‘use_facet’ is not a template function
+     use_facet<codecvt<char, char, mbstate_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:653:14: error: expected ‘;’ before ‘<’ token
+     use_facet<codecvt<char, char, mbstate_t> >(const locale&);
+              ^
+/usr/include/c++/7/bits/codecvt.h:657:5: error: ‘has_facet’ is not a template function
+     has_facet<codecvt<char, char, mbstate_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:657:14: error: expected ‘;’ before ‘<’ token
+     has_facet<codecvt<char, char, mbstate_t> >(const locale&);
+              ^
+/usr/include/c++/7/bits/codecvt.h:664:5: error: ‘use_facet’ is not a template function
+     use_facet<codecvt<wchar_t, char, mbstate_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:664:14: error: expected ‘;’ before ‘<’ token
+     use_facet<codecvt<wchar_t, char, mbstate_t> >(const locale&);
+              ^
+/usr/include/c++/7/bits/codecvt.h:668:5: error: ‘has_facet’ is not a template function
+     has_facet<codecvt<wchar_t, char, mbstate_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/codecvt.h:668:14: error: expected ‘;’ before ‘<’ token
+     has_facet<codecvt<wchar_t, char, mbstate_t> >(const locale&);
+              ^
+In file included from /usr/include/c++/7/fstream:42:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h:85:32: error: ‘ios_base’ has not been declared
+       open(const char* __name, ios_base::openmode __mode, int __prot = 0664);
+                                ^~~~~~~~
+/usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h:88:34: error: ‘ios_base’ has not been declared
+       sys_open(__c_file* __file, ios_base::openmode);
+                                  ^~~~~~~~
+/usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h:91:26: error: ‘ios_base’ has not been declared
+       sys_open(int __fd, ios_base::openmode __mode) throw ();
+                          ^~~~~~~~
+/usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h:107:7: error: ‘streamsize’ does not name a type; did you mean ‘strptime’?
+       streamsize
+       ^~~~~~~~~~
+       strptime
+/usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h:110:7: error: ‘streamsize’ does not name a type; did you mean ‘strptime’?
+       streamsize
+       ^~~~~~~~~~
+       strptime
+/usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h:114:7: error: ‘streamsize’ does not name a type; did you mean ‘strptime’?
+       streamsize
+       ^~~~~~~~~~
+       strptime
+/usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h:117:7: error: ‘streamoff’ does not name a type; did you mean ‘strerror’?
+       streamoff
+       ^~~~~~~~~
+       strerror
+/usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h:123:7: error: ‘streamsize’ does not name a type; did you mean ‘strptime’?
+       streamsize
+       ^~~~~~~~~~
+       strptime
+/usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h: In member function ‘void cml::std::__basic_file<char>::swap(cml::std::__basic_file<char>&)’:
+/usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h:79:7: error: ‘swap’ is not a member of ‘cml::std’
+  std::swap(_M_cfile, __f._M_cfile);
+       ^~~~
+/usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h:79:7: note: suggested alternatives:
+In file included from /usr/include/c++/7/complex:45:0,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/sstream:796:5: note:   ‘std::__cxx11::swap’
+     swap(basic_stringbuf<_CharT, _Traits, _Allocator>& __x,
+     ^~~~
+/usr/include/c++/7/sstream:817:5: note:   ‘std::__cxx11::swap’
+     swap(basic_stringstream<_CharT, _Traits, _Allocator>& __x,
+     ^~~~
+In file included from /usr/include/c++/7/bits/stl_pair.h:59:0,
+                 from /usr/include/c++/7/bits/stl_algobase.h:64,
+                 from /usr/include/c++/7/bits/specfun.h:45,
+                 from /usr/include/c++/7/cmath:1914,
+                 from /usr/local/include/Eigen/src/Core/util/Macros.h:586,
+                 from /usr/local/include/Eigen/Core:19,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/move.h:187:5: note:   ‘std::swap’
+     swap(_Tp& __a, _Tp& __b)
+     ^~~~
+/usr/include/c++/7/bits/move.h:187:5: note:   ‘std::swap’
+In file included from /usr/include/c++/7/exception:142:0,
+                 from /usr/include/c++/7/new:40,
+                 from /usr/local/include/Eigen/Core:34,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/exception_ptr.h:166:5: note:   ‘std::__exception_ptr::swap’
+     swap(exception_ptr& __lhs, exception_ptr& __rhs)
+     ^~~~
+In file included from /usr/local/include/Eigen/Core:154:0,
+                 from cifar10.cc:2:
+/usr/local/include/Eigen/src/Core/util/Memory.h:697:27: note:   ‘Eigen::internal::swap’
+ template<typename T> void swap(scoped_array<T> &a,scoped_array<T> &b)
+                           ^~~~
+In file included from /usr/local/include/Eigen/Core:150:0,
+                 from cifar10.cc:2:
+/usr/local/include/Eigen/src/Core/util/Meta.h:597:47: note:   ‘Eigen::numext::swap’
+ template<typename T> EIGEN_STRONG_INLINE void swap(T &a, T &b) { std::swap(a,b); }
+                                               ^~~~
+In file included from /usr/include/c++/7/fstream:42:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h:80:7: error: ‘swap’ is not a member of ‘cml::std’
+  std::swap(_M_cfile_created, __f._M_cfile_created);
+       ^~~~
+/usr/include/x86_64-linux-gnu/c++/7/bits/basic_file.h:80:7: note: suggested alternatives:
+In file included from /usr/include/c++/7/complex:45:0,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/sstream:796:5: note:   ‘std::__cxx11::swap’
+     swap(basic_stringbuf<_CharT, _Traits, _Allocator>& __x,
+     ^~~~
+/usr/include/c++/7/sstream:817:5: note:   ‘std::__cxx11::swap’
+     swap(basic_stringstream<_CharT, _Traits, _Allocator>& __x,
+     ^~~~
+In file included from /usr/include/c++/7/bits/stl_pair.h:59:0,
+                 from /usr/include/c++/7/bits/stl_algobase.h:64,
+                 from /usr/include/c++/7/bits/specfun.h:45,
+                 from /usr/include/c++/7/cmath:1914,
+                 from /usr/local/include/Eigen/src/Core/util/Macros.h:586,
+                 from /usr/local/include/Eigen/Core:19,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/move.h:187:5: note:   ‘std::swap’
+     swap(_Tp& __a, _Tp& __b)
+     ^~~~
+/usr/include/c++/7/bits/move.h:187:5: note:   ‘std::swap’
+In file included from /usr/include/c++/7/exception:142:0,
+                 from /usr/include/c++/7/new:40,
+                 from /usr/local/include/Eigen/Core:34,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/exception_ptr.h:166:5: note:   ‘std::__exception_ptr::swap’
+     swap(exception_ptr& __lhs, exception_ptr& __rhs)
+     ^~~~
+In file included from /usr/local/include/Eigen/Core:154:0,
+                 from cifar10.cc:2:
+/usr/local/include/Eigen/src/Core/util/Memory.h:697:27: note:   ‘Eigen::internal::swap’
+ template<typename T> void swap(scoped_array<T> &a,scoped_array<T> &b)
+                           ^~~~
+In file included from /usr/local/include/Eigen/Core:150:0,
+                 from cifar10.cc:2:
+/usr/local/include/Eigen/src/Core/util/Meta.h:597:47: note:   ‘Eigen::numext::swap’
+ template<typename T> EIGEN_STRONG_INLINE void swap(T &a, T &b) { std::swap(a,b); }
+                                               ^~~~
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream: At global scope:
+/usr/include/c++/7/fstream:72:49: error: expected template-name before ‘<’ token
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+                                                 ^
+/usr/include/c++/7/fstream:72:49: error: expected ‘{’ before ‘<’ token
+/usr/include/c++/7/fstream:455:48: error: expected template-name before ‘<’ token
+     class basic_ifstream : public basic_istream<_CharT, _Traits>
+                                                ^
+/usr/include/c++/7/fstream:455:48: error: expected ‘{’ before ‘<’ token
+/usr/include/c++/7/fstream:656:48: error: expected template-name before ‘<’ token
+     class basic_ofstream : public basic_ostream<_CharT,_Traits>
+                                                ^
+/usr/include/c++/7/fstream:656:48: error: expected ‘{’ before ‘<’ token
+/usr/include/c++/7/fstream:862:48: error: expected template-name before ‘<’ token
+     class basic_fstream : public basic_iostream<_CharT, _Traits>
+                                                ^
+/usr/include/c++/7/fstream:862:48: error: expected ‘{’ before ‘<’ token
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:49:33: error: invalid use of incomplete type ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     _M_allocate_internal_buffer()
+                                 ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: declaration of ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:63:40: error: invalid use of incomplete type ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     _M_destroy_internal_buffer() throw()
+                                        ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: declaration of ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:80:19: error: invalid use of incomplete type ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     basic_filebuf() : __streambuf_type(), _M_lock(), _M_file(&_M_lock),
+                   ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: declaration of ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:95:19: error: template placeholder type ‘basic_filebuf’ must be followed by a simple declarator-id
+     basic_filebuf(basic_filebuf&& __rhs)
+                   ^~~~~~~~~~~~~
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: ‘template<class _CharT, class _Traits> class cml::std::basic_filebuf’ declared here
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:95:35: error: ‘auto’ parameter not permitted in this context
+     basic_filebuf(basic_filebuf&& __rhs)
+                                   ^~~~~
+/usr/include/c++/7/bits/fstream.tcc:95:40: error: invalid use of incomplete type ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     basic_filebuf(basic_filebuf&& __rhs)
+                                        ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: declaration of ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:124:15: error: template placeholder type ‘basic_filebuf’ must be followed by a simple declarator-id
+     operator=(basic_filebuf&& __rhs)
+               ^~~~~~~~~~~~~
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: ‘template<class _CharT, class _Traits> class cml::std::basic_filebuf’ declared here
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:124:31: error: ‘auto’ parameter not permitted in this context
+     operator=(basic_filebuf&& __rhs)
+                               ^~~~~
+/usr/include/c++/7/bits/fstream.tcc:124:36: error: invalid use of incomplete type ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     operator=(basic_filebuf&& __rhs)
+                                    ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: declaration of ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:153:10: error: template placeholder type ‘basic_filebuf’ must be followed by a simple declarator-id
+     swap(basic_filebuf& __rhs)
+          ^~~~~~~~~~~~~
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: ‘template<class _CharT, class _Traits> class cml::std::basic_filebuf’ declared here
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:153:25: error: ‘auto’ parameter not permitted in this context
+     swap(basic_filebuf& __rhs)
+                         ^~~~~
+/usr/include/c++/7/bits/fstream.tcc:153:30: error: invalid use of incomplete type ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     swap(basic_filebuf& __rhs)
+                              ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: declaration of ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:179:27: error: ‘ios_base’ has not been declared
+     open(const char* __s, ios_base::openmode __mode)
+                           ^~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:179:52: error: invalid use of incomplete type ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     open(const char* __s, ios_base::openmode __mode)
+                                                    ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: declaration of ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:213:11: error: invalid use of incomplete type ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     close()
+           ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: declaration of ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:261:5: error: ‘streamsize’ does not name a type; did you mean ‘strptime’?
+     streamsize
+     ^~~~~~~~~~
+     strptime
+/usr/include/c++/7/bits/fstream.tcc:289:15: error: invalid use of incomplete type ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     underflow()
+               ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: declaration of ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:448:15: error: template definition of non-template ‘typename cml::std::basic_filebuf<_CharT, _Traits>::int_type cml::std::basic_filebuf<_CharT, _Traits>::pbackfail’
+     pbackfail(int_type __i)
+               ^~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:448:15: error: ‘int_type’ was not declared in this scope
+/usr/include/c++/7/bits/fstream.tcc:448:15: note: suggested alternative: ‘iswctype’
+     pbackfail(int_type __i)
+               ^~~~~~~~
+               iswctype
+/usr/include/c++/7/bits/fstream.tcc:507:14: error: template definition of non-template ‘typename cml::std::basic_filebuf<_CharT, _Traits>::int_type cml::std::basic_filebuf<_CharT, _Traits>::overflow’
+     overflow(int_type __c)
+              ^~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:507:14: error: ‘int_type’ was not declared in this scope
+/usr/include/c++/7/bits/fstream.tcc:507:14: note: suggested alternative: ‘iswctype’
+     overflow(int_type __c)
+              ^~~~~~~~
+              iswctype
+/usr/include/c++/7/bits/fstream.tcc:572:44: error: ‘streamsize’ has not been declared
+     _M_convert_to_external(_CharT* __ibuf, streamsize __ilen)
+                                            ^~~~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:572:61: error: invalid use of incomplete type ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     _M_convert_to_external(_CharT* __ibuf, streamsize __ilen)
+                                                             ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: declaration of ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:633:5: error: ‘streamsize’ does not name a type; did you mean ‘strptime’?
+     streamsize
+     ^~~~~~~~~~
+     strptime
+/usr/include/c++/7/bits/fstream.tcc:721:5: error: ‘streamsize’ does not name a type; did you mean ‘strptime’?
+     streamsize
+     ^~~~~~~~~~
+     strptime
+/usr/include/c++/7/bits/fstream.tcc:771:12: error: template definition of non-template ‘typename cml::std::basic_filebuf<_CharT, _Traits>::__streambuf_type* cml::std::basic_filebuf<_CharT, _Traits>::setbuf’
+     setbuf(char_type* __s, streamsize __n)
+            ^~~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:771:12: error: ‘char_type’ was not declared in this scope
+/usr/include/c++/7/bits/fstream.tcc:771:12: note: suggested alternative: ‘wchar_t’
+     setbuf(char_type* __s, streamsize __n)
+            ^~~~~~~~~
+            wchar_t
+/usr/include/c++/7/bits/fstream.tcc:771:23: error: ‘__s’ was not declared in this scope
+     setbuf(char_type* __s, streamsize __n)
+                       ^~~
+/usr/include/c++/7/bits/fstream.tcc:771:23: note: suggested alternative: ‘__N’
+     setbuf(char_type* __s, streamsize __n)
+                       ^~~
+                       __N
+/usr/include/c++/7/bits/fstream.tcc:771:28: error: ‘streamsize’ was not declared in this scope
+     setbuf(char_type* __s, streamsize __n)
+                            ^~~~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:771:28: note: suggested alternative:
+In file included from /usr/include/c++/7/iosfwd:40:0,
+                 from /usr/include/c++/7/ios:38,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/postypes.h:98:21: note:   ‘std::streamsize’
+   typedef ptrdiff_t streamsize; // Signed integral type
+                     ^~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:800:13: error: template definition of non-template ‘typename cml::std::basic_filebuf<_CharT, _Traits>::pos_type cml::std::basic_filebuf<_CharT, _Traits>::seekoff’
+     seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode)
+             ^~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:800:13: error: ‘off_type’ was not declared in this scope
+/usr/include/c++/7/bits/fstream.tcc:800:13: note: suggested alternative: ‘off_t’
+     seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode)
+             ^~~~~~~~
+             off_t
+/usr/include/c++/7/bits/fstream.tcc:800:29: error: ‘ios_base’ has not been declared
+     seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode)
+                             ^~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:800:54: error: ‘ios_base’ has not been declared
+     seekoff(off_type __off, ios_base::seekdir __way, ios_base::openmode)
+                                                      ^~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:860:13: error: template definition of non-template ‘typename cml::std::basic_filebuf<_CharT, _Traits>::pos_type cml::std::basic_filebuf<_CharT, _Traits>::seekpos’
+     seekpos(pos_type __pos, ios_base::openmode)
+             ^~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:860:13: error: ‘pos_type’ was not declared in this scope
+/usr/include/c++/7/bits/fstream.tcc:860:13: note: suggested alternative: ‘isctype’
+     seekpos(pos_type __pos, ios_base::openmode)
+             ^~~~~~~~
+             isctype
+/usr/include/c++/7/bits/fstream.tcc:860:29: error: ‘ios_base’ has not been declared
+     seekpos(pos_type __pos, ios_base::openmode)
+                             ^~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:875:13: error: template definition of non-template ‘typename cml::std::basic_filebuf<_CharT, _Traits>::pos_type cml::std::basic_filebuf<_CharT, _Traits>::_M_seek’
+     _M_seek(off_type __off, ios_base::seekdir __way, __state_type __state)
+             ^~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:875:13: error: ‘off_type’ was not declared in this scope
+/usr/include/c++/7/bits/fstream.tcc:875:13: note: suggested alternative: ‘off_t’
+     _M_seek(off_type __off, ios_base::seekdir __way, __state_type __state)
+             ^~~~~~~~
+             off_t
+/usr/include/c++/7/bits/fstream.tcc:875:29: error: ‘ios_base’ has not been declared
+     _M_seek(off_type __off, ios_base::seekdir __way, __state_type __state)
+                             ^~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:875:54: error: ‘__state_type’ was not declared in this scope
+     _M_seek(off_type __off, ios_base::seekdir __way, __state_type __state)
+                                                      ^~~~~~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:875:54: note: suggested alternative: ‘mbstate_t’
+     _M_seek(off_type __off, ios_base::seekdir __way, __state_type __state)
+                                                      ^~~~~~~~~~~~
+                                                      mbstate_t
+/usr/include/c++/7/bits/fstream.tcc:900:20: error: template definition of non-template ‘int cml::std::basic_filebuf<_CharT, _Traits>::_M_get_ext_pos’
+     _M_get_ext_pos(__state_type& __state)
+                    ^~~~~~~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:900:20: error: ‘__state_type’ was not declared in this scope
+/usr/include/c++/7/bits/fstream.tcc:900:20: note: suggested alternative: ‘mbstate_t’
+     _M_get_ext_pos(__state_type& __state)
+                    ^~~~~~~~~~~~
+                    mbstate_t
+/usr/include/c++/7/bits/fstream.tcc:900:34: error: ‘__state’ was not declared in this scope
+     _M_get_ext_pos(__state_type& __state)
+                                  ^~~~~~~
+/usr/include/c++/7/bits/fstream.tcc:900:34: note: suggested alternative: ‘setstate’
+     _M_get_ext_pos(__state_type& __state)
+                                  ^~~~~~~
+                                  setstate
+/usr/include/c++/7/bits/fstream.tcc:919:25: error: invalid use of incomplete type ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     _M_terminate_output()
+                         ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: declaration of ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:980:10: error: invalid use of incomplete type ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     sync()
+          ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: declaration of ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:997:17: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+     imbue(const locale& __loc)
+                 ^~~~~~
+                 locale_t
+/usr/include/c++/7/bits/fstream.tcc:997:30: error: invalid use of incomplete type ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     imbue(const locale& __loc)
+                              ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: declaration of ‘class cml::std::basic_filebuf<_CharT, _Traits>’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:1053:43: error: wrong number of template arguments (1, should be 2)
+   extern template class basic_filebuf<char>;
+                                           ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: provided for ‘template<class _CharT, class _Traits> class cml::std::basic_filebuf’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:1054:44: error: wrong number of template arguments (1, should be 2)
+   extern template class basic_ifstream<char>;
+                                            ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:455:11: note: provided for ‘template<class _CharT, class _Traits> class cml::std::basic_ifstream’
+     class basic_ifstream : public basic_istream<_CharT, _Traits>
+           ^~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:1055:44: error: wrong number of template arguments (1, should be 2)
+   extern template class basic_ofstream<char>;
+                                            ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:656:11: note: provided for ‘template<class _CharT, class _Traits> class cml::std::basic_ofstream’
+     class basic_ofstream : public basic_ostream<_CharT,_Traits>
+           ^~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:1056:43: error: wrong number of template arguments (1, should be 2)
+   extern template class basic_fstream<char>;
+                                           ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:862:11: note: provided for ‘template<class _CharT, class _Traits> class cml::std::basic_fstream’
+     class basic_fstream : public basic_iostream<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:1059:46: error: wrong number of template arguments (1, should be 2)
+   extern template class basic_filebuf<wchar_t>;
+                                              ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:72:11: note: provided for ‘template<class _CharT, class _Traits> class cml::std::basic_filebuf’
+     class basic_filebuf : public basic_streambuf<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:1060:47: error: wrong number of template arguments (1, should be 2)
+   extern template class basic_ifstream<wchar_t>;
+                                               ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:455:11: note: provided for ‘template<class _CharT, class _Traits> class cml::std::basic_ifstream’
+     class basic_ifstream : public basic_istream<_CharT, _Traits>
+           ^~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:1061:47: error: wrong number of template arguments (1, should be 2)
+   extern template class basic_ofstream<wchar_t>;
+                                               ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:656:11: note: provided for ‘template<class _CharT, class _Traits> class cml::std::basic_ofstream’
+     class basic_ofstream : public basic_ostream<_CharT,_Traits>
+           ^~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/fstream:1081:0,
+                 from ../../CML/utils/DataReader.h:5,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/fstream.tcc:1062:46: error: wrong number of template arguments (1, should be 2)
+   extern template class basic_fstream<wchar_t>;
+                                              ^
+In file included from ../../CML/utils/DataReader.h:5:0,
+                 from cifar10.cc:11:
+/usr/include/c++/7/fstream:862:11: note: provided for ‘template<class _CharT, class _Traits> class cml::std::basic_fstream’
+     class basic_fstream : public basic_iostream<_CharT, _Traits>
+           ^~~~~~~~~~~~~
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:59:39: error: ‘locale’ has not been declared
+     struct __timepunct_cache : public locale::facet
+                                       ^~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:59:47: error: expected ‘{’ before ‘facet’
+     struct __timepunct_cache : public locale::facet
+                                               ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:150:51: error: invalid use of incomplete type ‘struct cml::std::__timepunct_cache<_CharT>’
+     __timepunct_cache<_CharT>::~__timepunct_cache()
+                                                   ^
+/usr/include/c++/7/bits/locale_facets_nonio.h:59:12: note: declaration of ‘struct cml::std::__timepunct_cache<_CharT>’
+     struct __timepunct_cache : public locale::facet
+            ^~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:161:45: error: invalid use of incomplete type ‘struct cml::std::__timepunct_cache<char>’
+     __timepunct_cache<char>::_S_timezones[14];
+                                             ^
+/usr/include/c++/7/bits/locale_facets_nonio.h:59:12: note: declaration of ‘struct cml::std::__timepunct_cache<char>’
+     struct __timepunct_cache : public locale::facet
+            ^~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:166:48: error: invalid use of incomplete type ‘struct cml::std::__timepunct_cache<wchar_t>’
+     __timepunct_cache<wchar_t>::_S_timezones[14];
+                                                ^
+/usr/include/c++/7/bits/locale_facets_nonio.h:59:12: note: declaration of ‘struct cml::std::__timepunct_cache<wchar_t>’
+     struct __timepunct_cache : public locale::facet
+            ^~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:171:61: error: template definition of non-template ‘const _CharT* cml::std::__timepunct_cache<_CharT>::_S_timezones [14]’
+     const _CharT* __timepunct_cache<_CharT>::_S_timezones[14];
+                                                             ^
+/usr/include/c++/7/bits/locale_facets_nonio.h:174:32: error: ‘locale’ has not been declared
+     class __timepunct : public locale::facet
+                                ^~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:174:40: error: expected ‘{’ before ‘facet’
+     class __timepunct : public locale::facet
+                                        ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:318:5: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+     locale::id __timepunct<_CharT>::id;
+     ^~~~~~
+     locale_t
+/usr/include/c++/7/bits/locale_facets_nonio.h:323:48: error: invalid use of incomplete type ‘class cml::std::__timepunct<char>’
+     __timepunct<char>::_M_initialize_timepunct(__c_locale __cloc);
+                                                ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:174:11: note: declaration of ‘class cml::std::__timepunct<char>’
+     class __timepunct : public locale::facet
+           ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:323:48: error: ‘__c_locale’ was not declared in this scope
+     __timepunct<char>::_M_initialize_timepunct(__c_locale __cloc);
+                                                ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:323:48: note: suggested alternative:
+In file included from /usr/include/c++/7/bits/localefwd.h:40:0,
+                 from /usr/include/c++/7/ios:41,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/x86_64-linux-gnu/c++/7/bits/c++locale.h:62:23: note:   ‘std::__c_locale’
+   typedef __locale_t  __c_locale;
+                       ^~~~~~~~~~
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:327:83: error: invalid use of incomplete type ‘class cml::std::__timepunct<char>’
+     __timepunct<char>::_M_put(char*, size_t, const char*, const tm*) const throw ();
+                                                                                   ^
+/usr/include/c++/7/bits/locale_facets_nonio.h:174:11: note: declaration of ‘class cml::std::__timepunct<char>’
+     class __timepunct : public locale::facet
+           ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:332:51: error: invalid use of incomplete type ‘class cml::std::__timepunct<wchar_t>’
+     __timepunct<wchar_t>::_M_initialize_timepunct(__c_locale __cloc);
+                                                   ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:174:11: note: declaration of ‘class cml::std::__timepunct<wchar_t>’
+     class __timepunct : public locale::facet
+           ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:332:51: error: ‘__c_locale’ was not declared in this scope
+     __timepunct<wchar_t>::_M_initialize_timepunct(__c_locale __cloc);
+                                                   ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:332:51: note: suggested alternative:
+In file included from /usr/include/c++/7/bits/localefwd.h:40:0,
+                 from /usr/include/c++/7/ios:41,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/x86_64-linux-gnu/c++/7/bits/c++locale.h:62:23: note:   ‘std::__c_locale’
+   typedef __locale_t  __c_locale;
+                       ^~~~~~~~~~
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:337:30: error: invalid use of incomplete type ‘class cml::std::__timepunct<wchar_t>’
+      const tm*) const throw ();
+                              ^
+/usr/include/c++/7/bits/locale_facets_nonio.h:174:11: note: declaration of ‘class cml::std::__timepunct<wchar_t>’
+     class __timepunct : public locale::facet
+           ^~~~~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:344:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/x86_64-linux-gnu/c++/7/bits/time_members.h:42:51: error: invalid use of incomplete type ‘class cml::std::__timepunct<_CharT>’
+     __timepunct<_CharT>::__timepunct(size_t __refs)
+                                                   ^
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:174:11: note: declaration of ‘class cml::std::__timepunct<_CharT>’
+     class __timepunct : public locale::facet
+           ^~~~~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:344:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/x86_64-linux-gnu/c++/7/bits/time_members.h:48:37: error: expected constructor, destructor, or type conversion before ‘(’ token
+     __timepunct<_CharT>::__timepunct(__cache_type* __cache, size_t __refs)
+                                     ^
+/usr/include/x86_64-linux-gnu/c++/7/bits/time_members.h:54:37: error: expected constructor, destructor, or type conversion before ‘(’ token
+     __timepunct<_CharT>::__timepunct(__c_locale __cloc, const char* __s,
+                                     ^
+/usr/include/x86_64-linux-gnu/c++/7/bits/time_members.h:80:39: error: invalid use of incomplete type ‘class cml::std::__timepunct<_CharT>’
+     __timepunct<_CharT>::~__timepunct()
+                                       ^
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:174:11: note: declaration of ‘class cml::std::__timepunct<_CharT>’
+     class __timepunct : public locale::facet
+           ^~~~~~~~~~~
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:366:29: error: ‘locale’ has not been declared
+     class time_get : public locale::facet, public time_base
+                             ^~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:366:37: error: expected ‘{’ before ‘facet’
+     class time_get : public locale::facet, public time_base
+                                     ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:754:5: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+     locale::id time_get<_CharT, _InIter>::id;
+     ^~~~~~
+     locale_t
+/usr/include/c++/7/bits/locale_facets_nonio.h:771:29: error: ‘string’ does not name a type; did you mean ‘stdin’?
+       time_get_byname(const string& __s, size_t __refs = 0)
+                             ^~~~~~
+                             stdin
+/usr/include/c++/7/bits/locale_facets_nonio.h: In constructor ‘cml::std::__cxx11::time_get_byname<_CharT, _InIter>::time_get_byname(const int&, size_t)’:
+/usr/include/c++/7/bits/locale_facets_nonio.h:772:29: error: request for member ‘c_str’ in ‘__s’, which is of non-class type ‘const int’
+       : time_get_byname(__s.c_str(), __refs) { }
+                             ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h: At global scope:
+/usr/include/c++/7/bits/locale_facets_nonio.h:795:29: error: ‘locale’ has not been declared
+     class time_put : public locale::facet
+                             ^~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:795:37: error: expected ‘{’ before ‘facet’
+     class time_put : public locale::facet
+                                     ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:887:5: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+     locale::id time_put<_CharT, _OutIter>::id;
+     ^~~~~~
+     locale_t
+/usr/include/c++/7/bits/locale_facets_nonio.h:905:29: error: ‘string’ does not name a type; did you mean ‘stdin’?
+       time_put_byname(const string& __s, size_t __refs = 0)
+                             ^~~~~~
+                             stdin
+/usr/include/c++/7/bits/locale_facets_nonio.h: In constructor ‘cml::std::time_put_byname<_CharT, _OutIter>::time_put_byname(const int&, size_t)’:
+/usr/include/c++/7/bits/locale_facets_nonio.h:906:29: error: request for member ‘c_str’ in ‘__s’, which is of non-class type ‘const int’
+       : time_put_byname(__s.c_str(), __refs) { }
+                             ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h: At global scope:
+/usr/include/c++/7/bits/locale_facets_nonio.h:952:40: error: ‘locale’ has not been declared
+     struct __moneypunct_cache : public locale::facet
+                                        ^~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:952:48: error: expected ‘{’ before ‘facet’
+     struct __moneypunct_cache : public locale::facet
+                                                ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1001:60: error: invalid use of incomplete type ‘struct cml::std::__moneypunct_cache<_CharT, _Intl>’
+     __moneypunct_cache<_CharT, _Intl>::~__moneypunct_cache()
+                                                            ^
+/usr/include/c++/7/bits/locale_facets_nonio.h:952:12: note: declaration of ‘struct cml::std::__moneypunct_cache<_CharT, _Intl>’
+     struct __moneypunct_cache : public locale::facet
+            ^~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1022:31: error: ‘locale’ has not been declared
+     class moneypunct : public locale::facet, public money_base
+                               ^~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1022:39: error: expected ‘{’ before ‘facet’
+     class moneypunct : public locale::facet, public money_base
+                                       ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1373:5: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+     locale::id moneypunct<_CharT, _Intl>::id;
+     ^~~~~~
+     locale_t
+/usr/include/c++/7/bits/locale_facets_nonio.h:1376:43: error: template definition of non-template ‘const bool cml::std::__cxx11::moneypunct<_CharT, _Intl>::intl’
+     const bool moneypunct<_CharT, _Intl>::intl;
+                                           ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1379:41: error: invalid use of incomplete type ‘class cml::std::__cxx11::moneypunct<char, true>’
+     moneypunct<char, true>::~moneypunct();
+                                         ^
+/usr/include/c++/7/bits/locale_facets_nonio.h:1022:11: note: declaration of ‘class cml::std::__cxx11::moneypunct<char, true>’
+     class moneypunct : public locale::facet, public money_base
+           ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1382:42: error: invalid use of incomplete type ‘class cml::std::__cxx11::moneypunct<char, false>’
+     moneypunct<char, false>::~moneypunct();
+                                          ^
+/usr/include/c++/7/bits/locale_facets_nonio.h:1022:11: note: declaration of ‘class cml::std::__cxx11::moneypunct<char, false>’
+     class moneypunct : public locale::facet, public money_base
+           ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1386:54: error: invalid use of incomplete type ‘class cml::std::__cxx11::moneypunct<char, true>’
+     moneypunct<char, true>::_M_initialize_moneypunct(__c_locale, const char*);
+                                                      ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1022:11: note: declaration of ‘class cml::std::__cxx11::moneypunct<char, true>’
+     class moneypunct : public locale::facet, public money_base
+           ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1386:54: error: ‘__c_locale’ was not declared in this scope
+     moneypunct<char, true>::_M_initialize_moneypunct(__c_locale, const char*);
+                                                      ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1386:54: note: suggested alternative:
+In file included from /usr/include/c++/7/bits/localefwd.h:40:0,
+                 from /usr/include/c++/7/ios:41,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/x86_64-linux-gnu/c++/7/bits/c++locale.h:62:23: note:   ‘std::__c_locale’
+   typedef __locale_t  __c_locale;
+                       ^~~~~~~~~~
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1386:66: error: expected primary-expression before ‘const’
+     moneypunct<char, true>::_M_initialize_moneypunct(__c_locale, const char*);
+                                                                  ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1390:55: error: invalid use of incomplete type ‘class cml::std::__cxx11::moneypunct<char, false>’
+     moneypunct<char, false>::_M_initialize_moneypunct(__c_locale, const char*);
+                                                       ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1022:11: note: declaration of ‘class cml::std::__cxx11::moneypunct<char, false>’
+     class moneypunct : public locale::facet, public money_base
+           ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1390:55: error: ‘__c_locale’ was not declared in this scope
+     moneypunct<char, false>::_M_initialize_moneypunct(__c_locale, const char*);
+                                                       ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1390:55: note: suggested alternative:
+In file included from /usr/include/c++/7/bits/localefwd.h:40:0,
+                 from /usr/include/c++/7/ios:41,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/x86_64-linux-gnu/c++/7/bits/c++locale.h:62:23: note:   ‘std::__c_locale’
+   typedef __locale_t  __c_locale;
+                       ^~~~~~~~~~
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1390:67: error: expected primary-expression before ‘const’
+     moneypunct<char, false>::_M_initialize_moneypunct(__c_locale, const char*);
+                                                                   ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1394:44: error: invalid use of incomplete type ‘class cml::std::__cxx11::moneypunct<wchar_t, true>’
+     moneypunct<wchar_t, true>::~moneypunct();
+                                            ^
+/usr/include/c++/7/bits/locale_facets_nonio.h:1022:11: note: declaration of ‘class cml::std::__cxx11::moneypunct<wchar_t, true>’
+     class moneypunct : public locale::facet, public money_base
+           ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1397:45: error: invalid use of incomplete type ‘class cml::std::__cxx11::moneypunct<wchar_t, false>’
+     moneypunct<wchar_t, false>::~moneypunct();
+                                             ^
+/usr/include/c++/7/bits/locale_facets_nonio.h:1022:11: note: declaration of ‘class cml::std::__cxx11::moneypunct<wchar_t, false>’
+     class moneypunct : public locale::facet, public money_base
+           ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1401:57: error: invalid use of incomplete type ‘class cml::std::__cxx11::moneypunct<wchar_t, true>’
+     moneypunct<wchar_t, true>::_M_initialize_moneypunct(__c_locale,
+                                                         ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1022:11: note: declaration of ‘class cml::std::__cxx11::moneypunct<wchar_t, true>’
+     class moneypunct : public locale::facet, public money_base
+           ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1401:57: error: ‘__c_locale’ was not declared in this scope
+     moneypunct<wchar_t, true>::_M_initialize_moneypunct(__c_locale,
+                                                         ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1401:57: note: suggested alternative:
+In file included from /usr/include/c++/7/bits/localefwd.h:40:0,
+                 from /usr/include/c++/7/ios:41,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/x86_64-linux-gnu/c++/7/bits/c++locale.h:62:23: note:   ‘std::__c_locale’
+   typedef __locale_t  __c_locale;
+                       ^~~~~~~~~~
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1402:8: error: expected primary-expression before ‘const’
+        const char*);
+        ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1406:58: error: invalid use of incomplete type ‘class cml::std::__cxx11::moneypunct<wchar_t, false>’
+     moneypunct<wchar_t, false>::_M_initialize_moneypunct(__c_locale,
+                                                          ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1022:11: note: declaration of ‘class cml::std::__cxx11::moneypunct<wchar_t, false>’
+     class moneypunct : public locale::facet, public money_base
+           ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1406:58: error: ‘__c_locale’ was not declared in this scope
+     moneypunct<wchar_t, false>::_M_initialize_moneypunct(__c_locale,
+                                                          ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1406:58: note: suggested alternative:
+In file included from /usr/include/c++/7/bits/localefwd.h:40:0,
+                 from /usr/include/c++/7/ios:41,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/x86_64-linux-gnu/c++/7/bits/c++locale.h:62:23: note:   ‘std::__c_locale’
+   typedef __locale_t  __c_locale;
+                       ^~~~~~~~~~
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1407:9: error: expected primary-expression before ‘const’
+         const char*);
+         ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1416:15: error: ‘basic_string’ does not name a type; did you mean ‘basic_fstream’?
+       typedef basic_string<_CharT> string_type;
+               ^~~~~~~~~~~~
+               basic_fstream
+/usr/include/c++/7/bits/locale_facets_nonio.h:1436:31: error: ‘string’ does not name a type; did you mean ‘stdin’?
+       moneypunct_byname(const string& __s, size_t __refs = 0)
+                               ^~~~~~
+                               stdin
+/usr/include/c++/7/bits/locale_facets_nonio.h: In constructor ‘cml::std::__cxx11::moneypunct_byname<_CharT, _Intl>::moneypunct_byname(const char*, size_t)’:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1427:6: error: ‘__c_locale’ was not declared in this scope
+      __c_locale __tmp;
+      ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1427:6: note: suggested alternative:
+In file included from /usr/include/c++/7/bits/localefwd.h:40:0,
+                 from /usr/include/c++/7/ios:41,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/x86_64-linux-gnu/c++/7/bits/c++locale.h:62:23: note:   ‘std::__c_locale’
+   typedef __locale_t  __c_locale;
+                       ^~~~~~~~~~
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1428:31: error: ‘__tmp’ was not declared in this scope
+      this->_S_create_c_locale(__tmp, __s);
+                               ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1428:31: note: suggested alternative: ‘__fma’
+      this->_S_create_c_locale(__tmp, __s);
+                               ^~~~~
+                               __fma
+/usr/include/c++/7/bits/locale_facets_nonio.h: In constructor ‘cml::std::__cxx11::moneypunct_byname<_CharT, _Intl>::moneypunct_byname(const int&, size_t)’:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1437:31: error: request for member ‘c_str’ in ‘__s’, which is of non-class type ‘const int’
+       : moneypunct_byname(__s.c_str(), __refs) { }
+                               ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h: At global scope:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1466:30: error: ‘locale’ has not been declared
+     class money_get : public locale::facet
+                              ^~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1466:38: error: expected ‘{’ before ‘facet’
+     class money_get : public locale::facet
+                                      ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1603:5: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+     locale::id money_get<_CharT, _InIter>::id;
+     ^~~~~~
+     locale_t
+/usr/include/c++/7/bits/locale_facets_nonio.h:1619:30: error: ‘locale’ has not been declared
+     class money_put : public locale::facet
+                              ^~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1619:38: error: expected ‘{’ before ‘facet’
+     class money_put : public locale::facet
+                                      ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1760:5: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+     locale::id money_put<_CharT, _OutIter>::id;
+     ^~~~~~
+     locale_t
+/usr/include/c++/7/bits/locale_facets_nonio.h:1797:29: error: ‘locale’ has not been declared
+     class messages : public locale::facet, public messages_base
+                             ^~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1797:37: error: expected ‘{’ before ‘facet’
+     class messages : public locale::facet, public messages_base
+                                     ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.h:1966:5: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+     locale::id messages<_CharT>::id;
+     ^~~~~~
+     locale_t
+/usr/include/c++/7/bits/locale_facets_nonio.h:1970:5: error: ‘string’ does not name a type; did you mean ‘stdin’?
+     string
+     ^~~~~~
+     stdin
+/usr/include/c++/7/bits/locale_facets_nonio.h:1975:5: error: ‘wstring’ does not name a type; did you mean ‘wctrans’?
+     wstring
+     ^~~~~~~
+     wctrans
+/usr/include/c++/7/bits/locale_facets_nonio.h:1985:15: error: ‘basic_string’ does not name a type; did you mean ‘basic_fstream’?
+       typedef basic_string<_CharT> string_type;
+               ^~~~~~~~~~~~
+               basic_fstream
+/usr/include/c++/7/bits/locale_facets_nonio.h:1992:29: error: ‘string’ does not name a type; did you mean ‘stdin’?
+       messages_byname(const string& __s, size_t __refs = 0)
+                             ^~~~~~
+                             stdin
+/usr/include/c++/7/bits/locale_facets_nonio.h: In constructor ‘cml::std::__cxx11::messages_byname<_CharT>::messages_byname(const int&, size_t)’:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1993:29: error: request for member ‘c_str’ in ‘__s’, which is of non-class type ‘const int’
+       : messages_byname(__s.c_str(), __refs) { }
+                             ^~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2008:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h: At global scope:
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:44:5: error: ‘messages’ does not name a type
+     messages<_CharT>::messages(size_t __refs)
+     ^~~~~~~~
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:50:5: error: ‘messages’ does not name a type
+     messages<_CharT>::messages(__c_locale __cloc, const char* __s,
+     ^~~~~~~~
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:69:14: error: expected nested-name-specifier before ‘messages’
+     typename messages<_CharT>::catalog
+              ^~~~~~~~
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:69:22: error: expected initializer before ‘<’ token
+     typename messages<_CharT>::catalog
+                      ^
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:79:5: error: ‘messages’ does not name a type
+     messages<_CharT>::~messages()
+     ^~~~~~~~
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:87:14: error: expected nested-name-specifier before ‘messages’
+     typename messages<_CharT>::catalog
+              ^~~~~~~~
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:87:22: error: expected initializer before ‘<’ token
+     typename messages<_CharT>::catalog
+                      ^
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:99:13: error: expected initializer before ‘<’ token
+     messages<_CharT>::do_close(catalog) const
+             ^
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:104:5: error: ‘messages_byname’ does not name a type; did you mean ‘messages_base’?
+     messages_byname<_CharT>::messages_byname(const char* __s, size_t __refs)
+     ^~~~~~~~~~~~~~~
+     messages_base
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:131:14: error: expected nested-name-specifier before ‘messages’
+     typename messages<char>::catalog
+              ^~~~~~~~
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:131:22: error: expected initializer before ‘<’ token
+     typename messages<char>::catalog
+                      ^
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:137:13: error: expected initializer before ‘<’ token
+     messages<char>::do_close(catalog) const;
+             ^
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:141:14: error: expected nested-name-specifier before ‘messages’
+     typename messages<wchar_t>::catalog
+              ^~~~~~~~
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:141:22: error: expected initializer before ‘<’ token
+     typename messages<wchar_t>::catalog
+                      ^
+/usr/include/x86_64-linux-gnu/c++/7/bits/messages_members.h:147:13: error: expected initializer before ‘<’ token
+     messages<wchar_t>::do_close(catalog) const;
+             ^
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:40:12: error: ‘__use_cache’ is not a class template
+     struct __use_cache<__moneypunct_cache<_CharT, _Intl> >
+            ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:43:25: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+       operator() (const locale& __loc) const
+                         ^~~~~~
+                         locale_t
+/usr/include/c++/7/bits/locale_facets_nonio.tcc: In member function ‘const cml::std::__moneypunct_cache<_CharT, _Intl>* cml::std::__use_cache<_CharT, _Intl>::operator()(const int&) const’:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:45:21: error: ‘moneypunct’ was not declared in this scope
+  const size_t __i = moneypunct<_CharT, _Intl>::id._M_id();
+                     ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:45:21: note: suggested alternatives:
+In file included from /usr/include/c++/7/ios:41:0,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/localefwd.h:189:11: note:   ‘std::__cxx11::moneypunct’
+     class moneypunct;
+           ^~~~~~~~~~
+/usr/include/c++/7/bits/localefwd.h:189:11: note:   ‘std::__cxx11::moneypunct’
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1022:11: note:   ‘cml::std::__cxx11::moneypunct’
+     class moneypunct : public locale::facet, public money_base
+           ^~~~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:45:38: error: expected primary-expression before ‘,’ token
+  const size_t __i = moneypunct<_CharT, _Intl>::id._M_id();
+                                      ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:46:8: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+  const locale::facet** __caches = __loc._M_impl->_M_caches;
+        ^~~~~~
+        locale_t
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:47:7: error: ‘__caches’ was not declared in this scope
+  if (!__caches[__i])
+       ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:47:7: note: suggested alternative: ‘__acos’
+  if (!__caches[__i])
+       ^~~~~~~~
+       __acos
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:60:12: error: request for member ‘_M_impl’ in ‘__loc’, which is of non-class type ‘const int’
+      __loc._M_impl->_M_install_cache(__tmp, __i);
+            ^~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:63:46: error: ‘__caches’ was not declared in this scope
+    const __moneypunct_cache<_CharT, _Intl>*>(__caches[__i]);
+                                              ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:63:46: note: suggested alternative: ‘__acos’
+    const __moneypunct_cache<_CharT, _Intl>*>(__caches[__i]);
+                                              ^~~~~~~~
+                                              __acos
+/usr/include/c++/7/bits/locale_facets_nonio.tcc: At global scope:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:69:55: error: ‘locale’ does not name a type; did you mean ‘locale_t’?
+     __moneypunct_cache<_CharT, _Intl>::_M_cache(const locale& __loc)
+                                                       ^~~~~~
+                                                       locale_t
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:69:68: error: invalid use of incomplete type ‘struct cml::std::__moneypunct_cache<_CharT, _Intl>’
+     __moneypunct_cache<_CharT, _Intl>::_M_cache(const locale& __loc)
+                                                                    ^
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:952:12: note: declaration of ‘struct cml::std::__moneypunct_cache<_CharT, _Intl>’
+     struct __moneypunct_cache : public locale::facet
+            ^~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:137:18: error: template definition of non-template ‘_InIter cml::std::__cxx11::money_get<_CharT, _InIter>::_M_extract’
+       _M_extract(iter_type __beg, iter_type __end, ios_base& __io,
+                  ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:137:18: error: ‘iter_type’ was not declared in this scope
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:137:18: note: suggested alternative: ‘iswctype’
+       _M_extract(iter_type __beg, iter_type __end, ios_base& __io,
+                  ^~~~~~~~~
+                  iswctype
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:137:35: error: ‘iter_type’ was not declared in this scope
+       _M_extract(iter_type __beg, iter_type __end, ios_base& __io,
+                                   ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:137:35: note: suggested alternative: ‘iswctype’
+       _M_extract(iter_type __beg, iter_type __end, ios_base& __io,
+                                   ^~~~~~~~~
+                                   iswctype
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:137:52: error: ‘ios_base’ was not declared in this scope
+       _M_extract(iter_type __beg, iter_type __end, ios_base& __io,
+                                                    ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:137:52: note: suggested alternative:
+In file included from /usr/include/c++/7/ios:42:0,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/ios_base.h:228:9: note:   ‘std::ios_base’
+   class ios_base
+         ^~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:137:62: error: ‘__io’ was not declared in this scope
+       _M_extract(iter_type __beg, iter_type __end, ios_base& __io,
+                                                              ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:137:62: note: suggested alternative: ‘__yn’
+       _M_extract(iter_type __beg, iter_type __end, ios_base& __io,
+                                                              ^~~~
+                                                              __yn
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:138:4: error: ‘ios_base’ has not been declared
+    ios_base::iostate& __err, string& __units) const
+    ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:138:23: error: ‘__err’ was not declared in this scope
+    ios_base::iostate& __err, string& __units) const
+                       ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:138:23: note: suggested alternative: ‘__erf’
+    ios_base::iostate& __err, string& __units) const
+                       ^~~~~
+                       __erf
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:138:30: error: ‘string’ was not declared in this scope
+    ios_base::iostate& __err, string& __units) const
+                              ^~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:138:30: note: suggested alternatives:
+In file included from /usr/include/c++/7/iosfwd:39:0,
+                 from /usr/include/c++/7/ios:38,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/stringfwd.h:74:33: note:   ‘std::__cxx11::string’
+   typedef basic_string<char>    string;
+                                 ^~~~~~
+/usr/include/c++/7/bits/stringfwd.h:74:33: note:   ‘std::__cxx11::string’
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:138:38: error: ‘__units’ was not declared in this scope
+    ios_base::iostate& __err, string& __units) const
+                                      ^~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:138:38: note: suggested alternative: ‘__unix’
+    ios_base::iostate& __err, string& __units) const
+                                      ^~~~~~~
+                                      __unix
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:370:12: error: template definition of non-template ‘_InIter cml::std::__cxx11::money_get<_CharT, _InIter>::do_get’
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+            ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:370:12: error: ‘iter_type’ was not declared in this scope
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:370:12: note: suggested alternative: ‘iswctype’
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+            ^~~~~~~~~
+            iswctype
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:370:29: error: ‘iter_type’ was not declared in this scope
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+                             ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:370:29: note: suggested alternative: ‘iswctype’
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+                             ^~~~~~~~~
+                             iswctype
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:370:46: error: expected primary-expression before ‘bool’
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+                                              ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:370:59: error: ‘ios_base’ was not declared in this scope
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+                                                           ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:370:59: note: suggested alternative:
+In file included from /usr/include/c++/7/ios:42:0,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/ios_base.h:228:9: note:   ‘std::ios_base’
+   class ios_base
+         ^~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:370:69: error: ‘__io’ was not declared in this scope
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+                                                                     ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:370:69: note: suggested alternative: ‘__yn’
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+                                                                     ^~~~
+                                                                     __yn
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:371:5: error: ‘ios_base’ has not been declared
+     ios_base::iostate& __err, long double& __units) const
+     ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:371:24: error: ‘__err’ was not declared in this scope
+     ios_base::iostate& __err, long double& __units) const
+                        ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:371:24: note: suggested alternative: ‘__erf’
+     ios_base::iostate& __err, long double& __units) const
+                        ^~~~~
+                        __erf
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:371:31: error: expected primary-expression before ‘long’
+     ios_base::iostate& __err, long double& __units) const
+                               ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:383:12: error: template definition of non-template ‘_InIter cml::std::__cxx11::money_get<_CharT, _InIter>::do_get’
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+            ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:383:12: error: ‘iter_type’ was not declared in this scope
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:383:12: note: suggested alternative: ‘iswctype’
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+            ^~~~~~~~~
+            iswctype
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:383:29: error: ‘iter_type’ was not declared in this scope
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+                             ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:383:29: note: suggested alternative: ‘iswctype’
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+                             ^~~~~~~~~
+                             iswctype
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:383:46: error: expected primary-expression before ‘bool’
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+                                              ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:383:59: error: ‘ios_base’ was not declared in this scope
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+                                                           ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:383:59: note: suggested alternative:
+In file included from /usr/include/c++/7/ios:42:0,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/ios_base.h:228:9: note:   ‘std::ios_base’
+   class ios_base
+         ^~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:383:69: error: ‘__io’ was not declared in this scope
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+                                                                     ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:383:69: note: suggested alternative: ‘__yn’
+     do_get(iter_type __beg, iter_type __end, bool __intl, ios_base& __io,
+                                                                     ^~~~
+                                                                     __yn
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:384:5: error: ‘ios_base’ has not been declared
+     ios_base::iostate& __err, string_type& __digits) const
+     ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:384:24: error: ‘__err’ was not declared in this scope
+     ios_base::iostate& __err, string_type& __digits) const
+                        ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:384:24: note: suggested alternative: ‘__erf’
+     ios_base::iostate& __err, string_type& __digits) const
+                        ^~~~~
+                        __erf
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:384:31: error: ‘string_type’ was not declared in this scope
+     ios_base::iostate& __err, string_type& __digits) const
+                               ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:384:44: error: ‘__digits’ was not declared in this scope
+     ios_base::iostate& __err, string_type& __digits) const
+                                            ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:384:44: note: suggested alternative: ‘_ISdigit’
+     ios_base::iostate& __err, string_type& __digits) const
+                                            ^~~~~~~~
+                                            _ISdigit
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:407:17: error: template definition of non-template ‘_OutIter cml::std::__cxx11::money_put<_CharT, _OutIter>::_M_insert’
+       _M_insert(iter_type __s, ios_base& __io, char_type __fill,
+                 ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:407:17: error: ‘iter_type’ was not declared in this scope
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:407:17: note: suggested alternative: ‘iswctype’
+       _M_insert(iter_type __s, ios_base& __io, char_type __fill,
+                 ^~~~~~~~~
+                 iswctype
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:407:32: error: ‘ios_base’ was not declared in this scope
+       _M_insert(iter_type __s, ios_base& __io, char_type __fill,
+                                ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:407:32: note: suggested alternative:
+In file included from /usr/include/c++/7/ios:42:0,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/ios_base.h:228:9: note:   ‘std::ios_base’
+   class ios_base
+         ^~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:407:42: error: ‘__io’ was not declared in this scope
+       _M_insert(iter_type __s, ios_base& __io, char_type __fill,
+                                          ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:407:42: note: suggested alternative: ‘__yn’
+       _M_insert(iter_type __s, ios_base& __io, char_type __fill,
+                                          ^~~~
+                                          __yn
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:407:48: error: ‘char_type’ was not declared in this scope
+       _M_insert(iter_type __s, ios_base& __io, char_type __fill,
+                                                ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:407:48: note: suggested alternative: ‘wchar_t’
+       _M_insert(iter_type __s, ios_base& __io, char_type __fill,
+                                                ^~~~~~~~~
+                                                wchar_t
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:408:3: error: expected primary-expression before ‘const’
+   const string_type& __digits) const
+   ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:576:12: error: template definition of non-template ‘_OutIter cml::std::__cxx11::money_put<_CharT, _OutIter>::do_put’
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+            ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:576:12: error: ‘iter_type’ was not declared in this scope
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:576:12: note: suggested alternative: ‘iswctype’
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+            ^~~~~~~~~
+            iswctype
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:576:27: error: expected primary-expression before ‘bool’
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+                           ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:576:40: error: ‘ios_base’ was not declared in this scope
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+                                        ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:576:40: note: suggested alternative:
+In file included from /usr/include/c++/7/ios:42:0,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/ios_base.h:228:9: note:   ‘std::ios_base’
+   class ios_base
+         ^~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:576:50: error: ‘__io’ was not declared in this scope
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+                                                  ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:576:50: note: suggested alternative: ‘__yn’
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+                                                  ^~~~
+                                                  __yn
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:576:56: error: ‘char_type’ was not declared in this scope
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+                                                        ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:576:56: note: suggested alternative: ‘wchar_t’
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+                                                        ^~~~~~~~~
+                                                        wchar_t
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:577:5: error: expected primary-expression before ‘long’
+     long double __units) const
+     ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:614:12: error: template definition of non-template ‘_OutIter cml::std::__cxx11::money_put<_CharT, _OutIter>::do_put’
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+            ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:614:12: error: ‘iter_type’ was not declared in this scope
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:614:12: note: suggested alternative: ‘iswctype’
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+            ^~~~~~~~~
+            iswctype
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:614:27: error: expected primary-expression before ‘bool’
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+                           ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:614:40: error: ‘ios_base’ was not declared in this scope
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+                                        ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:614:40: note: suggested alternative:
+In file included from /usr/include/c++/7/ios:42:0,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/ios_base.h:228:9: note:   ‘std::ios_base’
+   class ios_base
+         ^~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:614:50: error: ‘__io’ was not declared in this scope
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+                                                  ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:614:50: note: suggested alternative: ‘__yn’
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+                                                  ^~~~
+                                                  __yn
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:614:56: error: ‘char_type’ was not declared in this scope
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+                                                        ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:614:56: note: suggested alternative: ‘wchar_t’
+     do_put(iter_type __s, bool __intl, ios_base& __io, char_type __fill,
+                                                        ^~~~~~~~~
+                                                        wchar_t
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:615:5: error: expected primary-expression before ‘const’
+     const string_type& __digits) const
+     ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:626:13: error: expected initializer before ‘<’ token
+     time_get<_CharT, _InIter>::do_date_order() const
+             ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:633:13: error: expected initializer before ‘<’ token
+     time_get<_CharT, _InIter>::
+             ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:867:13: error: expected initializer before ‘<’ token
+     time_get<_CharT, _InIter>::
+             ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:910:13: error: expected initializer before ‘<’ token
+     time_get<_CharT, _InIter>::
+             ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:986:13: error: expected initializer before ‘<’ token
+     time_get<_CharT, _InIter>::
+             ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1058:13: error: expected initializer before ‘<’ token
+     time_get<_CharT, _InIter>::
+             ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1075:13: error: expected initializer before ‘<’ token
+     time_get<_CharT, _InIter>::
+             ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1092:13: error: expected initializer before ‘<’ token
+     time_get<_CharT, _InIter>::
+             ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1119:13: error: expected initializer before ‘<’ token
+     time_get<_CharT, _InIter>::
+             ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1146:13: error: expected initializer before ‘<’ token
+     time_get<_CharT, _InIter>::
+             ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1171:13: error: expected initializer before ‘<’ token
+     time_get<_CharT, _InIter>::
+             ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1243:13: error: expected initializer before ‘<’ token
+     time_get<_CharT, _InIter>::
+             ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1277:9: error: template definition of non-template ‘_OutIter cml::std::time_put<_CharT, _OutIter>::put’
+     put(iter_type __s, ios_base& __io, char_type __fill, const tm* __tm,
+         ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1277:9: error: ‘iter_type’ was not declared in this scope
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1277:9: note: suggested alternative: ‘iswctype’
+     put(iter_type __s, ios_base& __io, char_type __fill, const tm* __tm,
+         ^~~~~~~~~
+         iswctype
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1277:24: error: ‘ios_base’ was not declared in this scope
+     put(iter_type __s, ios_base& __io, char_type __fill, const tm* __tm,
+                        ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1277:24: note: suggested alternative:
+In file included from /usr/include/c++/7/ios:42:0,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/ios_base.h:228:9: note:   ‘std::ios_base’
+   class ios_base
+         ^~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1277:34: error: ‘__io’ was not declared in this scope
+     put(iter_type __s, ios_base& __io, char_type __fill, const tm* __tm,
+                                  ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1277:34: note: suggested alternative: ‘__yn’
+     put(iter_type __s, ios_base& __io, char_type __fill, const tm* __tm,
+                                  ^~~~
+                                  __yn
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1277:40: error: ‘char_type’ was not declared in this scope
+     put(iter_type __s, ios_base& __io, char_type __fill, const tm* __tm,
+                                        ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1277:40: note: suggested alternative: ‘wchar_t’
+     put(iter_type __s, ios_base& __io, char_type __fill, const tm* __tm,
+                                        ^~~~~~~~~
+                                        wchar_t
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1277:58: error: expected primary-expression before ‘const’
+     put(iter_type __s, ios_base& __io, char_type __fill, const tm* __tm,
+                                                          ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1278:2: error: expected primary-expression before ‘const’
+  const _CharT* __beg, const _CharT* __end) const
+  ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1278:23: error: expected primary-expression before ‘const’
+  const _CharT* __beg, const _CharT* __end) const
+                       ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1312:12: error: template definition of non-template ‘_OutIter cml::std::time_put<_CharT, _OutIter>::do_put’
+     do_put(iter_type __s, ios_base& __io, char_type, const tm* __tm,
+            ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1312:12: error: ‘iter_type’ was not declared in this scope
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1312:12: note: suggested alternative: ‘iswctype’
+     do_put(iter_type __s, ios_base& __io, char_type, const tm* __tm,
+            ^~~~~~~~~
+            iswctype
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1312:27: error: ‘ios_base’ was not declared in this scope
+     do_put(iter_type __s, ios_base& __io, char_type, const tm* __tm,
+                           ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1312:27: note: suggested alternative:
+In file included from /usr/include/c++/7/ios:42:0,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/ios_base.h:228:9: note:   ‘std::ios_base’
+   class ios_base
+         ^~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1312:37: error: ‘__io’ was not declared in this scope
+     do_put(iter_type __s, ios_base& __io, char_type, const tm* __tm,
+                                     ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1312:37: note: suggested alternative: ‘__yn’
+     do_put(iter_type __s, ios_base& __io, char_type, const tm* __tm,
+                                     ^~~~
+                                     __yn
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1312:43: error: ‘char_type’ was not declared in this scope
+     do_put(iter_type __s, ios_base& __io, char_type, const tm* __tm,
+                                           ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1312:43: note: suggested alternative: ‘wchar_t’
+     do_put(iter_type __s, ios_base& __io, char_type, const tm* __tm,
+                                           ^~~~~~~~~
+                                           wchar_t
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1312:54: error: expected primary-expression before ‘const’
+     do_put(iter_type __s, ios_base& __io, char_type, const tm* __tm,
+                                                      ^~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1313:5: error: expected primary-expression before ‘char’
+     char __format, char __mod) const
+     ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1313:20: error: expected primary-expression before ‘char’
+     char __format, char __mod) const
+                    ^~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1353:25: error: ‘moneypunct’ is not a class template
+   extern template class moneypunct<char, false>;
+                         ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1353:25: error: explicit instantiation of non-template type ‘cml::std::moneypunct’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1354:25: error: ‘moneypunct’ is not a class template
+   extern template class moneypunct<char, true>;
+                         ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1354:25: error: explicit instantiation of non-template type ‘cml::std::moneypunct’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1355:25: error: ‘moneypunct_byname’ is not a class template
+   extern template class moneypunct_byname<char, false>;
+                         ^~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1355:25: error: explicit instantiation of non-template type ‘cml::std::moneypunct_byname’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1356:25: error: ‘moneypunct_byname’ is not a class template
+   extern template class moneypunct_byname<char, true>;
+                         ^~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1356:25: error: explicit instantiation of non-template type ‘cml::std::moneypunct_byname’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1357:72: error: wrong number of template arguments (1, should be 2)
+   extern template class _GLIBCXX_NAMESPACE_LDBL_OR_CXX11 money_get<char>;
+                                                                        ^
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1466:11: note: provided for ‘template<class _CharT, class _InIter> class cml::std::__cxx11::money_get’
+     class money_get : public locale::facet
+           ^~~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1358:72: error: wrong number of template arguments (1, should be 2)
+   extern template class _GLIBCXX_NAMESPACE_LDBL_OR_CXX11 money_put<char>;
+                                                                        ^
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1619:11: note: provided for ‘template<class _CharT, class _OutIter> class cml::std::__cxx11::money_put’
+     class money_put : public locale::facet
+           ^~~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1359:25: error: explicit instantiation of ‘class cml::std::__timepunct<char>’ before definition of template
+   extern template class __timepunct<char>;
+                         ^~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1360:38: error: wrong number of template arguments (1, should be 2)
+   extern template class time_put<char>;
+                                      ^
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:795:11: note: provided for ‘template<class _CharT, class _OutIter> class cml::std::time_put’
+     class time_put : public locale::facet
+           ^~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1361:45: error: wrong number of template arguments (1, should be 2)
+   extern template class time_put_byname<char>;
+                                             ^
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:891:11: note: provided for ‘template<class _CharT, class _OutIter> class cml::std::time_put_byname’
+     class time_put_byname : public time_put<_CharT, _OutIter>
+           ^~~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1362:25: error: ‘time_get’ is not a class template
+   extern template class time_get<char>;
+                         ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1362:25: error: explicit instantiation of non-template type ‘cml::std::time_get’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1363:25: error: ‘time_get_byname’ is not a class template
+   extern template class time_get_byname<char>;
+                         ^~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1363:25: error: explicit instantiation of non-template type ‘cml::std::time_get_byname’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1364:25: error: ‘messages’ is not a class template
+   extern template class messages<char>;
+                         ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1364:25: error: explicit instantiation of non-template type ‘cml::std::messages’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1365:25: error: ‘messages_byname’ is not a class template
+   extern template class messages_byname<char>;
+                         ^~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1365:25: error: explicit instantiation of non-template type ‘cml::std::messages_byname’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1368:11: error: ‘cml::std::moneypunct’ is not a template
+     const moneypunct<char, true>&
+           ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1369:5: error: ‘use_facet’ is not a template function
+     use_facet<moneypunct<char, true> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1369:14: error: expected ‘;’ before ‘<’ token
+     use_facet<moneypunct<char, true> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1372:11: error: ‘cml::std::moneypunct’ is not a template
+     const moneypunct<char, false>&
+           ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1373:5: error: ‘use_facet’ is not a template function
+     use_facet<moneypunct<char, false> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1373:14: error: expected ‘;’ before ‘<’ token
+     use_facet<moneypunct<char, false> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1376:11: error: ‘money_put’ is not a template function
+     const money_put<char>&
+           ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1376:20: error: expected ‘;’ before ‘<’ token
+     const money_put<char>&
+                    ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1380:11: error: ‘money_get’ is not a template function
+     const money_get<char>&
+           ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1380:20: error: expected ‘;’ before ‘<’ token
+     const money_get<char>&
+                    ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1385:5: error: ‘use_facet’ is not a template function
+     use_facet<__timepunct<char> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1385:14: error: expected ‘;’ before ‘<’ token
+     use_facet<__timepunct<char> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1388:24: error: wrong number of template arguments (1, should be 2)
+     const time_put<char>&
+                        ^
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:795:11: note: provided for ‘template<class _CharT, class _OutIter> class cml::std::time_put’
+     class time_put : public locale::facet
+           ^~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1389:5: error: ‘use_facet’ is not a template function
+     use_facet<time_put<char> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1389:14: error: expected ‘;’ before ‘<’ token
+     use_facet<time_put<char> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1392:11: error: ‘cml::std::time_get’ is not a template
+     const time_get<char>&
+           ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1393:5: error: ‘use_facet’ is not a template function
+     use_facet<time_get<char> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1393:14: error: expected ‘;’ before ‘<’ token
+     use_facet<time_get<char> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1396:11: error: ‘cml::std::messages’ is not a template
+     const messages<char>&
+           ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1397:5: error: ‘use_facet’ is not a template function
+     use_facet<messages<char> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1397:14: error: expected ‘;’ before ‘<’ token
+     use_facet<messages<char> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1401:5: error: ‘has_facet’ is not a template function
+     has_facet<moneypunct<char> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1401:14: error: expected ‘;’ before ‘<’ token
+     has_facet<moneypunct<char> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1405:5: error: ‘has_facet’ is not a template function
+     has_facet<money_put<char> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1405:14: error: expected ‘;’ before ‘<’ token
+     has_facet<money_put<char> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1409:5: error: ‘has_facet’ is not a template function
+     has_facet<money_get<char> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1409:14: error: expected ‘;’ before ‘<’ token
+     has_facet<money_get<char> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1413:5: error: ‘has_facet’ is not a template function
+     has_facet<__timepunct<char> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1413:14: error: expected ‘;’ before ‘<’ token
+     has_facet<__timepunct<char> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1417:5: error: ‘has_facet’ is not a template function
+     has_facet<time_put<char> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1417:14: error: expected ‘;’ before ‘<’ token
+     has_facet<time_put<char> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1421:5: error: ‘has_facet’ is not a template function
+     has_facet<time_get<char> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1421:14: error: expected ‘;’ before ‘<’ token
+     has_facet<time_get<char> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1425:5: error: ‘has_facet’ is not a template function
+     has_facet<messages<char> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1425:14: error: expected ‘;’ before ‘<’ token
+     has_facet<messages<char> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1428:25: error: ‘moneypunct’ is not a class template
+   extern template class moneypunct<wchar_t, false>;
+                         ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1428:25: error: explicit instantiation of non-template type ‘cml::std::moneypunct’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1429:25: error: ‘moneypunct’ is not a class template
+   extern template class moneypunct<wchar_t, true>;
+                         ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1429:25: error: explicit instantiation of non-template type ‘cml::std::moneypunct’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1430:25: error: ‘moneypunct_byname’ is not a class template
+   extern template class moneypunct_byname<wchar_t, false>;
+                         ^~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1430:25: error: explicit instantiation of non-template type ‘cml::std::moneypunct_byname’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1431:25: error: ‘moneypunct_byname’ is not a class template
+   extern template class moneypunct_byname<wchar_t, true>;
+                         ^~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1431:25: error: explicit instantiation of non-template type ‘cml::std::moneypunct_byname’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1432:75: error: wrong number of template arguments (1, should be 2)
+   extern template class _GLIBCXX_NAMESPACE_LDBL_OR_CXX11 money_get<wchar_t>;
+                                                                           ^
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1466:11: note: provided for ‘template<class _CharT, class _InIter> class cml::std::__cxx11::money_get’
+     class money_get : public locale::facet
+           ^~~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1433:75: error: wrong number of template arguments (1, should be 2)
+   extern template class _GLIBCXX_NAMESPACE_LDBL_OR_CXX11 money_put<wchar_t>;
+                                                                           ^
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:1619:11: note: provided for ‘template<class _CharT, class _OutIter> class cml::std::__cxx11::money_put’
+     class money_put : public locale::facet
+           ^~~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1434:25: error: explicit instantiation of ‘class cml::std::__timepunct<wchar_t>’ before definition of template
+   extern template class __timepunct<wchar_t>;
+                         ^~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1435:41: error: wrong number of template arguments (1, should be 2)
+   extern template class time_put<wchar_t>;
+                                         ^
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:795:11: note: provided for ‘template<class _CharT, class _OutIter> class cml::std::time_put’
+     class time_put : public locale::facet
+           ^~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1436:48: error: wrong number of template arguments (1, should be 2)
+   extern template class time_put_byname<wchar_t>;
+                                                ^
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:891:11: note: provided for ‘template<class _CharT, class _OutIter> class cml::std::time_put_byname’
+     class time_put_byname : public time_put<_CharT, _OutIter>
+           ^~~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1437:25: error: ‘time_get’ is not a class template
+   extern template class time_get<wchar_t>;
+                         ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1437:25: error: explicit instantiation of non-template type ‘cml::std::time_get’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1438:25: error: ‘time_get_byname’ is not a class template
+   extern template class time_get_byname<wchar_t>;
+                         ^~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1438:25: error: explicit instantiation of non-template type ‘cml::std::time_get_byname’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1439:25: error: ‘messages’ is not a class template
+   extern template class messages<wchar_t>;
+                         ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1439:25: error: explicit instantiation of non-template type ‘cml::std::messages’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1440:25: error: ‘messages_byname’ is not a class template
+   extern template class messages_byname<wchar_t>;
+                         ^~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1440:25: error: explicit instantiation of non-template type ‘cml::std::messages_byname’
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1443:11: error: ‘cml::std::moneypunct’ is not a template
+     const moneypunct<wchar_t, true>&
+           ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1444:5: error: ‘use_facet’ is not a template function
+     use_facet<moneypunct<wchar_t, true> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1444:14: error: expected ‘;’ before ‘<’ token
+     use_facet<moneypunct<wchar_t, true> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1447:11: error: ‘cml::std::moneypunct’ is not a template
+     const moneypunct<wchar_t, false>&
+           ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1448:5: error: ‘use_facet’ is not a template function
+     use_facet<moneypunct<wchar_t, false> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1448:14: error: expected ‘;’ before ‘<’ token
+     use_facet<moneypunct<wchar_t, false> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1451:11: error: ‘money_put’ is not a template function
+     const money_put<wchar_t>&
+           ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1451:20: error: expected ‘;’ before ‘<’ token
+     const money_put<wchar_t>&
+                    ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1455:11: error: ‘money_get’ is not a template function
+     const money_get<wchar_t>&
+           ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1455:20: error: expected ‘;’ before ‘<’ token
+     const money_get<wchar_t>&
+                    ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1460:5: error: ‘use_facet’ is not a template function
+     use_facet<__timepunct<wchar_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1460:14: error: expected ‘;’ before ‘<’ token
+     use_facet<__timepunct<wchar_t> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1463:27: error: wrong number of template arguments (1, should be 2)
+     const time_put<wchar_t>&
+                           ^
+In file included from /usr/include/c++/7/locale:41:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.h:795:11: note: provided for ‘template<class _CharT, class _OutIter> class cml::std::time_put’
+     class time_put : public locale::facet
+           ^~~~~~~~
+In file included from /usr/include/c++/7/bits/locale_facets_nonio.h:2013:0,
+                 from /usr/include/c++/7/locale:41,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1464:5: error: ‘use_facet’ is not a template function
+     use_facet<time_put<wchar_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1464:14: error: expected ‘;’ before ‘<’ token
+     use_facet<time_put<wchar_t> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1467:11: error: ‘cml::std::time_get’ is not a template
+     const time_get<wchar_t>&
+           ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1468:5: error: ‘use_facet’ is not a template function
+     use_facet<time_get<wchar_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1468:14: error: expected ‘;’ before ‘<’ token
+     use_facet<time_get<wchar_t> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1471:11: error: ‘cml::std::messages’ is not a template
+     const messages<wchar_t>&
+           ^~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1472:5: error: ‘use_facet’ is not a template function
+     use_facet<messages<wchar_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1472:14: error: expected ‘;’ before ‘<’ token
+     use_facet<messages<wchar_t> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1476:5: error: ‘has_facet’ is not a template function
+     has_facet<moneypunct<wchar_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1476:14: error: expected ‘;’ before ‘<’ token
+     has_facet<moneypunct<wchar_t> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1480:5: error: ‘has_facet’ is not a template function
+     has_facet<money_put<wchar_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1480:14: error: expected ‘;’ before ‘<’ token
+     has_facet<money_put<wchar_t> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1484:5: error: ‘has_facet’ is not a template function
+     has_facet<money_get<wchar_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1484:14: error: expected ‘;’ before ‘<’ token
+     has_facet<money_get<wchar_t> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1488:5: error: ‘has_facet’ is not a template function
+     has_facet<__timepunct<wchar_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1488:14: error: expected ‘;’ before ‘<’ token
+     has_facet<__timepunct<wchar_t> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1492:5: error: ‘has_facet’ is not a template function
+     has_facet<time_put<wchar_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1492:14: error: expected ‘;’ before ‘<’ token
+     has_facet<time_put<wchar_t> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1496:5: error: ‘has_facet’ is not a template function
+     has_facet<time_get<wchar_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1496:14: error: expected ‘;’ before ‘<’ token
+     has_facet<time_get<wchar_t> >(const locale&);
+              ^
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1500:5: error: ‘has_facet’ is not a template function
+     has_facet<messages<wchar_t> >(const locale&);
+     ^~~~~~~~~
+/usr/include/c++/7/bits/locale_facets_nonio.tcc:1500:14: error: expected ‘;’ before ‘<’ token
+     has_facet<messages<wchar_t> >(const locale&);
+              ^
+In file included from /usr/include/c++/7/locale:43:0,
+                 from /usr/include/c++/7/iomanip:43,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/locale_conv.h:107:8: error: ‘basic_string’ has not been declared
+        basic_string<_CharT, _Traits, _Alloc>& __outstr,
+        ^~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:107:20: error: expected ‘,’ or ‘...’ before ‘<’ token
+        basic_string<_CharT, _Traits, _Alloc>& __outstr,
+                    ^
+/usr/include/c++/7/bits/locale_conv.h: In function ‘bool cml::std::__str_codecvt_in(const char*, const char*, int)’:
+/usr/include/c++/7/bits/locale_conv.h:117:48: error: ‘__outstr’ was not declared in this scope
+       return __do_str_codecvt(__first, __last, __outstr, __cvt, __state,
+                                                ^~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:117:48: note: suggested alternative: ‘__first’
+       return __do_str_codecvt(__first, __last, __outstr, __cvt, __state,
+                                                ^~~~~~~~
+                                                __first
+/usr/include/c++/7/bits/locale_conv.h:117:58: error: ‘__cvt’ was not declared in this scope
+       return __do_str_codecvt(__first, __last, __outstr, __cvt, __state,
+                                                          ^~~~~
+/usr/include/c++/7/bits/locale_conv.h:117:58: note: suggested alternative: ‘qgcvt’
+       return __do_str_codecvt(__first, __last, __outstr, __cvt, __state,
+                                                          ^~~~~
+                                                          qgcvt
+/usr/include/c++/7/bits/locale_conv.h:117:65: error: ‘__state’ was not declared in this scope
+       return __do_str_codecvt(__first, __last, __outstr, __cvt, __state,
+                                                                 ^~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:117:65: note: suggested alternative: ‘_State’
+       return __do_str_codecvt(__first, __last, __outstr, __cvt, __state,
+                                                                 ^~~~~~~
+                                                                 _State
+/usr/include/c++/7/bits/locale_conv.h:118:10: error: ‘__count’ was not declared in this scope
+          __count, __fn);
+          ^~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:118:10: note: suggested alternative: ‘__round’
+          __count, __fn);
+          ^~~~~~~
+          __round
+/usr/include/c++/7/bits/locale_conv.h: At global scope:
+/usr/include/c++/7/bits/locale_conv.h:124:8: error: ‘basic_string’ has not been declared
+        basic_string<_CharT, _Traits, _Alloc>& __outstr,
+        ^~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:124:20: error: expected ‘,’ or ‘...’ before ‘<’ token
+        basic_string<_CharT, _Traits, _Alloc>& __outstr,
+                    ^
+/usr/include/c++/7/bits/locale_conv.h:123:5: error: redefinition of ‘template<class _CharT, class _Traits, class _Alloc, class _State> bool cml::std::__str_codecvt_in(const char*, const char*, int)’
+     __str_codecvt_in(const char* __first, const char* __last,
+     ^~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:106:5: note: ‘template<class _CharT, class _Traits, class _Alloc, class _State> bool cml::std::__str_codecvt_in(const char*, const char*, int)’ previously declared here
+     __str_codecvt_in(const char* __first, const char* __last,
+     ^~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:136:9: error: ‘basic_string’ has not been declared
+         basic_string<char, _Traits, _Alloc>& __outstr,
+         ^~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:136:21: error: expected ‘,’ or ‘...’ before ‘<’ token
+         basic_string<char, _Traits, _Alloc>& __outstr,
+                     ^
+/usr/include/c++/7/bits/locale_conv.h: In function ‘bool cml::std::__str_codecvt_out(const _CharT*, const _CharT*, int)’:
+/usr/include/c++/7/bits/locale_conv.h:146:48: error: ‘__outstr’ was not declared in this scope
+       return __do_str_codecvt(__first, __last, __outstr, __cvt, __state,
+                                                ^~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:146:48: note: suggested alternative: ‘__first’
+       return __do_str_codecvt(__first, __last, __outstr, __cvt, __state,
+                                                ^~~~~~~~
+                                                __first
+/usr/include/c++/7/bits/locale_conv.h:146:58: error: ‘__cvt’ was not declared in this scope
+       return __do_str_codecvt(__first, __last, __outstr, __cvt, __state,
+                                                          ^~~~~
+/usr/include/c++/7/bits/locale_conv.h:146:58: note: suggested alternative: ‘qgcvt’
+       return __do_str_codecvt(__first, __last, __outstr, __cvt, __state,
+                                                          ^~~~~
+                                                          qgcvt
+/usr/include/c++/7/bits/locale_conv.h:146:65: error: ‘__state’ was not declared in this scope
+       return __do_str_codecvt(__first, __last, __outstr, __cvt, __state,
+                                                                 ^~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:146:65: note: suggested alternative: ‘_State’
+       return __do_str_codecvt(__first, __last, __outstr, __cvt, __state,
+                                                                 ^~~~~~~
+                                                                 _State
+/usr/include/c++/7/bits/locale_conv.h:147:10: error: ‘__count’ was not declared in this scope
+          __count, __fn);
+          ^~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:147:10: note: suggested alternative: ‘__round’
+          __count, __fn);
+          ^~~~~~~
+          __round
+/usr/include/c++/7/bits/locale_conv.h: At global scope:
+/usr/include/c++/7/bits/locale_conv.h:153:9: error: ‘basic_string’ has not been declared
+         basic_string<char, _Traits, _Alloc>& __outstr,
+         ^~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:153:21: error: expected ‘,’ or ‘...’ before ‘<’ token
+         basic_string<char, _Traits, _Alloc>& __outstr,
+                     ^
+/usr/include/c++/7/bits/locale_conv.h:152:5: error: redefinition of ‘template<class _CharT, class _Traits, class _Alloc, class _State> bool cml::std::__str_codecvt_out(const _CharT*, const _CharT*, int)’
+     __str_codecvt_out(const _CharT* __first, const _CharT* __last,
+     ^~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:135:5: note: ‘template<class _CharT, class _Traits, class _Alloc, class _State> bool cml::std::__str_codecvt_out(const _CharT*, const _CharT*, int)’ previously declared here
+     __str_codecvt_out(const _CharT* __first, const _CharT* __last,
+     ^~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:167:28: error: ‘allocator’ does not name a type; did you mean ‘alloca’?
+     typename _Wide_alloc = allocator<_Elem>,
+                            ^~~~~~~~~
+                            alloca
+/usr/include/c++/7/bits/locale_conv.h:167:37: error: expected ‘>’ before ‘<’ token
+     typename _Wide_alloc = allocator<_Elem>,
+                                     ^
+/usr/include/c++/7/bits/locale_conv.h:172:15: error: ‘basic_string’ does not name a type; did you mean ‘basic_fstream’?
+       typedef basic_string<char, char_traits<char>, _Byte_alloc>   byte_string;
+               ^~~~~~~~~~~~
+               basic_fstream
+/usr/include/c++/7/bits/locale_conv.h:173:15: error: ‘basic_string’ does not name a type; did you mean ‘basic_fstream’?
+       typedef basic_string<_Elem, char_traits<_Elem>, _Wide_alloc> wide_string;
+               ^~~~~~~~~~~~
+               basic_fstream
+/usr/include/c++/7/bits/locale_conv.h:175:24: error: ‘wide_string’ has not been declared
+       typedef typename wide_string::traits_type::int_type    int_type;
+                        ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:211:29: error: ‘byte_string’ does not name a type
+       wstring_convert(const byte_string& __byte_err,
+                             ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:212:15: error: ‘wide_string’ does not name a type
+         const wide_string& __wide_err = wide_string())
+               ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:229:7: error: ‘wide_string’ does not name a type
+       wide_string
+       ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:236:7: error: ‘wide_string’ does not name a type
+       wide_string
+       ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:240:7: error: ‘wide_string’ does not name a type
+       wide_string
+       ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:247:7: error: ‘wide_string’ does not name a type
+       wide_string
+       ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:263:7: error: ‘byte_string’ does not name a type
+       byte_string
+       ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:270:7: error: ‘byte_string’ does not name a type
+       byte_string
+       ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:276:7: error: ‘byte_string’ does not name a type
+       byte_string
+       ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:283:7: error: ‘byte_string’ does not name a type
+       byte_string
+       ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:307:7: error: ‘unique_ptr’ does not name a type
+       unique_ptr<_Codecvt> _M_cvt;
+       ^~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:308:7: error: ‘byte_string’ does not name a type
+       byte_string  _M_byte_err_string;
+       ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:309:7: error: ‘wide_string’ does not name a type
+       wide_string  _M_wide_err_string;
+       ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:212:41: error: there are no arguments to ‘wide_string’ that depend on a template parameter, so a declaration of ‘wide_string’ must be available [-fpermissive]
+         const wide_string& __wide_err = wide_string())
+                                         ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:212:41: note: (if you use ‘-fpermissive’, G++ will accept your code, but allowing the use of an undeclared name is deprecated)
+/usr/include/c++/7/bits/locale_conv.h: In constructor ‘cml::std::__cxx11::wstring_convert<_Codecvt, _Elem, _Wide_alloc>::wstring_convert(_Codecvt*)’:
+/usr/include/c++/7/bits/locale_conv.h:184:60: error: class ‘cml::std::__cxx11::wstring_convert<_Codecvt, _Elem, _Wide_alloc>’ does not have any field named ‘_M_cvt’
+       wstring_convert(_Codecvt* __pcvt = new _Codecvt()) : _M_cvt(__pcvt)
+                                                            ^~~~~~
+/usr/include/c++/7/bits/locale_conv.h:186:7: error: ‘_M_cvt’ was not declared in this scope
+  if (!_M_cvt)
+       ^~~~~~
+/usr/include/c++/7/bits/locale_conv.h:186:7: note: suggested alternative: ‘__pcvt’
+  if (!_M_cvt)
+       ^~~~~~
+       __pcvt
+/usr/include/c++/7/bits/locale_conv.h:187:4: error: there are no arguments to ‘__throw_logic_error’ that depend on a template parameter, so a declaration of ‘__throw_logic_error’ must be available [-fpermissive]
+    __throw_logic_error("wstring_convert");
+    ^~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h: In constructor ‘cml::std::__cxx11::wstring_convert<_Codecvt, _Elem, _Wide_alloc>::wstring_convert(_Codecvt*, cml::std::__cxx11::wstring_convert<_Codecvt, _Elem, _Wide_alloc>::state_type)’:
+/usr/include/c++/7/bits/locale_conv.h:199:9: error: class ‘cml::std::__cxx11::wstring_convert<_Codecvt, _Elem, _Wide_alloc>’ does not have any field named ‘_M_cvt’
+       : _M_cvt(__pcvt), _M_state(__state), _M_with_cvtstate(true)
+         ^~~~~~
+/usr/include/c++/7/bits/locale_conv.h:201:7: error: ‘_M_cvt’ was not declared in this scope
+  if (!_M_cvt)
+       ^~~~~~
+/usr/include/c++/7/bits/locale_conv.h:201:7: note: suggested alternative: ‘__pcvt’
+  if (!_M_cvt)
+       ^~~~~~
+       __pcvt
+/usr/include/c++/7/bits/locale_conv.h:202:4: error: there are no arguments to ‘__throw_logic_error’ that depend on a template parameter, so a declaration of ‘__throw_logic_error’ must be available [-fpermissive]
+    __throw_logic_error("wstring_convert");
+    ^~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h: In constructor ‘cml::std::__cxx11::wstring_convert<_Codecvt, _Elem, _Wide_alloc>::wstring_convert(const int&, const int&)’:
+/usr/include/c++/7/bits/locale_conv.h:213:9: error: class ‘cml::std::__cxx11::wstring_convert<_Codecvt, _Elem, _Wide_alloc>’ does not have any field named ‘_M_cvt’
+       : _M_cvt(new _Codecvt),
+         ^~~~~~
+/usr/include/c++/7/bits/locale_conv.h:214:2: error: class ‘cml::std::__cxx11::wstring_convert<_Codecvt, _Elem, _Wide_alloc>’ does not have any field named ‘_M_byte_err_string’
+  _M_byte_err_string(__byte_err), _M_wide_err_string(__wide_err),
+  ^~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:214:34: error: class ‘cml::std::__cxx11::wstring_convert<_Codecvt, _Elem, _Wide_alloc>’ does not have any field named ‘_M_wide_err_string’
+  _M_byte_err_string(__byte_err), _M_wide_err_string(__wide_err),
+                                  ^~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:217:7: error: ‘_M_cvt’ was not declared in this scope
+  if (!_M_cvt)
+       ^~~~~~
+/usr/include/c++/7/bits/locale_conv.h:217:7: note: suggested alternative: ‘_M_count’
+  if (!_M_cvt)
+       ^~~~~~
+       _M_count
+/usr/include/c++/7/bits/locale_conv.h:218:4: error: there are no arguments to ‘__throw_logic_error’ that depend on a template parameter, so a declaration of ‘__throw_logic_error’ must be available [-fpermissive]
+    __throw_logic_error("wstring_convert");
+    ^~~~~~~~~~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h: At global scope:
+/usr/include/c++/7/bits/locale_conv.h:320:20: error: ‘char_traits’ does not name a type
+     typename _Tr = char_traits<_Elem>>
+                    ^~~~~~~~~~~
+/usr/include/c++/7/bits/locale_conv.h:320:31: error: expected ‘>’ before ‘<’ token
+     typename _Tr = char_traits<_Elem>>
+                               ^
+/usr/include/c++/7/bits/locale_conv.h:321:51: error: expected template-name before ‘<’ token
+     class wbuffer_convert : public basic_streambuf<_Elem, _Tr>
+                                                   ^
+/usr/include/c++/7/bits/locale_conv.h:321:51: error: expected ‘{’ before ‘<’ token
+In file included from /usr/include/c++/7/iomanip:45:0,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/quoted_string.h:51:16: error: ‘is_reference’ was not declared in this scope
+  static_assert(is_reference<_String>::value
+                ^~~~~~~~~~~~
+/usr/include/c++/7/bits/quoted_string.h:51:16: note: suggested alternative:
+In file included from /usr/include/c++/7/bits/move.h:54:0,
+                 from /usr/include/c++/7/bits/stl_pair.h:59,
+                 from /usr/include/c++/7/bits/stl_algobase.h:64,
+                 from /usr/include/c++/7/bits/specfun.h:45,
+                 from /usr/include/c++/7/cmath:1914,
+                 from /usr/local/include/Eigen/src/Core/util/Macros.h:586,
+                 from /usr/local/include/Eigen/Core:19,
+                 from cifar10.cc:2:
+/usr/include/c++/7/type_traits:580:12: note:   ‘std::is_reference’
+     struct is_reference
+            ^~~~~~~~~~~~
+In file included from /usr/include/c++/7/iomanip:45:0,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/quoted_string.h:51:36: error: expected primary-expression before ‘>’ token
+  static_assert(is_reference<_String>::value
+                                    ^
+/usr/include/c++/7/bits/quoted_string.h:51:39: error: ‘::value’ has not been declared
+  static_assert(is_reference<_String>::value
+                                       ^~~~~
+/usr/include/c++/7/bits/quoted_string.h:52:9: error: ‘is_pointer’ was not declared in this scope
+      || is_pointer<_String>::value,
+         ^~~~~~~~~~
+/usr/include/c++/7/bits/quoted_string.h:52:9: note: suggested alternative:
+In file included from /usr/include/c++/7/bits/move.h:54:0,
+                 from /usr/include/c++/7/bits/stl_pair.h:59,
+                 from /usr/include/c++/7/bits/stl_algobase.h:64,
+                 from /usr/include/c++/7/bits/specfun.h:45,
+                 from /usr/include/c++/7/cmath:1914,
+                 from /usr/local/include/Eigen/src/Core/util/Macros.h:586,
+                 from /usr/local/include/Eigen/Core:19,
+                 from cifar10.cc:2:
+/usr/include/c++/7/type_traits:380:12: note:   ‘std::is_pointer’
+     struct is_pointer
+            ^~~~~~~~~~
+In file included from /usr/include/c++/7/iomanip:45:0,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/quoted_string.h:52:27: error: expected primary-expression before ‘>’ token
+      || is_pointer<_String>::value,
+                           ^
+/usr/include/c++/7/bits/quoted_string.h:52:30: error: ‘::value’ has not been declared
+      || is_pointer<_String>::value,
+                              ^~~~~
+/usr/include/c++/7/bits/quoted_string.h:74:12: error: ‘basic_ostream’ in namespace ‘cml::std’ does not name a template type
+       std::basic_ostream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+/usr/include/c++/7/bits/quoted_string.h:98:12: error: ‘basic_ostream’ in namespace ‘cml::std’ does not name a template type
+       std::basic_ostream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+/usr/include/c++/7/bits/quoted_string.h:120:12: error: ‘basic_istream’ in namespace ‘cml::std’ does not name a template type
+       std::basic_istream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+In file included from ../../CML/utils/DataFormats/idx.h:6:0,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/iomanip:56:27: error: ‘ios_base’ does not name a type; did you mean ‘time_base’?
+   struct _Resetiosflags { ios_base::fmtflags _M_mask; };
+                           ^~~~~~~~
+                           time_base
+/usr/include/c++/7/iomanip:66:17: error: ‘ios_base’ has not been declared
+   resetiosflags(ios_base::fmtflags __mask)
+                 ^~~~~~~~
+/usr/include/c++/7/iomanip:67:3: error: expected ‘,’ or ‘;’ before ‘{’ token
+   { return { __mask }; }
+   ^
+/usr/include/c++/7/iomanip:70:12: error: ‘basic_istream’ does not name a type; did you mean ‘basic_fstream’?
+     inline basic_istream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+            basic_fstream
+/usr/include/c++/7/iomanip:78:12: error: ‘basic_ostream’ does not name a type; did you mean ‘basic_fstream’?
+     inline basic_ostream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+            basic_fstream
+/usr/include/c++/7/iomanip:86:25: error: ‘ios_base’ does not name a type; did you mean ‘time_base’?
+   struct _Setiosflags { ios_base::fmtflags _M_mask; };
+                         ^~~~~~~~
+                         time_base
+/usr/include/c++/7/iomanip:96:15: error: ‘ios_base’ has not been declared
+   setiosflags(ios_base::fmtflags __mask)
+               ^~~~~~~~
+/usr/include/c++/7/iomanip:97:3: error: expected ‘,’ or ‘;’ before ‘{’ token
+   { return { __mask }; }
+   ^
+/usr/include/c++/7/iomanip:100:12: error: ‘basic_istream’ does not name a type; did you mean ‘basic_fstream’?
+     inline basic_istream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+            basic_fstream
+/usr/include/c++/7/iomanip:108:12: error: ‘basic_ostream’ does not name a type; did you mean ‘basic_fstream’?
+     inline basic_ostream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+            basic_fstream
+/usr/include/c++/7/iomanip:131:12: error: ‘basic_istream’ does not name a type; did you mean ‘basic_fstream’?
+     inline basic_istream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+            basic_fstream
+/usr/include/c++/7/iomanip:142:12: error: ‘basic_ostream’ does not name a type; did you mean ‘basic_fstream’?
+     inline basic_ostream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+            basic_fstream
+/usr/include/c++/7/iomanip:169:12: error: ‘basic_istream’ does not name a type; did you mean ‘basic_fstream’?
+     inline basic_istream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+            basic_fstream
+/usr/include/c++/7/iomanip:177:12: error: ‘basic_ostream’ does not name a type; did you mean ‘basic_fstream’?
+     inline basic_ostream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+            basic_fstream
+/usr/include/c++/7/iomanip:199:12: error: ‘basic_istream’ does not name a type; did you mean ‘basic_fstream’?
+     inline basic_istream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+            basic_fstream
+/usr/include/c++/7/iomanip:207:12: error: ‘basic_ostream’ does not name a type; did you mean ‘basic_fstream’?
+     inline basic_ostream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+            basic_fstream
+/usr/include/c++/7/iomanip:229:12: error: ‘basic_istream’ does not name a type; did you mean ‘basic_fstream’?
+     inline basic_istream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+            basic_fstream
+/usr/include/c++/7/iomanip:237:12: error: ‘basic_ostream’ does not name a type; did you mean ‘basic_fstream’?
+     inline basic_ostream<_CharT, _Traits>&
+            ^~~~~~~~~~~~~
+            basic_fstream
+/usr/include/c++/7/iomanip:263:5: error: ‘basic_istream’ does not name a type; did you mean ‘basic_fstream’?
+     basic_istream<_CharT, _Traits>&
+     ^~~~~~~~~~~~~
+     basic_fstream
+/usr/include/c++/7/iomanip:310:5: error: ‘basic_ostream’ does not name a type; did you mean ‘basic_fstream’?
+     basic_ostream<_CharT, _Traits>&
+     ^~~~~~~~~~~~~
+     basic_fstream
+/usr/include/c++/7/iomanip:343:18: error: ‘tm’ in namespace ‘cml::std’ does not name a type
+       const std::tm* _M_tmb;
+                  ^~
+/usr/include/c++/7/iomanip:358:25: error: ‘tm’ in namespace ‘cml::std’ does not name a type
+     put_time(const std::tm* __tmb, const _CharT* __fmt)
+                         ^~
+/usr/include/c++/7/iomanip:362:5: error: ‘basic_ostream’ does not name a type; did you mean ‘basic_fstream’?
+     basic_ostream<_CharT, _Traits>&
+     ^~~~~~~~~~~~~
+     basic_fstream
+/usr/include/c++/7/iomanip:398:12: error: ‘tm’ in namespace ‘cml::std’ does not name a type
+       std::tm*     _M_tmb;
+            ^~
+/usr/include/c++/7/iomanip:413:19: error: ‘tm’ is not a member of ‘cml::std’
+     get_time(std::tm* __tmb, const _CharT* __fmt)
+                   ^~
+/usr/include/c++/7/iomanip:413:19: note: suggested alternatives:
+In file included from /usr/include/time.h:39:0,
+                 from /usr/include/pthread.h:24,
+                 from /usr/include/x86_64-linux-gnu/c++/7/bits/gthr-default.h:35,
+                 from /usr/include/x86_64-linux-gnu/c++/7/bits/gthr.h:148,
+                 from /usr/include/c++/7/ext/atomicity.h:35,
+                 from /usr/include/c++/7/bits/ios_base.h:39,
+                 from /usr/include/c++/7/ios:42,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:7:8: note:   ‘tm’
+ struct tm
+        ^~
+/usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:7:8: note:   ‘tm’
+In file included from ../../CML/utils/DataFormats/idx.h:6:0,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/iomanip:413:23: error: ‘__tmb’ was not declared in this scope
+     get_time(std::tm* __tmb, const _CharT* __fmt)
+                       ^~~~~
+/usr/include/c++/7/iomanip:413:23: note: suggested alternative: ‘__fma’
+     get_time(std::tm* __tmb, const _CharT* __fmt)
+                       ^~~~~
+                       __fma
+/usr/include/c++/7/iomanip:413:30: error: expected primary-expression before ‘const’
+     get_time(std::tm* __tmb, const _CharT* __fmt)
+                              ^~~~~
+/usr/include/c++/7/iomanip:414:5: error: expected ‘;’ before ‘{’ token
+     { return { __tmb, __fmt }; }
+     ^
+/usr/include/c++/7/iomanip:417:5: error: ‘basic_istream’ does not name a type; did you mean ‘basic_fstream’?
+     basic_istream<_CharT, _Traits>&
+     ^~~~~~~~~~~~~
+     basic_fstream
+/usr/include/c++/7/iomanip:470:18: error: ‘basic_string’ does not name a type; did you mean ‘basic_fstream’?
+     quoted(const basic_string<_CharT, _Traits, _Alloc>& __string,
+                  ^~~~~~~~~~~~
+                  basic_fstream
+/usr/include/c++/7/iomanip:470:30: error: expected ‘,’ or ‘...’ before ‘<’ token
+     quoted(const basic_string<_CharT, _Traits, _Alloc>& __string,
+                              ^
+/usr/include/c++/7/iomanip: In function ‘auto cml::std::quoted(int)’:
+/usr/include/c++/7/iomanip:474:56: error: wrong number of template arguments (1, should be 2)
+    const basic_string<_CharT, _Traits, _Alloc>&, _CharT>(
+                                                        ^
+In file included from /usr/include/c++/7/iomanip:45:0,
+                 from ../../CML/utils/DataFormats/idx.h:6,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/bits/quoted_string.h:49:14: note: provided for ‘template<class _String, class _CharT> struct cml::std::__detail::_Quoted_string’
+       struct _Quoted_string
+              ^~~~~~~~~~~~~~
+In file included from ../../CML/utils/DataFormats/idx.h:6:0,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/iomanip:475:5: error: ‘__string’ was not declared in this scope
+     __string, __delim, __escape);
+     ^~~~~~~~
+/usr/include/c++/7/iomanip:475:5: note: suggested alternative: ‘__sinl’
+     __string, __delim, __escape);
+     ^~~~~~~~
+     __sinl
+/usr/include/c++/7/iomanip:475:15: error: ‘__delim’ was not declared in this scope
+     __string, __delim, __escape);
+               ^~~~~~~
+/usr/include/c++/7/iomanip:475:15: note: suggested alternative: ‘getdelim’
+     __string, __delim, __escape);
+               ^~~~~~~
+               getdelim
+/usr/include/c++/7/iomanip:475:24: error: ‘__escape’ was not declared in this scope
+     __string, __delim, __escape);
+                        ^~~~~~~~
+/usr/include/c++/7/iomanip:475:24: note: suggested alternative: ‘__scalb’
+     __string, __delim, __escape);
+                        ^~~~~~~~
+                        __scalb
+/usr/include/c++/7/iomanip: At global scope:
+/usr/include/c++/7/iomanip:480:12: error: ‘template<class _CharT, class _Traits, class _Alloc> auto cml::std::quoted’ conflicts with a previous declaration
+     quoted(basic_string<_CharT, _Traits, _Alloc>& __string,
+            ^~~~~~~~~~~~
+/usr/include/c++/7/iomanip:470:5: note: previous declaration ‘namespace cml::std { }::quoted’
+     quoted(const basic_string<_CharT, _Traits, _Alloc>& __string,
+     ^~~~~~
+/usr/include/c++/7/iomanip:480:12: error: ‘basic_string’ was not declared in this scope
+     quoted(basic_string<_CharT, _Traits, _Alloc>& __string,
+            ^~~~~~~~~~~~
+/usr/include/c++/7/iomanip:480:12: note: suggested alternatives:
+In file included from /usr/include/c++/7/iosfwd:39:0,
+                 from /usr/include/c++/7/ios:38,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/stringfwd.h:71:11: note:   ‘std::__cxx11::basic_string’
+     class basic_string;
+           ^~~~~~~~~~~~
+/usr/include/c++/7/bits/stringfwd.h:71:11: note:   ‘std::__cxx11::basic_string’
+In file included from ../../CML/utils/DataFormats/idx.h:6:0,
+                 from ../../CML/utils/DataReader.h:9,
+                 from cifar10.cc:11:
+/usr/include/c++/7/iomanip:480:31: error: expected primary-expression before ‘,’ token
+     quoted(basic_string<_CharT, _Traits, _Alloc>& __string,
+                               ^
+/usr/include/c++/7/iomanip:480:40: error: expected primary-expression before ‘,’ token
+     quoted(basic_string<_CharT, _Traits, _Alloc>& __string,
+                                        ^
+/usr/include/c++/7/iomanip:480:48: error: expected primary-expression before ‘>’ token
+     quoted(basic_string<_CharT, _Traits, _Alloc>& __string,
+                                                ^
+/usr/include/c++/7/iomanip:480:51: error: ‘__string’ was not declared in this scope
+     quoted(basic_string<_CharT, _Traits, _Alloc>& __string,
+                                                   ^~~~~~~~
+/usr/include/c++/7/iomanip:480:51: note: suggested alternative: ‘__sinl’
+     quoted(basic_string<_CharT, _Traits, _Alloc>& __string,
+                                                   ^~~~~~~~
+                                                   __sinl
+/usr/include/c++/7/iomanip:481:12: error: expected primary-expression before ‘__delim’
+     _CharT __delim = _CharT('"'), _CharT __escape = _CharT('\\'))
+            ^~~~~~~
+/usr/include/c++/7/iomanip:481:42: error: expected primary-expression before ‘__escape’
+     _CharT __delim = _CharT('"'), _CharT __escape = _CharT('\\'))
+                                          ^~~~~~~~
+/usr/include/c++/7/iomanip:481:65: error: expression list treated as compound expression in initializer [-fpermissive]
+     _CharT __delim = _CharT('"'), _CharT __escape = _CharT('\\'))
+                                                                 ^
+/usr/include/c++/7/iomanip:482:5: error: expected ‘;’ before ‘{’ token
+     {
+     ^
+/usr/include/c++/7/iomanip:496:19: error: ‘ostream’ is not a template function
+   extern template ostream& operator<<(ostream&, _Setfill<char>);
+                   ^~~~~~~
+/usr/include/c++/7/iomanip:496:26: error: expected ‘;’ before ‘&’ token
+   extern template ostream& operator<<(ostream&, _Setfill<char>);
+                          ^
+/usr/include/c++/7/iomanip:497:19: error: ‘ostream’ is not a template function
+   extern template ostream& operator<<(ostream&, _Setiosflags);
+                   ^~~~~~~
+/usr/include/c++/7/iomanip:497:26: error: expected ‘;’ before ‘&’ token
+   extern template ostream& operator<<(ostream&, _Setiosflags);
+                          ^
+/usr/include/c++/7/iomanip:498:19: error: ‘ostream’ is not a template function
+   extern template ostream& operator<<(ostream&, _Resetiosflags);
+                   ^~~~~~~
+/usr/include/c++/7/iomanip:498:26: error: expected ‘;’ before ‘&’ token
+   extern template ostream& operator<<(ostream&, _Resetiosflags);
+                          ^
+/usr/include/c++/7/iomanip:499:19: error: ‘ostream’ is not a template function
+   extern template ostream& operator<<(ostream&, _Setbase);
+                   ^~~~~~~
+/usr/include/c++/7/iomanip:499:26: error: expected ‘;’ before ‘&’ token
+   extern template ostream& operator<<(ostream&, _Setbase);
+                          ^
+/usr/include/c++/7/iomanip:500:19: error: ‘ostream’ is not a template function
+   extern template ostream& operator<<(ostream&, _Setprecision);
+                   ^~~~~~~
+/usr/include/c++/7/iomanip:500:26: error: expected ‘;’ before ‘&’ token
+   extern template ostream& operator<<(ostream&, _Setprecision);
+                          ^
+/usr/include/c++/7/iomanip:501:19: error: ‘ostream’ is not a template function
+   extern template ostream& operator<<(ostream&, _Setw);
+                   ^~~~~~~
+/usr/include/c++/7/iomanip:501:26: error: expected ‘;’ before ‘&’ token
+   extern template ostream& operator<<(ostream&, _Setw);
+                          ^
+/usr/include/c++/7/iomanip:502:19: error: ‘istream’ is not a template function
+   extern template istream& operator>>(istream&, _Setfill<char>);
+                   ^~~~~~~
+/usr/include/c++/7/iomanip:502:26: error: expected ‘;’ before ‘&’ token
+   extern template istream& operator>>(istream&, _Setfill<char>);
+                          ^
+/usr/include/c++/7/iomanip:503:19: error: ‘istream’ is not a template function
+   extern template istream& operator>>(istream&, _Setiosflags);
+                   ^~~~~~~
+/usr/include/c++/7/iomanip:503:26: error: expected ‘;’ before ‘&’ token
+   extern template istream& operator>>(istream&, _Setiosflags);
+                          ^
+/usr/include/c++/7/iomanip:504:19: error: ‘istream’ is not a template function
+   extern template istream& operator>>(istream&, _Resetiosflags);
+                   ^~~~~~~
+/usr/include/c++/7/iomanip:504:26: error: expected ‘;’ before ‘&’ token
+   extern template istream& operator>>(istream&, _Resetiosflags);
+                          ^
+/usr/include/c++/7/iomanip:505:19: error: ‘istream’ is not a template function
+   extern template istream& operator>>(istream&, _Setbase);
+                   ^~~~~~~
+/usr/include/c++/7/iomanip:505:26: error: expected ‘;’ before ‘&’ token
+   extern template istream& operator>>(istream&, _Setbase);
+                          ^
+/usr/include/c++/7/iomanip:506:19: error: ‘istream’ is not a template function
+   extern template istream& operator>>(istream&, _Setprecision);
+                   ^~~~~~~
+/usr/include/c++/7/iomanip:506:26: error: expected ‘;’ before ‘&’ token
+   extern template istream& operator>>(istream&, _Setprecision);
+                          ^
+/usr/include/c++/7/iomanip:507:19: error: ‘istream’ is not a template function
+   extern template istream& operator>>(istream&, _Setw);
+                   ^~~~~~~
+/usr/include/c++/7/iomanip:507:26: error: expected ‘;’ before ‘&’ token
+   extern template istream& operator>>(istream&, _Setw);
+                          ^
+/usr/include/c++/7/iomanip:510:19: error: ‘wostream’ is not a template function
+   extern template wostream& operator<<(wostream&, _Setfill<wchar_t>);
+                   ^~~~~~~~
+/usr/include/c++/7/iomanip:510:27: error: expected ‘;’ before ‘&’ token
+   extern template wostream& operator<<(wostream&, _Setfill<wchar_t>);
+                           ^
+/usr/include/c++/7/iomanip:511:19: error: ‘wostream’ is not a template function
+   extern template wostream& operator<<(wostream&, _Setiosflags);
+                   ^~~~~~~~
+/usr/include/c++/7/iomanip:511:27: error: expected ‘;’ before ‘&’ token
+   extern template wostream& operator<<(wostream&, _Setiosflags);
+                           ^
+/usr/include/c++/7/iomanip:512:19: error: ‘wostream’ is not a template function
+   extern template wostream& operator<<(wostream&, _Resetiosflags);
+                   ^~~~~~~~
+/usr/include/c++/7/iomanip:512:27: error: expected ‘;’ before ‘&’ token
+   extern template wostream& operator<<(wostream&, _Resetiosflags);
+                           ^
+/usr/include/c++/7/iomanip:513:19: error: ‘wostream’ is not a template function
+   extern template wostream& operator<<(wostream&, _Setbase);
+                   ^~~~~~~~
+/usr/include/c++/7/iomanip:513:27: error: expected ‘;’ before ‘&’ token
+   extern template wostream& operator<<(wostream&, _Setbase);
+                           ^
+/usr/include/c++/7/iomanip:514:19: error: ‘wostream’ is not a template function
+   extern template wostream& operator<<(wostream&, _Setprecision);
+                   ^~~~~~~~
+/usr/include/c++/7/iomanip:514:27: error: expected ‘;’ before ‘&’ token
+   extern template wostream& operator<<(wostream&, _Setprecision);
+                           ^
+/usr/include/c++/7/iomanip:515:19: error: ‘wostream’ is not a template function
+   extern template wostream& operator<<(wostream&, _Setw);
+                   ^~~~~~~~
+/usr/include/c++/7/iomanip:515:27: error: expected ‘;’ before ‘&’ token
+   extern template wostream& operator<<(wostream&, _Setw);
+                           ^
+/usr/include/c++/7/iomanip:516:19: error: ‘wistream’ is not a template function
+   extern template wistream& operator>>(wistream&, _Setfill<wchar_t>);
+                   ^~~~~~~~
+/usr/include/c++/7/iomanip:516:27: error: expected ‘;’ before ‘&’ token
+   extern template wistream& operator>>(wistream&, _Setfill<wchar_t>);
+                           ^
+/usr/include/c++/7/iomanip:517:19: error: ‘wistream’ is not a template function
+   extern template wistream& operator>>(wistream&, _Setiosflags);
+                   ^~~~~~~~
+/usr/include/c++/7/iomanip:517:27: error: expected ‘;’ before ‘&’ token
+   extern template wistream& operator>>(wistream&, _Setiosflags);
+                           ^
+/usr/include/c++/7/iomanip:518:19: error: ‘wistream’ is not a template function
+   extern template wistream& operator>>(wistream&, _Resetiosflags);
+                   ^~~~~~~~
+/usr/include/c++/7/iomanip:518:27: error: expected ‘;’ before ‘&’ token
+   extern template wistream& operator>>(wistream&, _Resetiosflags);
+                           ^
+/usr/include/c++/7/iomanip:519:19: error: ‘wistream’ is not a template function
+   extern template wistream& operator>>(wistream&, _Setbase);
+                   ^~~~~~~~
+/usr/include/c++/7/iomanip:519:27: error: expected ‘;’ before ‘&’ token
+   extern template wistream& operator>>(wistream&, _Setbase);
+                           ^
+/usr/include/c++/7/iomanip:520:19: error: ‘wistream’ is not a template function
+   extern template wistream& operator>>(wistream&, _Setprecision);
+                   ^~~~~~~~
+/usr/include/c++/7/iomanip:520:27: error: expected ‘;’ before ‘&’ token
+   extern template wistream& operator>>(wistream&, _Setprecision);
+                           ^
+/usr/include/c++/7/iomanip:521:19: error: ‘wistream’ is not a template function
+   extern template wistream& operator>>(wistream&, _Setw);
+                   ^~~~~~~~
+/usr/include/c++/7/iomanip:521:27: error: expected ‘;’ before ‘&’ token
+   extern template wistream& operator>>(wistream&, _Setw);
+                           ^
+In file included from ../../CML/utils/DataReader.h:9:0,
+                 from cifar10.cc:11:
+../../CML/utils/DataFormats/idx.h:13:28: error: ‘istream’ is not a member of ‘cml::std’
+     uint32_t read_u32(std::istream& f){
+                            ^~~~~~~
+../../CML/utils/DataFormats/idx.h:13:28: note: suggested alternative:
+In file included from /usr/include/c++/7/ios:38:0,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/iosfwd:138:33: note:   ‘std::istream’
+   typedef basic_istream<char>   istream;
+                                 ^~~~~~~
+In file included from ../../CML/utils/DataReader.h:9:0,
+                 from cifar10.cc:11:
+../../CML/utils/DataFormats/idx.h:13:37: error: ‘f’ was not declared in this scope
+     uint32_t read_u32(std::istream& f){
+                                     ^
+../../CML/utils/DataFormats/idx.h:24:29: error: variable or field ‘read_U’ declared void
+     inline void read_U(std::istream& f, U& d){
+                             ^~~~~~~
+../../CML/utils/DataFormats/idx.h:24:29: error: ‘istream’ is not a member of ‘cml::std’
+../../CML/utils/DataFormats/idx.h:24:29: note: suggested alternative:
+In file included from /usr/include/c++/7/ios:38:0,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/iosfwd:138:33: note:   ‘std::istream’
+   typedef basic_istream<char>   istream;
+                                 ^~~~~~~
+In file included from ../../CML/utils/DataReader.h:9:0,
+                 from cifar10.cc:11:
+../../CML/utils/DataFormats/idx.h:24:38: error: ‘f’ was not declared in this scope
+     inline void read_U(std::istream& f, U& d){
+                                      ^
+../../CML/utils/DataFormats/idx.h:24:42: error: expected primary-expression before ‘&’ token
+     inline void read_U(std::istream& f, U& d){
+                                          ^
+../../CML/utils/DataFormats/idx.h:24:44: error: ‘d’ was not declared in this scope
+     inline void read_U(std::istream& f, U& d){
+                                            ^
+../../CML/utils/DataFormats/idx.h:34:22: error: variable or field ‘read_t’ declared void
+     void read_t(std::istream& f, tensor<T> data, std::vector<size_t>& dims, const size_t& S){
+                      ^~~~~~~
+../../CML/utils/DataFormats/idx.h:34:22: error: ‘istream’ is not a member of ‘cml::std’
+../../CML/utils/DataFormats/idx.h:34:22: note: suggested alternative:
+In file included from /usr/include/c++/7/ios:38:0,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/iosfwd:138:33: note:   ‘std::istream’
+   typedef basic_istream<char>   istream;
+                                 ^~~~~~~
+In file included from ../../CML/utils/DataReader.h:9:0,
+                 from cifar10.cc:11:
+../../CML/utils/DataFormats/idx.h:34:31: error: ‘f’ was not declared in this scope
+     void read_t(std::istream& f, tensor<T> data, std::vector<size_t>& dims, const size_t& S){
+                               ^
+../../CML/utils/DataFormats/idx.h:34:44: error: expected primary-expression before ‘data’
+     void read_t(std::istream& f, tensor<T> data, std::vector<size_t>& dims, const size_t& S){
+                                            ^~~~
+../../CML/utils/DataFormats/idx.h:34:55: error: ‘vector’ is not a member of ‘cml::std’
+     void read_t(std::istream& f, tensor<T> data, std::vector<size_t>& dims, const size_t& S){
+                                                       ^~~~~~
+../../CML/utils/DataFormats/idx.h:34:55: note: suggested alternative:
+In file included from /usr/include/c++/7/vector:64:0,
+                 from /usr/include/c++/7/functional:61,
+                 from /usr/local/include/Eigen/Core:74,
+                 from cifar10.cc:2:
+/usr/include/c++/7/bits/stl_vector.h:216:11: note:   ‘std::vector’
+     class vector : protected _Vector_base<_Tp, _Alloc>
+           ^~~~~~
+In file included from ../../CML/utils/DataReader.h:9:0,
+                 from cifar10.cc:11:
+../../CML/utils/DataFormats/idx.h:34:68: error: expected primary-expression before ‘>’ token
+     void read_t(std::istream& f, tensor<T> data, std::vector<size_t>& dims, const size_t& S){
+                                                                    ^
+../../CML/utils/DataFormats/idx.h:34:71: error: ‘dims’ was not declared in this scope
+     void read_t(std::istream& f, tensor<T> data, std::vector<size_t>& dims, const size_t& S){
+                                                                       ^~~~
+../../CML/utils/DataFormats/idx.h:34:71: note: suggested alternative: ‘time’
+     void read_t(std::istream& f, tensor<T> data, std::vector<size_t>& dims, const size_t& S){
+                                                                       ^~~~
+                                                                       time
+../../CML/utils/DataFormats/idx.h:34:77: error: expected primary-expression before ‘const’
+     void read_t(std::istream& f, tensor<T> data, std::vector<size_t>& dims, const size_t& S){
+                                                                             ^~~~~
+../../CML/utils/DataFormats/idx.h:48:25: error: ‘istream’ is not a member of ‘cml::std’
+     tensor<T> read(std::istream& f){
+                         ^~~~~~~
+../../CML/utils/DataFormats/idx.h:48:25: note: suggested alternative:
+In file included from /usr/include/c++/7/ios:38:0,
+                 from /usr/include/c++/7/istream:38,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/iosfwd:138:33: note:   ‘std::istream’
+   typedef basic_istream<char>   istream;
+                                 ^~~~~~~
+In file included from ../../CML/utils/DataReader.h:9:0,
+                 from cifar10.cc:11:
+../../CML/utils/DataFormats/idx.h:48:34: error: ‘f’ was not declared in this scope
+     tensor<T> read(std::istream& f){
+                                  ^
+../../CML/utils/DataFormats/idx.h:48:36: error: expected ‘;’ before ‘{’ token
+     tensor<T> read(std::istream& f){
+                                    ^
+In file included from cifar10.cc:11:0:
+../../CML/utils/DataReader.h:25:35: error: ‘string’ in namespace ‘cml::std’ does not name a type
+         tensor<T> load(const std::string& path){
+                                   ^~~~~~
+../../CML/utils/DataReader.h: In member function ‘cml::tensor<T> cml::cml::DataReader<T>::load(const int&)’:
+../../CML/utils/DataReader.h:26:18: error: ‘ifstream’ is not a member of ‘cml::std’
+             std::ifstream file {path, std::ios::in | std::ios::binary};
+                  ^~~~~~~~
+../../CML/utils/DataReader.h:26:18: note: suggested alternative: ‘basic_fstream’
+             std::ifstream file {path, std::ios::in | std::ios::binary};
+                  ^~~~~~~~
+                  basic_fstream
+../../CML/utils/DataReader.h:30:41: error: ‘file’ was not declared in this scope
+                     return idx::read<T>(file);
+                                         ^~~~
+../../CML/utils/DataReader.h:30:41: note: suggested alternative: ‘nice’
+                     return idx::read<T>(file);
+                                         ^~~~
+                                         nice
+In file included from cifar10.cc:12:0:
+../../CML/utils/Timer.h: At global scope:
+../../CML/utils/Timer.h:12:10: error: ‘clock_t’ in namespace ‘cml::std’ does not name a type
+     std::clock_t start;
+          ^~~~~~~
+../../CML/utils/Timer.h:28:2: error: expected ‘;’ after class definition
+ }
+  ^
+  ;
+../../CML/utils/Timer.h: In constructor ‘cml::Timer::Timer(unsigned int)’:
+../../CML/utils/Timer.h:15:60: error: class ‘cml::Timer’ does not have any field named ‘start’
+         Timer(unsigned int numLaps = 1): numLaps{numLaps}, start{clock()} {}
+                                                            ^~~~~
+../../CML/utils/Timer.h: In destructor ‘cml::Timer::~Timer()’:
+../../CML/utils/Timer.h:18:18: error: ‘cout’ is not a member of ‘cml::std’
+             std::cout << "Took " << double(clock()-start)/CLOCKS_PER_SEC << " seconds" << std::endl;
+                  ^~~~
+../../CML/utils/Timer.h:18:18: note: suggested alternative:
+In file included from cifar10.cc:3:0:
+/usr/include/c++/7/iostream:61:18: note:   ‘std::cout’
+   extern ostream cout;  /// Linked to standard output
+                  ^~~~
+In file included from cifar10.cc:12:0:
+../../CML/utils/Timer.h:18:52: error: ‘start’ was not declared in this scope
+             std::cout << "Took " << double(clock()-start)/CLOCKS_PER_SEC << " seconds" << std::endl;
+                                                    ^~~~~
+../../CML/utils/Timer.h:18:52: note: suggested alternative: ‘sqrt’
+             std::cout << "Took " << double(clock()-start)/CLOCKS_PER_SEC << " seconds" << std::endl;
+                                                    ^~~~~
+                                                    sqrt
+../../CML/utils/Timer.h:18:96: error: ‘endl’ is not a member of ‘cml::std’
+             std::cout << "Took " << double(clock()-start)/CLOCKS_PER_SEC << " seconds" << std::endl;
+                                                                                                ^~~~
+../../CML/utils/Timer.h:18:96: note: suggested alternative:
+In file included from /usr/include/c++/7/istream:39:0,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/ostream:590:5: note:   ‘std::endl’
+     endl(basic_ostream<_CharT, _Traits>& __os)
+     ^~~~
+cifar10.cc: In function ‘int cml::main()’:
+cifar10.cc:70:5: error: ‘cout’ was not declared in this scope
+     cout  << "Num Threads:  " << Eigen::nbThreads() << endl;
+     ^~~~
+cifar10.cc:70:5: note: suggested alternative:
+In file included from cifar10.cc:3:0:
+/usr/include/c++/7/iostream:61:18: note:   ‘std::cout’
+   extern ostream cout;  /// Linked to standard output
+                  ^~~~
+cifar10.cc:70:56: error: ‘endl’ was not declared in this scope
+     cout  << "Num Threads:  " << Eigen::nbThreads() << endl;
+                                                        ^~~~
+cifar10.cc:70:56: note: suggested alternative:
+In file included from /usr/include/c++/7/istream:39:0,
+                 from /usr/include/c++/7/sstream:38,
+                 from /usr/include/c++/7/complex:45,
+                 from /usr/local/include/Eigen/Core:43,
+                 from cifar10.cc:2:
+/usr/include/c++/7/ostream:590:5: note:   ‘std::endl’
+     endl(basic_ostream<_CharT, _Traits>& __os)
+     ^~~~
+cifar10.cc:96:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+cifar10.cc: At global scope:
+cifar10.cc:96:1: error: expected ‘}’ at end of input
+<builtin>: recipe for target 'cifar10.o' failed
+make: *** [cifar10.o] Error 1

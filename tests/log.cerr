@@ -2,7 +2,7 @@ g++ -g -std=c++14 -Wall -MMD -Werror=vla    -c -o testCML.o testCML.cc
 In file included from ../core/CML/Functions/Convolution.h:4:0,
                  from ../core/CML/Functions.h:7,
                  from testCML.cc:9:
-../core/CML/Functions/Convolution/Conv2D.h: In static member function ‘static cml::tensor<T> cml::Function::Conv2D::forward(cml::tensor<T>, cml::tensor<T>, cml::tensor<T>, const size_t&, const size_t&, const size_t&)’:
+../core/CML/Functions/Convolution/Conv2D.h: In static member function ‘static tensor<T> cml::Function::Conv2D::forward(tensor<T>, tensor<T>, tensor<T>, const size_t&, const size_t&, const size_t&)’:
 ../core/CML/Functions/Convolution/Conv2D.h:63:28: error: expected primary-expression before ‘)’ token
              t->toTensor<4>() = input->toTensor<4>().convolve(weights->toTensor<4>(), dims);
                             ^
@@ -14,21 +14,21 @@ In file included from ../core/CML/Functions/Convolution.h:4:0,
                                                                                    ^
 In file included from ../core/CML/Tensor.h:6:0,
                  from testCML.cc:8:
-../core/CML/Tensors/TensorImpl.h: In instantiation of ‘T& cml::Tensor<T>::at(const Dims& ...) [with Dims = {int, int}; T = float]’:
+../core/CML/Tensors/TensorImpl.h: In instantiation of ‘T& tensor<T>::at(const Dims& ...) [with Dims = {int, int}; T = float]’:
 tests/basicGradientsTest.h:43:41:   required from here
 ../core/CML/Tensors/TensorImpl.h:228:19: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
              if (d >= m){
                  ~~^~~~
-../core/CML/Tensors/TensorImpl.h: In instantiation of ‘T& cml::Tensor<T>::at(const Dims& ...) [with Dims = {int}; T = float]’:
-../core/CML/Functions/Loss/CrossEntropyLoss.h:32:44:   required from ‘static cml::tensor<T> cml::Function::CrossEntropyLoss::forward(cml::tensor<T>, cml::tensor<T>) [with T = float; cml::tensor<T> = std::shared_ptr<cml::Tensor<float> >]’
-../core/CML/Functions/Loss/CrossEntropyLoss.h:59:41:   required from ‘cml::tensor<T> cml::Function::CrossEntropyLoss(cml::tensor<T>, cml::tensor<T>) [with T = float; cml::tensor<T> = std::shared_ptr<cml::Tensor<float> >]’
+../core/CML/Tensors/TensorImpl.h: In instantiation of ‘T& tensor<T>::at(const Dims& ...) [with Dims = {int}; T = float]’:
+../core/CML/Functions/Loss/CrossEntropyLoss.h:32:44:   required from ‘static tensor<T> cml::Function::CrossEntropyLoss::forward(tensor<T>, tensor<T>) [with T = float; tensor<T> = std::shared_ptr<tensor<float> >]’
+../core/CML/Functions/Loss/CrossEntropyLoss.h:59:41:   required from ‘tensor<T> cml::Function::CrossEntropyLoss(tensor<T>, tensor<T>) [with T = float; tensor<T> = std::shared_ptr<tensor<float> >]’
 tests/softmaxTests.h:35:38:   required from here
 ../core/CML/Tensors/TensorImpl.h:228:19: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
 In file included from ../core/CML/Functions/Convolution.h:4:0,
                  from ../core/CML/Functions.h:7,
                  from testCML.cc:9:
-../core/CML/Functions/Convolution/Conv2D.h: In instantiation of ‘static cml::tensor<T> cml::Function::Conv2D::forward(cml::tensor<T>, cml::tensor<T>, cml::tensor<T>, const size_t&, const size_t&, const size_t&) [with T = float; cml::tensor<T> = std::shared_ptr<cml::Tensor<float> >; size_t = long unsigned int]’:
-../core/CML/nn/Convolution/Conv2D.h:61:60:   required from ‘cml::tensor<T> cml::nn::Conv2D<T>::forward(cml::tensor<T>) [with T = float; cml::tensor<T> = std::shared_ptr<cml::Tensor<float> >]’
+../core/CML/Functions/Convolution/Conv2D.h: In instantiation of ‘static tensor<T> cml::Function::Conv2D::forward(tensor<T>, tensor<T>, tensor<T>, const size_t&, const size_t&, const size_t&) [with T = float; tensor<T> = std::shared_ptr<tensor<float> >; size_t = long unsigned int]’:
+../core/CML/nn/Convolution/Conv2D.h:61:60:   required from ‘tensor<T> cml::nn::Conv2D<T>::forward(tensor<T>) [with T = float; tensor<T> = std::shared_ptr<tensor<float> >]’
 testCML.cc:32:1:   required from here
 ../core/CML/Functions/Convolution/Conv2D.h:63:24: error: invalid operands of types ‘<unresolved overloaded function type>’ and ‘int’ to binary ‘operator<’
              t->toTensor<4>() = input->toTensor<4>().convolve(weights->toTensor<4>(), dims);

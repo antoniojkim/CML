@@ -24,7 +24,7 @@ namespace nn {
         public:
             Softmax(const bool& inplace = false): inplace {inplace} {}
 
-            cml::tensor<T> forward(cml::tensor<T> x) override { return Function::Softmax::forward(x); }
+            tensor<T> forward(tensor<T> x) override { return Function::Softmax::forward(x); }
 
             std::ostream& print(std::ostream& out, const std::string& indent) override { return out << "Softmax {}"; }
     };

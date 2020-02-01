@@ -43,7 +43,7 @@ namespace nn {
                 throw CMLException("Attempting to get bias from Linear layer without bias");
             }
 
-            cml::tensor<T> forward(cml::tensor<T> x) override {
+            tensor<T> forward(tensor<T> x) override {
                 return bias ? Function::Linear::forward(x, getWeights(), getBias()) :
                               Function::Linear::forward(x, getWeights());
             }

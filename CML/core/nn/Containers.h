@@ -21,7 +21,7 @@ namespace nn {
             Sequential(std::initializer_list<Module<T>*> submodules): Module<T>{submodules} {}
             Sequential(std::initializer_list<std::pair<std::string, Module<T>*>> dict): Module<T>{dict} {}
 
-            cml::tensor<T> forward(cml::tensor<T> x) override {
+            tensor<T> forward(tensor<T> x) override {
                 auto y = x;
                 for (auto& submodule : submodules){
                     y = (*submodule)(y);
@@ -56,7 +56,7 @@ namespace nn {
             ModuleList(): Module<T>{} {}
             ModuleList(std::initializer_list<Module<T>*> submodules): Module<T>{submodules} {}
 
-            cml::tensor<T> forward(cml::tensor<T> x) override {
+            tensor<T> forward(tensor<T> x) override {
                 auto y = x;
                 for (auto& submodule : submodules){
                     y = (*submodule)(y);
@@ -85,7 +85,7 @@ namespace nn {
             ModuleDict(): Module<T>{} {}
             ModuleDict(std::initializer_list<std::pair<std::string, Module<T>*>> dict): Module<T>{dict} {}
 
-            cml::tensor<T> forward(cml::tensor<T> x) override  {
+            tensor<T> forward(tensor<T> x) override  {
                 auto y = x;
                 for (auto& submodule : submodules){
                     y = (*submodule)(y);

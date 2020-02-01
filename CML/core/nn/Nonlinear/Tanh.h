@@ -24,7 +24,7 @@ namespace nn {
             // TODO: Add support for in-place
             Tanh(const bool& inplace = false): inplace {inplace} {}
 
-            cml::tensor<T> forward(cml::tensor<T> x) override { return Function::Tanh::forward(x); }
+            tensor<T> forward(tensor<T> x) override { return Function::Tanh::forward(x); }
 
             std::ostream& print(std::ostream& out, const std::string& indent) override { return out << "Tanh {}"; }
     };

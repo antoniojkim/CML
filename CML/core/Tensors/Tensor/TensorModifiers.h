@@ -7,8 +7,8 @@
 #include <Eigen/Core>
 #include <unsupported/Eigen/CXX11/Tensor>
 
-#include "Tensor.h"
-#include "../../Numeric/Numeric.h"
+#include "../Tensor.h"
+#include "../../../numeric/Numeric.h"
 
 namespace cml {
 

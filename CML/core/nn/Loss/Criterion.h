@@ -9,8 +9,8 @@ namespace nn {
 
     template<typename T = float>
     struct Criterion {
-        virtual cml::tensor<T> forward(cml::tensor<T> actual, cml::tensor<T> expected) = 0;
-        inline cml::tensor<T> operator()(cml::tensor<T> actual, cml::tensor<T> expected){
+        virtual tensor<T> forward(tensor<T> actual, tensor<T> expected) = 0;
+        inline tensor<T> operator()(tensor<T> actual, tensor<T> expected){
             return forward(actual, expected);
         }
     };

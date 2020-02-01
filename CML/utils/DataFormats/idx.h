@@ -5,7 +5,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "../../CML/Tensor.h"
+#include "../../core/Tensor.h"
 #include "tools.h"
 
 namespace idx {
@@ -31,7 +31,7 @@ namespace idx {
     }
 
     template<typename T, typename U>
-    void read_t(std::istream& f, cml::tensor<T> data, std::vector<size_t>& dims, const size_t& S){
+    void read_t(std::istream& f, tensor<T> data, std::vector<size_t>& dims, const size_t& S){
         if (data->size() != S){
             throw CMLException("data.size() != S:  ", data->size(), "!=", S);
         }   
@@ -45,7 +45,7 @@ namespace idx {
     }
 
     template<typename T>
-    cml::tensor<T> read(std::istream& f){
+    tensor<T> read(std::istream& f){
         uint32_t magicNumber = read_u32(f);
 
         size_t numDims = ((magicNumber) & 0xff);
@@ -57,7 +57,7 @@ namespace idx {
             S *= dims[i];
         }
 
-        cml::tensor<T> data = cml::make_tensor<T>(dims);
+        tensor<T> data = cml::make_tensor<T>(dims);
 
         switch((magicNumber >> 8) & 0xff){
             case 0x08:

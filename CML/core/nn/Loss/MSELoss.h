@@ -30,12 +30,12 @@ namespace nn {
         Params:
             reduction - The Reduction operation to be applied. Default: Reduction::MEAN
         */
-        Reduction reduction;
+        nn::Reduction reduction;
 
         public:
-            MSELoss(const Reduction& reduction = Reduction::MEAN): reduction{reduction} {}
+            MSELoss(const nn::Reduction& reduction = nn::Reduction::MEAN): reduction{reduction} {}
 
-            cml::tensor<T> forward(cml::tensor<T> actual, cml::tensor<T> expected) override {
+            tensor<T> forward(tensor<T> actual, tensor<T> expected) override {
                 return Function::MSELoss::forward(actual, expected, reduction);
             }
     };

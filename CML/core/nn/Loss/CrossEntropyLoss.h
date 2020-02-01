@@ -16,7 +16,7 @@ namespace nn {
         public:
             CrossEntropyLoss() {}
 
-            cml::tensor<T> forward(cml::tensor<T> actual, cml::tensor<T> expected) override {
+            tensor<T> forward(tensor<T> actual, tensor<T> expected) override {
                 return Function::CrossEntropyLoss::forward(actual, expected);
             }
     };

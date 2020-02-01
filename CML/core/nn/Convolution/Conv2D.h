@@ -57,7 +57,7 @@ namespace cml {
                     throw "Attempting to get bias from Conv2D layer without bias";
                 }
 
-                cml::tensor<T> forward(cml::tensor<T> x) override {
+                tensor<T> forward(tensor<T> x) override {
                     return bias ? Function::Conv2D::forward(x, getWeights(), getBias(), stride, padding, dilation) :
                                   Function::Conv2D::forward(x, getWeights(), (tensor<T>)(nullptr), stride, padding, dilation);
                 }

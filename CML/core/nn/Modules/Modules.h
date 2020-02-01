@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "../../Tensor.h"
-#include "../../../Utils/Random.h"
+#include "../../../utils/Random.h"
 
 namespace cml {
 namespace nn {
@@ -86,8 +86,8 @@ namespace nn {
 
                     e.g.    Instead of model.forward(x), you can use model(x)
             */
-            virtual cml::tensor<T> forward(cml::tensor<T>) = 0;
-            cml::tensor<T> operator()(cml::tensor<T> x);
+            virtual tensor<T> forward(tensor<T>) = 0;
+            tensor<T> operator()(tensor<T> x);
 
             /*
                 The following methods allow you to add a submodule to your module.
@@ -263,7 +263,7 @@ namespace nn {
     }
 
     template<typename T>
-    cml::tensor<T> Module<T>::operator()(cml::tensor<T> x){
+    tensor<T> Module<T>::operator()(tensor<T> x){
         return forward(x);
     }
 

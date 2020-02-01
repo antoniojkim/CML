@@ -28,7 +28,7 @@ namespace nn {
         public:
             ReLU(const bool& inplace = false): inplace {inplace} {}
 
-            cml::tensor<T> forward(cml::tensor<T> x) override { return Function::ReLU(x); }
+            tensor<T> forward(tensor<T> x) override { return Function::ReLU(x); }
 
             std::ostream& print(std::ostream& out, const std::string& indent) override { return out << "ReLU {}"; }
     };
