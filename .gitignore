@@ -2,4 +2,5 @@
 *ipynb_checkpoint*
 Notes/
 examples/mnist/data/
+examples/cifar10/data/
 .sandbox/sandbox
