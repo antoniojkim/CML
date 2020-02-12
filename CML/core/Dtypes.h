@@ -8,19 +8,27 @@
 
 namespace cml {
 
-    #define INSTANTIATE_CLASS_TEMPLATES(T) \
-        template class T<float>; \
-        template class T<double>; \
-        template class T<long long>; \
-        template class T<long>; \
-        template class T<int>;
+    #define WRAP_ALL_TYPES(PREFIX, SUFFIX) \
+        PREFIX short int SUFFIX \
+        PREFIX unsigned short int SUFFIX \
+        PREFIX int SUFFIX \
+        PREFIX unsigned int SUFFIX \
+        PREFIX long int SUFFIX \
+        PREFIX unsigned long int SUFFIX \
+        PREFIX long long int SUFFIX \
+        PREFIX unsigned long long int SUFFIX \
+        PREFIX signed char SUFFIX \
+        PREFIX unsigned char SUFFIX \
+        PREFIX char SUFFIX \
+        PREFIX float SUFFIX \
+        PREFIX double SUFFIX \
+        PREFIX long double SUFFIX \
 
-    #define INSTANTIATE_FUNCTION_TEMPLATES(T) \
-        template float T<float>(const float&); \
-        template double T<double>(const double&); \
-        template long long T<long long>(const long long&); \
-        template long T<long>(const long&); \
-        template int T<int>(const int&);
+    #define INSTANTIATE_CLASS_TEMPLATES(T) \
+        WRAP_ALL_TYPES(template class T<, >;)\
+
+    
+    
 
 
     namespace nn {

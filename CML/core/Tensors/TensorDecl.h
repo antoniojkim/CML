@@ -31,7 +31,7 @@ namespace cml {
 
     #ifndef CAST_MATRIX
     #define CAST_MATRIX static_cast<DMatrix<T>>
-    #endif // CAST_EIGEN_TENSOR
+    #endif // CAST_MATRIX
 
     #ifndef CAST_TENSOR
     #define CAST_TENSOR static_cast<Eigen::Tensor<T, nDims>>
