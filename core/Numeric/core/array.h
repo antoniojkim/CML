@@ -25,18 +25,25 @@ namespace numeric {
             std::shared_ptr<void *> data();
             Dtype dtype();
             const std::vector<int>& shape();
-            const long size();
+            uint64_t size();
 
 
+    };
+
+    Array array(Dtype dtype = Dtype::float32);
+
+
+    class ArrayIter{
+       Array* array;
     };
 
 }
 
 namespace std {
-   template <> ArrayIter begin<numeric::Array>(numeric::Array& a){
+   template <> numeric::ArrayIter begin(numeric::Array& a){
       return a.begin();
    }
-   template <> ArrayIter end<numeric::Array>(numeric::Array& a){
+   template <> numeric::ArrayIter end(numeric::Array& a){
       return a.end();
    }
 }

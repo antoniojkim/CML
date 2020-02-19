@@ -4,3 +4,4 @@ Notes/
 examples/mnist/data/
 examples/cifar10/data/
 .sandbox/sandbox
+*log.cerr

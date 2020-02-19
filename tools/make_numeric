@@ -1,0 +1,7 @@
+#!/bin/bash
+
+CURR_DIR=$(pwd)
+
+cd core/Numeric/
+make
+cd $CURR_DIR
