@@ -1,15 +1,15 @@
 CXX = g++
-CXXFLAGS = -g -std=c++14 -Wall -MMD -Werror=vla -DDEBUG
-EXEC = testCML
+CXXFLAGS = -g -std=c++14 -Wall -MMD -Werror=vla -DDEBUG -I $${HOME} -I ../core/
+EXEC = test
 
-# TENSORS = $(wildcard ../core/CML/Tensors/*.cc)        $(TENSORS:.cc=.o)
-# MODULES = $(wildcard ../core/CML/nn/Modules/*.cc)     $(MODULES:.cc=.o)
-# OPTIMIZER = $(wildcard CML/optim/Optimizers/*.cc)     $(OPTIMIZER:.cc=.o)
-OBJECTS =  testCML.o
+NUMERIC_TESTS = $(wildcard numeric/*.cc)
+
+SOURCES = ${NUMERIC_TESTS} test.cc 
+OBJECTS = $(SOURCES:.cc=.o)
 DEPENDS = ${OBJECTS:.o=.d}
 
 ${EXEC}: ${OBJECTS}
-	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC}
+	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC} -L../core/Numeric/ -lNumeric 
 
 -include ${DEPENDS}
 

@@ -5,4 +5,7 @@ examples/mnist/data/
 examples/cifar10/data/
 .sandbox/sandbox
 *log.cerr
-core/Numeric/Numeric.a
+*.a
+*.o
+*.d
+

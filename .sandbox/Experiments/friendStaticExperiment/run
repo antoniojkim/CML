@@ -1,0 +1,10 @@
+#!/bin/bash
+
+clear
+g++ --std=c++14 experiment.cc -o experiment > log.cerr 2>&1
+if [ $? -ne 0 ]; then
+	vim -RZ log.cerr
+else
+	rm log.cerr
+	gdb -ex "run" ./experiment
+fi

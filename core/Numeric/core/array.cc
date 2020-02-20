@@ -9,7 +9,7 @@ using namespace std;
 using namespace numeric;
 
 namespace numeric {
-    struct array_attributes {
+    struct Array::array_attributes {
         vector<int> shape;
         uint64_t size;
         Dtype dtype;
@@ -26,12 +26,23 @@ namespace numeric {
             dtype{dtype},
             dtypesize{DtypeSizes[int(dtype)]} {}
     };
-}
 
+}
 
 Array::Array(Dtype dtype): a{make_unique<array_attributes>(dtype)} {
     a->shape.reserve(4);
 }
+Array::~Array() = default;
+
+ArrayIter Array::begin(){
+    throw "Unimplemented Error";
+}
+ArrayIter Array::end(){
+    throw "Unimplemented Error";
+}
+
+std::shared_ptr<void *> Array::data(){ return a->data; }
+Dtype Array::dtype(){ return a->dtype; }
 
 const vector<int>& Array::shape(){ return a->shape; }
 uint64_t Array::size(){ return a->size; }
@@ -39,4 +50,14 @@ uint64_t Array::size(){ return a->size; }
 
 Array array(Dtype dtype){
     return Array(dtype);
+}
+
+
+namespace std {
+    template <> numeric::ArrayIter begin(numeric::Array& a){
+        return a.begin();
+    }
+    template <> numeric::ArrayIter end(numeric::Array& a){
+        return a.end();
+    }
 }

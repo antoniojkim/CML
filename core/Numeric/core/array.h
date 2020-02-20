@@ -1,22 +1,24 @@
-// #pragma once
+#pragma once
 
+#include <iterator>
 #include <memory>
 
 #include "dtypes.h"
 
 namespace numeric {
 
-    struct array_attributes;
     class ArrayIter;
 
     // Multidimensional Array interface;
     class Array {
 
+        struct array_attributes;
         std::unique_ptr<array_attributes> a;
 
         public:
 
             Array(Dtype dtype = Dtype::float32);
+            ~Array();
 
             ArrayIter begin();
             ArrayIter end();
@@ -33,17 +35,17 @@ namespace numeric {
     Array array(Dtype dtype = Dtype::float32);
 
 
-    class ArrayIter{
-       Array* array;
+    class ArrayIter: public std::iterator<std::input_iterator_tag, Array*>{
+        Array* array;
+        int index = 0;
+
+        public:
+
     };
 
 }
 
 namespace std {
-   template <> numeric::ArrayIter begin(numeric::Array& a){
-      return a.begin();
-   }
-   template <> numeric::ArrayIter end(numeric::Array& a){
-      return a.end();
-   }
+    template <> numeric::ArrayIter begin(numeric::Array& a);
+    template <> numeric::ArrayIter end(numeric::Array& a);
 }

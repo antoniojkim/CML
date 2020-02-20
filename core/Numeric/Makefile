@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -Ofast -g -std=c++17 -fPIC -Wall -MMD -Werror=vla
-TARGET_LIB = Numeric.a  # target lib
+TARGET_LIB = libNumeric.a  # target lib
 
 CORE = $(wildcard core/*.cc)
 
