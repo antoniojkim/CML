@@ -69,8 +69,9 @@ def main(args):
         if args.lang == "c++":
             make = subprocess.Popen("make", shell=True)
             make.communicate()
-            run = subprocess.Popen("./sandbox", shell=True)
-            run.communicate()
+            if make.returncode == 0:
+                run = subprocess.Popen("./sandbox", shell=True)
+                run.communicate()
         
         elif args.lang == "python":
             run = subprocess.Popen(f"python -u {sandbox_file}", shell=True)

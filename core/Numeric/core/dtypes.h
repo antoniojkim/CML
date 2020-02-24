@@ -2,23 +2,26 @@
 
 #include <complex>
 #include <cstdint>
+#include <cstdlib>
 
 namespace numeric {
 
-    #define ALL_TYPES(PREFIX, SELECT, SUFFIX)                   \
+    #define ARRAY_TYPES(PREFIX, SELECT, SUFFIX)            \
         PREFIX SELECT(std::int8_t, int8) SUFFIX                 \
-        PREFIX SELECT(std::int16_t, int16) SUFFIX               \
-        PREFIX SELECT(std::int32_t, int32) SUFFIX               \
-        PREFIX SELECT(std::int64_t, int64) SUFFIX               \
+        PREFIX SELECT(short int, int16) SUFFIX                  \
+        PREFIX SELECT(int, int32) SUFFIX                        \
+        PREFIX SELECT(long long, int64) SUFFIX                  \
         PREFIX SELECT(std::uint8_t, uint8) SUFFIX               \
-        PREFIX SELECT(std::uint16_t, uint16) SUFFIX             \
-        PREFIX SELECT(std::uint32_t, uint32) SUFFIX             \
-        PREFIX SELECT(std::uint64_t, uint64) SUFFIX             \
+        PREFIX SELECT(unsigned short int, uint16) SUFFIX        \
+        PREFIX SELECT(unsigned int, uint32) SUFFIX              \
+        PREFIX SELECT(unsigned long long, uint64) SUFFIX        \
         PREFIX SELECT(float, float32) SUFFIX                    \
-        PREFIX SELECT(double, float64) SUFFIX                   \
-        PREFIX SELECT(long double, float80) SUFFIX              \
+        PREFIX SELECT(double, float64) SUFFIX
+
+    #define COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)               \
         PREFIX SELECT(std::complex<float>, cfloat32) SUFFIX     \
         PREFIX SELECT(std::complex<double>, cfloat64) SUFFIX
+
 
     #define NUM_DTYPES 13
 
@@ -29,7 +32,8 @@ namespace numeric {
         #define SELECT(_1, _2)  _2
         #define SUFFIX ,
 
-        ALL_TYPES(PREFIX, SELECT, SUFFIX)
+        ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+        COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
 
         #undef PREFIX
         #undef SELECT
@@ -45,7 +49,7 @@ namespace numeric {
         #define SELECT(_1, _2)  sizeof ( _1 )
         #define SUFFIX ,
 
-        ALL_TYPES(PREFIX, SELECT, SUFFIX)
+        ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
 
         #undef PREFIX
         #undef SELECT
@@ -53,5 +57,18 @@ namespace numeric {
 
         0
     };
+
+    // template<typename T>
+    // Dtype type_to_dtype();
+
+    // #define PREFIX 
+    // #define SELECT(T, DT) template<> Dtype type_to_dtype<T>(){ return Dtype::DT; }
+    // #define SUFFIX
+
+    // ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+
+    // #undef PREFIX 
+    // #undef SELECT
+    // #undef SUFFIX
 
 }

@@ -3,8 +3,9 @@ CXXFLAGS = -Ofast -g -std=c++17 -fPIC -Wall -MMD -Werror=vla
 TARGET_LIB = libNumeric.a  # target lib
 
 CORE = $(wildcard core/*.cc)
+METHODS = $(wildcard core/Methods/*.cc)
 
-SOURCES = ${CORE}
+SOURCES = ${CORE} ${METHODS}
 OBJECTS = $(SOURCES:.cc=.o)
 DEPENDS = ${OBJECTS:.o=.d}
 

@@ -4,6 +4,11 @@ test:	numeric
 	./tools/make_tests
 	./tests/test
 
+rtest:	numeric
+	rm ./tests/test
+	./tools/make_tests
+	./tests/test
+
 sandbox:
 	python3 -u tools/sandbox.py --create --name $(name) --lang $(lang)
 
