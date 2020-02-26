@@ -11,17 +11,18 @@
 
 namespace numeric {
     
+    template<typename T>
     struct array_attributes {
-        std::vector<std::size_t> shape;
-        std::size_t size;
-        Dtype dtype;
-        std::size_t dtypesize;
+        std::vector<std::size_t> shape {0};
+        std::size_t size = 0;
+        constexpr static Dtype dtype = TYPE_TO_DTYPE<T>();
+        constexpr static std::size_t dtypesize = sizeof(T);
 
-        std::shared_ptr<void> data = nullptr;
+        std::shared_ptr<T[]> data = nullptr;
 
-        array_attributes(Dtype dtype);
-        array_attributes(const std::vector<std::size_t>& shape, Dtype dtype);
-        // array_attributes(std::initializer_list<std::size_t> shape, Dtype dtype);
+        array_attributes();
+        array_attributes(const std::vector<std::size_t>& shape);
+        // array_attributes(std::initializer_list<std::size_t> shape);
     };
 
 }

@@ -10,41 +10,69 @@
 using namespace std;
 using namespace numeric;
 
-Array::Array(Dtype dtype): a{make_unique<array_attributes>(dtype)} {
+template<typename T>
+Array<T>::Array(): a{make_unique<array_attributes<T>>()} {
     a->shape.reserve(4);
 }
-Array::Array(const std::vector<size_t>& v, Dtype dtype):
-    a{make_unique<array_attributes>(v, dtype)} {}
-Array::~Array() = default;
 
-ArrayIter Array::begin(){
+template<typename T>
+Array<T>::Array(const std::vector<size_t>& v):
+    a{make_unique<array_attributes<T>>(v, dtype)} {}
+
+template<typename T>
+Array<T>::~Array() = default;
+
+template<typename T>
+ArrayIter<T> Array<T>::begin(){
     throw "Unimplemented Error";
 }
-ArrayIter Array::end(){
+template<typename T>
+ArrayIter<T> Array<T>::end(){
     throw "Unimplemented Error";
 }
 
-shared_ptr<void> Array::data(){ return a->data; }
-Dtype Array::dtype(){ return a->dtype; }
-size_t Array::itemsize(){ return a->dtypesize; }
-uint64_t Array::nbytes(){
+template<typename T> 
+shared_ptr<T> Array<T>::data(){ return a->data; }
+template<typename T>
+Dtype Array<T>::dtype(){ return a->dtype; }
+template<typename T>
+size_t Array<T>::itemsize(){ return a->dtypesize; }
+template<typename T>
+uint64_t Array<T>::nbytes(){
     return ((uint64_t) a->dtype) * ((uint64_t) a->dtypesize);
 }
 
-const vector<std::size_t>& Array::shape(){ return a->shape; }
-size_t Array::size(){ return a->size; }
-size_t Array::ndim(){ return a->shape.size(); }
+template<typename T>
+const vector<std::size_t>& Array<T>::shape(){ return a->shape; }
+template<typename T>
+size_t Array<T>::size(){ return a->size; }
+template<typename T>
+size_t Array<T>::ndim(){ return a->shape.size(); }
 
-Array array(Dtype dtype){
-    return Array(dtype);
+template<typename T>
+Array<T> array(){
+    return Array<T>();
 }
 
 
 namespace std {
-    template <> numeric::ArrayIter begin(numeric::Array& a){
+    template<typename T>
+    numeric::ArrayIter<T> begin(numeric::Array<T>& a){
         return a.begin();
     }
-    template <> numeric::ArrayIter end(numeric::Array& a){
+    template<typename T>
+    numeric::ArrayIter<T> end(numeric::Array<T>& a){
         return a.end();
     }
 }
+
+
+// #define PREFIX
+// #define SELECT
+// #define SUFFIX
+
+// ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+
+// #undef PREFIX
+// #undef SELECT
+// #undef SUFFIX

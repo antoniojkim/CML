@@ -11,27 +11,31 @@
 
 namespace numeric {
 
+    template<typename T>
     class ArrayIter;
+    
+    template<typename T>
     struct array_attributes;
 
     // Multidimensional Array interface;
+    template<typename T = float>
     class Array {
 
-        std::unique_ptr<array_attributes> a;
+        std::unique_ptr<array_attributes<T>> a;
 
         public:
 
-            Array(Dtype dtype = Dtype::float32);
-            Array(const std::vector<size_t>& v, Dtype dtype = Dtype::float32);
-            template<typename T>
-            Array(std::initializer_list<T> l, Dtype dtype = Dtype::float32);
+            Array();
+            Array(const std::vector<size_t>& v);
+            template<typename U>
+            Array(std::initializer_list<U> l);
             ~Array();
 
-            ArrayIter begin();
-            ArrayIter end();
+            ArrayIter<T> begin();
+            ArrayIter<T> end();
 
             // Attributes
-            std::shared_ptr<void> data();
+            std::shared_ptr<T> data();
             Dtype dtype();
             std::size_t itemsize();
             std::uint64_t nbytes();
@@ -41,7 +45,11 @@ namespace numeric {
             std::size_t size();
             std::size_t ndim();
 
-            ArrayIter flat();
+            ArrayIter<T> flat();
+
+
+            // Accessor Methods
+
 
 
             // Methods
@@ -50,13 +58,17 @@ namespace numeric {
             // template<typename T> Array all(int axis);
             // template<typename T> void all(int axis, Array& out);
 
+            
+
     };
 
-    Array array(Dtype dtype = Dtype::float32);
+    template<typename T = float>
+    Array<T> array();
 
 
-    class ArrayIter: public std::iterator<std::input_iterator_tag, Array*>{
-        Array* array;
+    template<typename T>
+    class ArrayIter: public std::iterator<std::input_iterator_tag, Array<T>*>{
+        Array<T>* array;
         int index = 0;
 
         public:
@@ -66,6 +78,8 @@ namespace numeric {
 }
 
 namespace std {
-    template <> numeric::ArrayIter begin(numeric::Array& a);
-    template <> numeric::ArrayIter end(numeric::Array& a);
+    template<typename T>
+    numeric::ArrayIter<T> begin(numeric::Array<T>& a);
+    template<typename T>
+    numeric::ArrayIter<T> end(numeric::Array<T>& a);
 }

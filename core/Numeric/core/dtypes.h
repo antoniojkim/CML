@@ -3,6 +3,9 @@
 #include <complex>
 #include <cstdint>
 #include <cstdlib>
+#include <type_traits>
+
+#include "exception.h"
 
 namespace numeric {
 
@@ -42,12 +45,12 @@ namespace numeric {
         size  // Number of Dtypes
     };
 
-    constexpr std::size_t DtypeSizes[NUM_DTYPES + 2] = {
-        0,
+    template<typename T>
+    constexpr Dtype TYPE_TO_DTYPE(){
 
         #define PREFIX 
-        #define SELECT(_1, _2)  sizeof ( _1 )
-        #define SUFFIX ,
+        #define SELECT(AT, DT)  if(std::is_same<T, AT>::value){ return Dtype::DT; }
+        #define SUFFIX
 
         ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
 
@@ -55,8 +58,8 @@ namespace numeric {
         #undef SELECT
         #undef SUFFIX
 
-        0
-    };
+        return Dtype::Undefined;
+    }
 
     // template<typename T>
     // Dtype type_to_dtype();

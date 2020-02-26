@@ -13,22 +13,16 @@ using namespace numeric;
 #define PREFIX
 #define SUFFIX
 
-bool Array::all(){
-    switch(a->dtype){
-        #define PREFIX
-        #define SELECT(T, DT) case Dtype::DT: return numeric::all((T*) a->data.get(), a->size);
-        #define SUFFIX
-
-        ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
-        
-        #undef PREFIX
-        #undef SELECT
-        #undef SUFFIX
-
-        default:  throw numeric::Exception("Invalid Type Error");
+template<typename T>
+bool Array<T>::all(){
+    if (ndim() != 1){
+        throw numeric::Exception("Array::all without axis requires array to be 1D. Got: ", ndim());
     }
+
+    return numeric::all((T*) a->data.get(), a->size);
 }
 
-inline void Array::all(bool& out){
+template<typename T>
+inline void Array<T>::all(bool& out){
     out = all();
 }

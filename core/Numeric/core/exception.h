@@ -1,20 +1,19 @@
 #pragma once
 
+#include <exception>
 #include <string>
 #include <sstream>
 
 namespace numeric {
 
-    struct Exception {
+    struct Exception: std::exception {
 
         std::string msg;
         
         template<typename...Args>
         Exception(Args&&... args){
             std::ostringstream oss;
-            for (auto& arg: {args...}){
-                oss << arg;
-            }
+            (oss << ... << args);
             msg = oss.str();
         }
 
