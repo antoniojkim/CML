@@ -75,4 +75,12 @@ namespace numeric {
         return (size_t)(min - array);
     }
 
+    template<typename T>
+    std::vector<size_t> argsort(T* a, std::size_t N){
+        std::vector<size_t> idx(N);
+        std::iota(idx.begin(), idx.end(), 0);
+        std::sort(idx.begin(), idx.end(), [a](const size_t &i, const size_t &j){ return a[i] < a[j];});
+        return idx;
+    }
+
 }

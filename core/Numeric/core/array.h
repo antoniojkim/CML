@@ -74,6 +74,9 @@ namespace numeric {
             // std::unique_ptr<Array<size_t>> argmin(int axis);
             // void argmin(int axis, Array<size_t>& out);
 
+            std::vector<size_t> argsort();
+            // std::vector<size_t> argsort(int axis);
+
             
 
     };
