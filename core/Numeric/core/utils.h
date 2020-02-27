@@ -50,4 +50,29 @@ namespace numeric {
         return bool(std::accumulate(std::begin(iterable), std::end(iterable), start, std::logical_or<T>()));
     }
 
+
+    template<typename T>
+    size_t argmax(T* array, std::size_t size){
+        T* max = array;
+        T* end = array+size;
+        for(T* a = array+1; a < end; ++a){
+            if (*a > *max){
+                max = a;
+            }
+        }
+        return (size_t)(max - array);
+    }
+
+    template<typename T>
+    size_t argmin(T* array, std::size_t size){
+        T* min = array;
+        T* end = array+size;
+        for(T* a = array+1; a < end; ++a){
+            if (*a < *min){
+                min = a;
+            }
+        }
+        return (size_t)(min - array);
+    }
+
 }

@@ -49,19 +49,30 @@ namespace numeric {
 
 
             // Accessor Methods
-
+            T& get(long index);
+            inline T& operator[](long index){ return get(index); }
 
 
             // Methods
             bool all();
             void all(bool& out);
-            // template<typename T> Array all(int axis);
-            // template<typename T> void all(int axis, Array& out);
+            // Array<T> all(int axis);
+            // void all(int axis, Array<T>& out);
             
             bool any();
             void any(bool& out);
-            // template<typename T> Array any(int axis);
-            // template<typename T> void any(int axis, Array& out);
+            // std::unique_ptr<Array<T>> any(int axis);
+            // void any(int axis, Array<T>& out);
+
+            size_t argmax();
+            void argmax(size_t& out);
+            // std::unique_ptr<Array<size_t>> argmax(int axis);
+            // void argmax(int axis, Array<size_t>& out);
+
+            size_t argmin();
+            void argmin(size_t& out);
+            // std::unique_ptr<Array<size_t>> argmin(int axis);
+            // void argmin(int axis, Array<size_t>& out);
 
             
 

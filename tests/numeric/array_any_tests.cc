@@ -19,14 +19,14 @@ TEST_CASE("Array `any` tests", "[any]"){
         REQUIRE( !a.any() );
     }
 
-    SECTION("`all` Test (true) all one"){
+    SECTION("`any` Test (true) all one"){
         Array<int> a ({1, 1, 1, 1});
         REQUIRE( a.dtype() == Dtype::int32 );
         REQUIRE( a.size() == 4 );
         REQUIRE( a.any() );
     }
 
-    SECTION("`all` Test (true) mix zero one"){
+    SECTION("`any` Test (true) mix zero one"){
         Array<int> a ({0, 1, 0, 1});
         REQUIRE( a.dtype() == Dtype::int32 );
         REQUIRE( a.size() == 4 );
@@ -34,7 +34,7 @@ TEST_CASE("Array `any` tests", "[any]"){
         REQUIRE( a.any() );
     }
 
-    SECTION("`all` Test (false)"){
+    SECTION("`any` Test (false)"){
         Array<int> a ({0, 0, 0, 0});
         REQUIRE( a.dtype() == Dtype::int32 );
         REQUIRE( a.size() == 4 );
@@ -42,7 +42,7 @@ TEST_CASE("Array `any` tests", "[any]"){
         REQUIRE( !a.any() );
     }
 
-    SECTION("`all` Test (true, non zero values)"){
+    SECTION("`any` Test (true, non zero values)"){
         Array<int> a ({1, -1, 2, -4, 5});
         REQUIRE( a.dtype() == Dtype::int32 );
         REQUIRE( a.size() == 5 );
@@ -50,7 +50,7 @@ TEST_CASE("Array `any` tests", "[any]"){
         REQUIRE( a.any() );
     }
 
-    SECTION("`all` Test (true, non zero values)"){
+    SECTION("`any` Test (true, non zero values)"){
         Array<int> a ({1, -1, 2, -4, 0});
         REQUIRE( a.dtype() == Dtype::int32 );
         REQUIRE( a.size() == 5 );
@@ -58,7 +58,7 @@ TEST_CASE("Array `any` tests", "[any]"){
         REQUIRE( a.any() );
     }
 
-    SECTION("`all` Test (true, floats)"){
+    SECTION("`any` Test (true, floats)"){
         Array a ({1.0, -1.0, 2.0, -4.0, 5.0});
         REQUIRE( a.dtype() == Dtype::float32 );
         REQUIRE( a.size() == 5 );
@@ -66,7 +66,7 @@ TEST_CASE("Array `any` tests", "[any]"){
         REQUIRE( a.any() );
     }
 
-    SECTION("`all` Test (true, floats) with zero"){
+    SECTION("`any` Test (true, floats) with zero"){
         Array a ({1.0, -1.0, 2.0, -4.0, 0.0});
         REQUIRE( a.dtype() == Dtype::float32 );
         REQUIRE( a.size() == 5 );
@@ -74,7 +74,7 @@ TEST_CASE("Array `any` tests", "[any]"){
         REQUIRE( a.any() );
     }
 
-    SECTION("`all` Test (false, floats)"){
+    SECTION("`any` Test (false, floats)"){
         Array a ({0.0, -0.0, -0.0, 0.0, 0.0});
         REQUIRE( a.dtype() == Dtype::float32 );
         REQUIRE( a.size() == 5 );
