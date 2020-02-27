@@ -17,7 +17,7 @@ Array<T>::Array(): a{make_unique<array_attributes<T>>()} {
 
 template<typename T>
 Array<T>::Array(const std::vector<size_t>& v):
-    a{make_unique<array_attributes<T>>(v, dtype)} {}
+    a{make_unique<array_attributes<T>>(v)} {}
 
 template<typename T>
 Array<T>::~Array() = default;
@@ -32,7 +32,7 @@ ArrayIter<T> Array<T>::end(){
 }
 
 template<typename T> 
-shared_ptr<T> Array<T>::data(){ return a->data; }
+shared_ptr<T[]> Array<T>::data(){ return a->data; }
 template<typename T>
 Dtype Array<T>::dtype(){ return a->dtype; }
 template<typename T>
@@ -67,12 +67,12 @@ namespace std {
 }
 
 
-// #define PREFIX
-// #define SELECT
-// #define SUFFIX
+#define PREFIX
+#define SELECT(T, _2) template class Array<T>;
+#define SUFFIX
 
-// ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
 
-// #undef PREFIX
-// #undef SELECT
-// #undef SUFFIX
+#undef PREFIX
+#undef SELECT
+#undef SUFFIX

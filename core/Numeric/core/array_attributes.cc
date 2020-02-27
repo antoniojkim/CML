@@ -15,8 +15,13 @@ array_attributes<T>::array_attributes(const vector<size_t>& shape):
     size{size_t(sum(shape))},
     data{new T[size]} {}
 
-// array_attributes::array_attributes(initializer_list<size_t> shape, Dtype dtype):
-//     shape{shape},
-//     size{size_t(sum(shape))},
-//     dtype{dtype},
-//     dtypesize{DtypeSizes[int(dtype)]} {}
+
+#define PREFIX
+#define SELECT(T, _2) template class array_attributes<T>;
+#define SUFFIX
+
+ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+
+#undef PREFIX
+#undef SELECT
+#undef SUFFIX

@@ -45,3 +45,23 @@ Array<T>::Array(std::initializer_list<U> l):
 //         default:  throw numeric::Exception("Invalid Type Error");
 //     }
 // }
+
+#define PREFIX
+#define SELECT(T, _2) \
+    template Array<T>::Array(std::initializer_list<std::int8_t>); \
+    template Array<T>::Array(std::initializer_list<short int>); \
+    template Array<T>::Array(std::initializer_list<int>); \
+    template Array<T>::Array(std::initializer_list<long long>); \
+    template Array<T>::Array(std::initializer_list<std::uint8_t>); \
+    template Array<T>::Array(std::initializer_list<unsigned short int>); \
+    template Array<T>::Array(std::initializer_list<unsigned int>); \
+    template Array<T>::Array(std::initializer_list<unsigned long long>); \
+    template Array<T>::Array(std::initializer_list<float>); \
+    template Array<T>::Array(std::initializer_list<double>);
+#define SUFFIX
+
+ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+
+#undef PREFIX
+#undef SELECT
+#undef SUFFIX

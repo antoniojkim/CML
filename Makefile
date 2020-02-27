@@ -17,3 +17,6 @@ numeric:
 
 cleantest:
 	rm -f ./tests/test
+
+te2:
+	python3 -u tools/type_expansion_2d.py

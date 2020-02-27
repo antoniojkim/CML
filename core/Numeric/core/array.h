@@ -35,7 +35,7 @@ namespace numeric {
             ArrayIter<T> end();
 
             // Attributes
-            std::shared_ptr<T> data();
+            std::shared_ptr<T[]> data();
             Dtype dtype();
             std::size_t itemsize();
             std::uint64_t nbytes();
@@ -57,6 +57,11 @@ namespace numeric {
             void all(bool& out);
             // template<typename T> Array all(int axis);
             // template<typename T> void all(int axis, Array& out);
+            
+            bool any();
+            void any(bool& out);
+            // template<typename T> Array any(int axis);
+            // template<typename T> void any(int axis, Array& out);
 
             
 

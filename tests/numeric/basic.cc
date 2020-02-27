@@ -26,7 +26,7 @@ TEST_CASE("Basic Array Construction Tests", "[basic]"){
     }
 
     SECTION("Simple 1D Array Test (different type)"){
-        Array a ({1, 2}, Dtype::int32);
+        Array<int> a ({1, 2});
         REQUIRE( a.dtype() == Dtype::int32 );
         REQUIRE( a.itemsize() == sizeof(int) );
         REQUIRE( a.shape() == vector<size_t>{2} );

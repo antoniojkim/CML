@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g -std=c++17 -Wall -MMD -Werror=vla -DDEBUG
+CXXFLAGS = -g -std=c++17 -Wall -MMD -Werror=vla -DDEBUG -E
 EXEC = sandbox
 
 OBJECTS =  sandbox.o

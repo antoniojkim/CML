@@ -26,3 +26,14 @@ template<typename T>
 inline void Array<T>::all(bool& out){
     out = all();
 }
+
+
+#define PREFIX
+#define SELECT(T, _2) template bool Array<T>::all(); template void Array<T>::all(bool&);
+#define SUFFIX
+
+ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+
+#undef PREFIX
+#undef SELECT
+#undef SUFFIX
