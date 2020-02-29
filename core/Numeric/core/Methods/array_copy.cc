@@ -14,7 +14,7 @@ using namespace numeric;
 #define SUFFIX
 
 template<typename T>
-Array<T> Array<T>::copy(){
+Array<T> Array<T>::copy() const {
     Array<T> a {*this};
     *a.a = a.a->copy();
     return a; 
@@ -22,7 +22,7 @@ Array<T> Array<T>::copy(){
 
 
 #define PREFIX
-#define SELECT(T, _2) template Array<T> Array<T>::copy();
+#define SELECT(T, _2) template Array<T> Array<T>::copy() const;
 #define SUFFIX
 
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)

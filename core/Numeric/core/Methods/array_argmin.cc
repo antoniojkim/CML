@@ -14,20 +14,20 @@ using namespace numeric;
 #define SUFFIX
 
 template<typename T>
-size_t Array<T>::argmin(){
+size_t Array<T>::argmin() const {
     return numeric::argmin(a->data.get(), a->size);
 }
 
 template<typename T>
-void Array<T>::argmin(size_t& out){
+void Array<T>::argmin(size_t& out) const {
     out = numeric::argmin(a->data.get(), a->size);;
 }
 
 
 #define PREFIX
 #define SELECT(T, _2)                           \
-    template size_t Array<T>::argmin();         \
-    template void Array<T>::argmin(size_t&);
+    template size_t Array<T>::argmin() const;         \
+    template void Array<T>::argmin(size_t&) const;
 #define SUFFIX
 
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)

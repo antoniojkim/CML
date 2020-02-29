@@ -4,5 +4,13 @@
 CURR_DIR=$(pwd)
 
 cd tests/
-make
+
+make 2> log.cerr
+if [ -s log.cerr ]; then
+    vi -R log.cerr
+    exit 1
+else
+    rm log.cerr
+fi
+
 cd $CURR_DIR

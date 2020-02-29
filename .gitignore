@@ -4,6 +4,8 @@ Notes/
 examples/mnist/data/
 examples/cifar10/data/
 .sandbox/sandbox
+.includes/
+tests/test
 *log.cerr
 *.a
 *.o

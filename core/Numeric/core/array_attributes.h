@@ -29,6 +29,8 @@ namespace numeric {
         array_attributes<T>& operator=(const array_attributes<T>& other);
 
         array_attributes<T> copy();
+
+        array_attributes<T> zero();
     };
 
 }

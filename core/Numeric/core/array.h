@@ -37,15 +37,15 @@ namespace numeric {
             ArrayIter<T> end();
 
             // Attributes
-            std::shared_ptr<T[]> data();
-            Dtype dtype();
-            std::size_t itemsize();
-            std::uint64_t nbytes();
+            std::shared_ptr<T[]> data() const;
+            Dtype dtype() const;
+            std::size_t itemsize() const;
+            std::uint64_t nbytes() const;
             
 
-            const std::vector<std::size_t>& shape();
-            std::size_t size();
-            std::size_t ndim();
+            const std::vector<std::size_t>& shape() const;
+            std::size_t size() const;
+            std::size_t ndim() const;
 
             ArrayIter<T> flat();
 
@@ -56,31 +56,42 @@ namespace numeric {
 
 
             // Methods
-            bool all();
-            void all(bool& out);
-            // Array<T> all(int axis);
-            // void all(int axis, Array<T>& out);
+            bool all() const;
+            void all(bool& out) const;
+            // Array<T> all(int axis) const;
+            // void all(int axis, Array<T>& out) const;
             
-            bool any();
-            void any(bool& out);
+            bool any() const;
+            void any(bool& out) const;
             // std::unique_ptr<Array<T>> any(int axis);
             // void any(int axis, Array<T>& out);
 
-            size_t argmax();
-            void argmax(size_t& out);
+            size_t argmax() const ;
+            void argmax(size_t& out) const ;
             // std::unique_ptr<Array<size_t>> argmax(int axis);
             // void argmax(int axis, Array<size_t>& out);
 
-            size_t argmin();
-            void argmin(size_t& out);
+            size_t argmin() const ;
+            void argmin(size_t& out) const ;
             // std::unique_ptr<Array<size_t>> argmin(int axis);
             // void argmin(int axis, Array<size_t>& out);
 
-            std::vector<size_t> argsort();
+            std::vector<size_t> argsort() const ;
             // std::vector<size_t> argsort(int axis);
 
-            Array<T> copy();
+            Array<T> copy() const ;
 
+            Array<T> cumprod() const ;
+            // Array<T> cumprod(int axis);
+            void cumprod(Array<T>& out) const ;
+            // void cumprod(int axis, Array<T>& out);
+
+            Array<T> cumsum() const ;
+            // Array<T> cumsum(int axis);
+            void cumsum(Array<T>& out) const ;
+            // void cumsum(int axis, Array<T>& out);
+
+            Array<T> zero() const ;
             
 
     };
@@ -110,3 +121,7 @@ namespace std {
     template<typename T>
     numeric::ArrayIter<T> end(numeric::Array<T>& a);
 }
+
+
+template<typename T = float>
+bool operator==(const numeric::Array<T>& a1, const numeric::Array<T>& a2);

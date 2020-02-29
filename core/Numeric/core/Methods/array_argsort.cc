@@ -14,13 +14,13 @@ using namespace numeric;
 #define SUFFIX
 
 template<typename T>
-vector<size_t> Array<T>::argsort(){
+vector<size_t> Array<T>::argsort() const {
     return numeric::argsort(a->data.get(), a->size);
 }
 
 
 #define PREFIX
-#define SELECT(T, _2) template vector<size_t> Array<T>::argsort();
+#define SELECT(T, _2) template vector<size_t> Array<T>::argsort() const;
 #define SUFFIX
 
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)

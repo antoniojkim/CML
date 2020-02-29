@@ -14,20 +14,20 @@ using namespace numeric;
 #define SUFFIX
 
 template<typename T>
-size_t Array<T>::argmax() const {
-    return numeric::argmax(a->data.get(), a->size);
-}
+Array<T> Array<T>::zero() const {
+    Array<T> out;
+    *out.a = this->a->zero();
 
-template<typename T>
-void Array<T>::argmax(size_t& out) const {
-    out = numeric::argmax(a->data.get(), a->size);
+    if (out.size() != this->size()){
+        throw numeric::Exception("Array::zero produces different size results: ", this->size(), " != ", out.size());
+    }
+
+    return out;
 }
 
 
 #define PREFIX
-#define SELECT(T, _2)                           \
-    template size_t Array<T>::argmax() const;         \
-    template void Array<T>::argmax(size_t&) const;
+#define SELECT(T, _2) template Array<T> Array<T>::zero() const;
 #define SUFFIX
 
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)

@@ -14,7 +14,7 @@ using namespace numeric;
 #define SUFFIX
 
 template<typename T>
-bool Array<T>::any(){
+bool Array<T>::any() const {
     if (ndim() != 1){
         throw numeric::Exception("Array::all without axis requires array to be 1D. Got: ", ndim());
     }
@@ -23,13 +23,15 @@ bool Array<T>::any(){
 }
 
 template<typename T>
-inline void Array<T>::any(bool& out){
+inline void Array<T>::any(bool& out) const {
     out = any();
 }
 
 
 #define PREFIX
-#define SELECT(T, _2) template bool Array<T>::any(); template void Array<T>::any(bool&);
+#define SELECT(T, _2)                       \
+    template bool Array<T>::any() const;    \
+    template void Array<T>::any(bool&) const;
 #define SUFFIX
 
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)

@@ -7,6 +7,7 @@ cd core/Numeric/
 make 2> log.cerr
 if [ -s log.cerr ]; then
     vi -R log.cerr
+    exit 1
 else
     rm log.cerr
 fi

@@ -18,6 +18,21 @@ TEST_CASE("Basic Array Construction Tests", "[basic]"){
         REQUIRE( a.dtype() == Dtype::float32 );
     }
 
+    SECTION("Zero Array Test"){
+        Array<int> a (vector<size_t>{5, 2});
+        REQUIRE( a.dtype() == Dtype::int32 );
+        REQUIRE( a.size() == 10 );
+        REQUIRE( a.ndim() == 2 );
+
+        Array<int> b = a.zero();
+        REQUIRE( b.dtype() == Dtype::int32 );
+        REQUIRE( b.size() == 10 );
+        REQUIRE( b.ndim() == 2 );
+        for (size_t i = 0; i < b.size(); ++i){
+            REQUIRE( b[i] == 0 );
+        }
+    }
+
     SECTION("Simple 1D Array Test"){
         auto a = array<float>({1, 2, 3, 4});
         REQUIRE( a.dtype() == Dtype::float32 );

@@ -41,26 +41,41 @@ ArrayIter<T> Array<T>::end(){
 }
 
 template<typename T> 
-shared_ptr<T[]> Array<T>::data(){ return a->data; }
+shared_ptr<T[]> Array<T>::data() const { return a->data; }
 template<typename T>
-Dtype Array<T>::dtype(){ return array_attributes<T>::dtype; }
+Dtype Array<T>::dtype() const { return array_attributes<T>::dtype; }
 template<typename T>
-size_t Array<T>::itemsize(){ return array_attributes<T>::dtypesize; }
+size_t Array<T>::itemsize() const { return array_attributes<T>::dtypesize; }
 template<typename T>
-uint64_t Array<T>::nbytes(){
+uint64_t Array<T>::nbytes() const {
     return ((uint64_t) a->dtype) * ((uint64_t) a->dtypesize);
 }
 
 template<typename T>
-const vector<std::size_t>& Array<T>::shape(){ return a->shape; }
+const vector<std::size_t>& Array<T>::shape() const { return a->shape; }
 template<typename T>
-size_t Array<T>::size(){ return a->size; }
+size_t Array<T>::size() const { return a->size; }
 template<typename T>
-size_t Array<T>::ndim(){ return a->shape.size(); }
+size_t Array<T>::ndim() const { return a->shape.size(); }
+
 
 template<typename T>
-Array<T> array(){
-    return Array<T>();
+bool operator==(const Array<T>& a1, const Array<T>& a2){
+
+    if (a1.size() != a2.size() || a1.ndim() != a2.ndim() || a1.shape() != a2.shape()){
+        return false;
+    }
+
+    T* d1 = (T*) a1.data().get();
+    T* d2 = (T*) a2.data().get();
+
+    for(size_t i = 0; i < a1.size(); ++i){
+        if (d1[i] != d2[i]){
+            return false;
+        }
+    }
+
+    return true;
 }
 
 
@@ -77,12 +92,21 @@ namespace std {
 
 
 #define PREFIX
-#define SELECT(T, _2) template class Array<T>;
 #define SUFFIX
+
+#define SELECT(T, _2) template class Array<T>;
 
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
 COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
 
-#undef PREFIX
 #undef SELECT
+
+#define SELECT(T, _2) template bool operator==<T>(const Array<T>&, const Array<T>&);
+
+ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
+
+#undef SELECT
+
+#undef PREFIX
 #undef SUFFIX

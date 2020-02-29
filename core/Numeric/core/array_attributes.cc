@@ -16,7 +16,7 @@ array_attributes<T>::array_attributes() {}
 template<typename T>
 array_attributes<T>::array_attributes(const vector<size_t>& shape):
     shape{shape},
-    size{size_t(sum(shape))},
+    size{size_t(product(shape))},
     data{new T[size]} {}
 
     
@@ -42,6 +42,12 @@ array_attributes<T> array_attributes<T>::copy(){
     return a;
 }
 
+template<typename T>
+array_attributes<T> array_attributes<T>::zero(){
+    array_attributes<T> a {*this};
+    a.data = shared_ptr<T[]>(new T[a.size]());
+    return a;
+}
 
 template<typename T>
 array_attributes<T>& array_attributes<T>::operator=(const array_attributes<T>& other){

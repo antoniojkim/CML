@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g -std=c++17 -Wall -MMD -Werror=vla -DDEBUG -I $${HOME} -I ../core/
+CXXFLAGS = -g -std=c++17 -Wall -MMD -Werror=vla -DDEBUG -I ../.includes -I ../core/
 EXEC = test
 
 NUMERIC_TESTS = $(wildcard numeric/*.cc)
