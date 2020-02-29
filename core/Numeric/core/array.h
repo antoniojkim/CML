@@ -26,10 +26,12 @@ namespace numeric {
         public:
 
             Array();
-            Array(const std::vector<size_t>& v);
-            template<typename U>
-            Array(std::initializer_list<U> l);
+            Array(const std::vector<std::size_t>& shape);
+            Array(const Array<T>&);
+            Array(Array<T>&&);
             ~Array();
+
+
 
             ArrayIter<T> begin();
             ArrayIter<T> end();
@@ -77,12 +79,18 @@ namespace numeric {
             std::vector<size_t> argsort();
             // std::vector<size_t> argsort(int axis);
 
+            Array<T> copy();
+
             
 
     };
 
     template<typename T = float>
     Array<T> array();
+    template<typename T = float>
+    Array<T> array(const std::vector<std::size_t>& shape);
+    template<typename T = float>
+    Array<T> array(std::initializer_list<T> l);
 
 
     template<typename T>

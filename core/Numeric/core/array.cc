@@ -1,6 +1,7 @@
 
 #include <numeric>
 #include <vector>
+#include <utility>
 
 #include "array.h"
 #include "array_attributes.h"
@@ -20,6 +21,14 @@ Array<T>::Array(const std::vector<size_t>& v):
     a{make_unique<array_attributes<T>>(v)} {}
 
 template<typename T>
+Array<T>::Array(const Array<T>& other):
+    a{make_unique<array_attributes<T>>(*other.a)}{}
+
+template<typename T>
+Array<T>::Array(Array<T>&& other):
+    a{std::move(other.a)}{}
+
+template<typename T>
 Array<T>::~Array() = default;
 
 template<typename T>
@@ -34,9 +43,9 @@ ArrayIter<T> Array<T>::end(){
 template<typename T> 
 shared_ptr<T[]> Array<T>::data(){ return a->data; }
 template<typename T>
-Dtype Array<T>::dtype(){ return a->dtype; }
+Dtype Array<T>::dtype(){ return array_attributes<T>::dtype; }
 template<typename T>
-size_t Array<T>::itemsize(){ return a->dtypesize; }
+size_t Array<T>::itemsize(){ return array_attributes<T>::dtypesize; }
 template<typename T>
 uint64_t Array<T>::nbytes(){
     return ((uint64_t) a->dtype) * ((uint64_t) a->dtypesize);
@@ -72,6 +81,7 @@ namespace std {
 #define SUFFIX
 
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
 
 #undef PREFIX
 #undef SELECT

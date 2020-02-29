@@ -24,6 +24,7 @@ vector<size_t> Array<T>::argsort(){
 #define SUFFIX
 
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
 
 #undef PREFIX
 #undef SELECT

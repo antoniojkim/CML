@@ -33,6 +33,7 @@ inline void Array<T>::any(bool& out){
 #define SUFFIX
 
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
 
 #undef PREFIX
 #undef SELECT

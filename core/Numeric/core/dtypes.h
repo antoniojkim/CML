@@ -9,7 +9,7 @@
 
 namespace numeric {
 
-    #define ARRAY_TYPES(PREFIX, SELECT, SUFFIX)            \
+    #define ARRAY_TYPES(PREFIX, SELECT, SUFFIX)                 \
         PREFIX SELECT(std::int8_t, int8) SUFFIX                 \
         PREFIX SELECT(short int, int16) SUFFIX                  \
         PREFIX SELECT(int, int32) SUFFIX                        \
@@ -21,15 +21,15 @@ namespace numeric {
         PREFIX SELECT(float, float32) SUFFIX                    \
         PREFIX SELECT(double, float64) SUFFIX
 
-    #define COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)               \
-        PREFIX SELECT(std::complex<float>, cfloat32) SUFFIX     \
-        PREFIX SELECT(std::complex<double>, cfloat64) SUFFIX
+    #define COMPLEX_TYPES(PREFIX, SELECT, SUFFIX) PREFIX
+        // PREFIX SELECT(std::complex<float>, cfloat32) SUFFIX 
+        // PREFIX SELECT(std::complex<double>, cfloat64) SUFFIX
 
 
     #define NUM_DTYPES 13
 
     enum class Dtype: std::int8_t {
-        Undefined,
+        Undefined = 0,
 
         #define PREFIX
         #define SELECT(_1, _2)  _2

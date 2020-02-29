@@ -12,6 +12,5 @@ types = (
     ("double",             "float64"),
 )
 
-for T, _1 in types:
-    for U, _2 in types:
-        print(f"template Array<{T}>::Array(std::initializer_list<{U}>);")
+for U, _1 in types:
+    print(f"template<> Array<T> array(std::initializer_list<{U}>);".ljust(70), "\\")

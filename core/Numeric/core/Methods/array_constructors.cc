@@ -15,11 +15,17 @@ using namespace numeric;
 
 #include <cstdlib>
 
-template<typename T> template<typename U>
-Array<T>::Array(std::initializer_list<U> l):
-    a{make_unique<array_attributes<T>>(vector<size_t>{l.size()})} {
+template<typename T>
+numeric::Array<T> numeric::array(){ return Array<T>(); }
+template<typename T>
+numeric::Array<T> numeric::array(const std::vector<std::size_t>& shape){ return Array<T>(shape); }
+template<typename T>
+numeric::Array<T> numeric::array(std::initializer_list<T> l){
+    Array<T> a (vector<size_t>{l.size()});
 
-    std::copy(std::begin(l), std::end(l), (T*) a->data.get());
+    std::copy(std::begin(l), std::end(l), (T*) a.data().get());
+
+    return a;
 }
 
 // template<typename T>
@@ -47,21 +53,28 @@ Array<T>::Array(std::initializer_list<U> l):
 // }
 
 #define PREFIX
-#define SELECT(T, _2) \
-    template Array<T>::Array(std::initializer_list<std::int8_t>); \
-    template Array<T>::Array(std::initializer_list<short int>); \
-    template Array<T>::Array(std::initializer_list<int>); \
-    template Array<T>::Array(std::initializer_list<long long>); \
-    template Array<T>::Array(std::initializer_list<std::uint8_t>); \
-    template Array<T>::Array(std::initializer_list<unsigned short int>); \
-    template Array<T>::Array(std::initializer_list<unsigned int>); \
-    template Array<T>::Array(std::initializer_list<unsigned long long>); \
-    template Array<T>::Array(std::initializer_list<float>); \
-    template Array<T>::Array(std::initializer_list<double>);
 #define SUFFIX
 
+#define SELECT(T, _2) template numeric::Array<T> numeric::array<T>();
+
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
+
+#undef SELECT
+
+#define SELECT(T, _2) template numeric::Array<T> numeric::array<T>(const std::vector<size_t>&);
+
+ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
+
+#undef SELECT
+
+#define SELECT(T, _2) template numeric::Array<T> numeric::array<T>(std::initializer_list<T>);
+
+ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
+
+#undef SELECT
 
 #undef PREFIX
-#undef SELECT
 #undef SUFFIX

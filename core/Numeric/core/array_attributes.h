@@ -15,6 +15,7 @@ namespace numeric {
     struct array_attributes {
         std::vector<std::size_t> shape {0};
         std::size_t size = 0;
+        
         constexpr static Dtype dtype = TYPE_TO_DTYPE<T>();
         constexpr static std::size_t dtypesize = sizeof(T);
 
@@ -22,7 +23,8 @@ namespace numeric {
 
         array_attributes();
         array_attributes(const std::vector<std::size_t>& shape);
-        // array_attributes(std::initializer_list<std::size_t> shape);
+        array_attributes(const array_attributes<T>& other);
+        array_attributes(array_attributes<T>&& other);
     };
 
 }

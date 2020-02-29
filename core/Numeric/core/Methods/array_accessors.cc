@@ -32,6 +32,7 @@ T& Array<T>::get(long index){
 #define SUFFIX
 
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
 
 #undef PREFIX
 #undef SELECT
