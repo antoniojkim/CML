@@ -20,7 +20,7 @@ size_t Array<T>::argmax(){
 
 template<typename T>
 void Array<T>::argmax(size_t& out){
-    out = numeric::argmax(a->data.get(), a->size);;
+    out = numeric::argmax(a->data.get(), a->size);
 }
 
 

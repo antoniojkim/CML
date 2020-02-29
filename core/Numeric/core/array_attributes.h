@@ -25,6 +25,10 @@ namespace numeric {
         array_attributes(const std::vector<std::size_t>& shape);
         array_attributes(const array_attributes<T>& other);
         array_attributes(array_attributes<T>&& other);
+
+        array_attributes<T>& operator=(const array_attributes<T>& other);
+
+        array_attributes<T> copy();
     };
 
 }
