@@ -1,4 +1,5 @@
 
+#include <algorithm>
 #include <numeric>
 #include <vector>
 #include <utility>
@@ -61,6 +62,12 @@ template<typename T>
 size_t Array<T>::size() const { return a->size; }
 template<typename T>
 size_t Array<T>::ndim() const { return a->shape.size(); }
+
+
+template<typename T>
+void Array<T>::fill(T value){
+    std::fill_n((T*) a->data.get(), a->size, value);
+}
 
 
 template<typename T>

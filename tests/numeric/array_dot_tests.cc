@@ -16,11 +16,13 @@ TEST_CASE("Array `dot` tests", "[dot]"){
     SECTION("Empty Array Test"){
         try {
             Array a1;
+            a1.fill(2);
             REQUIRE( a1.dtype() == Dtype::float32 );
             REQUIRE( a1.size() == 0 );
             REQUIRE( a1.ndim() == 1 );
 
             Array a2;
+            a2.fill(3);
             REQUIRE( a2.dtype() == Dtype::float32 );
             REQUIRE( a2.size() == 0 );
             REQUIRE( a2.ndim() == 1 );

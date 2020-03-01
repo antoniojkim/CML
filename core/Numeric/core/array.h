@@ -96,6 +96,8 @@ namespace numeric {
             Array<T> dot(const Array<T>& other) const;
             void dot(const Array<T>& other, Array<T>& out) const;
 
+            void fill(T value);
+
             Array<T> zero() const;
             
 

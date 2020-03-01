@@ -31,6 +31,11 @@ TEST_CASE("Basic Array Construction Tests", "[basic]"){
         for (size_t i = 0; i < b.size(); ++i){
             REQUIRE( b[i] == 0 );
         }
+
+        b.fill(3);
+        for (size_t i = 0; i < b.size(); ++i){
+            REQUIRE( b[i] == 3 );
+        }
     }
 
     SECTION("Simple 1D Array Test"){
