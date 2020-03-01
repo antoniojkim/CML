@@ -44,6 +44,8 @@ namespace numeric {
             
 
             const std::vector<std::size_t>& shape() const;
+            std::size_t rows() const;
+            std::size_t cols() const;
             std::size_t size() const;
             std::size_t ndim() const;
 
@@ -66,32 +68,35 @@ namespace numeric {
             // std::unique_ptr<Array<T>> any(int axis);
             // void any(int axis, Array<T>& out);
 
-            size_t argmax() const ;
-            void argmax(size_t& out) const ;
+            size_t argmax() const;
+            void argmax(size_t& out) const;
             // std::unique_ptr<Array<size_t>> argmax(int axis);
             // void argmax(int axis, Array<size_t>& out);
 
-            size_t argmin() const ;
-            void argmin(size_t& out) const ;
+            size_t argmin() const;
+            void argmin(size_t& out) const;
             // std::unique_ptr<Array<size_t>> argmin(int axis);
             // void argmin(int axis, Array<size_t>& out);
 
-            std::vector<size_t> argsort() const ;
+            std::vector<size_t> argsort() const;
             // std::vector<size_t> argsort(int axis);
 
-            Array<T> copy() const ;
+            Array<T> copy() const;
 
-            Array<T> cumprod() const ;
+            Array<T> cumprod() const;
             // Array<T> cumprod(int axis);
-            void cumprod(Array<T>& out) const ;
+            void cumprod(Array<T>& out) const;
             // void cumprod(int axis, Array<T>& out);
 
-            Array<T> cumsum() const ;
+            Array<T> cumsum() const;
             // Array<T> cumsum(int axis);
-            void cumsum(Array<T>& out) const ;
+            void cumsum(Array<T>& out) const;
             // void cumsum(int axis, Array<T>& out);
 
-            Array<T> zero() const ;
+            Array<T> dot(const Array<T>& other) const;
+            void dot(const Array<T>& other, Array<T>& out) const;
+
+            Array<T> zero() const;
             
 
     };

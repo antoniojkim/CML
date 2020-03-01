@@ -2,5 +2,17 @@
 
 mkdir -p .includes
 
+# Reinstall Catch2
 rm -rf.includes/Catch2
 wget https://raw.githubusercontent.com/catchorg/Catch2/master/single_include/catch2/catch.hpp -O .includes/Catch2
+
+CURR_DIR=$(pwd)
+
+EIGEN_VERSION="3.3.7"
+rm -f .includes/Eigen
+rm -f .includes/eigen-${EIGEN_VERSION}.tar.gz
+rm -rf .includes/eigen-${EIGEN_VERSION}
+wget https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_VERSION}/eigen-${EIGEN_VERSION}.tar.gz -O .includes/eigen-${EIGEN_VERSION}.tar.gz
+tar -xzf .includes/eigen-${EIGEN_VERSION}.tar.gz -C .includes/
+ln -s $CURR_DIR/.includes/eigen-${EIGEN_VERSION}/Eigen $CURR_DIR/.includes/Eigen
+rm -f .includes/eigen-${EIGEN_VERSION}.tar.gz

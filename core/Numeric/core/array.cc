@@ -54,6 +54,10 @@ uint64_t Array<T>::nbytes() const {
 template<typename T>
 const vector<std::size_t>& Array<T>::shape() const { return a->shape; }
 template<typename T>
+std::size_t Array<T>::rows() const { return a->shape[0]; }
+template<typename T>
+std::size_t Array<T>::cols() const { return a->shape[1]; }
+template<typename T>
 size_t Array<T>::size() const { return a->size; }
 template<typename T>
 size_t Array<T>::ndim() const { return a->shape.size(); }

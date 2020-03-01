@@ -10,9 +10,6 @@
 using namespace std;
 using namespace numeric;
 
-#define PREFIX
-#define SUFFIX
-
 template<typename T>
 Array<T> Array<T>::zero() const {
     Array<T> out;
