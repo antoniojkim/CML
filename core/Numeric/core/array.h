@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstdint>
 #include <initializer_list>
+#include <iostream>
 #include <iterator>
 #include <memory>
 #include <vector>
@@ -32,7 +33,6 @@ namespace numeric {
             ~Array();
 
 
-
             ArrayIter<T> begin();
             ArrayIter<T> end();
 
@@ -53,8 +53,12 @@ namespace numeric {
 
 
             // Accessor Methods
-            T& get(long index);
-            inline T& operator[](long index){ return get(index); }
+            virtual T& get(long index) const;
+            inline T& operator[](long index) const { return get(index); }
+            virtual T& get(const std::vector<long>& indices) const;
+            inline T& operator[](const std::vector<long>& indices) const { return get(indices); }
+            inline T& get(std::initializer_list<long> indices) const { return get(std::vector<long>(indices)); }
+            inline T& operator[](std::initializer_list<long> indices) const { return get(std::vector<long>(indices)); }
 
 
             // Methods
@@ -132,3 +136,6 @@ namespace std {
 
 template<typename T = float>
 bool operator==(const numeric::Array<T>& a1, const numeric::Array<T>& a2);
+
+template<typename T = float>
+std::ostream& operator<<(std::ostream&, const numeric::Array<T>&);

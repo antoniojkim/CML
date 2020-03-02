@@ -28,7 +28,7 @@ Array<T> Array<T>::dot(const Array<T>& other) const {
 
 template<typename T>
 void Array<T>::dot(const Array<T>& other, Array<T>& out) const {
-#ifdef ERROR_CHECKING
+#ifndef NO_ERROR_CHECKING
     if (this->ndim() != 2){
         throw numeric::Exception("Array::dot requires a1 be a 2-dimensional array. Got: ", this->ndim());
     }
@@ -50,9 +50,9 @@ void Array<T>::dot(const Array<T>& other, Array<T>& out) const {
 #endif
 
     // DMatrix<T> m1((T*) this->data().get(), Eigen::Index(this->rows()), Eigen::Index(this->cols()));
-    auto m1 = Eigen::Map<MatrixType<T>>((T*) this->data().get(), this->rows(), this->cols());
-    auto m2 = Eigen::Map<MatrixType<T>>((T*) other.data().get(), other.rows(), other.cols());
-    auto mout = Eigen::Map<MatrixType<T>>((T*) out.data().get(), out.rows(),   out.cols());
+    DMatrix<T> m1 ((T*) this->data().get(), this->rows(), this->cols());
+    DMatrix<T> m2 ((T*) other.data().get(), other.rows(), other.cols());
+    DMatrix<T> mout ((T*) out.data().get(), out.rows(),   out.cols());
 
     // cout << "m1.shape:   " << (int) m1.rows() << "x" << (int) m1.cols() << "       " << this->rows() << ", " << this->cols() << endl;
     // cout << "m2.shape:   " << (int) m2.rows() << "x" << (int) m2.cols() << "       " << other.rows() << ", " << other.cols() << endl;

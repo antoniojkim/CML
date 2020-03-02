@@ -7,6 +7,7 @@
 #include "array.h"
 #include "array_attributes.h"
 #include "dtypes.h"
+#include "printer.h"
 #include "utils.h"
 
 using namespace std;
@@ -89,6 +90,11 @@ bool operator==(const Array<T>& a1, const Array<T>& a2){
     return true;
 }
 
+template<typename T = float>
+std::ostream& operator<<(std::ostream& out, const numeric::Array<T>& array){
+    return Printer::print(out, array);
+}
+
 
 namespace std {
     template<typename T>
@@ -113,6 +119,13 @@ COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
 #undef SELECT
 
 #define SELECT(T, _2) template bool operator==<T>(const Array<T>&, const Array<T>&);
+
+ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
+
+#undef SELECT
+
+#define SELECT(T, _2) template std::ostream& operator<<<T>(std::ostream&, const Array<T>&);
 
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
 COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)

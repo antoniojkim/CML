@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include <Catch2>
 
@@ -54,6 +55,37 @@ TEST_CASE("Basic Array Construction Tests", "[basic]"){
         REQUIRE( a.shape() == vector<size_t>{2} );
         REQUIRE( a.size() == 2 );
         REQUIRE( a.ndim() == 1 );
+    }
+
+    SECTION("Simple 1D Array Print Test "){
+        Array<int> a (vector<size_t>{10});
+        a.fill(3);
+        REQUIRE( a.dtype() == Dtype::int32 );
+        REQUIRE( a.size() == 10 );
+        REQUIRE( a.ndim() == 1 );
+
+        ostringstream oss;
+        oss << a;
+        REQUIRE( oss.str() == "[ 3 3 3 3 3 3 3 3 3 3]" );
+    }
+
+    SECTION("Simple 2D Array Print Test "){
+        Array<int> a (vector<size_t>{5, 2});
+        REQUIRE( a.dtype() == Dtype::int32 );
+        REQUIRE( a.size() == 10 );
+        REQUIRE( a.ndim() == 2 );
+
+        for (int i = 0; i < 5; ++i){
+            for (int j = 0; j < 2; ++j){
+                a[{i, j}] = i * (j + 1);
+            }
+        }
+
+        REQUIRE( a[{4, 1}] == 8 );
+
+        ostringstream oss;
+        oss << a;
+        REQUIRE( oss.str() == "[[ 0 0]\n [ 1 2]\n [ 2 4]\n [ 3 6]\n [ 4 8]]");
     }
 
 }
