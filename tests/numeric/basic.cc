@@ -88,5 +88,26 @@ TEST_CASE("Basic Array Construction Tests", "[basic]"){
         REQUIRE( oss.str() == "[[ 0 0]\n [ 1 2]\n [ 2 4]\n [ 3 6]\n [ 4 8]]");
     }
 
+    SECTION("Simple 3D Array Print Test "){
+        Array<int> a (vector<size_t>{5, 2, 3});
+        REQUIRE( a.dtype() == Dtype::int32 );
+        REQUIRE( a.size() == 30 );
+        REQUIRE( a.ndim() == 3 );
+
+        for (int i = 0; i < 5; ++i){
+            for (int j = 0; j < 2; ++j){
+                for (int k = 0; k < 3; ++k){
+                    a[{i, j, k}] = (i * (j + 1) + j) * (k - 3);
+                }
+            }
+        }
+
+        ostringstream oss;
+        oss << a;
+        REQUIRE( oss.str() == "[[[ 0 0 0]\n  [ -3 -2 -1]]\n [[ -3 -2 -1]\n"
+                              "  [ -9 -6 -3]]\n [[ -6 -4 -2]\n  [ -15 -10 -5]]\n"
+                              " [[ -9 -6 -3]\n  [ -21 -14 -7]]\n [[ -12 -8 -4]]\n  [ -27 -18 -9]]]");
+    }
+
 }
 

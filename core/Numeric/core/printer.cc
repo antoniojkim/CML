@@ -39,10 +39,21 @@ ostream& Printer::print(ostream& out, const Array<T>& array, const std::string& 
     int curr_axis = 0;
 
     size_t i = 0;
+    int num_spaces = 0, num_bracket = 0;
     while(i < array.size()){
-        for (auto axis : indices){
-            out << (axis == 0 ? '[' : ' ');
+        num_spaces = 0;
+        num_bracket = 0;
+        for (int j = (int) indices.size() - 1; j >= 0; --j){
+            if (indices[j] == 0){
+                ++num_bracket;
+            }
+            else {
+                num_spaces = j + 1;
+                break;
+            }
         }
+        out << std::setw(num_spaces) << std::setfill(' ') << "";
+        out << std::setw(num_bracket) << std::setfill('[') << "";
 
         for (size_t last_axis = 0; last_axis < shape.back(); ++last_axis){
             indices.back() = last_axis;
