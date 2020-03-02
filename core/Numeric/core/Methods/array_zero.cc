@@ -13,7 +13,7 @@ using namespace numeric;
 template<typename T>
 Array<T> Array<T>::zero() const {
     Array<T> out;
-    *out.a = this->a->zero();
+    out.a = a.zero();
 
     if (out.size() != this->size()){
         throw numeric::Exception("Array::zero produces different size results: ", this->size(), " != ", out.size());

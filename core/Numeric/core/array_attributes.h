@@ -6,7 +6,6 @@
 #include <memory>
 #include <vector>
 
-#include "array.h"
 #include "dtypes.h"
 
 namespace numeric {
@@ -28,9 +27,9 @@ namespace numeric {
 
         array_attributes<T>& operator=(const array_attributes<T>& other);
 
-        array_attributes<T> copy();
+        array_attributes<T> copy() const;
 
-        array_attributes<T> zero();
+        array_attributes<T> zero() const;
     };
 
 }

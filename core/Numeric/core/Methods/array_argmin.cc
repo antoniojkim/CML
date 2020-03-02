@@ -15,12 +15,12 @@ using namespace numeric;
 
 template<typename T>
 size_t Array<T>::argmin() const {
-    return numeric::argmin(a->data.get(), a->size);
+    return numeric::argmin(a.data.get(), a.size);
 }
 
 template<typename T>
 void Array<T>::argmin(size_t& out) const {
-    out = numeric::argmin(a->data.get(), a->size);;
+    out = numeric::argmin(a.data.get(), a.size);;
 }
 
 

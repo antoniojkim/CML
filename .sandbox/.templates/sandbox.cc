@@ -22,6 +22,11 @@ void timeit(func_t f, float* a, int N){
 }
 
 int main(){
-
+    srand(time(NULL));
+    const int N = 10000;
+    float a[N];
+    for (int i = 0; i < N; ++i){
+        a[i] = (float) rand();
+    }
 }
 

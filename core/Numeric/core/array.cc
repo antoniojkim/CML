@@ -14,21 +14,18 @@ using namespace std;
 using namespace numeric;
 
 template<typename T>
-Array<T>::Array(): a{make_unique<array_attributes<T>>()} {
-    a->shape.reserve(4);
+Array<T>::Array() {
+    a.shape.reserve(4);
 }
 
 template<typename T>
-Array<T>::Array(const std::vector<size_t>& v):
-    a{make_unique<array_attributes<T>>(v)} {}
+Array<T>::Array(const std::vector<size_t>& v): a{v} {}
 
 template<typename T>
-Array<T>::Array(const Array<T>& other):
-    a{make_unique<array_attributes<T>>(*other.a)}{}
+Array<T>::Array(const Array<T>& other): a{other.a}{}
 
 template<typename T>
-Array<T>::Array(Array<T>&& other):
-    a{std::move(other.a)}{}
+Array<T>::Array(Array<T>&& other): a{std::move(other.a)}{}
 
 template<typename T>
 Array<T>::~Array() = default;
@@ -43,31 +40,31 @@ ArrayIter<T> Array<T>::end(){
 }
 
 template<typename T> 
-shared_ptr<T[]> Array<T>::data() const { return a->data; }
+shared_ptr<T[]> Array<T>::data() const { return a.data; }
 template<typename T>
 Dtype Array<T>::dtype() const { return array_attributes<T>::dtype; }
 template<typename T>
 size_t Array<T>::itemsize() const { return array_attributes<T>::dtypesize; }
 template<typename T>
 uint64_t Array<T>::nbytes() const {
-    return ((uint64_t) a->dtype) * ((uint64_t) a->dtypesize);
+    return ((uint64_t) a.dtype) * ((uint64_t) a.dtypesize);
 }
 
 template<typename T>
-const vector<std::size_t>& Array<T>::shape() const { return a->shape; }
+const vector<std::size_t>& Array<T>::shape() const { return a.shape; }
 template<typename T>
-std::size_t Array<T>::rows() const { return a->shape[0]; }
+std::size_t Array<T>::rows() const { return a.shape[0]; }
 template<typename T>
-std::size_t Array<T>::cols() const { return a->shape[1]; }
+std::size_t Array<T>::cols() const { return a.shape[1]; }
 template<typename T>
-size_t Array<T>::size() const { return a->size; }
+size_t Array<T>::size() const { return a.size; }
 template<typename T>
-size_t Array<T>::ndim() const { return a->shape.size(); }
+size_t Array<T>::ndim() const { return a.shape.size(); }
 
 
 template<typename T>
 void Array<T>::fill(T value){
-    std::fill_n((T*) a->data.get(), a->size, value);
+    std::fill_n((T*) a.data.get(), a.size, value);
 }
 
 

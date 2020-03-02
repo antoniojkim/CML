@@ -64,7 +64,7 @@ void Array<T>::dot(const Array<T>& other, Array<T>& out) const {
 template<typename T>
 Array<T> Array<T>::zero() const {
     Array<T> out;
-    *out.a = this->a->zero();
+    *out.a = this->a.ero();
 
     if (out.size() != this->size()){
         throw numeric::Exception("Array::zero produces different size results: ", this->size(), " != ", out.size());

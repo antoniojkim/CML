@@ -15,7 +15,7 @@ using namespace numeric;
 
 template<typename T>
 vector<size_t> Array<T>::argsort() const {
-    return numeric::argsort(a->data.get(), a->size);
+    return numeric::argsort(a.data.get(), a.size);
 }
 
 

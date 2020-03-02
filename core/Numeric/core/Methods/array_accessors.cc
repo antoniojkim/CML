@@ -16,16 +16,16 @@ using namespace numeric;
 template<typename T>
 T& Array<T>::get(long index) const {
 #ifndef NO_ERROR_CHECKING
-    if (index >= (int) a->size || index < -((int) a->size)){
+    if (index >= (int) a.size || index < -((int) a.size)){
         throw numeric::Exception("Array index out of bounds: ", index,
-                                 "  Expected: [", -a->size, ", ", a->size, ")");
+                                 "  Expected: [", -a.size, ", ", a.size, ")");
     }
 #endif
 
     if (index >= 0){
-        return a->data.get()[index];
+        return a.data.get()[index];
     }
-    return a->data.get()[a->size + index];
+    return a.data.get()[a.size + index];
 }
 
 template<typename T>
@@ -42,22 +42,27 @@ T& Array<T>::get(const std::vector<long>& indices) const {
     for (size_t i = 0; i < indices.size(); ++i){
         axis = (long) shape()[i];
 
-#ifndef NO_ERROR_CHECKING
-        if (indices[i] >= axis || indices[i] < -axis){
-            throw numeric::Exception("Array index out of bounds at axis ", i, ". ",
-                                    " Expected: [", -axis, ", ", axis, ").  Got: ", indices[i]);
-        }
-#endif
-
         if (indices[i] >= 0){
+#ifndef NO_ERROR_CHECKING
+            if (indices[i] >= axis){
+                throw numeric::Exception("Array index out of bounds at axis ", i, ". ",
+                                        " Expected: [", -axis, ", ", axis, ").  Got: ", indices[i]);
+            }
+#endif
             index = index * axis + indices[i];
         }
         else{
+#ifndef NO_ERROR_CHECKING
+            if (indices[i] < -axis){
+                throw numeric::Exception("Array index out of bounds at axis ", i, ". ",
+                                        " Expected: [", -axis, ", ", axis, ").  Got: ", indices[i]);
+            }
+#endif
             index = (index + 1) * axis + indices[i];
         }
     }
 
-    return a->data.get()[index];
+    return a.data.get()[index];
 }
 
 

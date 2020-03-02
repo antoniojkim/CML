@@ -8,21 +8,19 @@
 #include <memory>
 #include <vector>
 
+#include "array_attributes.h"
 #include "dtypes.h"
 
 namespace numeric {
 
     template<typename T>
     class ArrayIter;
-    
-    template<typename T>
-    struct array_attributes;
 
     // Multidimensional Array interface;
     template<typename T = float>
     class Array {
 
-        std::unique_ptr<array_attributes<T>> a;
+        array_attributes<T> a;
 
         public:
 
@@ -69,17 +67,17 @@ namespace numeric {
             
             bool any() const;
             void any(bool& out) const;
-            // std::unique_ptr<Array<T>> any(int axis);
+            // Array<T> any(int axis);
             // void any(int axis, Array<T>& out);
 
             size_t argmax() const;
             void argmax(size_t& out) const;
-            // std::unique_ptr<Array<size_t>> argmax(int axis);
+            // Array<size_t> argmax(int axis);
             // void argmax(int axis, Array<size_t>& out);
 
             size_t argmin() const;
             void argmin(size_t& out) const;
-            // std::unique_ptr<Array<size_t>> argmin(int axis);
+            // Array<size_t> argmin(int axis);
             // void argmin(int axis, Array<size_t>& out);
 
             std::vector<size_t> argsort() const;
@@ -101,6 +99,11 @@ namespace numeric {
             void dot(const Array<T>& other, Array<T>& out) const;
 
             void fill(T value);
+
+            T mean() const;
+            void mean(T& out) const;
+            // Array<T> mean(int axis);
+            // void mean(int axis, Array<T>& out);
 
             Array<T> zero() const;
             

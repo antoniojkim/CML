@@ -19,7 +19,7 @@ bool Array<T>::any() const {
         throw numeric::Exception("Array::all without axis requires array to be 1D. Got: ", ndim());
     }
 
-    return numeric::any((T*) a->data.get(), a->size);
+    return numeric::any((T*) a.data.get(), a.size);
 }
 
 template<typename T>

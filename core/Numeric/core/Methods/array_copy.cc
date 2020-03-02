@@ -15,9 +15,9 @@ using namespace numeric;
 
 template<typename T>
 Array<T> Array<T>::copy() const {
-    Array<T> a {*this};
-    *a.a = a.a->copy();
-    return a; 
+    Array<T> copy {*this};
+    copy.a = a.copy();
+    return copy; 
 }
 
 

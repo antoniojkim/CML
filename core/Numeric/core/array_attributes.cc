@@ -35,7 +35,7 @@ array_attributes<T>::array_attributes(array_attributes<T>&& other):
 
 
 template<typename T>
-array_attributes<T> array_attributes<T>::copy(){
+array_attributes<T> array_attributes<T>::copy() const{
     array_attributes<T> a {*this};
     a.data = shared_ptr<T[]>(new T[a.size]);
     std::copy((T*) this->data.get(), (T*) this->data.get() + this->size, (T*) a.data.get());
@@ -43,7 +43,7 @@ array_attributes<T> array_attributes<T>::copy(){
 }
 
 template<typename T>
-array_attributes<T> array_attributes<T>::zero(){
+array_attributes<T> array_attributes<T>::zero() const{
     array_attributes<T> a {*this};
     a.data = shared_ptr<T[]>(new T[a.size]());
     return a;
