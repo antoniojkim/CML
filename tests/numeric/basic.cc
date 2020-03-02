@@ -70,7 +70,7 @@ TEST_CASE("Basic Array Construction Tests", "[basic]"){
     }
 
     SECTION("Simple 2D Array Print Test "){
-        Array<int> a (vector<size_t>{5, 2});
+        Array<int> a ({5, 2});
         REQUIRE( a.dtype() == Dtype::int32 );
         REQUIRE( a.size() == 10 );
         REQUIRE( a.ndim() == 2 );
@@ -89,7 +89,7 @@ TEST_CASE("Basic Array Construction Tests", "[basic]"){
     }
 
     SECTION("Simple 3D Array Print Test "){
-        Array<int> a (vector<size_t>{5, 2, 3});
+        Array<int> a ({5, 2, 3});
         REQUIRE( a.dtype() == Dtype::int32 );
         REQUIRE( a.size() == 30 );
         REQUIRE( a.ndim() == 3 );

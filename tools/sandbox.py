@@ -8,54 +8,6 @@ from shutil import copyfile, move
 
 from datetime import datetime
 
-sandbox_templates = {
-"c++": """
-
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-
-using namespace std;
-
-typedef size_t (*func_t)(float*, int);
-
-void timeit(func_t f, float* a, int N){
-    std::clock_t start = std::clock();
-
-    size_t isum = 0;
-    for (int i = 0; i<100000; ++i){
-        isum += f(a, N);
-    }
-
-    double duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-
-    cout << "isum: " << isum << endl;
-    cout << "duration: " << duration << " seconds" << endl;
-
-}
-
-int main(){
-
-}
-
-""",
-"python": """
-import torch
-import numpy as np
-
-def main():
-    pass
-
-
-if __name__ == "__main__":
-    main()
-"""
-}
-
-sandbox_extensions = {
-    "c++": "cc",
-    "python": "py"
-}
 
 def main(args):
     if args.lang is None:
@@ -63,30 +15,33 @@ def main(args):
 
     curr_dir = os.getcwd()
     sandbox_dir = os.path.join(curr_dir, ".sandbox")
-    sandbox_file = os.path.join(sandbox_dir, f"sandbox.{sandbox_extensions[args.lang]}")
-    if args.create:        
-        if os.path.isfile(sandbox_file):
-            name = args.name
-            if name is None:
-                name = f"sandbox__{datetime.now().strftime('%Y-%m-%d__%H-%M-%S')}"
+    if args.create:
+        if args.name is None:
+            raise Exception("Name required to create new sandbox")
 
-            if os.path.isdir(os.path.join(sandbox_dir, name)):
-                name = f"{name}__{datetime.now().strftime('%Y-%m-%d__%H-%M-%S')}"
-
-            old_sandbox_dir = os.path.join(sandbox_dir, name)
-            os.mkdir(old_sandbox_dir)
-
-            move(sandbox_file, old_sandbox_dir)
+        name = args.name
+        new_sandbox_dir = os.path.join(sandbox_dir, name)
+        if os.path.isfile(new_sandbox_dir):
+            name = f"{args.name}__{datetime.now().strftime('%Y-%m-%d__%H-%M-%S')}"
+            new_sandbox_dir = os.path.join(sandbox_dir, name)
             
-            if args.lang == "c++":
-                copyfile(os.path.join(sandbox_dir, "Makefile"),
-                         os.path.join(old_sandbox_dir, "Makefile"))
+        os.mkdir(new_sandbox_dir)
 
-        with open(sandbox_file, "w") as file:
-            file.write(sandbox_templates[args.lang])
+        for template in os.listdir(os.path.join(sandbox_dir, ".templates")):
+            copyfile(os.path.join(sandbox_dir, ".templates", template),
+                     os.path.join(new_sandbox_dir, template))
+
+        with open(os.path.join(sandbox_dir, ".info"), "w") as file:
+            file.write(name)
+
 
     elif args.build:
-        os.chdir(sandbox_dir)
+        
+        with open(os.path.join(sandbox_dir, ".info")) as file:
+            sandbox = "".join(file)
+            recent_sandbox_dir = os.path.join(sandbox_dir, sandbox)
+
+        os.chdir(recent_sandbox_dir)
         if args.lang == "c++":
             make = subprocess.Popen("make", shell=True)
             make.communicate()
@@ -95,7 +50,7 @@ def main(args):
                 run.communicate()
         
         elif args.lang == "python":
-            run = subprocess.Popen(f"python -u {sandbox_file}", shell=True)
+            run = subprocess.Popen(f"python -u sandbox.py", shell=True)
             run.communicate()
   
         os.chdir(curr_dir)
@@ -104,8 +59,8 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--name",
-                        nargs="?",
                         default=None,
+                        nargs='?',
                         help="name of sandbox")
     parser.add_argument('--lang',
                         default='c++',
