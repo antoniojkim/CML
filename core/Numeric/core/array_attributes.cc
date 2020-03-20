@@ -4,7 +4,7 @@
 
 #include "array_attributes.h"
 #include "dtypes.h"
-#include "utils.h"
+#include "Utils/accumulators.h"
 
 using namespace std;
 using namespace numeric;

@@ -105,9 +105,13 @@ namespace numeric {
             // Array<T> mean(int axis);
             // void mean(int axis, Array<T>& out);
 
+            T std(long ddof = 0) const;
+            void std(T& out, long ddof = 0) const;
+            // Array<T> std(int axis, long ddof = 0);
+            // void std(int axis, Array<T>& out, long ddof = 0);
+
             Array<T> zero() const;
             
-
     };
 
     template<typename T = float>
