@@ -12,26 +12,28 @@ using namespace numeric;
 #define SUFFIX
 
 template<typename T>
-T Array<T>::mean() const {
+T Array<T>::sum() const {
     if (a.size == 0){
-        throw numeric::Exception("Cannot compute mean of empty array.");
+        return 0;
     }
-    return numeric::mean(a.data.get(), a.size);
+    return numeric::sum(a.data.get(), a.size);
 }
 
 template<typename T>
-void Array<T>::mean(T& out) const {
+void Array<T>::sum(T& out) const {
     if (a.size == 0){
-        throw numeric::Exception("Cannot compute mean of empty array.");
+        out = 0;
     }
-    out = numeric::mean(a.data.get(), a.size);
+    else {
+        out = numeric::sum(a.data.get(), a.size);
+    }
 }
 
 
 #define PREFIX
 #define SELECT(T, _2)                           \
-    template T Array<T>::mean() const;         \
-    template void Array<T>::mean(T&) const;
+    template T Array<T>::sum() const;         \
+    template void Array<T>::sum(T&) const;
 #define SUFFIX
 
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)

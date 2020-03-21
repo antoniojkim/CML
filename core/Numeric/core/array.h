@@ -121,6 +121,11 @@ namespace numeric {
             // Array<T> std(int axis, long ddof = 0);
             // void std(int axis, Array<T>& out, long ddof = 0);
 
+            T sum() const;
+            void sum(T& out) const;
+            // Array<T> sum(int axis);
+            // void sum(int axis, Array<T>& out);
+
             Array<T> zero() const;
             
     };
