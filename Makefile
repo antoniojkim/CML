@@ -1,10 +1,12 @@
 
-
 test:	numeric
+	rm -f ./tests/test
 	./tools/make_tests
 	./tests/test
 
-rtest:	numeric cleantest test
+numeric:
+	rm -f core/Numeric/libNumeric.a
+	./tools/make_numeric
 
 sandbox:
 	python3 -u tools/sandbox.py --create --name $(name) --lang $(lang)
@@ -12,15 +14,8 @@ sandbox:
 experiment:
 	python3 -u tools/sandbox.py --build --name $(name) --lang $(lang)
 
-numeric:
-	./tools/make_numeric
-
-cleantest:
-	rm -f ./tests/test
-
 te2:
 	python3 -u tools/type_expansion_2d.py
-
 
 install:
 	./tools/install

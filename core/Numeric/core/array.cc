@@ -31,12 +31,23 @@ template<typename T>
 Array<T>::~Array() = default;
 
 template<typename T>
-ArrayIter<T> Array<T>::begin(){
-    throw "Unimplemented Error";
+Array<T>::ArrayIter::ArrayIter(const Array<T>* array, int index): array{array}, index{index} {}
+template<typename T>
+void Array<T>::ArrayIter::operator++() { ++index; }
+template<typename T>
+bool Array<T>::ArrayIter::operator!=(const ArrayIter& other) const {
+    return array != other.array || index != other.index;
 }
 template<typename T>
-ArrayIter<T> Array<T>::end(){
-    throw "Unimplemented Error";
+T Array<T>::ArrayIter::operator*() const { return (*array)[index]; }
+
+template<typename T>
+typename Array<T>::ArrayIter Array<T>::begin() const {
+    return typename Array<T>::ArrayIter(this, 0);
+}
+template<typename T>
+typename Array<T>::ArrayIter Array<T>::end() const {
+    return typename Array<T>::ArrayIter(this, this->size());
 }
 
 template<typename T> 
@@ -95,11 +106,11 @@ std::ostream& operator<<(std::ostream& out, const numeric::Array<T>& array){
 
 namespace std {
     template<typename T>
-    numeric::ArrayIter<T> begin(numeric::Array<T>& a){
+    typename numeric::Array<T>::ArrayIter begin(const numeric::Array<T>& a){
         return a.begin();
     }
     template<typename T>
-    numeric::ArrayIter<T> end(numeric::Array<T>& a){
+    typename numeric::Array<T>::ArrayIter end(const numeric::Array<T>& a){
         return a.end();
     }
 }
@@ -123,6 +134,15 @@ COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
 #undef SELECT
 
 #define SELECT(T, _2) template std::ostream& operator<<<T>(std::ostream&, const Array<T>&);
+
+ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
+COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)
+
+#undef SELECT
+
+#define SELECT(T, _2)                                                           \
+    typename numeric::Array<T>::ArrayIter begin(const numeric::Array<T>& a);    \
+    typename numeric::Array<T>::ArrayIter end(const numeric::Array<T>& a);
 
 ARRAY_TYPES(PREFIX, SELECT, SUFFIX)
 COMPLEX_TYPES(PREFIX, SELECT, SUFFIX)

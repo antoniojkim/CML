@@ -30,9 +30,20 @@ namespace numeric {
             Array(Array<T>&&);
             ~Array();
 
+            class ArrayIter: public std::iterator<std::input_iterator_tag, Array<T>*>{
+                const Array<T>* array;
+                int index;
 
-            ArrayIter<T> begin();
-            ArrayIter<T> end();
+                public:
+                    ArrayIter(const Array<T>* array, int index);
+
+                    void operator++();
+                    bool operator!=(const ArrayIter& other) const;
+                    T operator*() const;
+            };
+
+            ArrayIter begin() const;
+            ArrayIter end() const;
 
             // Attributes
             std::shared_ptr<T[]> data() const;
@@ -47,7 +58,7 @@ namespace numeric {
             std::size_t size() const;
             std::size_t ndim() const;
 
-            ArrayIter<T> flat();
+            ArrayIter flat();
 
 
             // Accessor Methods
@@ -121,23 +132,13 @@ namespace numeric {
     template<typename T = float>
     Array<T> array(std::initializer_list<T> l);
 
-
-    template<typename T>
-    class ArrayIter: public std::iterator<std::input_iterator_tag, Array<T>*>{
-        Array<T>* array;
-        int index = 0;
-
-        public:
-
-    };
-
 }
 
 namespace std {
     template<typename T>
-    numeric::ArrayIter<T> begin(numeric::Array<T>& a);
+    typename numeric::Array<T>::ArrayIter begin(numeric::Array<T>& a);
     template<typename T>
-    numeric::ArrayIter<T> end(numeric::Array<T>& a);
+    typename numeric::Array<T>::ArrayIter end(numeric::Array<T>& a);
 }
 
 
